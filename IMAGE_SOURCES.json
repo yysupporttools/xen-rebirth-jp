@@ -690,5 +690,20 @@
   {
     "file": "assets/classes/sg_m.jpg",
     "source": "https://www.xenrebirth.com/images/db/classes/sg_m.jpg"
+  },
+  {
+    "file": "assets/skills/art-of-war.png",
+    "source": "User-provided game skill icon, 2026-09-13",
+    "skill": "Art of War"
+  },
+  {
+    "file": "assets/skills/heavy-slam.png",
+    "source": "User-provided game skill icon, 2026-09-13",
+    "skill": "Heavy Slam"
+  },
+  {
+    "file": "assets/skills/blizzard.png",
+    "source": "User-provided game skill icon, 2026-09-13",
+    "skill": "Blizzard"
   }
 ]

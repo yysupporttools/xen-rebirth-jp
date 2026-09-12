@@ -67,7 +67,7 @@ python scripts/update_bosses.py
 
 公式サイトの職業紹介と公式サイト内Lexiconを参照し、日本語で独自に要約しました。
 Lexiconには利用者執筆記事も含まれます。仕様変更や編集中の内容もあるため、ゲーム内の最新表示を優先してください。各ページに出典リンクを記載しています。
-6系統の公式早見表に掲載された全129項目（未確認1項目を含む）を日本語で収録。職業画像48点とスキルアイコン125点を追加しています。SKILL_DATA.jsonにスキルデータ、IMAGE_SOURCES.jsonに画像ごとの出典を同梱。
+6系統の公式早見表に掲載された全129項目（未確認1項目を含む）を日本語で収録。職業画像48点とスキルアイコン128点を追加しています。SKILL_DATA.jsonにスキルデータ、IMAGE_SOURCES.jsonに画像ごとの出典を同梱。
 登録・メール認証・ゲームログインは実施していません。認証手順は実画面の案内に従う形式です。
 ボス画像4点の出典：公式Worldboss Event Timer、`images/db/events/hippo.png`、`snaked.png`、`ra.png`、`amaranth.png`。
 名称・ゲーム画像の権利は各権利者に帰属します。
@@ -76,3 +76,5 @@ Lexiconには利用者執筆記事も含まれます。仕様変更や編集中�
 ## 動作確認
 
 検証内容と結果は `VALIDATION.md` を参照してください。
+
+Art of War / Heavy Slam / Blizzard: user-provided skill icons added on 2026-09-13.
