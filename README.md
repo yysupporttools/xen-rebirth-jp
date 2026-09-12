@@ -1,4 +1,4 @@
-# Xen Rebirth 日本語攻略サイト Ver.1
+# Xen Rebirth 日本語攻略サイト Ver.2
 
 HTML / CSS / JavaScriptだけで表示できる静的サイトです。本文確認日：2026-09-11。
 
@@ -19,7 +19,7 @@ ZIPを「すべて展開」し、`dist/index.html`をブラウザで開いてく
 公開リポジトリで使えるGitHub FreeのPagesを想定。プランや利用条件は公式で確認してください。
 https://docs.github.com/en/pages/getting-started-with-github-pages/using-custom-workflows-with-github-pages
 
-この納品ではGitHubへのアップロード・公開は実行していません。
+公開先：https://yysupporttools.github.io/xen-rebirth-jp/
 
 ## ボス予定の更新
 
@@ -67,11 +67,11 @@ python scripts/update_bosses.py
 
 公式サイトの職業紹介と公式サイト内Lexiconを参照し、日本語で独自に要約しました。
 Lexiconには利用者執筆記事も含まれます。仕様変更や編集中の内容もあるため、ゲーム内の最新表示を優先してください。各ページに出典リンクを記載しています。
-各職業6件の代表スキルを掲載し、全スキルの詳細は公式へ案内しています。
+6系統の公式早見表に掲載された全129項目（未確認1項目を含む）を日本語で収録。職業画像48点とスキルアイコン125点を追加しています。SKILL_DATA.jsonにスキルデータ、IMAGE_SOURCES.jsonに画像ごとの出典を同梱。
 登録・メール認証・ゲームログインは実施していません。認証手順は実画面の案内に従う形式です。
 ボス画像4点の出典：公式Worldboss Event Timer、`images/db/events/hippo.png`、`snaked.png`、`ra.png`、`amaranth.png`。
 名称・ゲーム画像の権利は各権利者に帰属します。
-イベントカレンダー・掲示板・新しいガチャ集計は今回のVer.1の範囲には含みません。
+イベントカレンダー・掲示板・新しいガチャ集計は今回のVer.2の範囲には含みません。
 
 ## 動作確認
 

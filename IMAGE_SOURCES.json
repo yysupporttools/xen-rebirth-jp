@@ -1,0 +1,694 @@
+[
+  {
+    "file": "assets/skills/archer-0.png",
+    "source": "https://www.xenrebirth.com/index.php?attachment/2504-quick-shot-png/"
+  },
+  {
+    "file": "assets/skills/archer-1.png",
+    "source": "https://www.xenrebirth.com/index.php?attachment/2501-blunt-arrow-png/"
+  },
+  {
+    "file": "assets/skills/archer-2.png",
+    "source": "https://www.xenrebirth.com/index.php?attachment/4452-falcon-eye-png/"
+  },
+  {
+    "file": "assets/skills/archer-3.png",
+    "source": "https://www.xenrebirth.com/index.php?attachment/4453-ankle-binding-png/"
+  },
+  {
+    "file": "assets/skills/archer-4.png",
+    "source": "https://www.xenrebirth.com/index.php?attachment/4454-siphon-png/"
+  },
+  {
+    "file": "assets/skills/archer-5.png",
+    "source": "https://www.xenrebirth.com/index.php?attachment/4455-tailwind-png/"
+  },
+  {
+    "file": "assets/skills/archer-6.png",
+    "source": "https://www.xenrebirth.com/index.php?attachment/4456-wind-blow-png/"
+  },
+  {
+    "file": "assets/skills/archer-7.png",
+    "source": "https://www.xenrebirth.com/index.php?attachment/2503-parasite-png/"
+  },
+  {
+    "file": "assets/skills/archer-8.png",
+    "source": "https://www.xenrebirth.com/index.php?attachment/2216-poison-arrow-png/"
+  },
+  {
+    "file": "assets/skills/archer-9.png",
+    "source": "https://www.xenrebirth.com/index.php?attachment/2650-spiritual-png/"
+  },
+  {
+    "file": "assets/skills/archer-10.png",
+    "source": "https://www.xenrebirth.com/index.php?attachment/2654-brambleway-png/"
+  },
+  {
+    "file": "assets/skills/archer-11.png",
+    "source": "https://www.xenrebirth.com/index.php?attachment/2657-reticle-trap-png/"
+  },
+  {
+    "file": "assets/skills/archer-12.png",
+    "source": "https://www.xenrebirth.com/index.php?attachment/2215-phantom-arrow-png/"
+  },
+  {
+    "file": "assets/skills/archer-13.png",
+    "source": "https://www.xenrebirth.com/index.php?attachment/2217-stone-edge-png/"
+  },
+  {
+    "file": "assets/skills/archer-14.png",
+    "source": "https://www.xenrebirth.com/index.php?attachment/2658-snake-shot-png/"
+  },
+  {
+    "file": "assets/skills/archer-15.png",
+    "source": "https://www.xenrebirth.com/index.php?attachment/2214-marked-point-png/"
+  },
+  {
+    "file": "assets/skills/archer-16.png",
+    "source": "https://www.xenrebirth.com/index.php?attachment/2653-arrow-rampage-png/"
+  },
+  {
+    "file": "assets/skills/archer-17.png",
+    "source": "https://www.xenrebirth.com/index.php?attachment/2649-ice-arrow-png/"
+  },
+  {
+    "file": "assets/skills/archer-18.png",
+    "source": "https://www.xenrebirth.com/index.php?attachment/2659-sniper-shot-png/"
+  },
+  {
+    "file": "assets/skills/archer-19.png",
+    "source": "https://www.xenrebirth.com/index.php?attachment/2656-overtrick-png/"
+  },
+  {
+    "file": "assets/skills/archer-20.png",
+    "source": "https://www.xenrebirth.com/index.php?attachment/2655-last-judgement-png/"
+  },
+  {
+    "file": "assets/skills/archer-21.png",
+    "source": "https://www.xenrebirth.com/index.php?attachment/4649-orion-s-fury-png/"
+  },
+  {
+    "file": "assets/skills/archer-22.png",
+    "source": "https://www.xenrebirth.com/index.php?attachment/9269-vine-shackle-png/"
+  },
+  {
+    "file": "assets/classes/scout_f.jpg",
+    "source": "https://www.xenrebirth.com/images/db/classes/scout_f.jpg"
+  },
+  {
+    "file": "assets/classes/scout_m.jpg",
+    "source": "https://www.xenrebirth.com/images/db/classes/scout_m.jpg"
+  },
+  {
+    "file": "assets/classes/arch_f.jpg",
+    "source": "https://www.xenrebirth.com/images/db/classes/arch_f.jpg"
+  },
+  {
+    "file": "assets/classes/arch_m.jpg",
+    "source": "https://www.xenrebirth.com/images/db/classes/arch_m.jpg"
+  },
+  {
+    "file": "assets/classes/rang_f.jpg",
+    "source": "https://www.xenrebirth.com/images/db/classes/rang_f.jpg"
+  },
+  {
+    "file": "assets/classes/rang_m.jpg",
+    "source": "https://www.xenrebirth.com/images/db/classes/rang_m.jpg"
+  },
+  {
+    "file": "assets/classes/al_f.jpg",
+    "source": "https://www.xenrebirth.com/images/db/classes/al_f.jpg"
+  },
+  {
+    "file": "assets/classes/al_m.jpg",
+    "source": "https://www.xenrebirth.com/images/db/classes/al_m.jpg"
+  },
+  {
+    "file": "assets/skills/cleric-0.png",
+    "source": "https://www.xenrebirth.com/index.php?attachment/1887-illusion-quake-png/"
+  },
+  {
+    "file": "assets/skills/cleric-1.png",
+    "source": "https://www.xenrebirth.com/index.php?attachment/1882-minor-heal-png/"
+  },
+  {
+    "file": "assets/skills/cleric-2.png",
+    "source": "https://www.xenrebirth.com/index.php?attachment/1886-spirit-png/"
+  },
+  {
+    "file": "assets/skills/cleric-3.png",
+    "source": "https://www.xenrebirth.com/index.php?attachment/1878-bless-png/"
+  },
+  {
+    "file": "assets/skills/cleric-4.png",
+    "source": "https://www.xenrebirth.com/index.php?attachment/1874-fist-up-png/"
+  },
+  {
+    "file": "assets/skills/cleric-5.png",
+    "source": "https://www.xenrebirth.com/index.php?attachment/1884-poison-clear-png/"
+  },
+  {
+    "file": "assets/skills/cleric-6.png",
+    "source": "https://www.xenrebirth.com/index.php?attachment/1870-antibuff-png/"
+  },
+  {
+    "file": "assets/skills/cleric-7.png",
+    "source": "https://www.xenrebirth.com/index.php?attachment/1877-holy-cure-png/"
+  },
+  {
+    "file": "assets/skills/cleric-8.png",
+    "source": "https://www.xenrebirth.com/index.php?attachment/1885-revival-png/"
+  },
+  {
+    "file": "assets/skills/cleric-9.png",
+    "source": "https://www.xenrebirth.com/index.php?attachment/1881-meditation-png/"
+  },
+  {
+    "file": "assets/skills/cleric-10.png",
+    "source": "https://www.xenrebirth.com/index.php?attachment/1883-oblivion-png/"
+  },
+  {
+    "file": "assets/skills/cleric-11.png",
+    "source": "https://www.xenrebirth.com/index.php?attachment/1875-ghost-steel-png/"
+  },
+  {
+    "file": "assets/skills/cleric-12.png",
+    "source": "https://www.xenrebirth.com/index.php?attachment/1876-guardianship-png/"
+  },
+  {
+    "file": "assets/skills/cleric-13.png",
+    "source": "https://www.xenrebirth.com/index.php?attachment/1880-major-heal-png/"
+  },
+  {
+    "file": "assets/skills/cleric-14.png",
+    "source": "https://www.xenrebirth.com/index.php?attachment/1869-howling-png/"
+  },
+  {
+    "file": "assets/skills/cleric-15.png",
+    "source": "https://www.xenrebirth.com/index.php?attachment/1868-cooling-heal-png/"
+  },
+  {
+    "file": "assets/skills/cleric-16.png",
+    "source": "https://www.xenrebirth.com/index.php?attachment/1863-fury-png/"
+  },
+  {
+    "file": "assets/skills/cleric-17.png",
+    "source": "https://www.xenrebirth.com/index.php?attachment/1857-nobleshield-png/"
+  },
+  {
+    "file": "assets/skills/cleric-18.png",
+    "source": "https://www.xenrebirth.com/index.php?attachment/1856-power-light-png/"
+  },
+  {
+    "file": "assets/skills/cleric-19.png",
+    "source": "https://www.xenrebirth.com/index.php?attachment/1851-life-conversion-png/"
+  },
+  {
+    "file": "assets/skills/cleric-20.png",
+    "source": "https://www.xenrebirth.com/index.php?attachment/1853-restoration-png/"
+  },
+  {
+    "file": "assets/skills/cleric-21.png",
+    "source": "https://www.xenrebirth.com/index.php?attachment/1890-divine-infusion-png/"
+  },
+  {
+    "file": "assets/skills/cleric-22.png",
+    "source": "https://www.xenrebirth.com/index.php?attachment/1891-jureah-s-last-stand-png/"
+  },
+  {
+    "file": "assets/skills/cleric-23.png",
+    "source": "https://www.xenrebirth.com/index.php?attachment/16490-jureah-s-blessing-png/"
+  },
+  {
+    "file": "assets/classes/aco_f.jpg",
+    "source": "https://www.xenrebirth.com/images/db/classes/aco_f.jpg"
+  },
+  {
+    "file": "assets/classes/aco_m.jpg",
+    "source": "https://www.xenrebirth.com/images/db/classes/aco_m.jpg"
+  },
+  {
+    "file": "assets/classes/cleric_f.jpg",
+    "source": "https://www.xenrebirth.com/images/db/classes/cleric_f.jpg"
+  },
+  {
+    "file": "assets/classes/cleric_m.jpg",
+    "source": "https://www.xenrebirth.com/images/db/classes/cleric_m.jpg"
+  },
+  {
+    "file": "assets/classes/priest_f.jpg",
+    "source": "https://www.xenrebirth.com/images/db/classes/priest_f.jpg"
+  },
+  {
+    "file": "assets/classes/priest_m.jpg",
+    "source": "https://www.xenrebirth.com/images/db/classes/priest_m.jpg"
+  },
+  {
+    "file": "assets/classes/pala_f.jpg",
+    "source": "https://www.xenrebirth.com/images/db/classes/pala_f.jpg"
+  },
+  {
+    "file": "assets/classes/pala_m.jpg",
+    "source": "https://www.xenrebirth.com/images/db/classes/pala_m.jpg"
+  },
+  {
+    "file": "assets/skills/rogue-0.png",
+    "source": "https://www.xenrebirth.com/index.php?attachment/1900-threaten-png/"
+  },
+  {
+    "file": "assets/skills/rogue-1.png",
+    "source": "https://www.xenrebirth.com/index.php?attachment/1897-enhance-png/"
+  },
+  {
+    "file": "assets/skills/rogue-2.png",
+    "source": "https://www.xenrebirth.com/index.php?attachment/1896-blndside-png/"
+  },
+  {
+    "file": "assets/skills/rogue-3.png",
+    "source": "https://www.xenrebirth.com/index.php?attachment/1895-accuracy-png/"
+  },
+  {
+    "file": "assets/skills/rogue-4.png",
+    "source": "https://www.xenrebirth.com/index.php?attachment/1899-rapid-step-png/"
+  },
+  {
+    "file": "assets/skills/rogue-5.png",
+    "source": "https://www.xenrebirth.com/index.php?attachment/1898-invisible-png/"
+  },
+  {
+    "file": "assets/skills/rogue-6.png",
+    "source": "https://www.xenrebirth.com/index.php?attachment/1901-poison-blow-png/"
+  },
+  {
+    "file": "assets/skills/rogue-7.png",
+    "source": "https://www.xenrebirth.com/index.php?attachment/2669-extract-png/"
+  },
+  {
+    "file": "assets/skills/rogue-8.png",
+    "source": "https://www.xenrebirth.com/index.php?attachment/2668-evil-voice-png/"
+  },
+  {
+    "file": "assets/skills/rogue-9.png",
+    "source": "https://www.xenrebirth.com/index.php?attachment/2664-circle-trap-png/"
+  },
+  {
+    "file": "assets/skills/rogue-10.png",
+    "source": "https://www.xenrebirth.com/index.php?attachment/2665-cruel-blow-png/"
+  },
+  {
+    "file": "assets/skills/rogue-11.png",
+    "source": "https://www.xenrebirth.com/index.php?attachment/2671-sandstorm-png/"
+  },
+  {
+    "file": "assets/skills/rogue-12.png",
+    "source": "https://www.xenrebirth.com/index.php?attachment/2667-dust-blade-png/"
+  },
+  {
+    "file": "assets/skills/rogue-13.png",
+    "source": "https://www.xenrebirth.com/index.php?attachment/2663-breeze-dagger-png/"
+  },
+  {
+    "file": "assets/skills/rogue-14.png",
+    "source": "https://www.xenrebirth.com/index.php?attachment/2670-light-masque-png/"
+  },
+  {
+    "file": "assets/skills/rogue-15.png",
+    "source": "https://www.xenrebirth.com/index.php?attachment/2673-starlight-shot-png/"
+  },
+  {
+    "file": "assets/skills/rogue-16.png",
+    "source": "https://www.xenrebirth.com/index.php?attachment/2666-double-strike-png/"
+  },
+  {
+    "file": "assets/skills/rogue-17.png",
+    "source": "https://www.xenrebirth.com/index.php?attachment/2672-shock-troops-png/"
+  },
+  {
+    "file": "assets/skills/rogue-18.png",
+    "source": "https://www.xenrebirth.com/index.php?attachment/6600-vacuum-pulse-png/"
+  },
+  {
+    "file": "assets/skills/rogue-19.png",
+    "source": "https://www.xenrebirth.com/index.php?attachment/6601-shadow-fury-png/"
+  },
+  {
+    "file": "assets/classes/neo_f.jpg",
+    "source": "https://www.xenrebirth.com/images/db/classes/neo_f.jpg"
+  },
+  {
+    "file": "assets/classes/neo_m.jpg",
+    "source": "https://www.xenrebirth.com/images/db/classes/neo_m.jpg"
+  },
+  {
+    "file": "assets/classes/rog_f.jpg",
+    "source": "https://www.xenrebirth.com/images/db/classes/rog_f.jpg"
+  },
+  {
+    "file": "assets/classes/rog_m.jpg",
+    "source": "https://www.xenrebirth.com/images/db/classes/rog_m.jpg"
+  },
+  {
+    "file": "assets/classes/assa_f.jpg",
+    "source": "https://www.xenrebirth.com/images/db/classes/assa_f.jpg"
+  },
+  {
+    "file": "assets/classes/assa_m.jpg",
+    "source": "https://www.xenrebirth.com/images/db/classes/assa_m.jpg"
+  },
+  {
+    "file": "assets/classes/sm_f.jpg",
+    "source": "https://www.xenrebirth.com/images/db/classes/sm_f.jpg"
+  },
+  {
+    "file": "assets/classes/sm_m.jpg",
+    "source": "https://www.xenrebirth.com/images/db/classes/sm_m.jpg"
+  },
+  {
+    "file": "assets/skills/knight-0.png",
+    "source": "https://www.xenrebirth.com/index.php?attachment/3814-slash-png/"
+  },
+  {
+    "file": "assets/skills/knight-1.png",
+    "source": "https://www.xenrebirth.com/index.php?attachment/3813-shield-crash-egg-timer-png/"
+  },
+  {
+    "file": "assets/skills/knight-2.png",
+    "source": "https://www.xenrebirth.com/index.php?attachment/3812-sharp-weapon-png/"
+  },
+  {
+    "file": "assets/skills/knight-3.png",
+    "source": "https://www.xenrebirth.com/index.php?attachment/3802-blazing-png/"
+  },
+  {
+    "file": "assets/skills/knight-4.png",
+    "source": "https://www.xenrebirth.com/index.php?attachment/3803-broken-sword-png/"
+  },
+  {
+    "file": "assets/skills/knight-5.png",
+    "source": "https://www.xenrebirth.com/index.php?attachment/3801-attraction-png/"
+  },
+  {
+    "file": "assets/skills/knight-6.png",
+    "source": "https://www.xenrebirth.com/index.php?attachment/3811-reflection-png/"
+  },
+  {
+    "file": "assets/skills/knight-7.png",
+    "source": "https://www.xenrebirth.com/index.php?attachment/3807-hard-blow-png/"
+  },
+  {
+    "file": "assets/skills/knight-8.png",
+    "source": "https://www.xenrebirth.com/index.php?attachment/3808-patience-png/"
+  },
+  {
+    "file": "assets/skills/knight-9.png",
+    "source": "https://www.xenrebirth.com/index.php?attachment/3819-wild-swing-png/"
+  },
+  {
+    "file": "assets/skills/knight-10.png",
+    "source": "https://www.xenrebirth.com/index.php?attachment/3804-bulwark-png/"
+  },
+  {
+    "file": "assets/skills/knight-11.png",
+    "source": "https://www.xenrebirth.com/index.php?attachment/3816-soul-break-png/"
+  },
+  {
+    "file": "assets/skills/knight-12.png",
+    "source": "https://www.xenrebirth.com/index.php?attachment/3809-penetration-png/"
+  },
+  {
+    "file": "assets/skills/knight-13.png",
+    "source": "https://www.xenrebirth.com/index.php?attachment/3805-fire-swing-png/"
+  },
+  {
+    "file": "assets/skills/knight-14.png",
+    "source": "https://www.xenrebirth.com/index.php?attachment/3810-power-reinforce-png/"
+  },
+  {
+    "file": "assets/skills/knight-15.png",
+    "source": "https://www.xenrebirth.com/index.php?attachment/3806-force-cut-png/"
+  },
+  {
+    "file": "assets/skills/knight-16.png",
+    "source": "https://www.xenrebirth.com/index.php?attachment/3817-triangle-slash-png/"
+  },
+  {
+    "file": "assets/skills/knight-17.png",
+    "source": "https://www.xenrebirth.com/index.php?attachment/3815-sorrow-shout-png/"
+  },
+  {
+    "file": "assets/classes/squire_f.jpg",
+    "source": "https://www.xenrebirth.com/images/db/classes/squire_f.jpg"
+  },
+  {
+    "file": "assets/classes/squire_m.jpg",
+    "source": "https://www.xenrebirth.com/images/db/classes/squire_m.jpg"
+  },
+  {
+    "file": "assets/classes/knight_f.jpg",
+    "source": "https://www.xenrebirth.com/images/db/classes/knight_f.jpg"
+  },
+  {
+    "file": "assets/classes/knight_m.jpg",
+    "source": "https://www.xenrebirth.com/images/db/classes/knight_m.jpg"
+  },
+  {
+    "file": "assets/classes/warrior_f.jpg",
+    "source": "https://www.xenrebirth.com/images/db/classes/warrior_f.jpg"
+  },
+  {
+    "file": "assets/classes/warrior_m.jpg",
+    "source": "https://www.xenrebirth.com/images/db/classes/warrior_m.jpg"
+  },
+  {
+    "file": "assets/classes/warlord_f.jpg",
+    "source": "https://www.xenrebirth.com/images/db/classes/warlord_f.jpg"
+  },
+  {
+    "file": "assets/classes/warlord_m.jpg",
+    "source": "https://www.xenrebirth.com/images/db/classes/warlord_m.jpg"
+  },
+  {
+    "file": "assets/skills/mage-0.png",
+    "source": "https://www.xenrebirth.com/index.php?attachment/1784-mind-buster-png/"
+  },
+  {
+    "file": "assets/skills/mage-1.png",
+    "source": "https://www.xenrebirth.com/index.php?attachment/1780-magic-ice-png/"
+  },
+  {
+    "file": "assets/skills/mage-2.png",
+    "source": "https://www.xenrebirth.com/index.php?attachment/1783-magic-thunder-png/"
+  },
+  {
+    "file": "assets/skills/mage-3.png",
+    "source": "https://www.xenrebirth.com/index.php?attachment/1769-clear-magic-png/"
+  },
+  {
+    "file": "assets/skills/mage-4.png",
+    "source": "https://www.xenrebirth.com/index.php?attachment/1782-magic-shield-png/"
+  },
+  {
+    "file": "assets/skills/mage-5.png",
+    "source": "https://www.xenrebirth.com/index.php?attachment/1781-magic-poison-png/"
+  },
+  {
+    "file": "assets/skills/mage-6.png",
+    "source": "https://www.xenrebirth.com/index.php?attachment/1778-magic-fire-png/"
+  },
+  {
+    "file": "assets/skills/mage-7.png",
+    "source": "https://www.xenrebirth.com/index.php?attachment/1770-concentration-png/"
+  },
+  {
+    "file": "assets/skills/mage-8.png",
+    "source": "https://www.xenrebirth.com/index.php?attachment/1776-lightning-png/"
+  },
+  {
+    "file": "assets/skills/mage-9.png",
+    "source": "https://www.xenrebirth.com/index.php?attachment/1768-arrest-png/"
+  },
+  {
+    "file": "assets/skills/mage-10.png",
+    "source": "https://www.xenrebirth.com/index.php?attachment/1773-frost-png/"
+  },
+  {
+    "file": "assets/skills/mage-11.png",
+    "source": "https://www.xenrebirth.com/index.php?attachment/1775-icicle-png/"
+  },
+  {
+    "file": "assets/skills/mage-12.png",
+    "source": "https://www.xenrebirth.com/index.php?attachment/1777-magic-beam-png/"
+  },
+  {
+    "file": "assets/skills/mage-13.png",
+    "source": "https://www.xenrebirth.com/index.php?attachment/1785-volcano-png/"
+  },
+  {
+    "file": "assets/skills/mage-14.png",
+    "source": "https://www.xenrebirth.com/index.php?attachment/1779-magic-flame-png/"
+  },
+  {
+    "file": "assets/skills/mage-15.png",
+    "source": "https://www.xenrebirth.com/index.php?attachment/1774-ice-ball-png/"
+  },
+  {
+    "file": "assets/skills/mage-16.png",
+    "source": "https://www.xenrebirth.com/index.php?attachment/1771-fire-ball-png/"
+  },
+  {
+    "file": "assets/skills/mage-17.png",
+    "source": "https://www.xenrebirth.com/index.php?attachment/1772-freeze-splasher-png/"
+  },
+  {
+    "file": "assets/classes/app_f.jpg",
+    "source": "https://www.xenrebirth.com/images/db/classes/app_f.jpg"
+  },
+  {
+    "file": "assets/classes/app_m.jpg",
+    "source": "https://www.xenrebirth.com/images/db/classes/app_m.jpg"
+  },
+  {
+    "file": "assets/classes/mage_f.jpg",
+    "source": "https://www.xenrebirth.com/images/db/classes/mage_f.jpg"
+  },
+  {
+    "file": "assets/classes/mage_m.jpg",
+    "source": "https://www.xenrebirth.com/images/db/classes/mage_m.jpg"
+  },
+  {
+    "file": "assets/classes/wiz_f.jpg",
+    "source": "https://www.xenrebirth.com/images/db/classes/wiz_f.jpg"
+  },
+  {
+    "file": "assets/classes/wiz_m.jpg",
+    "source": "https://www.xenrebirth.com/images/db/classes/wiz_m.jpg"
+  },
+  {
+    "file": "assets/classes/arc_f.jpg",
+    "source": "https://www.xenrebirth.com/images/db/classes/arc_f.jpg"
+  },
+  {
+    "file": "assets/classes/arc_m.jpg",
+    "source": "https://www.xenrebirth.com/images/db/classes/arc_m.jpg"
+  },
+  {
+    "file": "assets/skills/templar-0.png",
+    "source": "https://www.xenrebirth.com/index.php?attachment/1913-ward-png/"
+  },
+  {
+    "file": "assets/skills/templar-1.png",
+    "source": "https://www.xenrebirth.com/index.php?attachment/1911-sustain-png/"
+  },
+  {
+    "file": "assets/skills/templar-2.png",
+    "source": "https://www.xenrebirth.com/index.php?attachment/1902-assist-heal-png/"
+  },
+  {
+    "file": "assets/skills/templar-3.png",
+    "source": "https://www.xenrebirth.com/index.php?attachment/1903-brace-up-png/"
+  },
+  {
+    "file": "assets/skills/templar-4.png",
+    "source": "https://www.xenrebirth.com/index.php?attachment/1912-time-shield-png/"
+  },
+  {
+    "file": "assets/skills/templar-5.png",
+    "source": "https://www.xenrebirth.com/index.php?attachment/1907-force-blast-png/"
+  },
+  {
+    "file": "assets/skills/templar-6.png",
+    "source": "https://www.xenrebirth.com/index.php?attachment/1908-protection-png/"
+  },
+  {
+    "file": "assets/skills/templar-7.png",
+    "source": "https://www.xenrebirth.com/index.php?attachment/1910-shake-mind-png/"
+  },
+  {
+    "file": "assets/skills/templar-8.png",
+    "source": "https://www.xenrebirth.com/index.php?attachment/1914-eurosia-png/"
+  },
+  {
+    "file": "assets/skills/templar-9.png",
+    "source": "https://www.xenrebirth.com/index.php?attachment/1904-burning-hands-png/"
+  },
+  {
+    "file": "assets/skills/templar-10.png",
+    "source": "https://www.xenrebirth.com/index.php?attachment/1905-chain-block-png/"
+  },
+  {
+    "file": "assets/skills/templar-11.png",
+    "source": "https://www.xenrebirth.com/index.php?attachment/1909-saint-rising-png/"
+  },
+  {
+    "file": "assets/skills/templar-12.png",
+    "source": "https://www.xenrebirth.com/index.php?attachment/1906-dead-lock-png/"
+  },
+  {
+    "file": "assets/skills/templar-13.png",
+    "source": "https://www.xenrebirth.com/index.php?attachment/1917-evil-dead-png/"
+  },
+  {
+    "file": "assets/skills/templar-14.png",
+    "source": "https://www.xenrebirth.com/index.php?attachment/2099-repentance-png/"
+  },
+  {
+    "file": "assets/skills/templar-15.png",
+    "source": "https://www.xenrebirth.com/index.php?attachment/1915-great-sphere-png/"
+  },
+  {
+    "file": "assets/skills/templar-16.png",
+    "source": "https://www.xenrebirth.com/index.php?attachment/1916-auto-genesis-png/"
+  },
+  {
+    "file": "assets/skills/templar-17.png",
+    "source": "https://www.xenrebirth.com/index.php?attachment/7206-purge-png/"
+  },
+  {
+    "file": "assets/skills/templar-18.png",
+    "source": "https://www.xenrebirth.com/index.php?attachment/1918-introspection-png/"
+  },
+  {
+    "file": "assets/skills/templar-19.png",
+    "source": "https://www.xenrebirth.com/index.php?attachment/2100-counter-measure-png/"
+  },
+  {
+    "file": "assets/skills/templar-20.png",
+    "source": "https://www.xenrebirth.com/index.php?attachment/7204-divine-descent-png/"
+  },
+  {
+    "file": "assets/skills/templar-21.png",
+    "source": "https://www.xenrebirth.com/index.php?attachment/7205-plutan-s-gift-png/"
+  },
+  {
+    "file": "assets/classes/disc_f.jpg",
+    "source": "https://www.xenrebirth.com/images/db/classes/disc_f.jpg"
+  },
+  {
+    "file": "assets/classes/disc_m.jpg",
+    "source": "https://www.xenrebirth.com/images/db/classes/disc_m.jpg"
+  },
+  {
+    "file": "assets/classes/temp_f.jpg",
+    "source": "https://www.xenrebirth.com/images/db/classes/temp_f.jpg"
+  },
+  {
+    "file": "assets/classes/temp_m.jpg",
+    "source": "https://www.xenrebirth.com/images/db/classes/temp_m.jpg"
+  },
+  {
+    "file": "assets/classes/ha_f.jpg",
+    "source": "https://www.xenrebirth.com/images/db/classes/ha_f.jpg"
+  },
+  {
+    "file": "assets/classes/ha_m.jpg",
+    "source": "https://www.xenrebirth.com/images/db/classes/ha_m.jpg"
+  },
+  {
+    "file": "assets/classes/sg_f.jpg",
+    "source": "https://www.xenrebirth.com/images/db/classes/sg_f.jpg"
+  },
+  {
+    "file": "assets/classes/sg_m.jpg",
+    "source": "https://www.xenrebirth.com/images/db/classes/sg_m.jpg"
+  }
+]

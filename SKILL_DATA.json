@@ -1,0 +1,1798 @@
+{
+  "archer": [
+    {
+      "name": "Quick Shot",
+      "effect": "敵1体への遠距離攻撃。",
+      "levels": [
+        "16",
+        "31",
+        "—",
+        "—",
+        "—",
+        "—",
+        "—"
+      ],
+      "image": "assets/skills/archer-0.png"
+    },
+    {
+      "name": "Blunt Arrow",
+      "effect": "遠距離攻撃とスタン。",
+      "levels": [
+        "16",
+        "41",
+        "66",
+        "91",
+        "116",
+        "141",
+        "—"
+      ],
+      "image": "assets/skills/archer-1.png"
+    },
+    {
+      "name": "Falcon Eye",
+      "effect": "自身のスキルクリティカルを強化。Symbol of Windを1個消費。",
+      "levels": [
+        "21",
+        "46",
+        "71",
+        "96",
+        "121",
+        "146",
+        "—"
+      ],
+      "image": "assets/skills/archer-2.png"
+    },
+    {
+      "name": "Ankle Binding",
+      "effect": "遠距離攻撃と移動速度低下。",
+      "levels": [
+        "26",
+        "46",
+        "66",
+        "86",
+        "106",
+        "126",
+        "146"
+      ],
+      "image": "assets/skills/archer-3.png"
+    },
+    {
+      "name": "Siphon",
+      "effect": "遠距離攻撃と継続ダメージ。",
+      "levels": [
+        "31",
+        "—",
+        "—",
+        "—",
+        "—",
+        "—",
+        "—"
+      ],
+      "image": "assets/skills/archer-4.png"
+    },
+    {
+      "name": "Tailwind",
+      "effect": "自身と周囲の味方の移動速度・命中を強化。",
+      "levels": [
+        "36",
+        "66",
+        "96",
+        "131",
+        "—",
+        "—",
+        "—"
+      ],
+      "image": "assets/skills/archer-5.png"
+    },
+    {
+      "name": "Wind Blow",
+      "effect": "敵1体への遠距離攻撃。",
+      "levels": [
+        "46",
+        "66",
+        "86",
+        "106",
+        "126",
+        "146",
+        "—"
+      ],
+      "image": "assets/skills/archer-6.png"
+    },
+    {
+      "name": "Parasite",
+      "effect": "隠れている対象を発見する範囲スキル。主に対人戦用。",
+      "levels": [
+        "51",
+        "61",
+        "—",
+        "—",
+        "—",
+        "—",
+        "—"
+      ],
+      "image": "assets/skills/archer-7.png"
+    },
+    {
+      "name": "Poison Arrow",
+      "effect": "遠距離攻撃と継続ダメージ。",
+      "levels": [
+        "56",
+        "76",
+        "96",
+        "116",
+        "136",
+        "—",
+        "—"
+      ],
+      "image": "assets/skills/archer-8.png"
+    },
+    {
+      "name": "Spiritual",
+      "effect": "自身のAGIと移動速度を強化。Symbol of Soulを1個消費。",
+      "levels": [
+        "61",
+        "—",
+        "—",
+        "—",
+        "—",
+        "—",
+        "—"
+      ],
+      "image": "assets/skills/archer-9.png"
+    },
+    {
+      "name": "Brambleway",
+      "effect": "対象を中心とした扇状の範囲攻撃。移動速度を下げる。",
+      "levels": [
+        "66",
+        "—",
+        "—",
+        "—",
+        "—",
+        "—",
+        "—"
+      ],
+      "image": "assets/skills/archer-10.png"
+    },
+    {
+      "name": "Reticle Trap",
+      "effect": "指定した地点の周囲を攻撃。",
+      "levels": [
+        "71",
+        "96",
+        "121",
+        "146",
+        "—",
+        "—",
+        "—"
+      ],
+      "image": "assets/skills/archer-11.png"
+    },
+    {
+      "name": "Phantom Arrow",
+      "effect": "遠距離攻撃と継続ダメージ。",
+      "levels": [
+        "81",
+        "101",
+        "121",
+        "141",
+        "—",
+        "—",
+        "—"
+      ],
+      "image": "assets/skills/archer-12.png"
+    },
+    {
+      "name": "Stone Edge",
+      "effect": "対象を石化させて移動を止める。同時に対象の防御が上がる。",
+      "levels": [
+        "86",
+        "—",
+        "—",
+        "—",
+        "—",
+        "—",
+        "—"
+      ],
+      "image": "assets/skills/archer-13.png"
+    },
+    {
+      "name": "Snake Shot",
+      "effect": "遠距離攻撃にDizzy（行動妨害）を付与。",
+      "levels": [
+        "91",
+        "111",
+        "131",
+        "—",
+        "—",
+        "—",
+        "—"
+      ],
+      "image": "assets/skills/archer-14.png"
+    },
+    {
+      "name": "Marked Point",
+      "effect": "遠距離攻撃。確率でスタンを付与。",
+      "levels": [
+        "101",
+        "121",
+        "141",
+        "—",
+        "—",
+        "—",
+        "—"
+      ],
+      "image": "assets/skills/archer-15.png"
+    },
+    {
+      "name": "Arrow Rampage",
+      "effect": "指定した地点の周囲を攻撃。",
+      "levels": [
+        "111",
+        "136",
+        "—",
+        "—",
+        "—",
+        "—",
+        "—"
+      ],
+      "image": "assets/skills/archer-16.png"
+    },
+    {
+      "name": "Ice Arrow",
+      "effect": "遠距離攻撃と移動速度低下。",
+      "levels": [
+        "116",
+        "136",
+        "156",
+        "176",
+        "196",
+        "—",
+        "—"
+      ],
+      "image": "assets/skills/archer-17.png"
+    },
+    {
+      "name": "Sniper Shot",
+      "effect": "高いクリティカル率の遠距離攻撃。",
+      "levels": [
+        "121",
+        "146",
+        "—",
+        "—",
+        "—",
+        "—",
+        "—"
+      ],
+      "image": "assets/skills/archer-18.png"
+    },
+    {
+      "name": "Overtrick",
+      "effect": "自身の攻撃力とスキルクリティカルを強化。",
+      "levels": [
+        "126",
+        "—",
+        "—",
+        "—",
+        "—",
+        "—",
+        "—"
+      ],
+      "image": "assets/skills/archer-19.png"
+    },
+    {
+      "name": "Last Judgement",
+      "effect": "対象へ3連続の遠距離攻撃。",
+      "levels": [
+        "136",
+        "—",
+        "—",
+        "—",
+        "—",
+        "—",
+        "—"
+      ],
+      "image": "assets/skills/archer-20.png"
+    },
+    {
+      "name": "Orion's Fury",
+      "effect": "指定地点への範囲攻撃。BramblewayまたはVine Shackleの効果中の敵に継続ダメージを付与。",
+      "levels": [
+        "141",
+        "181",
+        "—",
+        "—",
+        "—",
+        "—",
+        "—"
+      ],
+      "image": "assets/skills/archer-21.png"
+    },
+    {
+      "name": "Vine Shackle",
+      "effect": "対象周辺の敵の移動速度を大幅に下げる。",
+      "levels": [
+        "151",
+        "176",
+        "—",
+        "—",
+        "—",
+        "—",
+        "—"
+      ],
+      "image": "assets/skills/archer-22.png"
+    }
+  ],
+  "cleric": [
+    {
+      "name": "Illusion Quake",
+      "effect": "遠距離攻撃と移動速度低下。",
+      "levels": [
+        "16",
+        "36",
+        "56",
+        "76",
+        "96",
+        "116",
+        "136"
+      ],
+      "image": "assets/skills/cleric-0.png"
+    },
+    {
+      "name": "Minor Heal",
+      "effect": "対象1体のHPを少量回復。",
+      "levels": [
+        "16",
+        "31",
+        "46",
+        "61",
+        "76",
+        "91",
+        "—"
+      ],
+      "image": "assets/skills/cleric-1.png"
+    },
+    {
+      "name": "Spirit",
+      "effect": "対象の動きを止める。攻撃を受けると解除。",
+      "levels": [
+        "16",
+        "41",
+        "66",
+        "91",
+        "116",
+        "141",
+        "—"
+      ],
+      "image": "assets/skills/cleric-2.png"
+    },
+    {
+      "name": "Bless",
+      "effect": "対象の防御を強化。",
+      "levels": [
+        "21",
+        "41",
+        "61",
+        "81",
+        "101",
+        "121",
+        "141"
+      ],
+      "image": "assets/skills/cleric-3.png"
+    },
+    {
+      "name": "Fist Up",
+      "effect": "対象の物理攻撃・魔法攻撃を強化。",
+      "levels": [
+        "26",
+        "46",
+        "66",
+        "86",
+        "106",
+        "126",
+        "146"
+      ],
+      "image": "assets/skills/cleric-4.png"
+    },
+    {
+      "name": "Poison Clear",
+      "effect": "毒・猛毒を解除。",
+      "levels": [
+        "31",
+        "51",
+        "—",
+        "—",
+        "—",
+        "—",
+        "—"
+      ],
+      "image": "assets/skills/cleric-5.png"
+    },
+    {
+      "name": "Antibuff",
+      "effect": "対人戦で対象の一部の強化効果を解除。",
+      "levels": [
+        "36",
+        "—",
+        "—",
+        "—",
+        "—",
+        "—",
+        "—"
+      ],
+      "image": "assets/skills/cleric-6.png"
+    },
+    {
+      "name": "Holy Cure",
+      "effect": "出血・火傷を解除。",
+      "levels": [
+        "41",
+        "56",
+        "—",
+        "—",
+        "—",
+        "—",
+        "—"
+      ],
+      "image": "assets/skills/cleric-7.png"
+    },
+    {
+      "name": "Revival",
+      "effect": "対象を衰弱状態で蘇生。Insignia of Lifeを1個消費。",
+      "levels": [
+        "46",
+        "—",
+        "—",
+        "—",
+        "—",
+        "—",
+        "—"
+      ],
+      "image": "assets/skills/cleric-8.png"
+    },
+    {
+      "name": "Meditation",
+      "effect": "自身または味方1体のMPを継続回復。",
+      "levels": [
+        "51",
+        "71",
+        "91",
+        "111",
+        "—",
+        "—",
+        "—"
+      ],
+      "image": "assets/skills/cleric-9.png"
+    },
+    {
+      "name": "Oblivion",
+      "effect": "遠距離攻撃と継続ダメージ。",
+      "levels": [
+        "56",
+        "81",
+        "106",
+        "—",
+        "—",
+        "—",
+        "—"
+      ],
+      "image": "assets/skills/cleric-10.png"
+    },
+    {
+      "name": "Ghost Steel",
+      "effect": "遠距離攻撃とスタン。",
+      "levels": [
+        "61",
+        "81",
+        "101",
+        "121",
+        "—",
+        "—",
+        "—"
+      ],
+      "image": "assets/skills/cleric-11.png"
+    },
+    {
+      "name": "Guardianship",
+      "effect": "自身または味方1体の防御を一時的に強化。Insignia of Protectionを1個消費。",
+      "levels": [
+        "66",
+        "—",
+        "—",
+        "—",
+        "—",
+        "—",
+        "—"
+      ],
+      "image": "assets/skills/cleric-12.png"
+    },
+    {
+      "name": "Major Heal",
+      "effect": "自身と周囲の味方のHPを回復。",
+      "levels": [
+        "71",
+        "86",
+        "106",
+        "126",
+        "146",
+        "—",
+        "—"
+      ],
+      "image": "assets/skills/cleric-13.png"
+    },
+    {
+      "name": "Howling",
+      "effect": "敵1体の防御を下げる。",
+      "levels": [
+        "81",
+        "101",
+        "121",
+        "141",
+        "—",
+        "—",
+        "—"
+      ],
+      "image": "assets/skills/cleric-14.png"
+    },
+    {
+      "name": "Cooling Heal",
+      "effect": "対象1体のHPを大きく回復。",
+      "levels": [
+        "91",
+        "111",
+        "131",
+        "—",
+        "—",
+        "—",
+        "—"
+      ],
+      "image": "assets/skills/cleric-15.png"
+    },
+    {
+      "name": "Fury",
+      "effect": "自身のINT・スキルクリティカル・移動速度を強化。被ダメージで解除。",
+      "levels": [
+        "96",
+        "—",
+        "—",
+        "—",
+        "—",
+        "—",
+        "—"
+      ],
+      "image": "assets/skills/cleric-16.png"
+    },
+    {
+      "name": "Nobleshield",
+      "effect": "自身の防御を一時的に強化。",
+      "levels": [
+        "111",
+        "136",
+        "—",
+        "—",
+        "—",
+        "—",
+        "—"
+      ],
+      "image": "assets/skills/cleric-17.png"
+    },
+    {
+      "name": "Power Light",
+      "effect": "自身の周囲に範囲攻撃。",
+      "levels": [
+        "121",
+        "146",
+        "—",
+        "—",
+        "—",
+        "—",
+        "—"
+      ],
+      "image": "assets/skills/cleric-18.png"
+    },
+    {
+      "name": "Life Conversion",
+      "effect": "自身のHPをMPへ変換。",
+      "levels": [
+        "131",
+        "—",
+        "—",
+        "—",
+        "—",
+        "—",
+        "—"
+      ],
+      "image": "assets/skills/cleric-19.png"
+    },
+    {
+      "name": "Restoration",
+      "effect": "対象のHP・MPを全回復。Insignia of Protectionを3個消費。",
+      "levels": [
+        "136",
+        "151",
+        "171",
+        "—",
+        "—",
+        "—",
+        "—"
+      ],
+      "image": "assets/skills/cleric-20.png"
+    },
+    {
+      "name": "Divine Infusion",
+      "effect": "短時間、パーティの物理攻撃・魔法攻撃を30増加。",
+      "levels": [
+        "151",
+        "186",
+        "—",
+        "—",
+        "—",
+        "—",
+        "—"
+      ],
+      "image": "assets/skills/cleric-21.png"
+    },
+    {
+      "name": "Jureah's Last Stand",
+      "effect": "短時間、パーティの防御を500増加。Insignia of Protectionを3個消費。",
+      "levels": [
+        "156",
+        "176",
+        "191",
+        "—",
+        "—",
+        "—",
+        "—"
+      ],
+      "image": "assets/skills/cleric-22.png"
+    },
+    {
+      "name": "Jureah's Blessing",
+      "effect": "周囲のパーティメンバーにBlessとFist Upを付与。",
+      "levels": [
+        "136",
+        "141",
+        "146",
+        "—",
+        "—",
+        "—",
+        "—"
+      ],
+      "image": "assets/skills/cleric-23.png"
+    }
+  ],
+  "rogue": [
+    {
+      "name": "Threaten",
+      "effect": "敵1体への近接攻撃。",
+      "levels": [
+        "16",
+        "36",
+        "56",
+        "76",
+        "—",
+        "—"
+      ],
+      "image": "assets/skills/rogue-0.png"
+    },
+    {
+      "name": "Enhance",
+      "effect": "自身の通常攻撃速度と回避を強化。スキルレベルで効果が増加。",
+      "levels": [
+        "16",
+        "36",
+        "56",
+        "76",
+        "96",
+        "116"
+      ],
+      "image": "assets/skills/rogue-1.png"
+    },
+    {
+      "name": "Blindside",
+      "effect": "近接攻撃とスタン。公式記載はスタン4秒、再使用17秒。",
+      "levels": [
+        "21",
+        "46",
+        "71",
+        "96",
+        "121",
+        "146"
+      ],
+      "image": "assets/skills/rogue-2.png"
+    },
+    {
+      "name": "Accuracy",
+      "effect": "自身と周囲の対象のクリティカル・スキルクリティカルを強化。",
+      "levels": [
+        "26",
+        "56",
+        "86",
+        "116",
+        "146",
+        "—"
+      ],
+      "image": "assets/skills/rogue-3.png"
+    },
+    {
+      "name": "Rapid Step",
+      "effect": "自身の移動速度を強化。",
+      "levels": [
+        "31",
+        "56",
+        "81",
+        "106",
+        "131",
+        "—"
+      ],
+      "image": "assets/skills/rogue-4.png"
+    },
+    {
+      "name": "Invisible",
+      "effect": "一定時間、姿を隠す。Transparent Plantを1個消費。",
+      "levels": [
+        "36",
+        "61",
+        "—",
+        "—",
+        "—",
+        "—"
+      ],
+      "image": "assets/skills/rogue-5.png"
+    },
+    {
+      "name": "Poison Blow",
+      "effect": "近接攻撃と毒の継続ダメージ。同じ毒効果は上書きされる。",
+      "levels": [
+        "41",
+        "61",
+        "81",
+        "101",
+        "121",
+        "141"
+      ],
+      "image": "assets/skills/rogue-6.png"
+    },
+    {
+      "name": "Extract",
+      "effect": "指定した近くの地点へ瞬間移動。段差なども越えられる。",
+      "levels": [
+        "51",
+        "66",
+        "—",
+        "—",
+        "—",
+        "—"
+      ],
+      "image": "assets/skills/rogue-7.png"
+    },
+    {
+      "name": "Evil Voice",
+      "effect": "敵を眠らせる。攻撃で解除。Sleeping Herbを1個消費。",
+      "levels": [
+        "61",
+        "81",
+        "101",
+        "121",
+        "—",
+        "—"
+      ],
+      "image": "assets/skills/rogue-8.png"
+    },
+    {
+      "name": "Circle Trap",
+      "effect": "自身の周囲へ範囲攻撃。",
+      "levels": [
+        "66",
+        "91",
+        "116",
+        "—",
+        "—",
+        "—"
+      ],
+      "image": "assets/skills/rogue-9.png"
+    },
+    {
+      "name": "Cruel Blow",
+      "effect": "近接攻撃。対象の通常攻撃・スキル速度を50%低下させる（公式説明ではボスも対象）。",
+      "levels": [
+        "71",
+        "96",
+        "121",
+        "146",
+        "—",
+        "—"
+      ],
+      "image": "assets/skills/rogue-10.png"
+    },
+    {
+      "name": "Sandstorm",
+      "effect": "周囲への範囲攻撃とBlind（暗闇）。",
+      "levels": [
+        "81",
+        "106",
+        "166",
+        "—",
+        "—",
+        "—"
+      ],
+      "image": "assets/skills/rogue-11.png"
+    },
+    {
+      "name": "Dust Blade",
+      "effect": "近接攻撃。確率でスタンを付与。",
+      "levels": [
+        "96",
+        "116",
+        "136",
+        "—",
+        "—",
+        "—"
+      ],
+      "image": "assets/skills/rogue-12.png"
+    },
+    {
+      "name": "Breeze Dagger",
+      "effect": "近接攻撃と出血の継続ダメージ。同じ出血効果は上書きされる。",
+      "levels": [
+        "106",
+        "121",
+        "136",
+        "—",
+        "—",
+        "—"
+      ],
+      "image": "assets/skills/rogue-13.png"
+    },
+    {
+      "name": "Light Masque",
+      "effect": "周囲への範囲攻撃。確率でスタンを付与。",
+      "levels": [
+        "116",
+        "136",
+        "156",
+        "—",
+        "—",
+        "—"
+      ],
+      "image": "assets/skills/rogue-14.png"
+    },
+    {
+      "name": "Starlight Shot",
+      "effect": "追尾する遠距離攻撃。スキルLv1は1発、Lv2は2発。",
+      "levels": [
+        "126",
+        "146",
+        "—",
+        "—",
+        "—",
+        "—"
+      ],
+      "image": "assets/skills/rogue-15.png"
+    },
+    {
+      "name": "Double Strike",
+      "effect": "自身の与ダメージを15%強化。公式記載は14秒持続、再使用20秒。",
+      "levels": [
+        "131",
+        "—",
+        "—",
+        "—",
+        "—",
+        "—"
+      ],
+      "image": "assets/skills/rogue-16.png"
+    },
+    {
+      "name": "Shock Troops",
+      "effect": "自身の与ダメージを7%強化。公式記載は12秒持続、再使用28秒。",
+      "levels": [
+        "136",
+        "176",
+        "—",
+        "—",
+        "—",
+        "—"
+      ],
+      "image": "assets/skills/rogue-17.png"
+    },
+    {
+      "name": "Vacuum Pulse",
+      "effect": "自身の周囲へ3連続の範囲攻撃。強い敵対心を発生させる。",
+      "levels": [
+        "141",
+        "161",
+        "181",
+        "—",
+        "—",
+        "—"
+      ],
+      "image": "assets/skills/rogue-18.png"
+    },
+    {
+      "name": "Shadow Fury",
+      "effect": "対象に10連続の近接攻撃。公式記載は再使用10秒。",
+      "levels": [
+        "146",
+        "—",
+        "—",
+        "—",
+        "—",
+        "—"
+      ],
+      "image": "assets/skills/rogue-19.png"
+    }
+  ],
+  "knight": [
+    {
+      "name": "Slash",
+      "effect": "敵1体への基本近接攻撃。",
+      "levels": [
+        "16",
+        "31",
+        "46",
+        "61",
+        "76",
+        "—",
+        "—",
+        "—"
+      ],
+      "image": "assets/skills/knight-0.png"
+    },
+    {
+      "name": "Shield Crash",
+      "effect": "対象をスタンさせ、移動速度を下げる。",
+      "levels": [
+        "21",
+        "46",
+        "71",
+        "96",
+        "121",
+        "146",
+        "—",
+        "—"
+      ],
+      "image": "assets/skills/knight-1.png"
+    },
+    {
+      "name": "Sharp Weapon",
+      "effect": "自身の攻撃力を一時的に強化。",
+      "levels": [
+        "26",
+        "56",
+        "86",
+        "116",
+        "146",
+        "176",
+        "—",
+        "—"
+      ],
+      "image": "assets/skills/knight-2.png"
+    },
+    {
+      "name": "Blazing",
+      "effect": "周囲の対象の最大HPを一時的に増加。Fighting Spirit Tonicを消費。",
+      "levels": [
+        "36",
+        "51",
+        "66",
+        "81",
+        "96",
+        "111",
+        "126",
+        "141"
+      ],
+      "image": "assets/skills/knight-3.png"
+    },
+    {
+      "name": "Broken Sword",
+      "effect": "攻撃と継続ダメージ。",
+      "levels": [
+        "41",
+        "61",
+        "81",
+        "101",
+        "121",
+        "141",
+        "—",
+        "—"
+      ],
+      "image": "assets/skills/knight-4.png"
+    },
+    {
+      "name": "Attraction",
+      "effect": "遠方の対象に使える物理攻撃。",
+      "levels": [
+        "46",
+        "—",
+        "—",
+        "—",
+        "—",
+        "—",
+        "—",
+        "—"
+      ],
+      "image": "assets/skills/knight-5.png"
+    },
+    {
+      "name": "Reflection",
+      "effect": "周囲の敵の攻撃速度を下げる。",
+      "levels": [
+        "51",
+        "76",
+        "101",
+        "126",
+        "—",
+        "—",
+        "—",
+        "—"
+      ],
+      "image": "assets/skills/knight-6.png"
+    },
+    {
+      "name": "Hard Blow",
+      "effect": "対象を攻撃し、攻撃速度・移動速度を下げる。公式の種別欄はST Stun。",
+      "levels": [
+        "61",
+        "86",
+        "111",
+        "136",
+        "—",
+        "—",
+        "—",
+        "—"
+      ],
+      "image": "assets/skills/knight-7.png"
+    },
+    {
+      "name": "Patience",
+      "effect": "自身のクリティカル率を強化。Patience Tonicを消費。",
+      "levels": [
+        "66",
+        "—",
+        "—",
+        "—",
+        "—",
+        "—",
+        "—",
+        "—"
+      ],
+      "image": "assets/skills/knight-8.png"
+    },
+    {
+      "name": "Wild Swing",
+      "effect": "自身の周囲へ範囲攻撃。",
+      "levels": [
+        "71",
+        "91",
+        "111",
+        "131",
+        "—",
+        "—",
+        "—",
+        "—"
+      ],
+      "image": "assets/skills/knight-9.png"
+    },
+    {
+      "name": "Bulwark",
+      "effect": "自身の防御を一時的に強化。",
+      "levels": [
+        "81",
+        "106",
+        "131",
+        "156",
+        "—",
+        "—",
+        "—",
+        "—"
+      ],
+      "image": "assets/skills/knight-10.png"
+    },
+    {
+      "name": "Soul Break",
+      "effect": "対象を攻撃し、スタンさせる。",
+      "levels": [
+        "86",
+        "106",
+        "126",
+        "146",
+        "—",
+        "—",
+        "—",
+        "—"
+      ],
+      "image": "assets/skills/knight-11.png"
+    },
+    {
+      "name": "Penetration",
+      "effect": "敵1体への近接攻撃。",
+      "levels": [
+        "91",
+        "106",
+        "121",
+        "136",
+        "151",
+        "—",
+        "—",
+        "—"
+      ],
+      "image": "assets/skills/knight-12.png"
+    },
+    {
+      "name": "Fire Swing",
+      "effect": "自身の周囲を炎で攻撃し、出血を付与。",
+      "levels": [
+        "106",
+        "126",
+        "146",
+        "161",
+        "—",
+        "—",
+        "—",
+        "—"
+      ],
+      "image": "assets/skills/knight-13.png"
+    },
+    {
+      "name": "Power Reinforce",
+      "effect": "自身のPOWを強化。",
+      "levels": [
+        "116",
+        "141",
+        "—",
+        "—",
+        "—",
+        "—",
+        "—",
+        "—"
+      ],
+      "image": "assets/skills/knight-14.png"
+    },
+    {
+      "name": "Force Cut",
+      "effect": "敵1体への近接攻撃。",
+      "levels": [
+        "126",
+        "141",
+        "156",
+        "181",
+        "—",
+        "—",
+        "—",
+        "—"
+      ],
+      "image": "assets/skills/knight-15.png"
+    },
+    {
+      "name": "Triangle Slash",
+      "effect": "対象を攻撃し、MPを減少させる。主に対人戦で使用。",
+      "levels": [
+        "131",
+        "146",
+        "—",
+        "—",
+        "—",
+        "—",
+        "—",
+        "—"
+      ],
+      "image": "assets/skills/knight-16.png"
+    },
+    {
+      "name": "Sorrow Shout",
+      "effect": "周囲へ範囲攻撃。",
+      "levels": [
+        "136",
+        "—",
+        "—",
+        "—",
+        "—",
+        "—",
+        "—",
+        "—"
+      ],
+      "image": "assets/skills/knight-17.png"
+    },
+    {
+      "name": "Art of War",
+      "effect": "攻撃力を上げる代わりに防御が下がる。",
+      "levels": [
+        "141",
+        "—",
+        "—",
+        "—",
+        "—",
+        "—",
+        "—",
+        "—"
+      ],
+      "image": ""
+    },
+    {
+      "name": "Heavy Slam",
+      "effect": "自身の防御をもとにダメージを計算する単体攻撃。",
+      "levels": [
+        "146",
+        "—",
+        "—",
+        "—",
+        "—",
+        "—",
+        "—",
+        "—"
+      ],
+      "image": ""
+    }
+  ],
+  "mage": [
+    {
+      "name": "Mind Buster",
+      "effect": "敵1体への攻撃魔法。",
+      "levels": [
+        "16",
+        "—",
+        "—",
+        "—",
+        "—",
+        "—",
+        "—"
+      ],
+      "image": "assets/skills/mage-0.png"
+    },
+    {
+      "name": "Magic Ice",
+      "effect": "敵1体を攻撃し、移動速度を13秒間低下。",
+      "levels": [
+        "16",
+        "36",
+        "56",
+        "76",
+        "96",
+        "116",
+        "136"
+      ],
+      "image": "assets/skills/mage-1.png"
+    },
+    {
+      "name": "Magic Thunder",
+      "effect": "敵1体に雷の攻撃。",
+      "levels": [
+        "21",
+        "41",
+        "61",
+        "—",
+        "—",
+        "—",
+        "—"
+      ],
+      "image": "assets/skills/mage-2.png"
+    },
+    {
+      "name": "Clear Magic",
+      "effect": "対象1体の魔法系弱体効果を解除。",
+      "levels": [
+        "26",
+        "46",
+        "—",
+        "—",
+        "—",
+        "—",
+        "—"
+      ],
+      "image": "assets/skills/mage-3.png"
+    },
+    {
+      "name": "Magic Shield",
+      "effect": "自身への被ダメージを50%軽減。回数は2＋スキルレベル、持続は3分。",
+      "levels": [
+        "31",
+        "51",
+        "71",
+        "91",
+        "111",
+        "131",
+        "—"
+      ],
+      "image": "assets/skills/mage-4.png"
+    },
+    {
+      "name": "Magic Poison",
+      "effect": "初撃と15秒間の継続ダメージ。",
+      "levels": [
+        "36",
+        "61",
+        "86",
+        "111",
+        "136",
+        "—",
+        "—"
+      ],
+      "image": "assets/skills/mage-5.png"
+    },
+    {
+      "name": "Magic Fire",
+      "effect": "敵1体への炎の攻撃。光線の数はスキルレベルに応じる。",
+      "levels": [
+        "46",
+        "71",
+        "96",
+        "121",
+        "146",
+        "—",
+        "—"
+      ],
+      "image": "assets/skills/mage-6.png"
+    },
+    {
+      "name": "Concentration",
+      "effect": "自身のスキルクリティカルを1分間2倍にする。Concentration Tonicが必要。",
+      "levels": [
+        "51",
+        "—",
+        "—",
+        "—",
+        "—",
+        "—",
+        "—"
+      ],
+      "image": "assets/skills/mage-7.png"
+    },
+    {
+      "name": "Lightning",
+      "effect": "指定地点の広い範囲へ雷の攻撃。クリティカルは発生しない。",
+      "levels": [
+        "56",
+        "81",
+        "106",
+        "131",
+        "—",
+        "—",
+        "—"
+      ],
+      "image": "assets/skills/mage-8.png"
+    },
+    {
+      "name": "Arrest",
+      "effect": "対象の移動を20秒間封じる。Unarrestで早期解除できる。",
+      "levels": [
+        "61",
+        "101",
+        "161",
+        "—",
+        "—",
+        "—",
+        "—"
+      ],
+      "image": "assets/skills/mage-9.png"
+    },
+    {
+      "name": "Frost",
+      "effect": "周囲の敵へ攻撃し、8秒間大きく減速させる。クリティカル可能。",
+      "levels": [
+        "66",
+        "91",
+        "116",
+        "141",
+        "—",
+        "—",
+        "—"
+      ],
+      "image": "assets/skills/mage-10.png"
+    },
+    {
+      "name": "Icicle",
+      "effect": "指定地点へ氷柱の範囲攻撃と8秒間の継続ダメージ。クリティカルなし。",
+      "levels": [
+        "76",
+        "101",
+        "126",
+        "—",
+        "—",
+        "—",
+        "—"
+      ],
+      "image": "assets/skills/mage-11.png"
+    },
+    {
+      "name": "Magic Beam",
+      "effect": "敵1体を攻撃し、3秒間スタン。",
+      "levels": [
+        "86",
+        "106",
+        "126",
+        "146",
+        "—",
+        "—",
+        "—"
+      ],
+      "image": "assets/skills/mage-12.png"
+    },
+    {
+      "name": "Volcano",
+      "effect": "周囲へ大きな範囲ダメージ。クリティカル可能。",
+      "levels": [
+        "96",
+        "121",
+        "146",
+        "—",
+        "—",
+        "—",
+        "—"
+      ],
+      "image": "assets/skills/mage-13.png"
+    },
+    {
+      "name": "Magic Flame",
+      "effect": "敵1体への大きな初撃と12秒間の継続ダメージ。",
+      "levels": [
+        "106",
+        "131",
+        "—",
+        "—",
+        "—",
+        "—",
+        "—"
+      ],
+      "image": "assets/skills/mage-14.png"
+    },
+    {
+      "name": "Ice Ball",
+      "effect": "敵1体を攻撃し、移動速度を13秒間低下。",
+      "levels": [
+        "116",
+        "131",
+        "146",
+        "—",
+        "—",
+        "—",
+        "—"
+      ],
+      "image": "assets/skills/mage-15.png"
+    },
+    {
+      "name": "Fire Ball",
+      "effect": "敵1体へ大きなダメージ。低確率で1秒間スタン。",
+      "levels": [
+        "126",
+        "151",
+        "—",
+        "—",
+        "—",
+        "—",
+        "—"
+      ],
+      "image": "assets/skills/mage-16.png"
+    },
+    {
+      "name": "Tornado",
+      "effect": "周囲への範囲攻撃。Overheatedで次のVolcanoを25%強化。",
+      "levels": [
+        "136",
+        "—",
+        "—",
+        "—",
+        "—",
+        "—",
+        "—"
+      ],
+      "image": "assets/skills/mage-17.png"
+    },
+    {
+      "name": "Blizzard",
+      "effect": "周囲への範囲攻撃。Supercellで次のTornadoを25%強化。",
+      "levels": [
+        "146",
+        "—",
+        "—",
+        "—",
+        "—",
+        "—",
+        "—"
+      ],
+      "image": ""
+    },
+    {
+      "name": "Freeze Splaher",
+      "effect": "公式早見表には名称のみ掲載。習得レベル・効果・現在の実装状況は未確認。",
+      "levels": [
+        "—",
+        "—",
+        "—",
+        "—",
+        "—",
+        "—",
+        "—"
+      ],
+      "image": ""
+    }
+  ],
+  "templar": [
+    {
+      "name": "Ward",
+      "effect": "近接攻撃。確率で対象の攻撃力を下げる。",
+      "levels": [
+        "16",
+        "31",
+        "—",
+        "—",
+        "—",
+        "—"
+      ],
+      "image": "assets/skills/templar-0.png"
+    },
+    {
+      "name": "Sustain",
+      "effect": "自身のHPを回復。回復量は攻撃力に応じる。",
+      "levels": [
+        "16",
+        "—",
+        "—",
+        "—",
+        "—",
+        "—"
+      ],
+      "image": "assets/skills/templar-1.png"
+    },
+    {
+      "name": "Assist Heal",
+      "effect": "HPを継続回復する。",
+      "levels": [
+        "21",
+        "41",
+        "61",
+        "81",
+        "101",
+        "121"
+      ],
+      "image": "assets/skills/templar-2.png"
+    },
+    {
+      "name": "Brace Up",
+      "effect": "自身の攻撃力を強化。",
+      "levels": [
+        "36",
+        "56",
+        "76",
+        "96",
+        "116",
+        "136"
+      ],
+      "image": "assets/skills/templar-3.png"
+    },
+    {
+      "name": "Time Shield",
+      "effect": "近接攻撃にDizzy（行動妨害）を付与。",
+      "levels": [
+        "36",
+        "51",
+        "76",
+        "101",
+        "126",
+        "151"
+      ],
+      "image": "assets/skills/templar-4.png"
+    },
+    {
+      "name": "Force Blast",
+      "effect": "近接攻撃。確率でスタンを付与。",
+      "levels": [
+        "41",
+        "61",
+        "81",
+        "101",
+        "121",
+        "141"
+      ],
+      "image": "assets/skills/templar-5.png"
+    },
+    {
+      "name": "Protection",
+      "effect": "自身の防御を強化。",
+      "levels": [
+        "41",
+        "61",
+        "81",
+        "101",
+        "121",
+        "141"
+      ],
+      "image": "assets/skills/templar-6.png"
+    },
+    {
+      "name": "Shake Mind",
+      "effect": "ボス由来ではない行動妨害を解除。",
+      "levels": [
+        "46",
+        "61",
+        "—",
+        "—",
+        "—",
+        "—"
+      ],
+      "image": "assets/skills/templar-7.png"
+    },
+    {
+      "name": "Eurosia",
+      "effect": "周囲の対象の最大HP・MPを強化。Wisdom Orbを1個消費。",
+      "levels": [
+        "56",
+        "76",
+        "96",
+        "—",
+        "—",
+        "—"
+      ],
+      "image": "assets/skills/templar-8.png"
+    },
+    {
+      "name": "Burning Hands",
+      "effect": "対象の動きを止める。対象が攻撃されると解除。",
+      "levels": [
+        "61",
+        "81",
+        "101",
+        "121",
+        "141",
+        "—"
+      ],
+      "image": "assets/skills/templar-9.png"
+    },
+    {
+      "name": "Chain Block",
+      "effect": "小範囲の攻撃。対象の攻撃力を10下げる。",
+      "levels": [
+        "66",
+        "—",
+        "—",
+        "—",
+        "—",
+        "—"
+      ],
+      "image": "assets/skills/templar-10.png"
+    },
+    {
+      "name": "Saint Rising",
+      "effect": "短時間、自身の防御を大きく強化。",
+      "levels": [
+        "71",
+        "91",
+        "111",
+        "—",
+        "—",
+        "—"
+      ],
+      "image": "assets/skills/templar-11.png"
+    },
+    {
+      "name": "Dead Lock",
+      "effect": "広い範囲を攻撃。対象の攻撃力を10下げる。",
+      "levels": [
+        "81",
+        "101",
+        "121",
+        "141",
+        "—",
+        "—"
+      ],
+      "image": "assets/skills/templar-12.png"
+    },
+    {
+      "name": "Evil Dead",
+      "effect": "近接攻撃。確率でスタンを付与。",
+      "levels": [
+        "86",
+        "106",
+        "126",
+        "146",
+        "—",
+        "—"
+      ],
+      "image": "assets/skills/templar-13.png"
+    },
+    {
+      "name": "Repentance",
+      "effect": "周囲の敵の移動速度を下げる広範囲スキル。",
+      "levels": [
+        "91",
+        "121",
+        "141",
+        "161",
+        "—",
+        "—"
+      ],
+      "image": "assets/skills/templar-14.png"
+    },
+    {
+      "name": "Great Sphere",
+      "effect": "指定地点の周囲の対象のHPを継続回復。",
+      "levels": [
+        "96",
+        "—",
+        "—",
+        "—",
+        "—",
+        "—"
+      ],
+      "image": "assets/skills/templar-15.png"
+    },
+    {
+      "name": "Auto Genesis",
+      "effect": "被弾ごとに33%の確率で自身を回復。Gracious Orbを1個消費。",
+      "levels": [
+        "111",
+        "131",
+        "151",
+        "—",
+        "—",
+        "—"
+      ],
+      "image": "assets/skills/templar-16.png"
+    },
+    {
+      "name": "Purge",
+      "effect": "敵1体への近接攻撃。",
+      "levels": [
+        "126",
+        "141",
+        "156",
+        "—",
+        "—",
+        "—"
+      ],
+      "image": "assets/skills/templar-17.png"
+    },
+    {
+      "name": "Introspection",
+      "effect": "自身のMENと移動速度を一時的に強化。",
+      "levels": [
+        "131",
+        "156",
+        "—",
+        "—",
+        "—",
+        "—"
+      ],
+      "image": "assets/skills/templar-18.png"
+    },
+    {
+      "name": "Counter Measure",
+      "effect": "自身の与ダメージを10%強化。",
+      "levels": [
+        "136",
+        "—",
+        "—",
+        "—",
+        "—",
+        "—"
+      ],
+      "image": "assets/skills/templar-19.png"
+    },
+    {
+      "name": "Divine Descent",
+      "effect": "自身の周囲へ範囲攻撃。",
+      "levels": [
+        "146",
+        "166",
+        "186",
+        "—",
+        "—",
+        "—"
+      ],
+      "image": "assets/skills/templar-20.png"
+    },
+    {
+      "name": "Plutan's Gift",
+      "effect": "周囲の対象のMPを継続回復。",
+      "levels": [
+        "151",
+        "—",
+        "—",
+        "—",
+        "—",
+        "—"
+      ],
+      "image": "assets/skills/templar-21.png"
+    }
+  ]
+}
