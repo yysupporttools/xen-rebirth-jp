@@ -1,24 +1,8 @@
 {
   "source": "https://www.xenrebirth.com/events.php",
-  "fetchedAt": 1789255531000,
-  "validUntil": 1789437600000,
+  "fetchedAt": 1789293480000,
+  "validUntil": 1789524000000,
   "events": [
-    {
-      "id": "w3",
-      "name": "Ra of the Obelisk",
-      "location": "Hellein Plateau",
-      "image": "assets/bosses/ra.png",
-      "start": 1789261200000,
-      "end": 1789264800000
-    },
-    {
-      "id": "w1",
-      "name": "Super Hippogras",
-      "location": "Essene Shipdock",
-      "image": "assets/bosses/hippo.png",
-      "start": 1789282800000,
-      "end": 1789286400000
-    },
     {
       "id": "w4",
       "name": "Amaranth Wyrm",
@@ -74,6 +58,38 @@
       "image": "assets/bosses/amaranth.png",
       "start": 1789434000000,
       "end": 1789437600000
+    },
+    {
+      "id": "w2",
+      "name": "Snake Dragon Hematosou",
+      "location": "Temple of Pansidia",
+      "image": "assets/bosses/snaked.png",
+      "start": 1789455600000,
+      "end": 1789459200000
+    },
+    {
+      "id": "w1",
+      "name": "Super Hippogras",
+      "location": "Essene Shipdock",
+      "image": "assets/bosses/hippo.png",
+      "start": 1789477200000,
+      "end": 1789480800000
+    },
+    {
+      "id": "w4",
+      "name": "Amaranth Wyrm",
+      "location": "Amorica Cave",
+      "image": "assets/bosses/amaranth.png",
+      "start": 1789498800000,
+      "end": 1789502400000
+    },
+    {
+      "id": "w3",
+      "name": "Ra of the Obelisk",
+      "location": "Hellein Plateau",
+      "image": "assets/bosses/ra.png",
+      "start": 1789520400000,
+      "end": 1789524000000
     }
   ]
 }

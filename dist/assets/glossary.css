@@ -1,0 +1,18 @@
+/* The glossary is fully readable with JavaScript disabled. */
+[hidden]{display:none!important}
+html.glossary-page{scroll-behavior:auto}
+.glossary-link{text-decoration-style:dotted;text-decoration-thickness:1px}
+.glossary-link:hover{text-decoration-style:solid}
+.glossary-controls{display:grid;grid-template-columns:1fr auto;gap:10px 20px}
+.glossary-controls label,.glossary-controls input,.glossary-controls p{grid-column:1/-1}
+.glossary-controls label{font-weight:bold}
+.glossary-controls input,.glossary-controls select,.glossary-controls button{font:inherit;padding:10px 12px;border:1px solid #a7babf;border-radius:4px;background:white;color:var(--ink);min-width:0}
+.glossary-controls input:focus-visible,.glossary-controls select:focus-visible{outline:3px solid #d59535;outline-offset:3px}
+.glossary-controls button{cursor:pointer;color:var(--teal)}
+.glossary-category{margin-top:36px}
+.glossary-entry{scroll-margin-top:24px;overflow-wrap:anywhere;margin:16px 0}
+.glossary-entry h3{margin-top:0;font-size:22px}
+.glossary-entry:target{border:2px solid var(--teal);background:#f0faf7}
+.glossary-entry:focus{outline:3px solid #d59535;outline-offset:3px}
+.glossary-links{display:flex;flex-wrap:wrap;gap:10px 24px;font-size:14px}
+@media(max-width:600px){.glossary-controls{grid-template-columns:1fr}.glossary-entry h3{font-size:20px}.glossary-links{gap:12px 20px}}

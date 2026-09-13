@@ -1,11 +1,11 @@
-# Xen Rebirth 日本語攻略サイト Ver.2
+# Xen Rebirth 日本語攻略サイト Ver.3
 
 HTML / CSS / JavaScriptだけで表示できる静的サイトです。本文確認日：2026-09-11。
 
 ## すぐ見る
 
 ZIPを「すべて展開」し、`dist/index.html`をブラウザで開いてください。
-全14ページ、ボス画像4点、出典、スマートフォン対応のスタイルを同梱。表示に追加インストールは不要です。
+全15ページ、ボス画像4点、出典、スマートフォン対応のスタイルを同梱。表示に追加インストールは不要です。
 
 ## GitHub Pagesで無料公開する
 
@@ -71,10 +71,26 @@ Lexiconには利用者執筆記事も含まれます。仕様変更や編集中�
 登録・メール認証・ゲームログインは実施していません。認証手順は実画面の案内に従う形式です。
 ボス画像4点の出典：公式Worldboss Event Timer、`images/db/events/hippo.png`、`snaked.png`、`ra.png`、`amaranth.png`。
 名称・ゲーム画像の権利は各権利者に帰属します。
-イベントカレンダー・掲示板・新しいガチャ集計は今回のVer.2の範囲には含みません。
+イベントカレンダー・掲示板・新しいガチャ集計は今回のVer.3の範囲には含みません。
 
 ## 動作確認
 
 検証内容と結果は `VALIDATION.md` を参照してください。
 
 Art of War / Heavy Slam / Blizzard: user-provided skill icons added on 2026-09-13.
+
+## Ver.3：用語集とアイテムリンク
+
+43項目の用語集を追加。名称・別表記・説明の検索、分類、項目への直接リンクに対応しています。
+各ページの156箇所の用語を、用語集の対応する説明にリンクしています。同名のクレリックスキル「Jureah's Blessing」は転職素材と混同しないよう除外。
+用語集とリンクは静的HTMLなので、JavaScriptが無効でも読めます。検索と絞り込みにはJavaScriptを使います。
+
+編集時は `dist/assets/glossary.json` の項目を更新し、Pythonとbeautifulsoup4がある環境で次を実行してください。通常の公開・閲覧時には追加インストールは不要です。
+
+```sh
+python -m pip install beautifulsoup4
+python scripts/build_glossary.py
+python scripts/verify_site.py
+```
+
+項目の `id` は外部リンク先になるため、公開後は変更しないでください。再生成は既存の用語リンクを作り直し、リンクの重複を防ぎます。

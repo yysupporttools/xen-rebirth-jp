@@ -1,0 +1,403 @@
+[
+  {
+    "id": "fighting-spirit-tonic",
+    "name": "Fighting Spirit Tonic",
+    "category": "スキル消耗品",
+    "description": "周囲の対象の最大HPを強化するBlazingで消費するアイテム。消費数はゲーム内で確認してください。",
+    "source": "https://www.xenrebirth.com/lexicon/index.php?entry/18-knight-class-skill-book-list/",
+    "aliases": [],
+    "related": "class-knight.html#all-skills"
+  },
+  {
+    "id": "gracious-orb",
+    "name": "Gracious Orb",
+    "category": "スキル消耗品",
+    "description": "被弾時に一定確率で自身を回復するAuto Genesisで1個消費するアイテム。",
+    "source": "https://www.xenrebirth.com/lexicon/index.php?entry/9-templar-class-skill-book-list/",
+    "aliases": [],
+    "related": "class-templar.html#all-skills"
+  },
+  {
+    "id": "insignia-of-life",
+    "name": "Insignia of Life",
+    "category": "スキル消耗品",
+    "description": "蘇生スキルRevivalで1個消費するアイテム。",
+    "source": "https://www.xenrebirth.com/lexicon/index.php?entry/1-cleric-class-skill-book-list/",
+    "aliases": [],
+    "related": "class-cleric.html#all-skills"
+  },
+  {
+    "id": "insignia-of-protection",
+    "name": "Insignia of Protection",
+    "category": "スキル消耗品",
+    "description": "Guardianshipで1個、RestorationとJureah's Last Standで各3個消費するアイテム。",
+    "source": "https://www.xenrebirth.com/lexicon/index.php?entry/1-cleric-class-skill-book-list/",
+    "aliases": [],
+    "related": "class-cleric.html#all-skills"
+  },
+  {
+    "id": "patience-tonic",
+    "name": "Patience Tonic",
+    "category": "スキル消耗品",
+    "description": "自身のクリティカル率を強化するPatienceで消費するアイテム。消費数はゲーム内で確認してください。",
+    "source": "https://www.xenrebirth.com/lexicon/index.php?entry/18-knight-class-skill-book-list/",
+    "aliases": [],
+    "related": "class-knight.html#all-skills"
+  },
+  {
+    "id": "sleeping-herb",
+    "name": "Sleeping Herb",
+    "category": "スキル消耗品",
+    "description": "敵を眠らせるEvil Voiceで1個消費するアイテム。",
+    "source": "https://www.xenrebirth.com/lexicon/index.php?entry/11-rogue-class-skill-book-list/",
+    "aliases": [],
+    "related": "class-rogue.html#all-skills"
+  },
+  {
+    "id": "symbol-of-soul",
+    "name": "Symbol of Soul",
+    "category": "スキル消耗品",
+    "description": "Spiritualで1個消費するアイテム。",
+    "source": "https://www.xenrebirth.com/lexicon/index.php?entry/13-archer-class-skill-book-list/",
+    "aliases": [],
+    "related": "class-archer.html#all-skills"
+  },
+  {
+    "id": "symbol-of-wind",
+    "name": "Symbol of Wind",
+    "category": "スキル消耗品",
+    "description": "Falcon Eyeで1個消費するアイテム。",
+    "source": "https://www.xenrebirth.com/lexicon/index.php?entry/13-archer-class-skill-book-list/",
+    "aliases": [],
+    "related": "class-archer.html#all-skills"
+  },
+  {
+    "id": "transparent-plant",
+    "name": "Transparent Plant",
+    "category": "スキル消耗品",
+    "description": "姿を隠すInvisibleで1個消費するアイテム。",
+    "source": "https://www.xenrebirth.com/lexicon/index.php?entry/11-rogue-class-skill-book-list/",
+    "aliases": [],
+    "related": "class-rogue.html#all-skills"
+  },
+  {
+    "id": "wisdom-orb",
+    "name": "Wisdom Orb",
+    "category": "スキル消耗品",
+    "description": "周囲の対象の最大HP・MPを強化するEurosiaで1個消費するアイテム。",
+    "source": "https://www.xenrebirth.com/lexicon/index.php?entry/9-templar-class-skill-book-list/",
+    "aliases": [],
+    "related": "class-templar.html#all-skills"
+  },
+  {
+    "id": "poko",
+    "name": "Poko",
+    "category": "ペット",
+    "description": "Pet Merchantの「Tame a Monster」で入手できる基本ペットの1種。基本ペットには能力値補正がなく、Pet NPCの案内で騎乗化を進められます。",
+    "source": "https://www.xenrebirth.com/lexicon/index.php?entry/27-pets-mounts/",
+    "aliases": [],
+    "related": "systems.html#pets"
+  },
+  {
+    "id": "poku",
+    "name": "Poku",
+    "category": "ペット",
+    "description": "Pet Merchantの「Tame a Monster」で入手できる基本ペットの1種。基本ペットには能力値補正がなく、Pet NPCの案内で騎乗化を進められます。",
+    "source": "https://www.xenrebirth.com/lexicon/index.php?entry/27-pets-mounts/",
+    "aliases": [],
+    "related": "systems.html#pets"
+  },
+  {
+    "id": "poyo",
+    "name": "Poyo",
+    "category": "ペット",
+    "description": "Pet Merchantの「Tame a Monster」で入手できる基本ペットの1種。基本ペットには能力値補正がなく、Pet NPCの案内で騎乗化を進められます。",
+    "source": "https://www.xenrebirth.com/lexicon/index.php?entry/27-pets-mounts/",
+    "aliases": [],
+    "related": "systems.html#pets"
+  },
+  {
+    "id": "kron",
+    "name": "Kron",
+    "category": "基本用語",
+    "description": "ゲーム内の通貨単位。このガイドではLv96転職で50,000 Kron、ギルド作成で10,000,000 Kronの条件を紹介しています。",
+    "source": "https://www.xenrebirth.com/lexicon/index.php?entry/28-class-change-guide-accessories/",
+    "aliases": [],
+    "related": "systems.html#guild"
+  },
+  {
+    "id": "skill-book",
+    "name": "スキルブック",
+    "category": "基本用語",
+    "description": "スキルの習得に使う本。初期の本を購入する町や上位の本の入手先は、系統とスキルによって異なります。",
+    "source": "https://www.xenrebirth.com/lexicon/index.php?entry/52-skill-book-locations/",
+    "aliases": [],
+    "related": "classes.html"
+  },
+  {
+    "id": "party-dungeon",
+    "name": "パーティダンジョン",
+    "category": "基本用語",
+    "description": "複数人で挑むダンジョン。人数・レベル・回数に条件があり、行き先ごとに入場条件を確認します。",
+    "source": "https://www.xenrebirth.com/lexicon/index.php?entry/90-party-dungeon-instances/",
+    "aliases": [],
+    "related": "systems.html#dungeons"
+  },
+  {
+    "id": "boss-instance",
+    "name": "ボスインスタンス",
+    "category": "基本用語",
+    "description": "ボスに挑戦する独立した攻略コンテンツ。Lv131転職で必要な討伐も含まれ、ワールドボスタイマーとは別に確認します。",
+    "source": "https://www.xenrebirth.com/lexicon/index.php?entry/42-boss-instances/",
+    "aliases": [],
+    "related": "systems.html#dungeons"
+  },
+  {
+    "id": "mount",
+    "name": "騎乗ペット",
+    "category": "基本用語",
+    "description": "プレイヤーが乗って移動するペット。種類によって移動速度などの補正や強化できる範囲が異なります。",
+    "source": "https://www.xenrebirth.com/lexicon/index.php?entry/27-pets-mounts/",
+    "aliases": [],
+    "related": "systems.html#mounts"
+  },
+  {
+    "id": "archer-armor",
+    "name": "Armor of a Well",
+    "category": "転職用装備",
+    "description": "アーチャー系統のLv66転職で1個用意する指定防具。Brynhildの商人から購入した品を用意します。ドロップ装備では代用できません。",
+    "source": "https://www.xenrebirth.com/lexicon/index.php?entry/28-class-change-guide-accessories/",
+    "aliases": [],
+    "related": "class-archer.html#job-detail"
+  },
+  {
+    "id": "rogue-armor",
+    "name": "Armor of Instinct",
+    "category": "転職用装備",
+    "description": "ローグ系統のLv66転職で1個用意する指定防具。Brynhildの商人から購入した品を用意します。ドロップ装備では代用できません。",
+    "source": "https://www.xenrebirth.com/lexicon/index.php?entry/28-class-change-guide-accessories/",
+    "aliases": [],
+    "related": "class-rogue.html#job-detail"
+  },
+  {
+    "id": "cleric-armor",
+    "name": "Armor of Moisture (Water)",
+    "category": "転職用装備",
+    "description": "クレリック系統のLv66転職で1個用意する指定防具。Esseneの商人から購入した品を用意します。ドロップ装備では代用できません。",
+    "source": "https://www.xenrebirth.com/lexicon/index.php?entry/28-class-change-guide-accessories/",
+    "aliases": [
+      "Armor of Moisture"
+    ],
+    "related": "class-cleric.html#job-detail"
+  },
+  {
+    "id": "templar-armor",
+    "name": "Armor of Starlight",
+    "category": "転職用装備",
+    "description": "テンプラー系統のLv66転職で1個用意する指定防具。Esseneの商人から購入した品を用意します。ドロップ装備では代用できません。",
+    "source": "https://www.xenrebirth.com/lexicon/index.php?entry/28-class-change-guide-accessories/",
+    "aliases": [],
+    "related": "class-templar.html#job-detail"
+  },
+  {
+    "id": "mage-armor",
+    "name": "Armor of Tree",
+    "category": "転職用装備",
+    "description": "メイジ系統のLv66転職で1個用意する指定防具。Esseneの商人から購入した品を用意します。ドロップ装備では代用できません。",
+    "source": "https://www.xenrebirth.com/lexicon/index.php?entry/28-class-change-guide-accessories/",
+    "aliases": [],
+    "related": "class-mage.html#job-detail"
+  },
+  {
+    "id": "knight-armor",
+    "name": "Armor of Trial",
+    "category": "転職用装備",
+    "description": "ナイト系統のLv66転職で1個用意する指定防具。Brynhildの商人から購入した品を用意します。ドロップ装備では代用できません。",
+    "source": "https://www.xenrebirth.com/lexicon/index.php?entry/28-class-change-guide-accessories/",
+    "aliases": [],
+    "related": "class-knight.html#job-detail"
+  },
+  {
+    "id": "archer-weapon",
+    "name": "Bow of Marksmen",
+    "category": "転職用装備",
+    "description": "アーチャー系統のLv66転職で1個用意する指定武器。Brynhildの商人から購入した品を用意します。ドロップ装備では代用できません。",
+    "source": "https://www.xenrebirth.com/lexicon/index.php?entry/28-class-change-guide-accessories/",
+    "aliases": [],
+    "related": "class-archer.html#job-detail"
+  },
+  {
+    "id": "cleric-weapon",
+    "name": "Cane of Confession",
+    "category": "転職用装備",
+    "description": "クレリック系統のLv66転職で1個用意する指定武器。Esseneの商人から購入した品を用意します。ドロップ装備では代用できません。",
+    "source": "https://www.xenrebirth.com/lexicon/index.php?entry/28-class-change-guide-accessories/",
+    "aliases": [],
+    "related": "class-cleric.html#job-detail"
+  },
+  {
+    "id": "templar-weapon",
+    "name": "Club of Truth",
+    "category": "転職用装備",
+    "description": "テンプラー系統のLv66転職で1個用意する指定武器。Esseneの商人から購入した品を用意します。ドロップ装備では代用できません。",
+    "source": "https://www.xenrebirth.com/lexicon/index.php?entry/28-class-change-guide-accessories/",
+    "aliases": [],
+    "related": "class-templar.html#job-detail"
+  },
+  {
+    "id": "mage-weapon",
+    "name": "Dream Staff",
+    "category": "転職用装備",
+    "description": "メイジ系統のLv66転職で1個用意する指定武器。Esseneの商人から購入した品を用意します。ドロップ装備では代用できません。",
+    "source": "https://www.xenrebirth.com/lexicon/index.php?entry/28-class-change-guide-accessories/",
+    "aliases": [],
+    "related": "class-mage.html#job-detail"
+  },
+  {
+    "id": "knight-weapon",
+    "name": "Sword of Sunlight (Sun)",
+    "category": "転職用装備",
+    "description": "ナイト系統のLv66転職で1個用意する指定武器。Brynhildの商人から購入した品を用意します。ドロップ装備では代用できません。",
+    "source": "https://www.xenrebirth.com/lexicon/index.php?entry/28-class-change-guide-accessories/",
+    "aliases": [
+      "Sword of Sunlight"
+    ],
+    "related": "class-knight.html#job-detail"
+  },
+  {
+    "id": "rogue-weapon",
+    "name": "White Dagger",
+    "category": "転職用装備",
+    "description": "ローグ系統のLv66転職で1個用意する指定武器。Brynhildの商人から購入した品を用意します。ドロップ装備では代用できません。",
+    "source": "https://www.xenrebirth.com/lexicon/index.php?entry/28-class-change-guide-accessories/",
+    "aliases": [],
+    "related": "class-rogue.html#job-detail"
+  },
+  {
+    "id": "artpoly",
+    "name": "Artpoly",
+    "category": "転職素材",
+    "description": "Lv131転職で集めるボスインスタンスのクエスト品の1つ。公式表だけでは各品名と討伐ボスの対応を確定できないため、進行中のクエストを確認してください。",
+    "source": "https://www.xenrebirth.com/lexicon/index.php?entry/28-class-change-guide-accessories/",
+    "aliases": [],
+    "related": "class-change.html"
+  },
+  {
+    "id": "blue-demon-blood",
+    "name": "Blue Demon Blood",
+    "category": "転職素材",
+    "description": "Lv66転職で1個用意する青色のDemon Blood。他の2色も各1個必要です。",
+    "source": "https://www.xenrebirth.com/lexicon/index.php?entry/28-class-change-guide-accessories/",
+    "aliases": [
+      "青のDemon Blood"
+    ],
+    "related": "class-change.html"
+  },
+  {
+    "id": "caricsobana",
+    "name": "Caricsobana",
+    "category": "転職素材",
+    "description": "Lv96転職で2個用意する納品物。公式内にはCaricosbana等の表記揺れがあるため、クエストの品名と照合してください。",
+    "source": "https://www.xenrebirth.com/lexicon/index.php?entry/28-class-change-guide-accessories/",
+    "aliases": [
+      "Caricosbana"
+    ],
+    "related": "class-change.html"
+  },
+  {
+    "id": "demon-blood",
+    "name": "Demon Blood",
+    "category": "転職素材",
+    "description": "Lv66転職で必要な血の素材の総称。このガイドでは赤・青・黄の3色を各1個用意します。",
+    "source": "https://www.xenrebirth.com/lexicon/index.php?entry/28-class-change-guide-accessories/",
+    "aliases": [],
+    "related": "class-change.html"
+  },
+  {
+    "id": "jureahs-blessing",
+    "name": "Jureah’s Blessing",
+    "category": "転職素材",
+    "description": "Lv66転職でSpirit Orbを用意した後に受け取る祝福。指定のギルドマスターへ進む際に必要です。",
+    "source": "https://www.xenrebirth.com/lexicon/index.php?entry/28-class-change-guide-accessories/",
+    "aliases": [
+      "Jureah's Blessing"
+    ],
+    "related": "class-change.html"
+  },
+  {
+    "id": "naviondark",
+    "name": "Naviondark",
+    "category": "転職素材",
+    "description": "Lv131転職で集めるボスインスタンスのクエスト品の1つ。公式表だけでは各品名と討伐ボスの対応を確定できないため、進行中のクエストを確認してください。",
+    "source": "https://www.xenrebirth.com/lexicon/index.php?entry/28-class-change-guide-accessories/",
+    "aliases": [],
+    "related": "class-change.html"
+  },
+  {
+    "id": "red-demon-blood",
+    "name": "Red Demon Blood",
+    "category": "転職素材",
+    "description": "Lv66転職で1個用意する赤色のDemon Blood。他の2色も各1個必要です。",
+    "source": "https://www.xenrebirth.com/lexicon/index.php?entry/28-class-change-guide-accessories/",
+    "aliases": [
+      "赤のDemon Blood"
+    ],
+    "related": "class-change.html"
+  },
+  {
+    "id": "rodney-garters",
+    "name": "Rodney Garters",
+    "category": "転職素材",
+    "description": "Lv131転職で集めるボスインスタンスのクエスト品の1つ。公式表だけでは各品名と討伐ボスの対応を確定できないため、進行中のクエストを確認してください。",
+    "source": "https://www.xenrebirth.com/lexicon/index.php?entry/28-class-change-guide-accessories/",
+    "aliases": [],
+    "related": "class-change.html"
+  },
+  {
+    "id": "spirit-orb",
+    "name": "Spirit Orb",
+    "category": "転職素材",
+    "description": "Lv66転職で、職業ごとの指定武器・防具を商人から購入して作るクエスト品。ドロップ装備は材料にできません。作成先は公式本文ではAlchemistですが、NPC表にはBlacksmithもあるためクエスト表示を確認してください。",
+    "source": "https://www.xenrebirth.com/lexicon/index.php?entry/28-class-change-guide-accessories/",
+    "aliases": [],
+    "related": "class-change.html"
+  },
+  {
+    "id": "tiger-dogma",
+    "name": "Tiger Dogma",
+    "category": "転職素材",
+    "description": "Lv131転職で集めるボスインスタンスのクエスト品の1つ。公式表だけでは各品名と討伐ボスの対応を確定できないため、進行中のクエストを確認してください。",
+    "source": "https://www.xenrebirth.com/lexicon/index.php?entry/28-class-change-guide-accessories/",
+    "aliases": [],
+    "related": "class-change.html"
+  },
+  {
+    "id": "xen-stone",
+    "name": "Xen Stone",
+    "category": "転職素材",
+    "description": "このガイドではLv96転職の納品物として登場します。必要数は1個です。ここでは転職での用途を説明しています。",
+    "source": "https://www.xenrebirth.com/lexicon/index.php?entry/28-class-change-guide-accessories/",
+    "aliases": [],
+    "related": "class-change.html"
+  },
+  {
+    "id": "yellow-demon-blood",
+    "name": "Yellow Demon Blood",
+    "category": "転職素材",
+    "description": "Lv66転職で1個用意する黄色のDemon Blood。他の2色も各1個必要です。",
+    "source": "https://www.xenrebirth.com/lexicon/index.php?entry/28-class-change-guide-accessories/",
+    "aliases": [
+      "黄のDemon Blood"
+    ],
+    "related": "class-change.html"
+  },
+  {
+    "id": "yellow-watermelon",
+    "name": "Yellow Watermelon",
+    "category": "転職素材",
+    "description": "Lv96転職で5個用意する納品物。Xen Stone、Caricsobana、Kronも一緒に準備します。",
+    "source": "https://www.xenrebirth.com/lexicon/index.php?entry/28-class-change-guide-accessories/",
+    "aliases": [],
+    "related": "class-change.html"
+  }
+]
