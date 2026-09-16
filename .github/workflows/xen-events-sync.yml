@@ -1,0 +1,27 @@
+name: Xen Rebirth event fetch test
+
+on:
+  workflow_dispatch:
+  schedule:
+    # Once daily. GitHub Actions cron uses UTC.
+    - cron: "20 18 * * *"
+
+permissions:
+  contents: read
+
+jobs:
+  fetch-events-test:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+
+      - name: Test official calendar fetch
+        run: node scripts/sync-xen-events.js
