@@ -19,3 +19,20 @@
 .quest-detail-title{margin-bottom:4px}.quest-source{font-size:14px}.quest-note{white-space:pre-wrap}.quest-back{display:inline-block;margin-bottom:18px}
 @media(max-width:800px){.quest-toolbar{grid-template-columns:1fr}.quest-grid{grid-template-columns:1fr}.quest-meta{grid-template-columns:1fr}.quest-images{grid-template-columns:1fr 1fr}}
 @media(max-width:520px){.quest-form .two{grid-template-columns:1fr}.quest-images{grid-template-columns:1fr}.quest-images img{height:auto}}
+
+
+/* Ver.3.2: quest edit history / delete */
+.quest-actions .danger{border-color:#b42318;color:#b42318;background:#fff}
+.quest-actions .danger:hover{background:#fff1f0}
+.quest-history-dialog{width:min(760px,calc(100vw - 32px));max-height:82vh;border:1px solid #cbd8dc;border-radius:4px;padding:24px;background:#fff;color:#0b2b38}
+.quest-history-dialog::backdrop{background:rgba(5,28,38,.48)}
+.quest-history-head{display:flex;align-items:flex-start;justify-content:space-between;gap:16px;border-bottom:1px solid #d8e2e5;padding-bottom:14px;margin-bottom:14px}
+.quest-history-head h2{margin:4px 0 0}
+.quest-history-close{white-space:nowrap}
+.quest-history-list{display:grid;gap:12px;margin-top:18px;max-height:55vh;overflow:auto;padding-right:4px}
+.quest-history-item{border:1px solid #d8e2e5;border-left:4px solid #e7b85c;padding:14px 16px;background:#fbfcfc}
+.quest-history-item>div{display:flex;justify-content:space-between;gap:12px;align-items:center}
+.quest-history-item>div span{font-size:.85rem;color:#60737b}
+.quest-history-item p{margin:8px 0 12px}
+.quest-history-item button{padding:8px 12px}
+@media(max-width:640px){.quest-history-item>div{align-items:flex-start;flex-direction:column}.quest-history-dialog{padding:18px}}

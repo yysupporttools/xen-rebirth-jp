@@ -49,6 +49,57 @@
    if(!rows.length)return '';
    return `<div class="quest-images">${rows.map(x=>`<figure><a href="${esc(x.image_url)}" target="_blank" rel="noopener"><img src="${esc(x.image_url)}" alt="${esc(x.caption||'クエスト攻略画像')}" loading="lazy"></a>${x.caption?`<figcaption>${esc(x.caption)}</figcaption>`:''}</figure>`).join('')}</div>`;
  }
+
+ async function openHistory(){
+   try{
+     const {data,error}=await db.from('quest_revisions').select('*').eq('quest_id',current.id).order('created_at',{ascending:false}).limit(50);
+     if(error)throw Error(error.message);
+     const rows=data||[];
+     const labels={create:'作成',update:'編集',delete:'削除',restore:'復元'};
+     const dlg=document.createElement('dialog');
+     dlg.className='quest-history-dialog';
+     dlg.innerHTML=`<div class="quest-history-head"><div><p class="eyebrow">EDIT HISTORY</p><h2>編集履歴</h2></div><button type="button" class="quest-history-close">閉じる</button></div>
+       <p class="small">直近50件を表示します。「この状態に戻す」は、その操作が行われる前のクエスト基本情報へ戻します。</p>
+       <div class="quest-history-list">${rows.length?rows.map(r=>{
+         const d=r.previous_data||{};
+         const when=r.created_at?new Date(r.created_at).toLocaleString('ja-JP'):'日時不明';
+         const title=d.title_ja||d.title_en||'復元可能な基本情報';
+         const canRestore=!!r.previous_data;
+         return `<article class="quest-history-item">
+           <div><strong>${esc(labels[r.action]||r.action||'変更')}</strong><span>${esc(when)}</span></div>
+           <p>${esc(title)}</p>
+           ${canRestore?`<button type="button" data-restore="${esc(r.id)}">この状態に戻す</button>`:'<span class="small">この履歴からは復元できません</span>'}
+         </article>`;
+       }).join(''):'<p>編集履歴はまだありません。</p>'}</div>`;
+     document.body.appendChild(dlg);
+     dlg.querySelector('.quest-history-close').onclick=()=>dlg.close();
+     dlg.addEventListener('close',()=>dlg.remove());
+     dlg.querySelectorAll('[data-restore]').forEach(b=>b.onclick=async()=>{
+       if(!confirm('クエストの基本情報をこの履歴の状態に戻します。よろしいですか？'))return;
+       b.disabled=true;
+       try{
+         await rpc('quest_restore_revision',{p_revision_id:b.dataset.restore,p_editor_id:editorKey});
+         dlg.close();
+         await loadList(); await route();
+       }catch(err){alert('復元できませんでした：'+err.message);b.disabled=false}
+     });
+     dlg.showModal();
+   }catch(err){alert('編集履歴を読み込めませんでした：'+err.message)}
+ }
+ async function deleteQuest(){
+   if(!current)return;
+   const name=current.title_ja||current.title_en;
+   if(!confirm(`「${name}」を削除します。\n\n攻略STEPも削除されます。クエスト基本情報は編集履歴から復元できますが、STEP・画像情報は現在の復元対象外です。\n\n本当に削除しますか？`))return;
+   const typed=prompt('誤操作防止のため「削除」と入力してください。');
+   if(typed!=='削除')return;
+   const btn=document.getElementById('quest-delete');
+   if(btn)btn.disabled=true;
+   try{
+     await rpc('quest_delete',{p_quest_id:current.id,p_editor_id:editorKey});
+     location.hash='';
+     await loadList(); await route();
+   }catch(err){alert('削除できませんでした：'+err.message);if(btn)btn.disabled=false}
+ }
  function renderDetail(){
    const q=current;
    $('quest-detail').innerHTML=`<a class="quest-back" href="quests.html">← クエスト一覧へ</a>
@@ -60,13 +111,15 @@
     ${q.notes?`<h2>攻略メモ</h2><p class="quest-note">${esc(q.notes)}</p>`:''}
     ${q.source_url?`<p class="quest-source"><a href="${esc(q.source_url)}" target="_blank" rel="noopener noreferrer">情報元を確認 ↗</a></p>`:''}
     ${imgHtml(null)}
-    <div class="quest-actions"><button class="primary" id="quest-edit">クエスト情報を編集</button><button id="step-add">攻略STEPを追加</button><button id="quest-image-add">クエスト画像を追加</button></div>
+    <div class="quest-actions"><button class="primary" id="quest-edit">クエスト情報を編集</button><button id="step-add">攻略STEPを追加</button><button id="quest-image-add">クエスト画像を追加</button><button id="quest-history">編集履歴</button><button class="danger" id="quest-delete">クエストを削除</button></div>
    </article>
    <section><div class="section-heading"><div><p class="eyebrow">WALKTHROUGH</p><h2>進行手順</h2></div><span>${steps.length} STEP</span></div>
    ${steps.length?steps.map(s=>`<article class="quest-step"><div class="quest-step-head"><div><span class="quest-step-number">STEP ${esc(s.step_number)}</span><h2>${esc(s.title||'進行手順')}</h2></div><div class="quest-actions"><button data-step-edit="${s.id}">編集</button><button data-step-image="${s.id}">画像追加</button></div></div>${s.npc_name?`<p><strong>NPC：</strong>${esc(s.npc_name)}</p>`:''}${s.location?`<p><strong>場所：</strong>${esc(s.location)}</p>`:''}<p class="quest-note">${esc(s.description||'説明はまだ登録されていません。')}</p>${imgHtml(s.id)}</article>`).join(''):'<div class="paper quest-empty">攻略手順はまだ登録されていません。「攻略STEPを追加」から追加できます。</div>'}</section>`;
    $('quest-edit').onclick=()=>openQuestEdit(q);
    $('step-add').onclick=()=>openStep();
    $('quest-image-add').onclick=()=>openImage(null);
+   $('quest-history').onclick=openHistory;
+   $('quest-delete').onclick=deleteQuest;
    document.querySelectorAll('[data-step-edit]').forEach(b=>b.onclick=()=>openStep(steps.find(s=>s.id===b.dataset.stepEdit)));
    document.querySelectorAll('[data-step-image]').forEach(b=>b.onclick=()=>openImage(b.dataset.stepImage));
  }
