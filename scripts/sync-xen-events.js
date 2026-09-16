@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 "use strict";
 
-/* Xen Rebirth Event Supabase Duplicate Check Ver.8
+/* Xen Rebirth Event Sync Simulation Ver.9
    DRY RUN / NO SUPABASE WRITES
    Adds date-only fallback for official events without "Your Timezone".
 */
@@ -16,7 +16,7 @@ const DATETIME=`${DATE},\\s+\\d{1,2}:\\d{2}\\s+(?:am|pm)`;
 
 function decode(s=""){return s.replace(/&amp;/g,"&").replace(/&quot;/g,'"').replace(/&#0?39;/g,"'").replace(/&nbsp;/g," ").replace(/&lt;/g,"<").replace(/&gt;/g,">");}
 function clean(s=""){return decode(s.replace(/<script[\s\S]*?<\/script>/gi," ").replace(/<style[\s\S]*?<\/style>/gi," ").replace(/<br\s*\/?>/gi,"\n").replace(/<\/(?:p|li|div|tr|h\d|time)>/gi,"\n").replace(/<[^>]+>/g," ").replace(/[ \t]+/g," ").replace(/\n\s+/g,"\n").replace(/\n{3,}/g,"\n\n").trim());}
-async function get(url){const c=new AbortController(),t=setTimeout(()=>c.abort(),30000);try{const r=await fetch(url,{redirect:"follow",signal:c.signal,headers:{"user-agent":"Mozilla/5.0 (compatible; XenRebirthJP-CalendarSync/8.0)","accept":"text/html,application/xhtml+xml"}});if(!r.ok)throw new Error(`HTTP ${r.status} ${url}`);return await r.text();}finally{clearTimeout(t);}}
+async function get(url){const c=new AbortController(),t=setTimeout(()=>c.abort(),30000);try{const r=await fetch(url,{redirect:"follow",signal:c.signal,headers:{"user-agent":"Mozilla/5.0 (compatible; XenRebirthJP-CalendarSync/9.0)","accept":"text/html,application/xhtml+xml"}});if(!r.ok)throw new Error(`HTTP ${r.status} ${url}`);return await r.text();}finally{clearTimeout(t);}}
 function canonical(raw){const u=new URL(decode(raw),CALENDAR_URL);u.hash="";return u.href;}
 function discover(html){const re=/<a\b[^>]*href=["']([^"']*(?:\?|&amp;)event\/(\d+)[^"']*)["'][^>]*>([\s\S]*?)<\/a>/gi,map=new Map();for(const m of html.matchAll(re)){const id=m[2],title=clean(m[3]);if(title&&!map.has(id))map.set(id,{id,title,url:canonical(m[1])});}return [...map.values()];}
 function titleOf(html,fallback){const m=html.match(/<h1[^>]*>([\s\S]*?)<\/h1>/i);return m?clean(m[1]):fallback;}
@@ -96,62 +96,77 @@ function classify(rec,existing){
 }
 
 (async()=>{
- console.log("=== Xen Rebirth Event Supabase Duplicate Check Ver.8 ===");
- console.log("READ ONLY / NO SUPABASE WRITES");
+ console.log("=== Xen Rebirth Event Sync Simulation Ver.9 ===");
+ console.log("DRY RUN / NO SUPABASE WRITES / NO DELETES");
 
  const [calendarHtml,existing]=await Promise.all([get(CALENDAR_URL),loadExistingEvents()]);
  const events=discover(calendarHtml).slice(0,MAX_EVENTS);
- console.log(`[SUPABASE] Existing xen_events rows: ${existing.length}`);
 
- let ok=0,review=0,timed=0,allDay=0;
- let fresh=0,official=0,candidates=0;
+ let updateCount=0, insertCount=0, reviewCount=0;
+ const plans=[];
 
  for(let i=0;i<events.length;i++){
-   const e=events[i],html=await get(e.url),title=titleOf(html,e.title);
+   const e=events[i], html=await get(e.url), title=titleOf(html,e.title);
    const rec=preview({...e,title},headerWindow(html,title));
-   if(rec.status==="OK")ok++;else review++;
-   if(rec.all_day===true)allDay++;else if(rec.all_day===false)timed++;
+   if(rec.status!=="OK"){
+     reviewCount++;
+     plans.push({action:"REVIEW",title_en:rec.title_en,reason:rec.reason||"parse error"});
+     continue;
+   }
 
    const c=classify(rec,existing);
-   if(c.kind==="NEW")fresh++;
-   else if(c.kind==="EXISTING_OFFICIAL_ID")official++;
-   else candidates++;
-
-   console.log(`\n===== CHECK ${i+1}/${events.length} =====`);
-   console.log(JSON.stringify({
-     classification:c.kind,
-     official_event_id:rec.official_event_id,
-     title_en:rec.title_en,
-     official_url:rec.official_url,
-     all_day:rec.all_day,
-     source_start:rec.source_start,
-     source_end:rec.source_end,
-     start_time:rec.start_time||null,
-     end_time:rec.end_time||null,
-     start_date:rec.start_date||null,
-     matched_rows:c.matches.map(x=>({
-       id:x.id,
-       official_event_id:x.official_event_id,
-       title_en:x.title_en,
-       title_ja:x.title_ja,
-       start_time:x.start_time,
-       end_time:x.end_time,
-       official_url:x.official_url
-     }))
-   },null,2));
+   if(c.kind==="NEW"){
+     insertCount++;
+     plans.push({
+       action:"INSERT",
+       title_en:rec.title_en,
+       official_event_id:rec.official_event_id,
+       official_url:rec.official_url,
+       all_day:rec.all_day,
+       start_time:rec.start_time||null,
+       end_time:rec.end_time||null,
+       start_date:rec.start_date||null,
+       end_date_exclusive:rec.end_date_exclusive||null,
+       note:"New official event. Japanese fields are not generated in Ver.9."
+     });
+   } else {
+     updateCount++;
+     const old=c.matches[0];
+     plans.push({
+       action:"UPDATE",
+       match_type:c.kind,
+       title_en:rec.title_en,
+       row_id:old.id,
+       preserve:{
+         title_ja:old.title_ja,
+         note:"Japanese title/content fields are preserved; Ver.9 performs no write."
+       },
+       changes:{
+         official_event_id:{from:old.official_event_id,to:rec.official_event_id},
+         official_url:{from:old.official_url,to:rec.official_url},
+         start_time:{from:old.start_time,to:rec.start_time||null},
+         end_time:{from:old.end_time,to:rec.end_time||null}
+       },
+       all_day:rec.all_day,
+       start_date:rec.start_date||null,
+       end_date_exclusive:rec.end_date_exclusive||null
+     });
+   }
    await new Promise(r=>setTimeout(r,250));
  }
 
+ for(let i=0;i<plans.length;i++){
+   console.log(`\n===== PLAN ${i+1}/${plans.length} =====`);
+   console.log(JSON.stringify(plans[i],null,2));
+ }
+
  console.log("\n=== SUMMARY ===");
- console.log(`Official events:             ${events.length}`);
- console.log(`Parsed OK:                   ${ok}`);
- console.log(`Needs review:                ${review}`);
- console.log(`Timed events:                ${timed}`);
- console.log(`Date-only events:            ${allDay}`);
- console.log(`Existing official-ID match:  ${official}`);
- console.log(`Duplicate candidates:        ${candidates}`);
- console.log(`New candidates:              ${fresh}`);
- console.log(`Supabase existing rows:      ${existing.length}`);
- console.log("Supabase writes:             0");
- console.log("IMPORTANT: Read-only duplicate check. No rows were inserted, updated, or deleted.");
+ console.log(`Official events:        ${events.length}`);
+ console.log(`UPDATE planned:         ${updateCount}`);
+ console.log(`INSERT planned:         ${insertCount}`);
+ console.log(`REVIEW required:        ${reviewCount}`);
+ console.log("DELETE planned:         0");
+ console.log("Japanese data:          PRESERVE on existing rows");
+ console.log("Supabase writes:        0");
+ console.log("IMPORTANT: Simulation only. No database rows were changed.");
 })().catch(e=>{console.error(e?.stack||e);process.exit(1);});
