@@ -9,3 +9,23 @@
 @media(max-width:720px){.events-page{padding:35px 14px 60px}.calendar-day{min-height:90px;padding:4px}.day-number{font-size:.8rem}.event-chip{font-size:.68rem;padding:4px}.calendar-toolbar h2{width:100%;order:-1}.upcoming-card{grid-template-columns:1fr}.calendar-weekdays span{padding:7px 2px;font-size:.8rem}}
 /* Ver1.2 connected multi-day bars */
 .calendar-grid{display:block;border:0}.calendar-week{position:relative;display:grid;grid-template-columns:repeat(7,minmax(0,1fr));min-height:calc(78px + (var(--event-lanes)*30px));border-left:1px solid #d7dfe1;border-top:1px solid #d7dfe1}.calendar-week:last-child{border-bottom:1px solid #d7dfe1}.calendar-week .calendar-day{min-height:100%;padding:8px;border-right:1px solid #d7dfe1;border-bottom:0}.week-events{position:absolute;inset:0;pointer-events:none}.event-bar{position:absolute;pointer-events:auto;left:calc((100%/7)*var(--start) + 8px);width:calc((100%/7)*var(--span) - 16px);top:calc(38px + (var(--lane)*30px));height:25px;z-index:3;border:0;border-left:4px solid #138070;border-radius:4px;background:#eaf4f2;color:#123b43;padding:4px 8px;text-align:left;font-size:.78rem;line-height:17px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;cursor:pointer}.event-bar:hover{background:#d9ece8}.event-bar.continues-left{left:calc((100%/7)*var(--start));width:calc((100%/7)*var(--span) - 8px);border-left:0;border-radius:0 4px 4px 0}.event-bar.continues-right{width:calc((100%/7)*var(--span) - 8px);border-radius:4px 0 0 4px}.event-bar.continues-left.continues-right{width:calc((100%/7)*var(--span));border-radius:0}.event-bar.world-boss{background:#fff3d9;border-left-color:#d6a33e}.event-bar[data-category="Events"]{background:#dfffd7;border-left-color:#35b93f}.event-bar[data-category="Automated Events"]{background:#d9f4e9;border-left-color:#15966f}@media(max-width:720px){.calendar-week{min-height:calc(60px + (var(--event-lanes)*25px))}.calendar-week .calendar-day{padding:4px}.event-bar{left:calc((100%/7)*var(--start) + 3px);width:calc((100%/7)*var(--span) - 6px);top:calc(28px + (var(--lane)*25px));height:21px;padding:2px 4px;font-size:.64rem}.event-bar.continues-left{left:calc((100%/7)*var(--start));width:calc((100%/7)*var(--span) - 3px)}.event-bar.continues-right{width:calc((100%/7)*var(--span) - 3px)}.event-bar.continues-left.continues-right{width:calc((100%/7)*var(--span))}}
+
+/* Ver1.3 official-style category colors */
+.event-bar[data-category="Holiday Events"]{
+  background:#ffd45a;
+  border-left-color:#e3a600;
+  color:#17333a;
+}
+.event-bar[data-category="Maintenance"]{
+  background:#e77f79;
+  border-left-color:#c9514b;
+  color:#fff;
+  font-weight:700;
+}
+.event-bar[data-category="Weddings"]{
+  background:#d9b8ef;
+  border-left-color:#a56ac8;
+}
+.event-bar.continues-left{
+  padding-left:4px;
+}
