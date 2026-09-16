@@ -50,6 +50,21 @@
    return `<div class="quest-images">${rows.map(x=>`<figure><a href="${esc(x.image_url)}" target="_blank" rel="noopener"><img src="${esc(x.image_url)}" alt="${esc(x.caption||'クエスト攻略画像')}" loading="lazy"></a>${x.caption?`<figcaption>${esc(x.caption)}</figcaption>`:''}</figure>`).join('')}</div>`;
  }
 
+
+ async function openDeletedQuests(){
+   try{
+     const {data,error}=await db.from('quest_revisions').select('*').eq('action','delete').order('created_at',{ascending:false}).limit(100);
+     if(error)throw Error(error.message);
+     const existing=new Set((all||[]).map(q=>q.id)), seen=new Set(), rows=[];
+     for(const r of (data||[])){if(!existing.has(r.quest_id)&&!seen.has(r.quest_id)){seen.add(r.quest_id);rows.push(r)}}
+     const dlg=document.createElement('dialog'); dlg.className='quest-history-dialog';
+     dlg.innerHTML=`<div class="quest-history-head"><div><p class="eyebrow">DELETED QUESTS</p><h2>削除済みクエスト</h2></div><button type="button" class="quest-history-close">閉じる</button></div>
+     <p class="small">削除時のバックアップから復元できます。</p><div class="quest-history-list">${rows.length?rows.map(r=>{const s=r.previous_data||{},q=s.quest||s,t=q.title_ja||q.title_en||'名称不明',d=r.created_at?new Date(r.created_at).toLocaleString('ja-JP'):'日時不明',sc=Array.isArray(s.steps)?s.steps.length:0,ic=Array.isArray(s.images)?s.images.length:0;return `<article class="quest-history-item"><div><strong>${esc(t)}</strong><span>${esc(d)}</span></div><p>攻略STEP ${sc}件 / 画像 ${ic}件</p><button type="button" class="primary" data-restore-deleted="${esc(r.id)}">復元する</button></article>`}).join(''):'<p>復元できる削除済みクエストはありません。</p>'}</div>`;
+     document.body.appendChild(dlg); dlg.querySelector('.quest-history-close').onclick=()=>dlg.close(); dlg.addEventListener('close',()=>dlg.remove());
+     dlg.querySelectorAll('[data-restore-deleted]').forEach(b=>b.onclick=async()=>{if(!confirm('このクエストをSTEP・画像情報を含めて復元します。よろしいですか？'))return;b.disabled=true;try{const id=await rpc('quest_restore_revision',{p_revision_id:b.dataset.restoreDeleted,p_editor_id:editorKey});dlg.close();await loadList();location.hash=id||'';await route()}catch(err){alert('復元できませんでした：'+err.message);b.disabled=false}});
+     dlg.showModal();
+   }catch(err){alert('削除済みクエストを読み込めませんでした：'+err.message)}
+ }
  async function openHistory(){
    try{
      const {data,error}=await db.from('quest_revisions').select('*').eq('quest_id',current.id).order('created_at',{ascending:false}).limit(50);
@@ -129,6 +144,7 @@
  }
  function openQuestEdit(q){$('quest-dialog-title').textContent='クエスト情報を編集';$('quest-form').dataset.id=q.id;fillQuestForm(q);showDialog('quest-dialog')}
  $('quest-new').onclick=()=>{$('quest-dialog-title').textContent='クエストを追加';$('quest-form').dataset.id='';fillQuestForm();showDialog('quest-dialog')};
+ $('quest-deleted').onclick=openDeletedQuests;
  $('quest-form').onsubmit=async e=>{
    e.preventDefault(); const f=e.target,b=f.querySelector('[type=submit]'); b.disabled=true;
    try{

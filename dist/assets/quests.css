@@ -36,3 +36,6 @@
 .quest-history-item p{margin:8px 0 12px}
 .quest-history-item button{padding:8px 12px}
 @media(max-width:640px){.quest-history-item>div{align-items:flex-start;flex-direction:column}.quest-history-dialog{padding:18px}}
+
+/* Ver.3.3 */
+#quest-deleted{white-space:nowrap}
