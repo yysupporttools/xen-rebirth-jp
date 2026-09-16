@@ -10,7 +10,7 @@ function show(e){const url=safeUrl(e.official_url);$('event-detail').innerHTML=`
 function render(){
 const y=cursor.getFullYear(),m=cursor.getMonth();$('month-title').textContent=`${y}年 ${m+1}月`;const first=new Date(y,m,1),start=new Date(y,m,1-first.getDay()),keys=[];
 for(let i=0;i<42;i++){const d=new Date(start);d.setDate(start.getDate()+i);keys.push(`${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`)}
-const incEnd=e=>{if(!e.end_time)return dayKey(e.start_time);const k=dayKey(e.end_time),d=new Date(`${k}T00:00:00`);d.setDate(d.getDate()-1);return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`};let html='';
+const incEnd=e=>{const s=dayKey(e.start_time);if(!e.end_time)return s;const k=dayKey(e.end_time);if(k<=s)return s;const d=new Date(`${k}T00:00:00`);d.setDate(d.getDate()-1);return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`};let html='';
 for(let w=0;w<6;w++){const wk=keys.slice(w*7,w*7+7),ws=wk[0],we=wk[6],segs=[];
 events.forEach(e=>{const s=dayKey(e.start_time),end=incEnd(e);if(end<ws||s>we)return;const ss=s<ws?ws:s,ee=end>we?we:end,sc=wk.indexOf(ss),ec=wk.indexOf(ee);if(sc>=0&&ec>=0)segs.push({e,sc,ec,end})});
 segs.sort((x,y)=>x.sc-y.sc||(y.ec-y.sc)-(x.ec-x.sc));const lanes=[];segs.forEach(x=>{let n=lanes.findIndex(v=>v<x.sc);if(n<0){n=lanes.length;lanes.push(x.ec)}else lanes[n]=x.ec;x.lane=n});
