@@ -6,7 +6,25 @@ const safeUrl=u=>{try{const x=new URL(u);return /^https?:$/.test(x.protocol)?x.h
 const fmt=d=>new Intl.DateTimeFormat('ja-JP',{timeZone:JST,month:'numeric',day:'numeric',weekday:'short',hour:'2-digit',minute:'2-digit'}).format(new Date(d));
 const dayKey=d=>new Intl.DateTimeFormat('sv-SE',{timeZone:JST,year:'numeric',month:'2-digit',day:'2-digit'}).format(new Date(d));
 function title(e){return e.title_ja||e.title_en||'名称未設定'}
-function show(e){const url=safeUrl(e.official_url);$('event-detail').innerHTML=`<div class="event-detail"><p class="eyebrow">${esc(e.category||'EVENT')}</p><h2>${esc(title(e))}</h2><p class="event-meta"><strong>開催：</strong>${esc(fmt(e.start_time))}${e.end_time?' ～ '+esc(fmt(e.end_time)):''} JST${e.location?'<br><strong>場所：</strong>'+esc(e.location):''}</p>${e.description_ja?'<h3>イベント内容</h3><p>'+esc(e.description_ja).replace(/\n/g,'<br>')+'</p>':''}${e.requirements_ja?'<h3>参加条件</h3><p>'+esc(e.requirements_ja).replace(/\n/g,'<br>')+'</p>':''}${e.rewards_ja?'<h3>報酬</h3><p>'+esc(e.rewards_ja).replace(/\n/g,'<br>')+'</p>':''}${url?`<p><a href="${esc(url)}" target="_blank" rel="noopener noreferrer">公式情報を確認する ↗</a></p>`:''}</div>`;$('event-dialog').showModal()}
+const DATE_ONLY_EVENT_IDS=new Set([
+  'gummys-challenge-week-3-2026',
+  'gummys-challenge-week-4-2026'
+]);
+const dateOnly=e=>DATE_ONLY_EVENT_IDS.has(e.official_event_id);
+const fmtDate=d=>new Intl.DateTimeFormat('ja-JP',{timeZone:JST,year:'numeric',month:'numeric',day:'numeric',weekday:'short'}).format(new Date(d));
+const exclusiveEndDate=d=>{
+  const k=dayKey(d),x=new Date(`${k}T00:00:00`);
+  x.setDate(x.getDate()-1);
+  return `${x.getFullYear()}-${String(x.getMonth()+1).padStart(2,'0')}-${String(x.getDate()).padStart(2,'0')}T00:00:00+09:00`;
+};
+const eventPeriod=e=>{
+  if(dateOnly(e)){
+    const end=e.end_time?exclusiveEndDate(e.end_time):e.start_time;
+    return `${fmtDate(e.start_time)} ～ ${fmtDate(end)}`;
+  }
+  return e.end_time?`${fmt(e.start_time)} ～ ${fmt(e.end_time)} JST`:`${fmt(e.start_time)} JST`;
+};
+function show(e){const url=safeUrl(e.official_url);$('event-detail').innerHTML=`<div class="event-detail"><p class="eyebrow">${esc(e.category||'EVENT')}</p><h2>${esc(title(e))}</h2><p class="event-meta"><strong>開催：</strong>${esc(eventPeriod(e))}`<p><a href="${esc(url)}" target="_blank" rel="noopener noreferrer">公式情報を確認する ↗</a></p>`:''}</div>`;$('event-dialog').showModal()}
 function render(){
 const y=cursor.getFullYear(),m=cursor.getMonth();$('month-title').textContent=`${y}年 ${m+1}月`;const first=new Date(y,m,1),start=new Date(y,m,1-first.getDay()),keys=[];
 for(let i=0;i<42;i++){const d=new Date(start);d.setDate(start.getDate()+i);keys.push(`${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`)}
