@@ -55,7 +55,7 @@
    try{
      const {data,error}=await db.from('quest_revisions').select('*').eq('action','delete').order('created_at',{ascending:false}).limit(100);
      if(error)throw Error(error.message);
-     const existing=new Set((all||[]).map(q=>q.id)), seen=new Set(), rows=[];
+     const existing=new Set((quests||[]).map(q=>q.id)), seen=new Set(), rows=[];
      for(const r of (data||[])){if(!existing.has(r.quest_id)&&!seen.has(r.quest_id)){seen.add(r.quest_id);rows.push(r)}}
      const dlg=document.createElement('dialog'); dlg.className='quest-history-dialog';
      dlg.innerHTML=`<div class="quest-history-head"><div><p class="eyebrow">DELETED QUESTS</p><h2>削除済みクエスト</h2></div><button type="button" class="quest-history-close">閉じる</button></div>
