@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html lang="ja"><head><meta charset="utf-8"/><meta content="width=device-width,initial-scale=1" name="viewport"/>
+<title>イベントカレンダー | Xen Rebirth 日本語攻略</title>
+<meta name="description" content="Xen Rebirthのイベント予定を日本時間・日本語で確認できるカレンダー。"/>
+<link href="assets/style.css" rel="stylesheet"/><link href="assets/events.css?v=1" rel="stylesheet"/>
+<script defer src="assets/vendor/supabase.js"></script><script defer src="assets/glossary-config.js"></script><script defer src="assets/events.js?v=1"></script></head>
+<body><a class="skip" href="#main">本文へ移動</a>
+<header><div class="brand"><a href="index.html"><span class="mark">X</span><span>XEN REBIRTH<small>日本語攻略ガイド</small></span></a><span class="edition">UNOFFICIAL · VER.3</span></div>
+<nav aria-label="メインナビゲーション"><a href="index.html">ホーム</a><a href="start.html">初心者ガイド</a><a href="classes.html">職業・スキル</a><a href="systems.html">ゲームシステム</a><a href="quests.html">クエスト</a><a aria-current="page" href="events.html">イベント</a><a href="bosses.html">ボスタイマー</a><a href="tools.html">精錬ツール</a><a href="glossary.html">用語集</a><a href="board.html">質問掲示板</a></nav></header>
+<main id="main" class="events-page"><p class="eyebrow">EVENT CALENDAR / 日本時間</p><h1>イベントカレンダー</h1>
+<p class="lead">Xen Rebirthのイベント予定を日本時間で確認できます。イベントを選択すると日本語の詳細を表示します。</p>
+<div class="calendar-toolbar"><button id="prev-month" type="button" aria-label="前月">← 前月</button><h2 id="month-title"></h2><button id="next-month" type="button" aria-label="次月">次月 →</button><button id="today" type="button">今月</button></div>
+<div class="calendar-weekdays" aria-hidden="true"><span>日</span><span>月</span><span>火</span><span>水</span><span>木</span><span>金</span><span>土</span></div>
+<section id="calendar" class="calendar-grid" aria-label="イベント月間カレンダー"></section>
+<p id="calendar-status" class="calendar-status" role="status"></p>
+<section class="event-upcoming"><div class="section-heading"><div><p class="eyebrow">UPCOMING</p><h2>今後のイベント</h2></div></div><div id="upcoming-events"></div></section>
+<dialog id="event-dialog" class="event-dialog"><button class="dialog-close" id="event-close" type="button">閉じる</button><div id="event-detail"></div></dialog>
+</main><footer><span>XEN REBIRTH / 日本語攻略ガイド</span><p>プレイヤー向け非公式サイト。ゲームの名称・画像等の権利は各権利者に帰属します。</p><a href="sources.html">出典・更新方針</a></footer></body></html>
