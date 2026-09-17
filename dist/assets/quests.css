@@ -1,3 +1,13 @@
+/* ========================================
+   Xen Rebirth Quest Database
+   quests.css Ver.3.7
+======================================== */
+
+
+/* ========================================
+   ツールバー
+======================================== */
+
 .quest-toolbar{
   display:grid;
   grid-template-columns:minmax(220px,1fr) 220px auto;
@@ -38,12 +48,6 @@
   background:var(--teal);
   border-color:var(--teal);
   color:#fff;
-}
-
-.quest-actions .danger{
-  background:#fff2f2;
-  border-color:#d7aaaa;
-  color:#8c3333;
 }
 
 
@@ -123,28 +127,31 @@
 
 /* ========================================
    攻略STEP
-   Ver.3.5
 ======================================== */
 
 .quest-step{
   background:#fff;
   border:1px solid var(--line);
   border-left:4px solid var(--gold);
-  padding:18px 12px;
+  padding:18px 14px;
   margin:16px 0;
 }
 
+
 /* STEP上部 */
+
 .quest-step-head{
   display:flex;
   justify-content:space-between;
   gap:15px;
   align-items:flex-start;
-  margin-left:0;
-  padding-left:0;
+  margin:0;
+  padding:0;
 }
 
+
 /* STEP番号 */
+
 .quest-step-number{
   font-family:Georgia,serif;
   color:var(--teal);
@@ -152,23 +159,53 @@
   font-weight:bold;
 }
 
+
 /* STEPタイトル */
+
 .quest-step h2{
   margin-left:0;
   padding-left:0;
 }
 
-/* NPC・場所・攻略本文 */
+
+/* NPC・場所 */
+
 .quest-step > p{
   margin-left:0;
   padding-left:0;
+  text-indent:0;
 }
 
-/* 攻略本文 */
+
+/* ========================================
+   STEP攻略本文
+   Ver.3.7 修正
+======================================== */
+
+/*
+   quests.js内のHTML整形用スペースを
+   表示させないため normal を使用。
+*/
+
 .quest-step .quest-note{
-  margin-left:0;
-  padding-left:0;
-  white-space:pre-wrap;
+  white-space:normal !important;
+  text-indent:0 !important;
+  margin-left:0 !important;
+  padding-left:0 !important;
+}
+
+
+/* ========================================
+   クエスト基本情報のメモ
+======================================== */
+
+/*
+   攻略メモ・報酬などは
+   登録データ内の改行だけ維持する。
+*/
+
+.paper > .quest-note{
+  white-space:pre-line;
 }
 
 
@@ -203,7 +240,7 @@
 
 
 /* ========================================
-   ボタン
+   操作ボタン
 ======================================== */
 
 .quest-actions{
@@ -211,6 +248,16 @@
   gap:10px;
   flex-wrap:wrap;
   margin:18px 0;
+}
+
+.quest-actions .danger{
+  border-color:#b42318;
+  color:#b42318;
+  background:#fff;
+}
+
+.quest-actions .danger:hover{
+  background:#fff1f0;
 }
 
 .quest-status{
@@ -282,10 +329,6 @@
   font-size:14px;
 }
 
-.quest-note{
-  white-space:pre-wrap;
-}
-
 .quest-back{
   display:inline-block;
   margin-bottom:18px;
@@ -293,18 +336,8 @@
 
 
 /* ========================================
-   編集履歴・削除
+   編集履歴
 ======================================== */
-
-.quest-actions .danger{
-  border-color:#b42318;
-  color:#b42318;
-  background:#fff;
-}
-
-.quest-actions .danger:hover{
-  background:#fff1f0;
-}
 
 .quest-history-dialog{
   width:min(760px,calc(100vw - 32px));
@@ -427,13 +460,9 @@
     height:auto;
   }
 
-  /*
-    共通style.cssのmain左右18pxに対して
-    STEPカードを左右へ12px広げる
-  */
   .quest-step{
-    margin-left:-12px;
-    margin-right:-12px;
+    margin-left:0;
+    margin-right:0;
     padding:16px 10px;
   }
 
@@ -441,11 +470,17 @@
     gap:10px;
   }
 
-  .quest-step > p,
-  .quest-step h2,
-  .quest-step .quest-note{
+  .quest-step > p{
     margin-left:0;
     padding-left:0;
+    text-indent:0;
+  }
+
+  .quest-step .quest-note{
+    white-space:normal !important;
+    margin-left:0 !important;
+    padding-left:0 !important;
+    text-indent:0 !important;
   }
 
 }
@@ -466,17 +501,4 @@
     padding:18px;
   }
 
-}
-
-/* ========================================
-   Ver.3.6
-   STEP本文の1行目右寄りを完全解除
-======================================== */
-
-.quest-step .quest-note,
-.quest-step > p,
-.quest-step p{
-  text-indent:0 !important;
-  margin-left:0 !important;
-  padding-left:0 !important;
 }
