@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://yysupporttools.github.io/xen-rebirth-jp/sitemap.xml
