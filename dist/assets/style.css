@@ -63,11 +63,3 @@
 @media(max-width:600px){.build-grid,.stat-purpose-grid{grid-template-columns:1fr}.community-guide{padding:18px}.stat-table,.stat-table tbody,.stat-table tr,.stat-table td{display:block;width:100%}.stat-table thead{display:none}.stat-table tr{padding:12px 0;border-bottom:1px solid var(--line)}.stat-table td{padding:4px 0;border:0}}
 
 
-/* Cleric complete page */
-.cleric-summary-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin:18px 0 22px}
-.cleric-summary-grid>div{background:#edf3f4;border-top:3px solid var(--teal);padding:16px}
-.cleric-summary-grid strong,.cleric-summary-grid span{display:block}
-.cleric-summary-grid strong{font-size:12px;letter-spacing:1px;color:var(--teal);margin-bottom:5px}
-.cleric-summary-grid span{font-weight:bold}
-@media(max-width:850px){.cleric-summary-grid{grid-template-columns:repeat(2,1fr)}}
-@media(max-width:600px){.cleric-summary-grid{grid-template-columns:1fr}}
