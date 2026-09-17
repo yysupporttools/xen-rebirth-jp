@@ -269,3 +269,47 @@
     bottom: 8px;
   }
 }
+
+/* ========================================
+   QUESTSカード：3体スタック
+======================================== */
+
+.xen-guide-stack {
+  position: absolute;
+  right: 8px;
+  bottom: 4px;
+
+  width: 105px;
+  height: 95px;
+
+  background-image:
+    url("monsters/monster-stack.png");
+
+  background-repeat: no-repeat;
+  background-position: center bottom;
+  background-size: contain;
+
+  pointer-events: none;
+  z-index: 3;
+
+  filter:
+    drop-shadow(0 5px 9px rgba(0, 0, 0, 0.16));
+
+  transition:
+    transform 0.25s ease;
+}
+
+.xen-guide-mascot-card:hover
+.xen-guide-stack {
+  transform:
+    translateY(-5px)
+    rotate(-2deg);
+}
+
+@media (max-width: 800px) {
+
+  .xen-guide-stack {
+    width: 85px;
+    height: 78px;
+  }
+}
