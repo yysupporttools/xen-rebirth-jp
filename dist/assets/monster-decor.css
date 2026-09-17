@@ -1,62 +1,138 @@
 /* ========================================
    Xen Rebirth Monster Decoration
+   個別PNG版
 ======================================== */
+
+
+/* =========================
+   ヒーロー：3体集合
+========================= */
 
 .xen-hero-monsters {
   position: absolute;
-  right: 10px;
-  bottom: 0;
+  right: 14px;
+  bottom: -2px;
+
   width: 330px;
-  height: 190px;
+  max-width: 42%;
+
   pointer-events: none;
   z-index: 5;
 }
 
 .xen-monster-trio-art {
   width: 100%;
-  height: 100%;
+  aspect-ratio: 16 / 7;
 
-  background-image: url("monsters/monsters.png");
+  background-image:
+    url("monsters/monster-trio.png");
+
   background-repeat: no-repeat;
+  background-position: center bottom;
+  background-size: contain;
 
-  /* 画像右側の集合イラスト付近 */
-  background-size: 395% auto;
-  background-position: 100% 38%;
-
-  filter: drop-shadow(
-    0 8px 12px rgba(0, 0, 0, 0.3)
-  );
+  filter:
+    drop-shadow(0 8px 12px rgba(0, 0, 0, 0.24));
 }
 
-/* ========================================
-   BGM横のポクポク
-======================================== */
+
+/* =========================
+   BGM横：ポクポク
+========================= */
 
 .xen-bgm-mascot {
   position: fixed;
-  right: 108px;
-  bottom: 16px;
 
-  width: 82px;
-  height: 82px;
+  right: 108px;
+  bottom: 12px;
+
+  width: 88px;
+  height: 88px;
 
   pointer-events: none;
   z-index: 9998;
 
-  background-image: url("monsters/monsters.png");
-  background-repeat: no-repeat;
-  background-size: 1150% auto;
-  background-position: 0% 61%;
+  background-image:
+    url("monsters/pokupoku.png");
 
-  filter: drop-shadow(
-    0 5px 8px rgba(0, 0, 0, 0.22)
-  );
+  background-repeat: no-repeat;
+  background-position: center bottom;
+  background-size: contain;
+
+  filter:
+    drop-shadow(0 5px 8px rgba(0, 0, 0, 0.2));
 
   animation:
     xenMonsterFloat 3.4s ease-in-out infinite;
 }
 
+
+/* =========================
+   単体キャラクター共通
+========================= */
+
+.xen-monster {
+  display: block;
+
+  width: 110px;
+  height: 110px;
+
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: contain;
+
+  pointer-events: none;
+
+  filter:
+    drop-shadow(0 6px 10px rgba(0, 0, 0, 0.16));
+}
+
+.xen-monster-poyo {
+  background-image:
+    url("monsters/poyopoyo.png");
+}
+
+.xen-monster-poko {
+  background-image:
+    url("monsters/pokopoko.png");
+}
+
+.xen-monster-poku {
+  background-image:
+    url("monsters/pokupoku.png");
+}
+
+
+/* =========================
+   3体積み重なり素材
+========================= */
+
+.xen-monster-stack {
+  display: block;
+
+  width: 240px;
+  height: 220px;
+
+  background-image:
+    url("monsters/monster-stack.png");
+
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: contain;
+
+  pointer-events: none;
+
+  filter:
+    drop-shadow(0 8px 14px rgba(0, 0, 0, 0.18));
+}
+
+
+/* =========================
+   BGMポクポクのふわふわ
+========================= */
+
 @keyframes xenMonsterFloat {
+
   0%,
   100% {
     transform: translateY(0);
@@ -67,34 +143,50 @@
   }
 }
 
-/* ========================================
+
+/* =========================
    スマホ
-======================================== */
+========================= */
 
 @media (max-width: 800px) {
 
   .xen-hero-monsters {
     position: relative;
+
     right: auto;
     bottom: auto;
 
-    width: 300px;
-    max-width: 100%;
-    height: 170px;
+    width: min(100%, 320px);
+    max-width: none;
 
-    margin: 16px auto 0;
+    margin:
+      14px auto -5px;
   }
 
   .xen-bgm-mascot {
-    width: 62px;
-    height: 62px;
+    width: 64px;
+    height: 64px;
 
-    right: 78px;
-    bottom: 12px;
+    right: 76px;
+    bottom: 10px;
+  }
+
+  .xen-monster {
+    width: 82px;
+    height: 82px;
+  }
+
+  .xen-monster-stack {
+    width: 190px;
+    height: 175px;
   }
 }
 
-/* 動きを減らす設定 */
+
+/* =========================
+   動きを減らす設定
+========================= */
+
 @media (prefers-reduced-motion: reduce) {
 
   .xen-bgm-mascot {
