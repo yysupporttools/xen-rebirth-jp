@@ -3,6 +3,9 @@ name: Xen Rebirth event sync Ver.10
 on:
   workflow_dispatch:
 
+  schedule:
+    - cron: "20 18 * * *"
+
 permissions:
   contents: read
 
