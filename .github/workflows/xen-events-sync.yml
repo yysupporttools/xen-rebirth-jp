@@ -1,27 +1,23 @@
-name: Xen Rebirth event fetch test
+name: Xen Rebirth event sync Ver.10
 
 on:
   workflow_dispatch:
-  schedule:
-    # Once daily. GitHub Actions cron uses UTC.
-    - cron: "20 18 * * *"
 
 permissions:
   contents: read
 
 jobs:
-  fetch-events-test:
+  sync-events:
     runs-on: ubuntu-latest
-    timeout-minutes: 5
-
+    timeout-minutes: 10
+    env:
+      SUPABASE_SERVICE_ROLE_KEY: ${{ secrets.SUPABASE_SERVICE_ROLE_KEY }}
+      OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+      OPENAI_MODEL: gpt-5.6-luna
     steps:
-      - name: Checkout repository
-        uses: actions/checkout@v4
-
-      - name: Set up Node.js
-        uses: actions/setup-node@v4
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
         with:
           node-version: "22"
-
-      - name: Test official calendar fetch
+      - name: Sync official events to Supabase
         run: node scripts/sync-xen-events.js
