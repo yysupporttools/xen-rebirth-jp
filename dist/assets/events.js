@@ -6,13 +6,12 @@ const safeUrl=u=>{try{const x=new URL(u);return /^https?:$/.test(x.protocol)?x.h
 const fmt=d=>new Intl.DateTimeFormat('ja-JP',{timeZone:JST,month:'numeric',day:'numeric',weekday:'short',hour:'2-digit',minute:'2-digit'}).format(new Date(d));
 const dayKey=d=>new Intl.DateTimeFormat('sv-SE',{timeZone:JST,year:'numeric',month:'2-digit',day:'2-digit'}).format(new Date(d));
 function title(e){return e.title_ja||e.title_en||'名称未設定'}
-const DATE_ONLY_EVENT_IDS=new Set(['gummys-challenge-week-3-2026','gummys-challenge-week-4-2026']);
 const fmtDateKey=k=>new Intl.DateTimeFormat('ja-JP',{timeZone:JST,year:'numeric',month:'numeric',day:'numeric',weekday:'short'}).format(new Date(k+'T00:00:00+09:00'));
 const prevDayKey=k=>{const d=new Date(k+'T00:00:00Z');d.setUTCDate(d.getUTCDate()-1);return d.toISOString().slice(0,10)};
 const eventPeriod=e=>{
-  if(DATE_ONLY_EVENT_IDS.has(e.official_event_id)){
-    const s=dayKey(e.start_time);
-    const end=e.end_time?prevDayKey(dayKey(e.end_time)):s;
+  if(e.all_day===true){
+    const s=String(e.start_time||'').slice(0,10);
+    const end=e.end_time?prevDayKey(String(e.end_time).slice(0,10)):s;
     return `${fmtDateKey(s)} ～ ${fmtDateKey(end)}`;
   }
   return `${fmt(e.start_time)}${e.end_time?' ～ '+fmt(e.end_time):''} JST`;
@@ -21,15 +20,17 @@ function show(e){const url=safeUrl(e.official_url);$('event-detail').innerHTML=`
 function render(){
 const y=cursor.getFullYear(),m=cursor.getMonth();$('month-title').textContent=`${y}年 ${m+1}月`;const first=new Date(y,m,1),start=new Date(y,m,1-first.getDay()),keys=[];
 for(let i=0;i<42;i++){const d=new Date(start);d.setDate(start.getDate()+i);keys.push(`${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`)}
-const incEnd=e=>{const s=dayKey(e.start_time);if(!e.end_time)return s;const k=dayKey(e.end_time);if(k<=s)return s;const d=new Date(`${k}T00:00:00`);d.setDate(d.getDate()-1);return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`};let html='';
+const eventStartKey=e=>e.all_day===true?String(e.start_time||'').slice(0,10):dayKey(e.start_time);
+const eventEndKey=e=>e.all_day===true?String(e.end_time||'').slice(0,10):dayKey(e.end_time);
+const incEnd=e=>{const s=eventStartKey(e);if(!e.end_time)return s;const k=eventEndKey(e);if(k<=s)return s;const d=new Date(`${k}T00:00:00`);d.setDate(d.getDate()-1);return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`};let html='';
 for(let w=0;w<6;w++){const wk=keys.slice(w*7,w*7+7),ws=wk[0],we=wk[6],segs=[];
-events.forEach(e=>{const s=dayKey(e.start_time),end=incEnd(e);if(end<ws||s>we)return;const ss=s<ws?ws:s,ee=end>we?we:end,sc=wk.indexOf(ss),ec=wk.indexOf(ee);if(sc>=0&&ec>=0)segs.push({e,sc,ec,end})});
+events.forEach(e=>{const s=eventStartKey(e),end=incEnd(e);if(end<ws||s>we)return;const ss=s<ws?ws:s,ee=end>we?we:end,sc=wk.indexOf(ss),ec=wk.indexOf(ee);if(sc>=0&&ec>=0)segs.push({e,sc,ec,end})});
 segs.sort((x,y)=>x.sc-y.sc||(y.ec-y.sc)-(x.ec-x.sc));const lanes=[];segs.forEach(x=>{let n=lanes.findIndex(v=>v<x.sc);if(n<0){n=lanes.length;lanes.push(x.ec)}else lanes[n]=x.ec;x.lane=n});
 html+=`<div class="calendar-week" style="--event-lanes:${Math.max(1,lanes.length)}">`;
 wk.forEach(key=>{const d=new Date(`${key}T00:00:00`),inside=d.getMonth()===m,today=key===dayKey(Date.now());html+=`<div class="calendar-day${inside?'':' outside'}${today?' today':''}"><span class="day-number">${d.getDate()}</span></div>`});
-html+='<div class="week-events">';segs.forEach(x=>{const left=dayKey(x.e.start_time)<ws,right=x.end>we;html+=`<button class="event-bar${/boss/i.test(x.e.category||'')?' world-boss':''}${left?' continues-left':''}${right?' continues-right':''}" data-id="${esc(x.e.id)}" data-category="${esc(x.e.category||'')}" style="--start:${x.sc};--span:${x.ec-x.sc+1};--lane:${x.lane}" title="${esc(title(x.e))}">${left?'':esc(title(x.e))}</button>`});html+='</div></div>'}
+html+='<div class="week-events">';segs.forEach(x=>{const left=eventStartKey(x.e)<ws,right=x.end>we;html+=`<button class="event-bar${/boss/i.test(x.e.category||'')?' world-boss':''}${left?' continues-left':''}${right?' continues-right':''}" data-id="${esc(x.e.id)}" data-category="${esc(x.e.category||'')}" style="--start:${x.sc};--span:${x.ec-x.sc+1};--lane:${x.lane}" title="${esc(title(x.e))}">${left?'':esc(title(x.e))}</button>`});html+='</div></div>'}
 $('calendar').innerHTML=html;$('calendar').querySelectorAll('[data-id]').forEach(b=>b.onclick=()=>show(events.find(e=>String(e.id)===b.dataset.id)));
-const upcoming=events.filter(e=>new Date(e.start_time)>=new Date()).slice(0,12);$('upcoming-events').innerHTML=upcoming.length?upcoming.map(e=>`<article class="upcoming-card"><div class="upcoming-date">${esc(fmt(e.start_time))} JST</div><div><p class="eyebrow">${esc(e.category||'EVENT')}</p><h3>${esc(title(e))}</h3><button data-up="${esc(e.id)}">詳細を見る →</button></div></article>`).join(''):'<p>登録されている今後のイベントはありません。</p>';$('upcoming-events').querySelectorAll('[data-up]').forEach(b=>b.onclick=()=>show(events.find(e=>String(e.id)===b.dataset.up)))
+const upcoming=events.filter(e=>new Date(e.start_time)>=new Date()).slice(0,12);$('upcoming-events').innerHTML=upcoming.length?upcoming.map(e=>`<article class="upcoming-card"><div class="upcoming-date">${esc(e.all_day===true?eventPeriod(e):fmt(e.start_time)+' JST')}</div><div><p class="eyebrow">${esc(e.category||'EVENT')}</p><h3>${esc(title(e))}</h3><button data-up="${esc(e.id)}">詳細を見る →</button></div></article>`).join(''):'<p>登録されている今後のイベントはありません。</p>';$('upcoming-events').querySelectorAll('[data-up]').forEach(b=>b.onclick=()=>show(events.find(e=>String(e.id)===b.dataset.up)))
 }
 async function load(){if(!db){$('calendar-status').textContent='カレンダー設定を読み込めませんでした。';render();return} $('calendar-status').textContent='イベント情報を読み込み中…';const {data,error}=await db.from('xen_events').select('*').order('start_time',{ascending:true});if(error){$('calendar-status').textContent='イベント情報を取得できませんでした：'+error.message;render();return}events=data||[];$('calendar-status').textContent=events.length?`${events.length}件のイベント情報を表示しています。`:'イベント情報はまだ登録されていません。';render()}
 $('prev-month').onclick=()=>{cursor=new Date(cursor.getFullYear(),cursor.getMonth()-1,1);render()};$('next-month').onclick=()=>{cursor=new Date(cursor.getFullYear(),cursor.getMonth()+1,1);render()};$('today').onclick=()=>{cursor=new Date(jstNow.getFullYear(),jstNow.getMonth(),1);render()};$('event-close').onclick=()=>$('event-dialog').close();load()})();
