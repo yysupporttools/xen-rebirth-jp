@@ -415,3 +415,23 @@
 #quest-deleted{
   white-space:nowrap
 }
+
+/* ========================================
+   Ver.3.5
+   Quest detail STEP alignment fix
+   共通CSS .steps の左余白をクエストページのみ解除
+======================================== */
+
+.steps > li.quest-step{
+  padding-left:14px;
+}
+
+.steps > li.quest-step::before{
+  display:none;
+}
+
+@media(max-width:520px){
+  .steps > li.quest-step{
+    padding-left:10px;
+  }
+}
