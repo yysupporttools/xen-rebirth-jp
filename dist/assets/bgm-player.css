@@ -1,0 +1,666 @@
+/* =========================================================
+   Xen Rebirth BGM Player
+   ========================================================= */
+
+.xen-bgm-player {
+  --bgm-teal: #123f43;
+  --bgm-teal-dark: #082b2e;
+  --bgm-teal-light: #1b565b;
+  --bgm-gold: #c9a85d;
+  --bgm-gold-light: #e5ce91;
+  --bgm-cream: #f7f2e8;
+  --bgm-line: rgba(229, 206, 145, 0.22);
+
+  position: fixed;
+  right: 22px;
+  bottom: 22px;
+  z-index: 9999;
+
+  font-family:
+    -apple-system,
+    BlinkMacSystemFont,
+    "Segoe UI",
+    "Hiragino Kaku Gothic ProN",
+    "Yu Gothic",
+    sans-serif;
+}
+
+/* ---------- 小さいBGMボタン ---------- */
+
+.xen-bgm-mini {
+  width: 92px;
+  min-height: 58px;
+
+  display: flex;
+  align-items: center;
+  gap: 10px;
+
+  padding: 8px 12px;
+
+  border: 1px solid var(--bgm-gold);
+  border-radius: 15px;
+
+  background:
+    linear-gradient(
+      145deg,
+      var(--bgm-teal-light),
+      var(--bgm-teal-dark)
+    );
+
+  color: #fff;
+
+  box-shadow:
+    0 8px 24px rgba(0, 0, 0, 0.22),
+    inset 0 1px 0 rgba(255, 255, 255, 0.08);
+
+  cursor: pointer;
+
+  transition:
+    transform 0.2s ease,
+    box-shadow 0.2s ease;
+}
+
+.xen-bgm-mini:hover {
+  transform: translateY(-2px);
+
+  box-shadow:
+    0 11px 28px rgba(0, 0, 0, 0.28),
+    0 0 0 2px rgba(201, 168, 93, 0.1);
+}
+
+.xen-bgm-mini-icon {
+  width: 34px;
+  height: 34px;
+
+  display: grid;
+  place-items: center;
+
+  flex-shrink: 0;
+
+  border: 1px solid rgba(229, 206, 145, 0.55);
+  border-radius: 50%;
+
+  background: rgba(0, 0, 0, 0.18);
+
+  color: var(--bgm-gold-light);
+
+  font-family: Georgia, serif;
+  font-size: 22px;
+}
+
+.xen-bgm-mini-text {
+  min-width: 0;
+  text-align: left;
+}
+
+.xen-bgm-mini-text strong {
+  display: block;
+
+  color: var(--bgm-gold-light);
+
+  font-family: Georgia, serif;
+  font-size: 12px;
+  letter-spacing: 1.5px;
+}
+
+.xen-bgm-mini-text small {
+  display: block;
+
+  max-width: 36px;
+
+  margin-top: 2px;
+
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+
+  color: rgba(255, 255, 255, 0.75);
+
+  font-size: 9px;
+}
+
+/* ---------- 展開パネル ---------- */
+
+.xen-bgm-panel {
+  position: absolute;
+
+  right: 0;
+  bottom: 72px;
+
+  width: min(360px, calc(100vw - 30px));
+
+  overflow: hidden;
+
+  border: 1px solid rgba(201, 168, 93, 0.7);
+  border-radius: 18px;
+
+  background:
+    radial-gradient(
+      circle at top right,
+      rgba(201, 168, 93, 0.12),
+      transparent 32%
+    ),
+    linear-gradient(
+      160deg,
+      #17494d 0%,
+      #0c3539 55%,
+      #07282b 100%
+    );
+
+  color: #fff;
+
+  box-shadow:
+    0 18px 50px rgba(0, 0, 0, 0.35),
+    inset 0 1px 0 rgba(255, 255, 255, 0.06);
+
+  opacity: 0;
+  visibility: hidden;
+
+  transform:
+    translateY(12px)
+    scale(0.97);
+
+  transform-origin: bottom right;
+
+  pointer-events: none;
+
+  transition:
+    opacity 0.2s ease,
+    transform 0.2s ease,
+    visibility 0.2s ease;
+}
+
+.xen-bgm-player.is-expanded .xen-bgm-panel {
+  opacity: 1;
+  visibility: visible;
+
+  transform:
+    translateY(0)
+    scale(1);
+
+  pointer-events: auto;
+}
+
+/* ---------- ヘッダー ---------- */
+
+.xen-bgm-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  padding: 16px 18px 13px;
+
+  border-bottom: 1px solid var(--bgm-line);
+}
+
+.xen-bgm-header > div {
+  display: flex;
+  flex-direction: column;
+}
+
+.xen-bgm-eyebrow {
+  margin-bottom: 2px;
+
+  color: rgba(229, 206, 145, 0.65);
+
+  font-size: 9px;
+  font-weight: 700;
+  letter-spacing: 2.4px;
+}
+
+.xen-bgm-header strong {
+  color: var(--bgm-gold-light);
+
+  font-family: Georgia, serif;
+  font-size: 16px;
+  letter-spacing: 1.7px;
+}
+
+.xen-bgm-close {
+  width: 34px;
+  height: 34px;
+
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  border-radius: 50%;
+
+  background: rgba(255, 255, 255, 0.05);
+
+  color: rgba(255, 255, 255, 0.75);
+
+  font-size: 22px;
+  line-height: 1;
+
+  cursor: pointer;
+}
+
+.xen-bgm-close:hover {
+  border-color: rgba(229, 206, 145, 0.5);
+  color: var(--bgm-gold-light);
+}
+
+/* ---------- 再生曲表示 ---------- */
+
+.xen-bgm-now {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+
+  padding: 19px 18px 14px;
+}
+
+.xen-bgm-disc {
+  width: 62px;
+  height: 62px;
+
+  display: grid;
+  place-items: center;
+
+  flex-shrink: 0;
+
+  border: 1px solid rgba(229, 206, 145, 0.48);
+  border-radius: 50%;
+
+  background:
+    radial-gradient(
+      circle,
+      var(--bgm-gold) 0 7%,
+      #092d30 8% 19%,
+      rgba(229, 206, 145, 0.28) 20% 21%,
+      #0b363a 22% 42%,
+      rgba(229, 206, 145, 0.18) 43% 44%,
+      #092d30 45% 100%
+    );
+
+  color: var(--bgm-gold-light);
+
+  box-shadow:
+    inset 0 0 18px rgba(0, 0, 0, 0.38),
+    0 4px 14px rgba(0, 0, 0, 0.2);
+}
+
+.xen-bgm-disc span {
+  font-family: Georgia, serif;
+  font-size: 18px;
+}
+
+.xen-bgm-player.is-playing .xen-bgm-disc {
+  animation: xenBgmSpin 5s linear infinite;
+}
+
+@keyframes xenBgmSpin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.xen-bgm-now-text {
+  min-width: 0;
+
+  display: flex;
+  flex-direction: column;
+}
+
+.xen-bgm-now-text small {
+  margin-bottom: 4px;
+
+  color: rgba(255, 255, 255, 0.5);
+
+  font-size: 9px;
+  font-weight: 700;
+  letter-spacing: 1.6px;
+}
+
+.xen-bgm-title {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+
+  color: #fff;
+
+  font-size: 18px;
+}
+
+.xen-bgm-counter {
+  margin-top: 4px;
+
+  color: var(--bgm-gold);
+
+  font-size: 10px;
+  letter-spacing: 1px;
+}
+
+/* ---------- 再生位置 ---------- */
+
+.xen-bgm-progress-wrap {
+  display: grid;
+
+  grid-template-columns:
+    35px
+    1fr
+    35px;
+
+  align-items: center;
+  gap: 7px;
+
+  padding: 2px 18px 10px;
+
+  color: rgba(255, 255, 255, 0.55);
+
+  font-size: 9px;
+}
+
+.xen-bgm-current-time {
+  text-align: left;
+}
+
+.xen-bgm-duration {
+  text-align: right;
+}
+
+.xen-bgm-progress,
+.xen-bgm-volume {
+  width: 100%;
+
+  accent-color: var(--bgm-gold);
+
+  cursor: pointer;
+}
+
+/* ---------- メイン操作 ---------- */
+
+.xen-bgm-main-controls {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 9px;
+
+  padding: 4px 18px 15px;
+}
+
+.xen-bgm-main-controls button {
+  width: 39px;
+  height: 39px;
+
+  display: grid;
+  place-items: center;
+
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  border-radius: 50%;
+
+  background: rgba(255, 255, 255, 0.05);
+
+  color: rgba(255, 255, 255, 0.78);
+
+  font-size: 12px;
+
+  cursor: pointer;
+
+  transition:
+    border-color 0.15s ease,
+    color 0.15s ease,
+    background 0.15s ease,
+    transform 0.15s ease;
+}
+
+.xen-bgm-main-controls button:hover {
+  border-color: rgba(229, 206, 145, 0.5);
+
+  color: var(--bgm-gold-light);
+
+  transform: translateY(-1px);
+}
+
+.xen-bgm-main-controls .xen-bgm-play {
+  width: 52px;
+  height: 52px;
+
+  border-color: var(--bgm-gold);
+
+  background:
+    linear-gradient(
+      145deg,
+      #d2b66e,
+      #a8833f
+    );
+
+  color: #082b2e;
+
+  box-shadow:
+    0 5px 14px rgba(0, 0, 0, 0.25);
+
+  font-size: 17px;
+  font-weight: bold;
+}
+
+.xen-bgm-main-controls .xen-bgm-play:hover {
+  color: #082b2e;
+
+  background:
+    linear-gradient(
+      145deg,
+      #e0c886,
+      #b9954d
+    );
+}
+
+.xen-bgm-main-controls button.is-active {
+  border-color: var(--bgm-gold);
+
+  background: rgba(201, 168, 93, 0.18);
+
+  color: var(--bgm-gold-light);
+}
+
+/* ---------- 音量 ---------- */
+
+.xen-bgm-volume-row {
+  display: grid;
+
+  grid-template-columns:
+    24px
+    1fr
+    38px;
+
+  align-items: center;
+  gap: 8px;
+
+  margin: 0 18px 14px;
+  padding: 10px 12px;
+
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 10px;
+
+  background: rgba(0, 0, 0, 0.12);
+
+  font-size: 11px;
+}
+
+.xen-bgm-volume-value {
+  color: rgba(255, 255, 255, 0.65);
+
+  text-align: right;
+
+  font-size: 10px;
+}
+
+/* ---------- 曲一覧 ---------- */
+
+.xen-bgm-list-toggle {
+  width: calc(100% - 36px);
+
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  margin: 0 18px 15px;
+  padding: 10px 13px;
+
+  border: 1px solid rgba(201, 168, 93, 0.28);
+  border-radius: 10px;
+
+  background: rgba(0, 0, 0, 0.12);
+
+  color: rgba(255, 255, 255, 0.8);
+
+  font-size: 12px;
+
+  cursor: pointer;
+}
+
+.xen-bgm-list-toggle:hover,
+.xen-bgm-list-toggle.is-open {
+  border-color: rgba(201, 168, 93, 0.6);
+
+  color: var(--bgm-gold-light);
+}
+
+.xen-bgm-track-list {
+  max-height: 245px;
+
+  overflow-y: auto;
+
+  margin-top: -4px;
+
+  border-top: 1px solid var(--bgm-line);
+
+  background: rgba(3, 25, 27, 0.32);
+
+  scrollbar-width: thin;
+  scrollbar-color:
+    var(--bgm-gold)
+    rgba(255, 255, 255, 0.05);
+}
+
+.xen-bgm-track {
+  width: 100%;
+
+  display: grid;
+
+  grid-template-columns:
+    34px
+    1fr
+    24px;
+
+  align-items: center;
+  gap: 8px;
+
+  padding: 10px 18px;
+
+  border: 0;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.055);
+
+  background: transparent;
+
+  color: rgba(255, 255, 255, 0.72);
+
+  text-align: left;
+
+  cursor: pointer;
+}
+
+.xen-bgm-track:hover {
+  background: rgba(255, 255, 255, 0.055);
+
+  color: #fff;
+}
+
+.xen-bgm-track.is-current {
+  background: rgba(201, 168, 93, 0.13);
+
+  color: var(--bgm-gold-light);
+}
+
+.xen-bgm-track-number {
+  color: rgba(229, 206, 145, 0.55);
+
+  font-family: Georgia, serif;
+  font-size: 11px;
+}
+
+.xen-bgm-track-name {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+
+  font-size: 12px;
+}
+
+.xen-bgm-track-playing {
+  opacity: 0;
+
+  color: var(--bgm-gold-light);
+
+  text-align: center;
+}
+
+.xen-bgm-track.is-current .xen-bgm-track-playing {
+  opacity: 1;
+}
+
+/* ---------- フォーカス ---------- */
+
+.xen-bgm-player button:focus-visible,
+.xen-bgm-player input:focus-visible {
+  outline: 2px solid var(--bgm-gold-light);
+  outline-offset: 2px;
+}
+
+/* ---------- スマートフォン ---------- */
+
+@media (max-width: 600px) {
+  .xen-bgm-player {
+    right: 12px;
+    bottom: 12px;
+  }
+
+  .xen-bgm-mini {
+    width: 66px;
+    min-height: 52px;
+
+    padding: 7px 9px;
+
+    border-radius: 13px;
+  }
+
+  .xen-bgm-mini-icon {
+    width: 32px;
+    height: 32px;
+  }
+
+  .xen-bgm-mini-text strong {
+    font-size: 10px;
+  }
+
+  .xen-bgm-mini-text small {
+    display: none;
+  }
+
+  .xen-bgm-panel {
+    right: 0;
+    bottom: 64px;
+
+    width: min(
+      350px,
+      calc(100vw - 24px)
+    );
+
+    max-height: calc(100vh - 100px);
+  }
+
+  .xen-bgm-track-list {
+    max-height: 190px;
+  }
+}
+
+/* ---------- 動きを減らす設定 ---------- */
+
+@media (prefers-reduced-motion: reduce) {
+  .xen-bgm-player *,
+  .xen-bgm-player *::before,
+  .xen-bgm-player *::after {
+    scroll-behavior: auto !important;
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
