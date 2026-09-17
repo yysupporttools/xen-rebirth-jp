@@ -6,29 +6,24 @@
       return;
     }
 
-    /* 見出しだけからヒーロータイトルを探す */
     const headings = Array.from(
       document.querySelectorAll("h1, h2, h3")
     );
 
     const heading = headings.find(el =>
       el.textContent &&
-      el.textContent.includes("もう一度、ゼンの世界へ。")
+      el.textContent.includes("もう一度、") &&
+      el.textContent.includes("ゼンの世界へ。")
     );
 
-    if (!heading) {
-      return;
-    }
+    if (!heading) return;
 
-    /* 見出しを含むヒーロー領域を取得 */
     const hero =
       heading.closest("section") ||
       heading.closest(".hero") ||
       heading.parentElement;
 
-    if (!hero) {
-      return;
-    }
+    if (!hero) return;
 
     if (getComputedStyle(hero).position === "static") {
       hero.style.position = "relative";
@@ -37,7 +32,6 @@
     hero.style.overflow = "visible";
 
     const monsters = document.createElement("div");
-
     monsters.className = "xen-hero-monsters";
     monsters.setAttribute("aria-hidden", "true");
 
@@ -46,6 +40,7 @@
 
     hero.appendChild(monsters);
   }
+
 
   function addBgmMascot() {
     if (document.querySelector(".xen-bgm-mascot")) {
@@ -64,10 +59,66 @@
     document.body.appendChild(mascot);
   }
 
+
+  function addGuideMascots() {
+    const settings = [
+      {
+        marker: "01 / START",
+        className: "xen-guide-poyo"
+      },
+      {
+        marker: "02 / CLASSES",
+        className: "xen-guide-poko"
+      },
+      {
+        marker: "03 / ADVENTURE",
+        className: "xen-guide-poku"
+      }
+    ];
+
+    const links = Array.from(
+      document.querySelectorAll("a")
+    );
+
+    settings.forEach(setting => {
+      const card = links.find(link =>
+        link.textContent &&
+        link.textContent.includes(setting.marker)
+      );
+
+      if (!card) return;
+
+      if (card.querySelector(".xen-guide-mascot")) {
+        return;
+      }
+
+      card.classList.add(
+        "xen-guide-mascot-card"
+      );
+
+      const mascot =
+        document.createElement("span");
+
+      mascot.className =
+        `xen-guide-mascot ${setting.className}`;
+
+      mascot.setAttribute(
+        "aria-hidden",
+        "true"
+      );
+
+      card.appendChild(mascot);
+    });
+  }
+
+
   function init() {
     addHeroMonsters();
+    addGuideMascots();
 
-    /* BGMプレイヤー生成を待ちながら数回確認 */
+    /*
+      BGMプレイヤー生成を待つ
+    */
     let tries = 0;
 
     const timer = setInterval(() => {
@@ -84,8 +135,12 @@
     }, 250);
   }
 
+
   if (document.readyState === "loading") {
-    document.addEventListener("DOMContentLoaded", init);
+    document.addEventListener(
+      "DOMContentLoaded",
+      init
+    );
   } else {
     init();
   }
