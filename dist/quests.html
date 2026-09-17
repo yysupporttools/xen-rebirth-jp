@@ -10,12 +10,12 @@
 <main id="main"><div class="page-intro"><p class="eyebrow">QUEST DATABASE / みんなで作る攻略情報</p><h1>クエスト情報</h1><p>進行手順、NPC、場所、報酬、攻略画像をみんなで追加・編集できます。英語名でも日本語名でも検索できます。</p></div>
 <p class="note">登録不要で編集できます。公式情報やゲーム内で確認できた内容を中心に、他のプレイヤーにも分かりやすい説明をお願いします。</p>
 <p class="quest-status" id="quest-status" role="status"></p>
-<section id="quest-list-view"><div class="quest-toolbar"><input id="quest-search" type="search" placeholder="クエスト名・NPC・場所から検索" aria-label="クエスト検索"/><select id="quest-category" aria-label="カテゴリ"><option value="">すべてのカテゴリ</option><option>メインクエスト</option><option>転職クエスト</option><option>一般クエスト</option><option>デイリークエスト</option><option>イベントクエスト</option></select><button class="primary" id="quest-new">＋ クエストを追加</button><button id="quest-deleted">削除済みクエスト</button></div><div class="quest-grid" id="quest-list"></div></section>
+<section id="quest-list-view"><div class="quest-toolbar"><input id="quest-search" type="search" placeholder="クエスト名・NPC・場所から検索" aria-label="クエスト検索"/><select id="quest-category" aria-label="カテゴリ"><option value="">すべてのカテゴリ</option><option>メインクエスト</option><option>転職クエスト</option><option>一般クエスト</option><option>ペットクエスト</option><option>デイリークエスト</option><option>イベントクエスト</option></select><button class="primary" id="quest-new">＋ クエストを追加</button><button id="quest-deleted">削除済みクエスト</button></div><div class="quest-grid" id="quest-list"></div></section>
 <section id="quest-detail" hidden></section>
 </main>
 <dialog class="quest-dialog" id="quest-dialog"><h2 id="quest-dialog-title">クエストを追加</h2><form class="quest-form" id="quest-form">
 <label>クエスト名（英語）<input name="title_en" maxlength="200" required></label><label>クエスト名（日本語）<input name="title_ja" maxlength="200"></label>
-<div class="two"><label>カテゴリ<select name="category"><option>一般クエスト</option><option>メインクエスト</option><option>転職クエスト</option><option>デイリークエスト</option><option>イベントクエスト</option></select></label><label>必要Lv<input name="required_level" type="number" min="0" max="999"></label></div>
+<div class="two"><label>カテゴリ<select name="category"><option>一般クエスト</option><option>メインクエスト</option><option>転職クエスト</option><option>ペットクエスト</option><option>デイリークエスト</option><option>イベントクエスト</option></select></label><label>必要Lv<input name="required_level" type="number" min="0" max="999"></label></div>
 <div class="two"><label>開始NPC<input name="start_npc" maxlength="150"></label><label>開始場所<input name="start_location" maxlength="200"></label></div>
 <label>前提クエスト<input name="prerequisite" maxlength="300"></label><label>報酬<textarea name="rewards" maxlength="4000"></textarea></label><label>攻略メモ<textarea name="notes" maxlength="6000"></textarea></label><label>情報元URL<input name="source_url" type="url" maxlength="1000" placeholder="https://..."></label>
 <p class="quest-status" id="quest-form-status"></p><div class="quest-actions"><button type="button" data-close="quest-dialog">キャンセル</button><button class="primary" type="submit">保存する</button></div></form></dialog>
