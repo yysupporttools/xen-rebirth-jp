@@ -78,7 +78,30 @@ function classify(rec,existing){const oid=String(rec.official_event_id||"").repl
 function outputText(j){if(typeof j.output_text==="string")return j.output_text;for(const item of (j.output||[]))for(const c of (item.content||[]))if(c.type==="output_text"&&typeof c.text==="string")return c.text;return "";}
 async function translate(rec){
  const schema={type:"object",additionalProperties:false,properties:{title_ja:{type:"string"},description_ja:{type:"string"},requirements_ja:{type:"string"},rewards_ja:{type:"string"}},required:["title_ja","description_ja","requirements_ja","rewards_ja"]};
- const input=`Xen Rebirthの公式イベント情報を日本語化してください。固有名詞・NPC名・地名・アイテム名は必要に応じて英語表記を残してください。原文にない条件や報酬は絶対に作らないでください。requirements_ja は原文に明示された参加条件・ルールだけ、rewards_ja は明示された報酬だけを抽出し、該当情報がなければ空文字にしてください。description_ja は読みやすい日本語で原文内容を忠実に訳してください。\n\nTitle: ${rec.title_en}\nCategory: ${rec.category||""}\nBody:\n${rec.description_en||""}`;
+ const input=`Xen Rebirthの公式イベント情報を日本語化してください。
+
+【タイトルの重要ルール】
+title_ja は自然な日本語タイトルだけを返してください。
+元の英語タイトルを併記しないでください。
+「Four Seasons Event（四季イベント）」のような「英語名（日本語名）」形式は禁止です。
+例:
+Four Seasons Event → 四季イベント
+Obstacle Race (Wed) → 障害物レース（水曜日）
+Server Challenge → サーバーチャレンジ
+
+ただし、ゲーム内で英語表記のまま使われる固有名詞・NPC名・地名・アイテム名は、無理に日本語へ翻訳せず必要に応じて英語表記を残してください。
+
+【本文】
+原文にない条件や報酬は絶対に作らないでください。
+requirements_ja は原文に明示された参加条件・ルールだけを抽出してください。
+rewards_ja は原文に明示された報酬だけを抽出してください。
+該当情報がなければ空文字にしてください。
+description_ja は原文内容を忠実に、読みやすい日本語へ翻訳してください。
+
+Title: ${rec.title_en}
+Category: ${rec.category||""}
+Body:
+${rec.description_en||""}`;
  const r=await fetch("https://api.openai.com/v1/responses",{method:"POST",headers:{"Authorization":`Bearer ${OPENAI_API_KEY}`,"Content-Type":"application/json"},body:JSON.stringify({model:OPENAI_MODEL,store:false,reasoning:{effort:"none"},input,text:{format:{type:"json_schema",name:"xen_event_translation",strict:true,schema}}})});
  const raw=await r.text();if(!r.ok)throw new Error(`OpenAI translation failed HTTP ${r.status}: ${raw.slice(0,800)}`);const j=JSON.parse(raw),t=outputText(j);if(!t)throw new Error("OpenAI translation returned no output text");return JSON.parse(t);
 }
