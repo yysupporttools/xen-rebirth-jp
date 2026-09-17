@@ -467,3 +467,16 @@
   }
 
 }
+
+/* ========================================
+   Ver.3.6
+   STEP本文の1行目右寄りを完全解除
+======================================== */
+
+.quest-step .quest-note,
+.quest-step > p,
+.quest-step p{
+  text-indent:0 !important;
+  margin-left:0 !important;
+  padding-left:0 !important;
+}
