@@ -664,3 +664,66 @@
     transition-duration: 0.01ms !important;
   }
 }
+
+/* ========================================
+   BGM 曲名編集
+======================================== */
+
+.xen-bgm-track-row {
+  display: flex;
+  align-items: stretch;
+  width: 100%;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.xen-bgm-track-row .xen-bgm-track {
+  flex: 1;
+  min-width: 0;
+  border-bottom: 0;
+}
+
+.xen-bgm-track-edit {
+  flex: 0 0 44px;
+  width: 44px;
+  border: 0;
+  border-left: 1px solid rgba(255, 255, 255, 0.08);
+  background: transparent;
+  color: var(--bgm-gold-light);
+  cursor: pointer;
+  font-size: 15px;
+  transition:
+    background 0.2s ease,
+    transform 0.2s ease;
+}
+
+.xen-bgm-track-edit:hover {
+  background: rgba(201, 168, 93, 0.16);
+}
+
+.xen-bgm-track-edit:active {
+  transform: scale(0.92);
+}
+
+.xen-bgm-track-edit:disabled {
+  cursor: wait;
+  opacity: 0.6;
+}
+
+.xen-bgm-track-edit:focus-visible {
+  outline: 2px solid var(--bgm-gold-light);
+  outline-offset: -2px;
+}
+
+.xen-bgm-track-name {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* スマホ */
+@media (max-width: 600px) {
+  .xen-bgm-track-edit {
+    flex-basis: 42px;
+    width: 42px;
+  }
+}
