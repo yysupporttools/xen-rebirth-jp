@@ -369,6 +369,16 @@
                   : ''
               }
 
+              <div class="quest-image-actions">
+                <button
+                  type="button"
+                  class="quest-image-delete"
+                  data-image-delete="${esc(x.id)}"
+                >
+                  画像を削除
+                </button>
+              </div>
+
             </figure>
 
           `).join('')
@@ -1361,6 +1371,21 @@
 
       );
 
+
+    document
+      .querySelectorAll(
+        '[data-image-delete]'
+      )
+      .forEach(b => {
+
+        b.onclick =
+          () =>
+            deleteQuestImage(
+              b.dataset.imageDelete
+            );
+
+      });
+
   }
 
 
@@ -1891,6 +1916,161 @@
       }
 
     };
+
+
+  // ========================================
+  // 画像削除
+  // ========================================
+
+  function getQuestImageStoragePath(imageUrl) {
+
+    try {
+
+      const url = new URL(imageUrl);
+
+      const marker =
+        '/storage/v1/object/public/quest-images/';
+
+      const index =
+        url.pathname.indexOf(marker);
+
+      if (index === -1) {
+        return null;
+      }
+
+      const encodedPath =
+        url.pathname.substring(
+          index + marker.length
+        );
+
+      if (!encodedPath) {
+        return null;
+      }
+
+      return decodeURIComponent(encodedPath);
+
+    } catch (err) {
+
+      console.error(
+        '画像URLの解析に失敗しました',
+        err
+      );
+
+      return null;
+
+    }
+
+  }
+
+
+  async function deleteQuestImage(imageId) {
+
+    const image =
+      images.find(
+        x =>
+          String(x.id) ===
+          String(imageId)
+      );
+
+    if (!image) {
+
+      alert(
+        '削除する画像が見つかりませんでした。'
+      );
+
+      return;
+
+    }
+
+    const caption =
+      image.caption
+        ? `\n\n画像：${image.caption}`
+        : '';
+
+    if (
+      !confirm(
+        `この画像を削除しますか？${caption}\n\nこの操作は取り消せません。`
+      )
+    ) {
+      return;
+    }
+
+    const button =
+      document.querySelector(
+        `[data-image-delete="${CSS.escape(
+          String(imageId)
+        )}"]`
+      );
+
+    if (button) {
+      button.disabled = true;
+      button.textContent = '削除中…';
+    }
+
+    try {
+
+      const storagePath =
+        getQuestImageStoragePath(
+          image.image_url
+        );
+
+      if (!storagePath) {
+        throw new Error(
+          'Storage上の画像パスを取得できませんでした。'
+        );
+      }
+
+      // まずDBの画像レコードを削除
+      await rpc(
+        'quest_image_delete',
+        {
+          p_image_id: image.id,
+          p_editor_id: editorKey
+        }
+      );
+
+      // 次にStorageの実ファイルを削除
+      const { error: storageError } =
+        await db
+          .storage
+          .from('quest-images')
+          .remove([storagePath]);
+
+      if (storageError) {
+
+        console.error(
+          'Storage画像の削除に失敗しました',
+          storageError
+        );
+
+        alert(
+          '画像情報は削除しましたが、Storage上の実ファイル削除に失敗しました。\n\n' +
+          storageError.message
+        );
+      }
+
+      await route();
+
+    } catch (err) {
+
+      console.error(
+        '画像削除エラー',
+        err
+      );
+
+      alert(
+        '画像を削除できませんでした。\n\n' +
+        (err?.message || String(err))
+      );
+
+      if (button) {
+        button.disabled = false;
+        button.textContent = '画像を削除';
+      }
+
+    }
+
+  }
 
 
   // ========================================
