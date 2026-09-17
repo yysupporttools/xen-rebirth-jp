@@ -62,86 +62,81 @@
 
   function addGuideMascots() {
     const settings = [
-      {
-        marker: "01 / START",
-        className: "xen-guide-poyo"
-      },
-      {
-        marker: "02 / CLASSES",
-        className: "xen-guide-poko"
-      },
-      {
-        marker: "03 / ADVENTURE",
-        className: "xen-guide-poku"
-      }
-    ];
+    {
+      marker: "01 / START",
+      className: "xen-guide-poyo"
+    },
+    {
+      marker: "02 / CLASSES",
+      className: "xen-guide-poko"
+    },
+    {
+      marker: "03 / ADVENTURE",
+      className: "xen-guide-poku"
+    }
+  ];
 
-    const links = Array.from(
-      document.querySelectorAll("a")
+  const links = Array.from(
+    document.querySelectorAll("a")
+  );
+
+  settings.forEach(setting => {
+    const card = links.find(link =>
+      link.textContent &&
+      link.textContent.includes(setting.marker)
     );
 
-    settings.forEach(setting => {
-      const card = links.find(link =>
-        link.textContent &&
-        link.textContent.includes(setting.marker)
-      );
+    if (!card) return;
 
-      if (!card) return;
+    if (card.querySelector(".xen-guide-mascot")) {
+      return;
+    }
 
-      if (card.querySelector(".xen-guide-mascot")) {
-        return;
-      }
-
-      card.classList.add(
-        "xen-guide-mascot-card"
-      );
-
-      const mascot =
-        document.createElement("span");
-
-      mascot.className =
-        `xen-guide-mascot ${setting.className}`;
-
-      mascot.setAttribute(
-        "aria-hidden",
-        "true"
-      );
-
-      card.appendChild(mascot);
-    });
-  }
-
-
-  function init() {
-    addHeroMonsters();
-    addGuideMascots();
-
-    /*
-      BGMプレイヤー生成を待つ
-    */
-    let tries = 0;
-
-    const timer = setInterval(() => {
-      addBgmMascot();
-
-      tries++;
-
-      if (
-        document.querySelector(".xen-bgm-mascot") ||
-        tries >= 20
-      ) {
-        clearInterval(timer);
-      }
-    }, 250);
-  }
-
-
-  if (document.readyState === "loading") {
-    document.addEventListener(
-      "DOMContentLoaded",
-      init
+    card.classList.add(
+      "xen-guide-mascot-card"
     );
-  } else {
-    init();
+
+    const mascot =
+      document.createElement("span");
+
+    mascot.className =
+      `xen-guide-mascot ${setting.className}`;
+
+    mascot.setAttribute(
+      "aria-hidden",
+      "true"
+    );
+
+    card.appendChild(mascot);
+  });
+
+
+  /* QUESTSカード */
+
+  const questCard = links.find(link =>
+    link.textContent &&
+    link.textContent.includes("04 / QUESTS")
+  );
+
+  if (
+    questCard &&
+    !questCard.querySelector(".xen-guide-stack")
+  ) {
+    questCard.classList.add(
+      "xen-guide-mascot-card"
+    );
+
+    const stack =
+      document.createElement("span");
+
+    stack.className =
+      "xen-guide-stack";
+
+    stack.setAttribute(
+      "aria-hidden",
+      "true"
+    );
+
+    questCard.appendChild(stack);
   }
-})();
+}
