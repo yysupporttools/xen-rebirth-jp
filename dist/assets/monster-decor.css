@@ -1,211 +1,92 @@
-/* ========================================
-   Xen Rebirth Monster Decoration
-======================================== */
+(() => {
+  "use strict";
 
-.xen-hero-monsters {
-  position: absolute;
-  right: 18px;
-  bottom: -8px;
-  width: min(42%, 430px);
-  min-width: 300px;
-  aspect-ratio: 1.9 / 1;
-  pointer-events: none;
-  z-index: 2;
-}
+  function addHeroMonsters() {
+    if (document.querySelector(".xen-hero-monsters")) {
+      return;
+    }
 
-.xen-monster-trio-art {
-  width: 100%;
-  height: 100%;
+    /* 見出しだけからヒーロータイトルを探す */
+    const headings = Array.from(
+      document.querySelectorAll("h1, h2, h3")
+    );
 
-  background-image:
-    url("monsters/monsters.png");
+    const heading = headings.find(el =>
+      el.textContent &&
+      el.textContent.includes("もう一度、ゼンの世界へ。")
+    );
 
-  background-repeat: no-repeat;
+    if (!heading) {
+      return;
+    }
 
-  /*
-    monsters.png の右側にある
-    ポヨポヨ・ポコポコ・ポクポクの
-    集合イラスト部分だけを表示
-  */
-  background-size: 395% auto;
-  background-position: 100% 60%;
+    /* 見出しを含むヒーロー領域を取得 */
+    const hero =
+      heading.closest("section") ||
+      heading.closest(".hero") ||
+      heading.parentElement;
 
-  filter:
-    drop-shadow(0 8px 14px rgba(0, 0, 0, 0.22));
+    if (!hero) {
+      return;
+    }
 
-  transition:
-    transform 0.25s ease,
-    filter 0.25s ease;
-}
+    if (getComputedStyle(hero).position === "static") {
+      hero.style.position = "relative";
+    }
 
-.xen-hero-monsters:hover
-.xen-monster-trio-art {
-  transform: translateY(-4px);
+    hero.style.overflow = "visible";
 
-  filter:
-    drop-shadow(0 12px 18px rgba(0, 0, 0, 0.26));
-}
+    const monsters = document.createElement("div");
 
+    monsters.className = "xen-hero-monsters";
+    monsters.setAttribute("aria-hidden", "true");
 
-/* ========================================
-   小さなモンスター装飾
-======================================== */
+    monsters.innerHTML =
+      '<div class="xen-monster-trio-art"></div>';
 
-.xen-monster-peek {
-  position: absolute;
-  width: 105px;
-  height: 105px;
-  pointer-events: none;
-  z-index: 2;
-
-  background-image:
-    url("monsters/monsters.png");
-
-  background-repeat: no-repeat;
-
-  filter:
-    drop-shadow(0 5px 8px rgba(0, 0, 0, 0.18));
-}
-
-
-/* ポヨポヨ */
-
-.xen-monster-poyo {
-  background-size: 1150% auto;
-  background-position: 0% 0%;
-}
-
-
-/* ポコポコ */
-
-.xen-monster-poko {
-  background-size: 1150% auto;
-  background-position: 0% 31%;
-}
-
-
-/* ポクポク */
-
-.xen-monster-poku {
-  background-size: 1150% auto;
-  background-position: 0% 61%;
-}
-
-
-/* ========================================
-   カードから顔を出す用
-======================================== */
-
-.xen-monster-card {
-  position: relative;
-  overflow: visible;
-}
-
-.xen-monster-card
-.xen-monster-peek {
-  right: -18px;
-  bottom: -16px;
-
-  transform:
-    rotate(4deg);
-}
-
-
-/* ========================================
-   BGM付近のポクポク
-======================================== */
-
-.xen-bgm-mascot {
-  position: fixed;
-
-  right: 105px;
-  bottom: 18px;
-
-  width: 90px;
-  height: 90px;
-
-  pointer-events: none;
-  z-index: 9998;
-
-  background-image:
-    url("monsters/monsters.png");
-
-  background-repeat: no-repeat;
-
-  background-size: 1150% auto;
-  background-position: 0% 61%;
-
-  filter:
-    drop-shadow(0 5px 9px rgba(0, 0, 0, 0.2));
-
-  animation:
-    xenMonsterFloat 3.4s ease-in-out infinite;
-}
-
-
-@keyframes xenMonsterFloat {
-
-  0%,
-  100% {
-    transform:
-      translateY(0)
-      rotate(-2deg);
+    hero.appendChild(monsters);
   }
 
-  50% {
-    transform:
-      translateY(-7px)
-      rotate(2deg);
-  }
-}
+  function addBgmMascot() {
+    if (document.querySelector(".xen-bgm-mascot")) {
+      return;
+    }
 
+    if (!document.querySelector(".xen-bgm-player")) {
+      return;
+    }
 
-/* ========================================
-   スマホ
-======================================== */
+    const mascot = document.createElement("div");
 
-@media (max-width: 800px) {
+    mascot.className = "xen-bgm-mascot";
+    mascot.setAttribute("aria-hidden", "true");
 
-  .xen-hero-monsters {
-    position: relative;
-
-    right: auto;
-    bottom: auto;
-
-    width: min(100%, 360px);
-    min-width: 0;
-
-    margin:
-      18px auto -6px;
+    document.body.appendChild(mascot);
   }
 
-  .xen-bgm-mascot {
-    width: 68px;
-    height: 68px;
+  function init() {
+    addHeroMonsters();
 
-    right: 78px;
-    bottom: 12px;
+    /* BGMプレイヤー生成を待ちながら数回確認 */
+    let tries = 0;
+
+    const timer = setInterval(() => {
+      addBgmMascot();
+
+      tries++;
+
+      if (
+        document.querySelector(".xen-bgm-mascot") ||
+        tries >= 20
+      ) {
+        clearInterval(timer);
+      }
+    }, 250);
   }
 
-  .xen-monster-peek {
-    width: 82px;
-    height: 82px;
+  if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", init);
+  } else {
+    init();
   }
-}
-
-
-/* ========================================
-   動きを減らす設定
-======================================== */
-
-@media
-(prefers-reduced-motion: reduce) {
-
-  .xen-bgm-mascot {
-    animation: none;
-  }
-
-  .xen-monster-trio-art {
-    transition: none;
-  }
-}
+})();
