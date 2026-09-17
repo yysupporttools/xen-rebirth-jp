@@ -1,92 +1,103 @@
-(() => {
-  "use strict";
+/* ========================================
+   Xen Rebirth Monster Decoration
+======================================== */
 
-  function addHeroMonsters() {
-    if (document.querySelector(".xen-hero-monsters")) {
-      return;
-    }
+.xen-hero-monsters {
+  position: absolute;
+  right: 10px;
+  bottom: 0;
+  width: 330px;
+  height: 190px;
+  pointer-events: none;
+  z-index: 5;
+}
 
-    /* 見出しだけからヒーロータイトルを探す */
-    const headings = Array.from(
-      document.querySelectorAll("h1, h2, h3")
-    );
+.xen-monster-trio-art {
+  width: 100%;
+  height: 100%;
 
-    const heading = headings.find(el =>
-      el.textContent &&
-      el.textContent.includes("もう一度、ゼンの世界へ。")
-    );
+  background-image: url("monsters/monsters.png");
+  background-repeat: no-repeat;
 
-    if (!heading) {
-      return;
-    }
+  /* 画像右側の集合イラスト付近 */
+  background-size: 395% auto;
+  background-position: 100% 38%;
 
-    /* 見出しを含むヒーロー領域を取得 */
-    const hero =
-      heading.closest("section") ||
-      heading.closest(".hero") ||
-      heading.parentElement;
+  filter: drop-shadow(
+    0 8px 12px rgba(0, 0, 0, 0.3)
+  );
+}
 
-    if (!hero) {
-      return;
-    }
+/* ========================================
+   BGM横のポクポク
+======================================== */
 
-    if (getComputedStyle(hero).position === "static") {
-      hero.style.position = "relative";
-    }
+.xen-bgm-mascot {
+  position: fixed;
+  right: 108px;
+  bottom: 16px;
 
-    hero.style.overflow = "visible";
+  width: 82px;
+  height: 82px;
 
-    const monsters = document.createElement("div");
+  pointer-events: none;
+  z-index: 9998;
 
-    monsters.className = "xen-hero-monsters";
-    monsters.setAttribute("aria-hidden", "true");
+  background-image: url("monsters/monsters.png");
+  background-repeat: no-repeat;
+  background-size: 1150% auto;
+  background-position: 0% 61%;
 
-    monsters.innerHTML =
-      '<div class="xen-monster-trio-art"></div>';
+  filter: drop-shadow(
+    0 5px 8px rgba(0, 0, 0, 0.22)
+  );
 
-    hero.appendChild(monsters);
+  animation:
+    xenMonsterFloat 3.4s ease-in-out infinite;
+}
+
+@keyframes xenMonsterFloat {
+  0%,
+  100% {
+    transform: translateY(0);
   }
 
-  function addBgmMascot() {
-    if (document.querySelector(".xen-bgm-mascot")) {
-      return;
-    }
+  50% {
+    transform: translateY(-6px);
+  }
+}
 
-    if (!document.querySelector(".xen-bgm-player")) {
-      return;
-    }
+/* ========================================
+   スマホ
+======================================== */
 
-    const mascot = document.createElement("div");
+@media (max-width: 800px) {
 
-    mascot.className = "xen-bgm-mascot";
-    mascot.setAttribute("aria-hidden", "true");
+  .xen-hero-monsters {
+    position: relative;
+    right: auto;
+    bottom: auto;
 
-    document.body.appendChild(mascot);
+    width: 300px;
+    max-width: 100%;
+    height: 170px;
+
+    margin: 16px auto 0;
   }
 
-  function init() {
-    addHeroMonsters();
+  .xen-bgm-mascot {
+    width: 62px;
+    height: 62px;
 
-    /* BGMプレイヤー生成を待ちながら数回確認 */
-    let tries = 0;
-
-    const timer = setInterval(() => {
-      addBgmMascot();
-
-      tries++;
-
-      if (
-        document.querySelector(".xen-bgm-mascot") ||
-        tries >= 20
-      ) {
-        clearInterval(timer);
-      }
-    }, 250);
+    right: 78px;
+    bottom: 12px;
   }
+}
 
-  if (document.readyState === "loading") {
-    document.addEventListener("DOMContentLoaded", init);
-  } else {
-    init();
+/* 動きを減らす設定 */
+@media (prefers-reduced-motion: reduce) {
+
+  .xen-bgm-mascot {
+    animation: none;
   }
-})();
+}
