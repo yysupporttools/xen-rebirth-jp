@@ -193,3 +193,79 @@
     animation: none;
   }
 }
+
+/* ========================================
+   冒険の手引きカード用マスコット
+======================================== */
+
+.xen-guide-mascot-card {
+  position: relative;
+  overflow: visible;
+}
+
+.xen-guide-mascot {
+  position: absolute;
+  right: 12px;
+  bottom: 10px;
+
+  width: 74px;
+  height: 74px;
+
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: contain;
+
+  pointer-events: none;
+  z-index: 3;
+
+  filter:
+    drop-shadow(0 5px 8px rgba(0, 0, 0, 0.16));
+
+  transition:
+    transform 0.25s ease;
+}
+
+.xen-guide-mascot-card:hover
+.xen-guide-mascot {
+  transform:
+    translateY(-5px)
+    rotate(2deg);
+}
+
+
+/* ポヨポヨ */
+
+.xen-guide-poyo {
+  background-image:
+    url("monsters/poyopoyo.png");
+}
+
+
+/* ポコポコ */
+
+.xen-guide-poko {
+  background-image:
+    url("monsters/pokopoko.png");
+}
+
+
+/* ポクポク */
+
+.xen-guide-poku {
+  background-image:
+    url("monsters/pokupoku.png");
+}
+
+
+/* スマホ */
+
+@media (max-width: 800px) {
+
+  .xen-guide-mascot {
+    width: 60px;
+    height: 60px;
+
+    right: 8px;
+    bottom: 8px;
+  }
+}
