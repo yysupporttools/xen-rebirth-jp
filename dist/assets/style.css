@@ -63,3 +63,11 @@
 @media(max-width:600px){.build-grid,.stat-purpose-grid{grid-template-columns:1fr}.community-guide{padding:18px}.stat-table,.stat-table tbody,.stat-table tr,.stat-table td{display:block;width:100%}.stat-table thead{display:none}.stat-table tr{padding:12px 0;border-bottom:1px solid var(--line)}.stat-table td{padding:4px 0;border:0}}
 
 
+
+
+/* Rogue complete page */
+.rogue-tip-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:14px;margin:18px 0}
+.rogue-tip-grid>div{background:#edf3f4;border-left:4px solid var(--teal);padding:18px}
+.rogue-tip-grid strong{display:block;color:var(--teal);margin-bottom:7px}
+.rogue-tip-grid p{margin:0;color:var(--muted);font-size:14px}
+@media(max-width:600px){.rogue-tip-grid{grid-template-columns:1fr}}
