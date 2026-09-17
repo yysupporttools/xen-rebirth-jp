@@ -10,8 +10,49 @@
 <main id="main"><div class="page-intro"><p class="eyebrow">QUEST DATABASE / みんなで作る攻略情報</p><h1>クエスト情報</h1><p>進行手順、NPC、場所、報酬、攻略画像をみんなで追加・編集できます。英語名でも日本語名でも検索できます。</p></div>
 <p class="note">登録不要で編集できます。公式情報やゲーム内で確認できた内容を中心に、他のプレイヤーにも分かりやすい説明をお願いします。</p>
 <p class="quest-status" id="quest-status" role="status"></p>
-<section id="quest-list-view"><div class="quest-toolbar"><input id="quest-search" type="search" placeholder="クエスト名・NPC・場所から検索" aria-label="クエスト検索"/><select id="quest-category" aria-label="カテゴリ"><option value="">すべてのカテゴリ</option><option>メインクエスト</option><option>転職クエスト</option><option>一般クエスト</option><option>ペットクエスト</option><option>デイリークエスト</option><option>イベントクエスト</option></select><button class="primary" id="quest-new">＋ クエストを追加</button><button id="quest-deleted">削除済みクエスト</button></div><div class="quest-grid" id="quest-list"></div></section>
+<section id="quest-list-view"><div class="quest-toolbar"><input id="quest-search" type="search" placeholder="クエスト名・NPC・場所から検索" aria-label="クエスト検索"/><select id="quest-category" aria-label="カテゴリ"><option value="">すべてのカテゴリ</option><option>メインクエスト</option><option>転職クエスト</option><option>一般クエスト</option><option>ペットクエスト</option><option>デイリークエスト</option><option>イベントクエスト</option></select><button class="primary" id="quest-new">＋ クエストを追加</button><button id="quest-import">📥 一括インポート</button><button id="quest-deleted">削除済みクエスト</button></div><div class="quest-grid" id="quest-list"></div></section>
 <section id="quest-detail" hidden></section>
+  <!-- クエスト一括インポート -->
+<dialog class="quest-dialog" id="import-dialog">
+
+  <h2>クエストを一括インポート</h2>
+
+  <p class="note">
+    クエスト基本情報と複数の攻略STEPをまとめて登録できます。
+  </p>
+
+  <form class="quest-form" id="import-form">
+
+    <label>
+      インポートデータ
+      <textarea
+        name="import_data"
+        rows="18"
+        placeholder="ここにインポート用データを貼り付けてください"
+        required></textarea>
+    </label>
+
+    <p class="quest-status" id="import-status"></p>
+
+    <div class="quest-actions">
+
+      <button
+        type="button"
+        data-close="import-dialog">
+        キャンセル
+      </button>
+
+      <button
+        class="primary"
+        type="submit">
+        一括登録する
+      </button>
+
+    </div>
+
+  </form>
+
+</dialog>
 </main>
 <dialog class="quest-dialog" id="quest-dialog"><h2 id="quest-dialog-title">クエストを追加</h2><form class="quest-form" id="quest-form">
 <label>クエスト名（英語）<input name="title_en" maxlength="200" required></label><label>クエスト名（日本語）<input name="title_ja" maxlength="200"></label>
