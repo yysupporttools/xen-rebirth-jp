@@ -36,45 +36,37 @@
   if (
     !query ||
     !categorySelect ||
+    !countEl ||
+    !emptyEl ||
     !resultsEl
   ) {
+    console.error(
+      "Glossary: 必要なHTML要素が見つかりません。"
+    );
+
     return;
   }
 
 
   let categories = [];
-
   let terms = [];
 
-  let usingSharedData =
-    false;
+  let usingSharedData = false;
+  let editingTerm = null;
+  let modalOpener = null;
 
-  let editingTerm =
-    null;
-
-  let modalOpener =
-    null;
-
-  let previewUrl =
-    null;
-
-  let selectedImageFile =
-    null;
+  let previewUrl = null;
+  let selectedImageFile = null;
 
 
   const filters = {
-
-    major:
-      "",
-
-    index:
-      ""
-
+    major: "",
+    index: ""
   };
 
 
   /* ========================================
-     INDEX DATA
+     INDEX
   ======================================== */
 
   const ALPHA =
@@ -106,20 +98,11 @@
       ).replace(
         /[&<>"']/g,
         char => ({
-          "&":
-            "&amp;",
-
-          "<":
-            "&lt;",
-
-          ">":
-            "&gt;",
-
-          '"':
-            "&quot;",
-
-          "'":
-            "&#39;"
+          "&": "&amp;",
+          "<": "&lt;",
+          ">": "&gt;",
+          '"': "&quot;",
+          "'": "&#39;"
         })[char]
       );
 
@@ -185,18 +168,16 @@
   function authHeaders() {
 
     const headers = {
-
       apikey:
         CFG.SUPABASE_ANON_KEY
-
     };
 
 
     if (
-      !CFG.SUPABASE_ANON_KEY
-        ?.startsWith(
-          "sb_publishable_"
-        )
+      CFG.SUPABASE_ANON_KEY &&
+      !CFG.SUPABASE_ANON_KEY.startsWith(
+        "sb_publishable_"
+      )
     ) {
 
       headers.Authorization =
@@ -238,7 +219,7 @@
 
 
   /* ========================================
-     CATEGORY / GROUP
+     CATEGORY
   ======================================== */
 
   function getCategoryName(term) {
@@ -250,12 +231,17 @@
           String(term.category_id)
       );
 
+
     return (
       category?.name ||
       ""
     );
   }
 
+
+  /* ========================================
+     MAJOR CATEGORY
+  ======================================== */
 
   function getMajorGroups(term) {
 
@@ -264,6 +250,7 @@
         getCategoryName(term)
       );
 
+
     const text =
       normalize(
         [
@@ -271,7 +258,11 @@
           term.name_en,
           term.name_ja,
           term.aliases,
-          term.description
+          term.description,
+          term.drop_location,
+          term.acquisition,
+          term.related_entity,
+          term.notes
         ].join(" ")
       );
 
@@ -285,7 +276,7 @@
     */
 
     if (
-      /クラス|職業|アーチャー|クレリック|ナイト|メイジ|ローグ|テンプラー|xenian|archer|cleric|knight|mage|rogue|templar/.test(
+      /クラス|職業|転職用装備|アーチャー|クレリック|ナイト|メイジ|ローグ|テンプラー|xenian|archer|cleric|knight|mage|rogue|templar/.test(
         text
       )
     ) {
@@ -301,7 +292,7 @@
     */
 
     if (
-      /アイテム|素材|装備|武器|防具|消耗品|stone|orb|tonic|blood|weapon|armor|item|pet|ペット/.test(
+      /アイテム|素材|装備|武器|防具|消耗品|転職素材|stone|orb|tonic|blood|weapon|armor|item|ペット|pet/.test(
         text
       )
     ) {
@@ -313,11 +304,11 @@
 
 
     /*
-      世界
+      世界地図
     */
 
     if (
-      /マップ|地図|世界|町|村|地域|npc|モンスター|monster|map|フィールド/.test(
+      /マップ|地図|世界|町|村|地域|フィールド|npc|モンスター|monster|map/.test(
         text
       )
     ) {
@@ -345,11 +336,11 @@
 
 
     /*
-      ダンジョン / ボス
+      ダンジョン・ボス
     */
 
     if (
-      /ダンジョン|ボス|dungeon|boss|instance|インスタンス/.test(
+      /ダンジョン|ボス|インスタンス|dungeon|boss|instance/.test(
         text
       )
     ) {
@@ -360,12 +351,6 @@
     }
 
 
-    /*
-      どれにも入らない場合は
-      アイテムへ無理に分類せず
-      「すべて」のみで表示
-    */
-
     return [
       ...groups
     ];
@@ -373,130 +358,41 @@
 
 
   /* ========================================
-     LETTER
+     KATAKANA → HIRAGANA
   ======================================== */
 
-  function latinInitial(term) {
-/* ========================================
-     頭文字判定
-     英字 / ひらがな / カタカナ対応
-  ======================================== */
+  function katakanaToHiragana(
+    text
+  ) {
 
-  function latinInitial(term) {
+    return String(
+      text || ""
+    ).replace(
+      /[\u30a1-\u30f6]/g,
+      character => {
 
-    const name =
-      String(
-        term.name_en || ""
-      )
-        .trim()
-        .normalize("NFKC");
-
-
-    if (!name) {
-      return "";
-    }
-
-
-    const first =
-      name.charAt(0)
-        .toUpperCase();
-
-
-    /*
-      A～Zなら英字索引
-    */
-
-    if (
-      /^[A-Z]$/.test(first)
-    ) {
-      return first;
-    }
-
-
-    /*
-      日本語なら # にしない
-      japaneseInitial() 側へ回す
-    */
-
-    if (
-      /[\u3040-\u30ff\u3400-\u9fff]/.test(
-        first
-      )
-    ) {
-      return "";
-    }
-
-
-    /*
-      数字・記号など
-    */
-
-    return "#";
+        return String.fromCharCode(
+          character.charCodeAt(0) -
+          0x60
+        );
+      }
+    );
   }
 
 
-  function japaneseInitial(term) {
+  /* ========================================
+     VOICED KANA NORMALIZE
+  ======================================== */
 
-    /*
-      日本語名があれば優先。
-      なければ英語名欄も確認する。
-      これで name_en に日本語が入っていても対応。
-    */
+  function normalizeKanaInitial(
+    character
+  ) {
 
-    const text =
-      String(
-        term.name_ja ||
-        term.name_en ||
-        term.aliases ||
-        ""
-      )
-        .trim()
-        .normalize("NFKC");
+    const map = {
 
-
-    if (!text) {
-      return "";
-    }
-
-
-    let first =
-      text.charAt(0);
-
-
-    /*
-      カタカナ → ひらがな
-      ア → あ
-      ボ → ぼ
-      パ → ぱ
-    */
-
-    const code =
-      first.charCodeAt(0);
-
-
-    if (
-      code >= 0x30A1 &&
-      code <= 0x30F6
-    ) {
-
-      first =
-        String.fromCharCode(
-          code - 0x60
-        );
-    }
-
-
-    /*
-      濁音・半濁音を
-      五十音の基本文字へまとめる
-
-      が → か
-      ざ → さ
-      だ → た
-      ば / ぱ → は
-    */
-
-    const kanaMap = {
+      /*
+        が行
+      */
 
       "が": "か",
       "ぎ": "き",
@@ -504,11 +400,19 @@
       "げ": "け",
       "ご": "こ",
 
+      /*
+        ざ行
+      */
+
       "ざ": "さ",
       "じ": "し",
       "ず": "す",
       "ぜ": "せ",
       "ぞ": "そ",
+
+      /*
+        だ行
+      */
 
       "だ": "た",
       "ぢ": "ち",
@@ -516,17 +420,29 @@
       "で": "て",
       "ど": "と",
 
+      /*
+        ば行
+      */
+
       "ば": "は",
       "び": "ひ",
       "ぶ": "ふ",
       "べ": "へ",
       "ぼ": "ほ",
 
+      /*
+        ぱ行
+      */
+
       "ぱ": "は",
       "ぴ": "ひ",
       "ぷ": "ふ",
       "ぺ": "へ",
       "ぽ": "ほ",
+
+      /*
+        その他
+      */
 
       "ゔ": "う",
 
@@ -547,18 +463,21 @@
 
 
     return (
-      kanaMap[first] ||
-      first
+      map[character] ||
+      character
     );
   }
 
-  function japaneseInitial(term) {
+
+  /* ========================================
+     LATIN INITIAL
+  ======================================== */
+
+  function latinInitial(term) {
 
     const text =
       String(
-        term.name_ja ||
-        term.aliases ||
-        ""
+        term.name_en || ""
       )
         .trim()
         .normalize("NFKC");
@@ -569,36 +488,150 @@
     }
 
 
-    let first =
-      text.charAt(0);
+    const first =
+      text
+        .charAt(0)
+        .toUpperCase();
 
 
     /*
-      カタカナ → ひらがな
+      英字
     */
 
-    const code =
-      first.charCodeAt(0);
-
-
     if (
-      code >= 0x30A1 &&
-      code <= 0x30F6
+      /^[A-Z]$/.test(
+        first
+      )
     ) {
 
-      first =
-        String.fromCharCode(
-          code - 0x60
-        );
+      return first;
     }
 
 
-    return first;
+    /*
+      日本語の場合は
+      #にしない
+    */
+
+    if (
+      /[\u3040-\u30ff\u3400-\u9fff]/.test(
+        first
+      )
+    ) {
+
+      return "";
+    }
+
+
+    /*
+      数字・記号
+    */
+
+    return "#";
   }
 
 
   /* ========================================
-     INDEX
+     JAPANESE INITIAL
+  ======================================== */
+
+  function japaneseInitial(term) {
+
+    /*
+      日本語名を最優先。
+
+      日本語名が無い場合は
+      name_en に日本語が入っている
+      既存データにも対応。
+
+      aliases も最後に確認。
+    */
+
+    const candidates = [
+      term.name_ja,
+      term.name_en,
+      term.aliases
+    ];
+
+
+    for (
+      const candidate of candidates
+    ) {
+
+      const raw =
+        String(
+          candidate || ""
+        )
+          .trim()
+          .normalize("NFKC");
+
+
+      if (!raw) {
+        continue;
+      }
+
+
+      const hiragana =
+        katakanaToHiragana(
+          raw
+        );
+
+
+      const first =
+        hiragana.charAt(0);
+
+
+      /*
+        ひらがななら採用
+      */
+
+      if (
+        /^[ぁ-んゔ]$/.test(
+          first
+        )
+      ) {
+
+        return normalizeKanaInitial(
+          first
+        );
+      }
+    }
+
+
+    return "";
+  }
+
+
+  /* ========================================
+     DEFAULT GROUP INITIAL
+  ======================================== */
+
+  function displayInitial(term) {
+
+    const latin =
+      latinInitial(term);
+
+
+    if (latin) {
+      return latin;
+    }
+
+
+    const japanese =
+      japaneseInitial(term);
+
+
+    if (japanese) {
+      return japanese;
+    }
+
+
+    return "#";
+  }
+
+
+  /* ========================================
+     BUILD INDEX
   ======================================== */
 
   function buildIndexes() {
@@ -610,43 +643,75 @@
       $("glossary-kana-index");
 
 
+    if (
+      !alpha ||
+      !kana
+    ) {
+
+      console.error(
+        "Glossary: 索引エリアが見つかりません。"
+      );
+
+      return;
+    }
+
+
     alpha.innerHTML =
       [
-        `<button
-          type="button"
-          class="is-active"
-          data-index=""
-        >すべて</button>`,
+        `
+          <button
+            type="button"
+            class="is-active"
+            data-index=""
+          >
+            すべて
+          </button>
+        `,
 
         ...ALPHA.map(
-          letter =>
-            `<button
+          letter => `
+            <button
               type="button"
               data-index="${letter}"
-            >${letter}</button>`
+            >
+              ${letter}
+            </button>
+          `
         ),
 
-        `<button
-          type="button"
-          data-index="#"
-        >#</button>`
+        `
+          <button
+            type="button"
+            data-index="#"
+          >
+            #
+          </button>
+        `
       ].join("");
 
 
     kana.innerHTML =
       [
-        `<button
-          type="button"
-          data-index=""
-        >すべて</button>`,
+        `
+          <button
+            type="button"
+            data-index=""
+          >
+            すべて
+          </button>
+        `,
 
         ...KANA.map(
-          letter =>
-            `<button
+          letter => `
+            <button
               type="button"
               data-index="ja:${letter}"
-            >${letter}</button>`
+            >
+              ${letter}
+            </button>
+          `
         )
+
       ].join("");
 
 
@@ -654,43 +719,47 @@
       .querySelectorAll(
         "[data-index]"
       )
-      .forEach(button => {
+      .forEach(
+        button => {
 
-        button.addEventListener(
-          "click",
-          () => {
+          button.addEventListener(
+            "click",
+            () => {
 
-            filters.index =
-              button.dataset.index ||
-              "";
+              filters.index =
+                button.dataset.index ||
+                "";
 
 
-            document
-              .querySelectorAll(
-                "[data-index]"
-              )
-              .forEach(item =>
-                item.classList.remove(
-                  "is-active"
+              document
+                .querySelectorAll(
+                  "[data-index]"
                 )
+                .forEach(
+                  item => {
+
+                    item.classList.remove(
+                      "is-active"
+                    );
+                  }
+                );
+
+
+              button.classList.add(
+                "is-active"
               );
 
 
-            button.classList.add(
-              "is-active"
-            );
-
-
-            renderTerms();
-          }
-        );
-
-      });
+              renderTerms();
+            }
+          );
+        }
+      );
   }
 
 
   /* ========================================
-     MAJOR NAV
+     MAJOR INDEX
   ======================================== */
 
   function bindMajorIndex() {
@@ -699,38 +768,42 @@
       .querySelectorAll(
         "[data-major]"
       )
-      .forEach(button => {
+      .forEach(
+        button => {
 
-        button.addEventListener(
-          "click",
-          () => {
+          button.addEventListener(
+            "click",
+            () => {
 
-            filters.major =
-              button.dataset.major ||
-              "";
+              filters.major =
+                button.dataset.major ||
+                "";
 
 
-            document
-              .querySelectorAll(
-                "[data-major]"
-              )
-              .forEach(item =>
-                item.classList.remove(
-                  "is-active"
+              document
+                .querySelectorAll(
+                  "[data-major]"
                 )
+                .forEach(
+                  item => {
+
+                    item.classList.remove(
+                      "is-active"
+                    );
+                  }
+                );
+
+
+              button.classList.add(
+                "is-active"
               );
 
 
-            button.classList.add(
-              "is-active"
-            );
-
-
-            renderTerms();
-          }
-        );
-
-      });
+              renderTerms();
+            }
+          );
+        }
+      );
   }
 
 
@@ -745,13 +818,20 @@
 
 
     categorySelect.innerHTML =
-      '<option value="">すべての分類</option>' +
+      `
+        <option value="">
+          すべての分類
+        </option>
+      ` +
       categories
         .map(
-          category =>
-            `<option value="${esc(category.name)}">
+          category => `
+            <option
+              value="${esc(category.name)}"
+            >
               ${esc(category.name)}
-            </option>`
+            </option>
+          `
         )
         .join("");
 
@@ -770,16 +850,26 @@
       $("edit-category");
 
 
-    editCategory.innerHTML =
-      '<option value="">分類を選択</option>' +
-      categories
-        .map(
-          category =>
-            `<option value="${esc(category.id)}">
-              ${esc(category.name)}
-            </option>`
-        )
-        .join("");
+    if (editCategory) {
+
+      editCategory.innerHTML =
+        `
+          <option value="">
+            分類を選択
+          </option>
+        ` +
+        categories
+          .map(
+            category => `
+              <option
+                value="${esc(category.id)}"
+              >
+                ${esc(category.name)}
+              </option>
+            `
+          )
+          .join("");
+    }
   }
 
 
@@ -798,113 +888,146 @@
 
 
     return terms
-      .filter(term => {
+      .filter(
+        term => {
 
-        const category =
-          getCategoryName(
-            term
-          );
-
-
-        /*
-          検索
-        */
-
-        const searchText =
-          normalize(
-            [
-              term.name_en,
-              term.name_ja,
-              term.aliases,
-              category,
-              term.description,
-              term.drop_location,
-              term.acquisition,
-              term.related_entity,
-              term.notes
-            ].join(" ")
-          );
+          const category =
+            getCategoryName(
+              term
+            );
 
 
-        if (
-          !words.every(
-            word =>
-              searchText.includes(
-                word
-              )
-          )
-        ) {
-          return false;
-        }
+          const searchText =
+            normalize(
+              [
+                term.name_en,
+                term.name_ja,
+                term.aliases,
+                category,
+                term.description,
+                term.drop_location,
+                term.acquisition,
+                term.related_entity,
+                term.notes
+              ].join(" ")
+            );
 
 
-        /*
-          分類
-        */
-
-        if (
-          categorySelect.value &&
-          category !==
-          categorySelect.value
-        ) {
-          return false;
-        }
-
-
-        /*
-          大カテゴリ
-        */
-
-        if (
-          filters.major &&
-          !getMajorGroups(term)
-            .includes(
-              filters.major
-            )
-        ) {
-          return false;
-        }
-
-
-        /*
-          文字索引
-        */
-
-        if (
-          filters.index
-        ) {
+          /*
+            SEARCH
+          */
 
           if (
-            filters.index.startsWith(
-              "ja:"
+            !words.every(
+              word =>
+                searchText.includes(
+                  word
+                )
             )
           ) {
 
-            const letter =
-              filters.index.slice(3);
+            return false;
+          }
 
+
+          /*
+            CATEGORY
+          */
+
+          if (
+            categorySelect.value &&
+            category !==
+            categorySelect.value
+          ) {
+
+            return false;
+          }
+
+
+          /*
+            MAJOR CATEGORY
+          */
+
+          if (
+            filters.major &&
+            !getMajorGroups(term)
+              .includes(
+                filters.major
+              )
+          ) {
+
+            return false;
+          }
+
+
+          /*
+            INDEX
+          */
+
+          if (
+            filters.index
+          ) {
+
+            /*
+              日本語
+            */
 
             if (
-              japaneseInitial(term) !==
-              letter
+              filters.index.startsWith(
+                "ja:"
+              )
             ) {
-              return false;
-            }
 
-          } else {
+              const kana =
+                filters.index.slice(
+                  3
+                );
 
-            if (
-              latinInitial(term) !==
-              filters.index
-            ) {
-              return false;
+
+              if (
+                japaneseInitial(term) !==
+                kana
+              ) {
+
+                return false;
+              }
+
+            } else {
+
+              /*
+                英字 / #
+              */
+
+              if (
+                filters.index ===
+                "#"
+              ) {
+
+                if (
+                  displayInitial(term) !==
+                  "#"
+                ) {
+
+                  return false;
+                }
+
+              } else {
+
+                if (
+                  latinInitial(term) !==
+                  filters.index
+                ) {
+
+                  return false;
+                }
+              }
             }
           }
+
+
+          return true;
         }
-
-
-        return true;
-      })
+      )
       .sort(
         (a, b) => {
 
@@ -913,6 +1036,7 @@
               a.name_en ||
               a.name_ja
             );
+
 
           const bb =
             normalize(
@@ -923,7 +1047,7 @@
 
           return aa.localeCompare(
             bb,
-            "en"
+            "ja"
           );
         }
       );
@@ -931,7 +1055,7 @@
 
 
   /* ========================================
-     DETAILS
+     DETAIL
   ======================================== */
 
   function detail(
@@ -944,6 +1068,7 @@
       value === undefined ||
       value === ""
     ) {
+
       return "";
     }
 
@@ -969,7 +1094,7 @@
 
 
   /* ========================================
-     ENTRY
+     TERM HTML
   ======================================== */
 
   function termHtml(term) {
@@ -994,7 +1119,8 @@
             src="${esc(imageUrl)}"
             alt="${esc(
               term.name_en ||
-              term.name_ja
+              term.name_ja ||
+              "用語画像"
             )}"
             loading="lazy"
           >
@@ -1023,7 +1149,8 @@
       term.aliases
         ? `
           <span class="glossary-alias">
-            別表記：${esc(term.aliases)}
+            別表記：
+            ${esc(term.aliases)}
           </span>
         `
         : "";
@@ -1031,6 +1158,7 @@
 
     const details =
       [
+
         detail(
           "ドロップ場所",
           term.drop_location
@@ -1055,6 +1183,7 @@
           "備考",
           term.notes
         )
+
       ]
         .filter(Boolean)
         .join("");
@@ -1085,7 +1214,10 @@
     return `
       <article
         class="glossary-entry"
-        id="${esc(term.slug)}"
+        id="${esc(
+          term.slug ||
+          term.id
+        )}"
       >
 
         <details>
@@ -1094,14 +1226,18 @@
 
             ${image}
 
+
             <div class="glossary-summary-text">
 
               <div class="glossary-title-line">
 
-                <strong class="glossary-name-en">
+                <strong
+                  class="glossary-name-en"
+                >
                   ${esc(
                     term.name_en ||
-                    term.name_ja
+                    term.name_ja ||
+                    "名称未設定"
                   )}
                 </strong>
 
@@ -1109,10 +1245,18 @@
 
               </div>
 
-              <div class="glossary-summary-bottom">
 
-                <span class="glossary-category-badge">
-                  ${esc(category)}
+              <div
+                class="glossary-summary-bottom"
+              >
+
+                <span
+                  class="glossary-category-badge"
+                >
+                  ${esc(
+                    category ||
+                    "未分類"
+                  )}
                 </span>
 
                 ${alias}
@@ -1121,16 +1265,24 @@
 
             </div>
 
-            <span class="glossary-open-icon">
+
+            <span
+              class="glossary-open-icon"
+              aria-hidden="true"
+            >
               ＋
             </span>
 
           </summary>
 
 
-          <div class="glossary-entry-detail">
+          <div
+            class="glossary-entry-detail"
+          >
 
-            <p class="glossary-description">
+            <p
+              class="glossary-description"
+            >
               ${esc(
                 term.description ||
                 ""
@@ -1144,7 +1296,9 @@
             ${
               details
                 ? `
-                  <div class="glossary-detail-list">
+                  <div
+                    class="glossary-detail-list"
+                  >
                     ${details}
                   </div>
                 `
@@ -1152,17 +1306,22 @@
             }
 
 
-            <div class="glossary-links">
+            <div
+              class="glossary-links"
+            >
 
               ${
                 guide
                   ? `
-                    <a href="${esc(guide)}">
+                    <a
+                      href="${esc(guide)}"
+                    >
                       関連ガイド
                     </a>
                   `
                   : ""
               }
+
 
               ${
                 source
@@ -1178,14 +1337,23 @@
                   : ""
               }
 
-              <a href="#${esc(term.slug)}">
+
+              <a
+                href="#${esc(
+                  term.slug ||
+                  term.id
+                )}"
+              >
                 この項目へのリンク
               </a>
+
 
               <button
                 type="button"
                 class="glossary-edit-button"
-                data-edit-id="${esc(term.id)}"
+                data-edit-id="${esc(
+                  term.id
+                )}"
               >
                 編集
               </button>
@@ -1196,7 +1364,9 @@
             ${
               updated
                 ? `
-                  <div class="glossary-updated">
+                  <div
+                    class="glossary-updated"
+                  >
 
                     更新：
                     ${esc(updated)}
@@ -1255,10 +1425,6 @@
     }
 
 
-    /*
-      頭文字でグループ化
-    */
-
     const groups =
       new Map();
 
@@ -1270,6 +1436,10 @@
       let key;
 
 
+      /*
+        日本語索引選択中
+      */
+
       if (
         filters.index.startsWith(
           "ja:"
@@ -1278,14 +1448,12 @@
 
         key =
           japaneseInitial(term) ||
-          "その他";
+          "#";
 
       } else {
 
         key =
-          latinInitial(term) ||
-          japaneseInitial(term) ||
-          "その他";
+          displayInitial(term);
       }
 
 
@@ -1300,15 +1468,76 @@
       }
 
 
-      groups.get(key)
+      groups
+        .get(key)
         .push(term);
     }
 
 
-    resultsEl.innerHTML =
+    /*
+      グループ順
+    */
+
+    const order =
+      [
+        ...ALPHA,
+        "#",
+        ...KANA
+      ];
+
+
+    const sortedGroups =
       [
         ...groups.entries()
-      ]
+      ].sort(
+        (a, b) => {
+
+          const ai =
+            order.indexOf(
+              a[0]
+            );
+
+          const bi =
+            order.indexOf(
+              b[0]
+            );
+
+
+          if (
+            ai === -1 &&
+            bi === -1
+          ) {
+
+            return String(
+              a[0]
+            ).localeCompare(
+              String(b[0]),
+              "ja"
+            );
+          }
+
+
+          if (
+            ai === -1
+          ) {
+            return 1;
+          }
+
+
+          if (
+            bi === -1
+          ) {
+            return -1;
+          }
+
+
+          return ai - bi;
+        }
+      );
+
+
+    resultsEl.innerHTML =
+      sortedGroups
         .map(
           ([key, items]) => `
 
@@ -1320,10 +1549,15 @@
                 ${esc(key)}
               </h2>
 
-              <div class="glossary-compact-list">
+
+              <div
+                class="glossary-compact-list"
+              >
 
                 ${items
-                  .map(termHtml)
+                  .map(
+                    termHtml
+                  )
                   .join("")}
 
               </div>
@@ -1337,13 +1571,12 @@
 
     bindEditButtons();
 
-
     openHashTarget();
   }
 
 
   /* ========================================
-     LOAD DATA
+     LOAD
   ======================================== */
 
   async function loadShared() {
@@ -1352,11 +1585,24 @@
       !configured()
     ) {
 
-      syncStatus.textContent =
-        "共同編集の接続設定がありません。";
+      if (syncStatus) {
+
+        syncStatus.textContent =
+          "共同編集の接続設定がありません。";
+      }
+
 
       resultsEl.innerHTML =
-        "";
+        `
+          <p class="notice">
+            用語集を読み込めませんでした。
+          </p>
+        `;
+
+
+      countEl.textContent =
+        "0件";
+
 
       return false;
     }
@@ -1364,8 +1610,11 @@
 
     try {
 
-      syncStatus.textContent =
-        "用語集を読み込んでいます…";
+      if (syncStatus) {
+
+        syncStatus.textContent =
+          "用語集を読み込んでいます…";
+      }
 
 
       const [
@@ -1386,12 +1635,21 @@
 
 
       if (
-        !categoryResponse.ok ||
+        !categoryResponse.ok
+      ) {
+
+        throw new Error(
+          "分類データを取得できませんでした。"
+        );
+      }
+
+
+      if (
         !termResponse.ok
       ) {
 
         throw new Error(
-          "共有用語集を取得できません"
+          "用語データを取得できませんでした。"
         );
       }
 
@@ -1413,8 +1671,11 @@
       renderTerms();
 
 
-      syncStatus.textContent =
-        `共同編集に接続済み：${terms.length}件・${categories.length}分類`;
+      if (syncStatus) {
+
+        syncStatus.textContent =
+          `共同編集に接続済み：${terms.length}件・${categories.length}分類`;
+      }
 
 
       return true;
@@ -1425,17 +1686,28 @@
     ) {
 
       console.error(
-        "Glossary:",
+        "Glossary load error:",
         error
       );
 
 
-      syncStatus.textContent =
-        "用語集を取得できませんでした。ページを再読み込みしてください。";
+      if (syncStatus) {
+
+        syncStatus.textContent =
+          "用語集を取得できませんでした。ページを再読み込みしてください。";
+      }
 
 
       resultsEl.innerHTML =
-        "";
+        `
+          <p class="notice">
+            用語集の読み込みに失敗しました。
+          </p>
+        `;
+
+
+      countEl.textContent =
+        "読み込み失敗";
 
 
       return false;
@@ -1500,6 +1772,9 @@
       () => {
 
         target.scrollIntoView({
+          behavior:
+            "smooth",
+
           block:
             "center"
         });
@@ -1515,12 +1790,17 @@
 
   function openModal(id) {
 
-    modalOpener =
-      document.activeElement;
-
-
     const modal =
       $(id);
+
+
+    if (!modal) {
+      return;
+    }
+
+
+    modalOpener =
+      document.activeElement;
 
 
     modal.hidden =
@@ -1541,7 +1821,16 @@
 
   function closeModal(id) {
 
-    $(id).hidden =
+    const modal =
+      $(id);
+
+
+    if (!modal) {
+      return;
+    }
+
+
+    modal.hidden =
       true;
 
 
@@ -1558,43 +1847,46 @@
     .querySelectorAll(
       "[data-close-modal]"
     )
-    .forEach(button => {
+    .forEach(
+      button => {
 
-      button.addEventListener(
-        "click",
-        () =>
-          closeModal(
-            button.dataset.closeModal
-          )
-      );
+        button.addEventListener(
+          "click",
+          () => {
 
-    });
+            closeModal(
+              button.dataset.closeModal
+            );
+          }
+        );
+      }
+    );
 
 
   document
     .querySelectorAll(
       ".glossary-modal"
     )
-    .forEach(modal => {
+    .forEach(
+      modal => {
 
-      modal.addEventListener(
-        "click",
-        event => {
+        modal.addEventListener(
+          "click",
+          event => {
 
-          if (
-            event.target ===
-            modal
-          ) {
+            if (
+              event.target ===
+              modal
+            ) {
 
-            closeModal(
-              modal.id
-            );
+              closeModal(
+                modal.id
+              );
+            }
           }
-
-        }
-      );
-
-    });
+        );
+      }
+    );
 
 
   document.addEventListener(
@@ -1621,7 +1913,6 @@
           modal.id
         );
       }
-
     }
   );
 
@@ -1629,48 +1920,6 @@
   /* ========================================
      FORM
   ======================================== */
-
-  function clearPreview() {
-
-    selectedImageFile =
-      null;
-
-
-    if (
-      previewUrl
-    ) {
-
-      URL.revokeObjectURL(
-        previewUrl
-      );
-
-      previewUrl =
-        null;
-    }
-
-
-    const preview =
-      $("edit-image-preview");
-
-
-    preview.hidden =
-      true;
-
-
-    preview.removeAttribute(
-      "src"
-    );
-
-
-    $("edit-image").value =
-      "";
-
-
-    $("glossary-image-status")
-      .textContent =
-      "";
-  }
-
 
   function fillTermForm(
     term = null
@@ -1752,8 +2001,15 @@
       null;
 
 
-    $("edit-image").value =
-      "";
+    const imageInput =
+      $("edit-image");
+
+
+    if (imageInput) {
+
+      imageInput.value =
+        "";
+    }
 
 
     if (
@@ -1780,39 +2036,60 @@
 
 
     if (
-      existing
+      preview
     ) {
 
-      preview.src =
-        existing;
+      if (
+        existing
+      ) {
 
-      preview.hidden =
-        false;
+        preview.src =
+          existing;
 
-    } else {
+        preview.hidden =
+          false;
 
-      preview.hidden =
-        true;
+      } else {
 
-      preview.removeAttribute(
-        "src"
-      );
+        preview.removeAttribute(
+          "src"
+        );
+
+        preview.hidden =
+          true;
+      }
     }
 
 
-    $("glossary-image-status")
-      .textContent =
-      "";
+    const imageStatus =
+      $("glossary-image-status");
 
 
-    $("glossary-save-status")
-      .textContent =
-      "";
+    if (
+      imageStatus
+    ) {
+
+      imageStatus.textContent =
+        "";
+    }
+
+
+    const saveStatus =
+      $("glossary-save-status");
+
+
+    if (
+      saveStatus
+    ) {
+
+      saveStatus.textContent =
+        "";
+    }
   }
 
 
   /* ========================================
-     IMAGE VALIDATION
+     IMAGE VALIDATE
   ======================================== */
 
   function validateImage(
@@ -1865,6 +2142,10 @@
     source
   ) {
 
+    const status =
+      $("glossary-image-status");
+
+
     try {
 
       validateImage(
@@ -1896,12 +2177,16 @@
         $("edit-image-preview");
 
 
-      preview.src =
-        previewUrl;
+      if (
+        preview
+      ) {
 
+        preview.src =
+          previewUrl;
 
-      preview.hidden =
-        false;
+        preview.hidden =
+          false;
+      }
 
 
       const label =
@@ -1912,13 +2197,17 @@
           : "画像を選択しました";
 
 
-      $("glossary-image-status")
-        .textContent =
-        `📋 ${label}（${(
-          file.size /
-          1024 /
-          1024
-        ).toFixed(2)} MB）`;
+      if (
+        status
+      ) {
+
+        status.textContent =
+          `📋 ${label}（${(
+            file.size /
+            1024 /
+            1024
+          ).toFixed(2)} MB）`;
+      }
 
 
     } catch (
@@ -1929,9 +2218,13 @@
         null;
 
 
-      $("glossary-image-status")
-        .textContent =
-        error.message;
+      if (
+        status
+      ) {
+
+        status.textContent =
+          error.message;
+      }
     }
   }
 
@@ -1941,12 +2234,13 @@
   ======================================== */
 
   $("edit-image")
-    .addEventListener(
+    ?.addEventListener(
       "change",
       event => {
 
         const file =
-          event.target.files?.[0];
+          event.target
+            .files?.[0];
 
 
         if (!file) {
@@ -1975,8 +2269,10 @@
 
 
       if (
+        !modal ||
         modal.hidden
       ) {
+
         return;
       }
 
@@ -1991,10 +2287,10 @@
       const imageItem =
         items.find(
           item =>
-            item.type
-              ?.startsWith(
-                "image/"
-              )
+            item.type &&
+            item.type.startsWith(
+              "image/"
+            )
         );
 
 
@@ -2043,11 +2339,16 @@
       const file =
         new File(
           [blob],
+
           `clipboard-${Date.now()}.${extension}`,
+
           {
             type:
               blob.type ||
-              "image/png"
+              "image/png",
+
+            lastModified:
+              Date.now()
           }
         );
 
@@ -2063,110 +2364,124 @@
 
 
   /* ========================================
-     DRAG DROP
+     DRAG & DROP
   ======================================== */
 
   const pasteZone =
     $("glossary-paste-zone");
 
 
-  [
-    "dragenter",
-    "dragover"
-  ].forEach(
-    eventName => {
+  if (
+    pasteZone
+  ) {
 
-      pasteZone.addEventListener(
-        eventName,
-        event => {
+    [
+      "dragenter",
+      "dragover"
+    ].forEach(
+      eventName => {
 
-          event.preventDefault();
+        pasteZone.addEventListener(
+          eventName,
+          event => {
 
-          pasteZone
-            .classList.add(
+            event.preventDefault();
+
+
+            pasteZone.classList.add(
               "is-dragging"
             );
-        }
-      );
-
-    }
-  );
-
-
-  [
-    "dragleave",
-    "drop"
-  ].forEach(
-    eventName => {
-
-      pasteZone.addEventListener(
-        eventName,
-        event => {
-
-          event.preventDefault();
-
-          pasteZone
-            .classList.remove(
-              "is-dragging"
-            );
-        }
-      );
-
-    }
-  );
-
-
-  pasteZone.addEventListener(
-    "drop",
-    event => {
-
-      const files =
-        Array.from(
-          event.dataTransfer
-            ?.files || []
+          }
         );
+      }
+    );
 
 
-      const image =
-        files.find(
-          file =>
-            file.type
-              ?.startsWith(
+    [
+      "dragleave",
+      "drop"
+    ].forEach(
+      eventName => {
+
+        pasteZone.addEventListener(
+          eventName,
+          event => {
+
+            event.preventDefault();
+
+
+            pasteZone.classList.remove(
+              "is-dragging"
+            );
+          }
+        );
+      }
+    );
+
+
+    pasteZone.addEventListener(
+      "drop",
+      event => {
+
+        const files =
+          Array.from(
+            event.dataTransfer
+              ?.files || []
+          );
+
+
+        const image =
+          files.find(
+            file =>
+              file.type &&
+              file.type.startsWith(
                 "image/"
               )
+          );
+
+
+        if (
+          !image
+        ) {
+
+          const status =
+            $("glossary-image-status");
+
+
+          if (
+            status
+          ) {
+
+            status.textContent =
+              "画像ファイルをドロップしてください。";
+          }
+
+
+          return;
+        }
+
+
+        setImage(
+          image,
+          "drop"
         );
-
-
-      if (!image) {
-
-        $("glossary-image-status")
-          .textContent =
-          "画像ファイルをドロップしてください。";
-
-        return;
       }
+    );
 
 
-      setImage(
-        image,
-        "drop"
-      );
-    }
-  );
+    pasteZone.addEventListener(
+      "click",
+      () => {
 
-
-  pasteZone.addEventListener(
-    "click",
-    () => {
-
-      $("edit-image")
-        .click();
-    }
-  );
+        $("edit-image")
+          ?.click();
+      }
+    );
+  }
 
 
   /* ========================================
-     UPLOAD
+     IMAGE UPLOAD
   ======================================== */
 
   async function uploadImage(
@@ -2193,7 +2508,8 @@
         file.name
           ?.split(".")
           .pop() ||
-        file.type.split("/")[1] ||
+        file.type
+          ?.split("/")[1] ||
         "png"
       )
         .replace(
@@ -2216,14 +2532,13 @@
           method:
             "POST",
 
-          headers:
-            {
-              ...authHeaders(),
+          headers: {
+            ...authHeaders(),
 
-              "Content-Type":
-                file.type ||
-                "application/octet-stream"
-            },
+            "Content-Type":
+              file.type ||
+              "application/octet-stream"
+          },
 
           body:
             file
@@ -2235,8 +2550,20 @@
       !response.ok
     ) {
 
+      const message =
+        await response.text()
+          .catch(
+            () => ""
+          );
+
+
       throw new Error(
-        "画像をアップロードできませんでした。"
+        "画像をアップロードできませんでした。" +
+        (
+          message
+            ? " " + message
+            : ""
+        )
       );
     }
 
@@ -2257,42 +2584,43 @@
       .querySelectorAll(
         "[data-edit-id]"
       )
-      .forEach(button => {
+      .forEach(
+        button => {
 
-        button.addEventListener(
-          "click",
-          event => {
+          button.addEventListener(
+            "click",
+            event => {
 
-            event.preventDefault();
+              event.preventDefault();
 
 
-            const term =
-              terms.find(
-                item =>
-                  String(item.id) ===
-                  String(
-                    button.dataset.editId
-                  )
+              const term =
+                terms.find(
+                  item =>
+                    String(item.id) ===
+                    String(
+                      button.dataset.editId
+                    )
+                );
+
+
+              if (!term) {
+                return;
+              }
+
+
+              fillTermForm(
+                term
               );
 
 
-            if (!term) {
-              return;
+              openModal(
+                "glossary-editor-modal"
+              );
             }
-
-
-            fillTermForm(
-              term
-            );
-
-
-            openModal(
-              "glossary-editor-modal"
-            );
-          }
-        );
-
-      });
+          );
+        }
+      );
   }
 
 
@@ -2301,7 +2629,7 @@
   ======================================== */
 
   $("glossary-add-term")
-    .addEventListener(
+    ?.addEventListener(
       "click",
       () => {
 
@@ -2344,7 +2672,7 @@
   ======================================== */
 
   $("glossary-editor-form")
-    .addEventListener(
+    ?.addEventListener(
       "submit",
       async event => {
 
@@ -2359,18 +2687,29 @@
           $("glossary-save-status");
 
 
-        submit.disabled =
-          true;
+        if (
+          submit
+        ) {
+
+          submit.disabled =
+            true;
+        }
 
 
-        status.textContent =
-          "保存中…";
+        if (
+          status
+        ) {
+
+          status.textContent =
+            "保存中…";
+        }
 
 
         try {
 
           const id =
-            $("edit-term-id").value ||
+            $("edit-term-id")
+              .value ||
             null;
 
 
@@ -2392,7 +2731,8 @@
               id,
 
             p_slug:
-              $("edit-term-slug").value ||
+              $("edit-term-slug")
+                .value ||
               null,
 
             p_name_en:
@@ -2481,6 +2821,7 @@
           const response =
             await api(
               "/rest/v1/rpc/glossary_save_term",
+
               {
                 method:
                   "POST",
@@ -2503,8 +2844,13 @@
           }
 
 
-          status.textContent =
-            "保存しました。";
+          if (
+            status
+          ) {
+
+            status.textContent =
+              "保存しました。";
+          }
 
 
           closeModal(
@@ -2520,19 +2866,30 @@
         ) {
 
           console.error(
+            "Glossary save error:",
             error
           );
 
 
-          status.textContent =
-            "保存できませんでした：" +
-            error.message;
+          if (
+            status
+          ) {
+
+            status.textContent =
+              "保存できませんでした：" +
+              error.message;
+          }
 
 
         } finally {
 
-          submit.disabled =
-            false;
+          if (
+            submit
+          ) {
+
+            submit.disabled =
+              false;
+          }
         }
       }
     );
@@ -2543,11 +2900,12 @@
   ======================================== */
 
   $("glossary-add-category")
-    .addEventListener(
+    ?.addEventListener(
       "click",
       () => {
 
         if (
+          !configured() ||
           !usingSharedData
         ) {
 
@@ -2559,9 +2917,17 @@
         }
 
 
-        $("category-save-status")
-          .textContent =
-          "";
+        const status =
+          $("category-save-status");
+
+
+        if (
+          status
+        ) {
+
+          status.textContent =
+            "";
+        }
 
 
         openModal(
@@ -2572,7 +2938,7 @@
 
 
   $("glossary-category-form")
-    .addEventListener(
+    ?.addEventListener(
       "submit",
       async event => {
 
@@ -2583,16 +2949,26 @@
           event.submitter;
 
 
-        submit.disabled =
-          true;
-
-
         const status =
           $("category-save-status");
 
 
-        status.textContent =
-          "追加中…";
+        if (
+          submit
+        ) {
+
+          submit.disabled =
+            true;
+        }
+
+
+        if (
+          status
+        ) {
+
+          status.textContent =
+            "追加中…";
+        }
 
 
         try {
@@ -2600,6 +2976,7 @@
           const response =
             await api(
               "/rest/v1/rpc/glossary_add_category",
+
               {
                 method:
                   "POST",
@@ -2655,15 +3032,31 @@
           error
         ) {
 
-          status.textContent =
-            "追加できませんでした：" +
-            error.message;
+          console.error(
+            "Glossary category error:",
+            error
+          );
+
+
+          if (
+            status
+          ) {
+
+            status.textContent =
+              "追加できませんでした：" +
+              error.message;
+          }
 
 
         } finally {
 
-          submit.disabled =
-            false;
+          if (
+            submit
+          ) {
+
+            submit.disabled =
+              false;
+          }
         }
       }
     );
@@ -2695,12 +3088,15 @@
       .querySelectorAll(
         "[data-major]"
       )
-      .forEach(button =>
-        button.classList.toggle(
-          "is-active",
-          button.dataset.major ===
-          ""
-        )
+      .forEach(
+        button => {
+
+          button.classList.toggle(
+            "is-active",
+            button.dataset.major ===
+            ""
+          );
+        }
       );
 
 
@@ -2708,12 +3104,15 @@
       .querySelectorAll(
         "[data-index]"
       )
-      .forEach(button =>
-        button.classList.toggle(
-          "is-active",
-          button.dataset.index ===
-          ""
-        )
+      .forEach(
+        button => {
+
+          button.classList.toggle(
+            "is-active",
+            button.dataset.index ===
+            ""
+          );
+        }
       );
 
 
@@ -2738,7 +3137,7 @@
 
 
   $("glossary-reset")
-    .addEventListener(
+    ?.addEventListener(
       "click",
       resetFilters
     );
