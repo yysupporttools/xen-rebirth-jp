@@ -1,334 +1,2620 @@
 "use strict";
+
 (() => {
-  const panel = document.getElementById("glossary-search-panel");
-  if (!panel) return;
 
-  const CFG = window.XEN_GLOSSARY_CONFIG || {};
-  const query = document.getElementById("glossary-query");
-  const categorySelect = document.getElementById("glossary-category");
-  const countEl = document.getElementById("glossary-count");
-  const emptyEl = document.getElementById("glossary-empty");
-  const anchorNav = document.querySelector(".anchor-nav");
-  const syncStatus = document.createElement("p");
-  syncStatus.className = "glossary-sync-note";
-  syncStatus.setAttribute("role", "status");
-  panel.after(syncStatus);
-  let categories = [];
-  let terms = [];
-  let usingSharedData = false;
-  let editingTerm = null;
-  let modalOpener = null;
-  let previewUrl = null;
+  /* ========================================
+     CONFIG
+  ======================================== */
 
-  const esc = value => String(value ?? "").replace(/[&<>"']/g, c => ({
-    "&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"
-  }[c]));
-  const normalize = text => String(text ?? "").normalize("NFKC").toLocaleLowerCase("ja").replace(/[’‘]/g,"'").trim();
-  const configured = () => /^https?:\/\//.test(CFG.SUPABASE_URL || "") && (CFG.SUPABASE_ANON_KEY || "").length > 20;
-  function safeUrl(value) {
-    if (!value) return "";
-    try {
-      const url = new URL(value, location.href);
-      return ["http:", "https:"].includes(url.protocol) ? url.href : "";
-    } catch { return ""; }
+  const CFG =
+    window.XEN_GLOSSARY_CONFIG || {};
+
+  const $ =
+    id =>
+      document.getElementById(id);
+
+
+  const query =
+    $("glossary-query");
+
+  const categorySelect =
+    $("glossary-category");
+
+  const countEl =
+    $("glossary-count");
+
+  const emptyEl =
+    $("glossary-empty");
+
+  const resultsEl =
+    $("glossary-results");
+
+  const syncStatus =
+    $("glossary-sync-status");
+
+
+  if (
+    !query ||
+    !categorySelect ||
+    !resultsEl
+  ) {
+    return;
   }
+
+
+  let categories = [];
+
+  let terms = [];
+
+  let usingSharedData =
+    false;
+
+  let editingTerm =
+    null;
+
+  let modalOpener =
+    null;
+
+  let previewUrl =
+    null;
+
+  let selectedImageFile =
+    null;
+
+
+  const filters = {
+
+    major:
+      "",
+
+    index:
+      ""
+
+  };
+
+
+  /* ========================================
+     INDEX DATA
+  ======================================== */
+
+  const ALPHA =
+    "ABCDEFGHIJKLMNOPQRSTUVWXYZ".split("");
+
+
+  const KANA = [
+    "あ","い","う","え","お",
+    "か","き","く","け","こ",
+    "さ","し","す","せ","そ",
+    "た","ち","つ","て","と",
+    "な","に","ぬ","ね","の",
+    "は","ひ","ふ","へ","ほ",
+    "ま","み","む","め","も",
+    "や","ゆ","よ",
+    "ら","り","る","れ","ろ",
+    "わ","を","ん"
+  ];
+
+
+  /* ========================================
+     UTIL
+  ======================================== */
+
+  const esc =
+    value =>
+      String(
+        value ?? ""
+      ).replace(
+        /[&<>"']/g,
+        char => ({
+          "&":
+            "&amp;",
+
+          "<":
+            "&lt;",
+
+          ">":
+            "&gt;",
+
+          '"':
+            "&quot;",
+
+          "'":
+            "&#39;"
+        })[char]
+      );
+
+
+  const normalize =
+    value =>
+      String(
+        value ?? ""
+      )
+        .normalize("NFKC")
+        .toLocaleLowerCase("ja")
+        .replace(
+          /[’‘]/g,
+          "'"
+        )
+        .trim();
+
+
+  function configured() {
+
+    return (
+      /^https?:\/\//.test(
+        CFG.SUPABASE_URL || ""
+      ) &&
+      (
+        CFG.SUPABASE_ANON_KEY ||
+        ""
+      ).length > 20
+    );
+  }
+
+
+  function safeUrl(value) {
+
+    if (!value) {
+      return "";
+    }
+
+    try {
+
+      const url =
+        new URL(
+          value,
+          location.href
+        );
+
+      return [
+        "http:",
+        "https:"
+      ].includes(
+        url.protocol
+      )
+        ? url.href
+        : "";
+
+    } catch {
+
+      return "";
+    }
+  }
+
+
   function authHeaders() {
-    const headers = {apikey: CFG.SUPABASE_ANON_KEY};
-    if (!CFG.SUPABASE_ANON_KEY.startsWith("sb_publishable_")) headers.Authorization = "Bearer " + CFG.SUPABASE_ANON_KEY;
+
+    const headers = {
+
+      apikey:
+        CFG.SUPABASE_ANON_KEY
+
+    };
+
+
+    if (
+      !CFG.SUPABASE_ANON_KEY
+        ?.startsWith(
+          "sb_publishable_"
+        )
+    ) {
+
+      headers.Authorization =
+        "Bearer " +
+        CFG.SUPABASE_ANON_KEY;
+    }
+
+
     return headers;
   }
 
-  function api(path, options={}) {
-    const headers = Object.assign({
-      ...authHeaders(),
-      "Content-Type": "application/json"
-    }, options.headers || {});
-    return fetch(CFG.SUPABASE_URL + path, {...options, headers});
+
+  function api(
+    path,
+    options = {}
+  ) {
+
+    const headers =
+      Object.assign(
+        {
+          ...authHeaders(),
+
+          "Content-Type":
+            "application/json"
+        },
+        options.headers || {}
+      );
+
+
+    return fetch(
+      CFG.SUPABASE_URL +
+      path,
+      {
+        ...options,
+        headers
+      }
+    );
   }
 
-  function currentEntries() { return [...document.querySelectorAll(".glossary-entry")]; }
 
-  function filter() {
-    const words = normalize(query.value).split(/\s+/).filter(Boolean);
-    const entries = currentEntries();
-    let count = 0;
-    for (const entry of entries) {
-      const text = normalize(entry.textContent);
-      entry.hidden = !(words.every(word => text.includes(word)) && (!categorySelect.value || categorySelect.value === entry.dataset.category));
-      if (!entry.hidden) count++;
+  /* ========================================
+     CATEGORY / GROUP
+  ======================================== */
+
+  function getCategoryName(term) {
+
+    const category =
+      categories.find(
+        item =>
+          String(item.id) ===
+          String(term.category_id)
+      );
+
+    return (
+      category?.name ||
+      ""
+    );
+  }
+
+
+  function getMajorGroups(term) {
+
+    const category =
+      normalize(
+        getCategoryName(term)
+      );
+
+    const text =
+      normalize(
+        [
+          category,
+          term.name_en,
+          term.name_ja,
+          term.aliases,
+          term.description
+        ].join(" ")
+      );
+
+
+    const groups =
+      new Set();
+
+
+    /*
+      クラス
+    */
+
+    if (
+      /クラス|職業|アーチャー|クレリック|ナイト|メイジ|ローグ|テンプラー|xenian|archer|cleric|knight|mage|rogue|templar/.test(
+        text
+      )
+    ) {
+
+      groups.add(
+        "class"
+      );
     }
-    document.querySelectorAll(".glossary-category").forEach(section => {
-      section.hidden = ![...section.querySelectorAll(".glossary-entry")].some(entry => !entry.hidden);
-    });
-    countEl.textContent = `${count} / ${entries.length}件`;
-    emptyEl.hidden = count !== 0;
+
+
+    /*
+      アイテム
+    */
+
+    if (
+      /アイテム|素材|装備|武器|防具|消耗品|stone|orb|tonic|blood|weapon|armor|item|pet|ペット/.test(
+        text
+      )
+    ) {
+
+      groups.add(
+        "item"
+      );
+    }
+
+
+    /*
+      世界
+    */
+
+    if (
+      /マップ|地図|世界|町|村|地域|npc|モンスター|monster|map|フィールド/.test(
+        text
+      )
+    ) {
+
+      groups.add(
+        "world"
+      );
+    }
+
+
+    /*
+      クエスト
+    */
+
+    if (
+      /クエスト|quest|転職/.test(
+        text
+      )
+    ) {
+
+      groups.add(
+        "quest"
+      );
+    }
+
+
+    /*
+      ダンジョン / ボス
+    */
+
+    if (
+      /ダンジョン|ボス|dungeon|boss|instance|インスタンス/.test(
+        text
+      )
+    ) {
+
+      groups.add(
+        "dungeon"
+      );
+    }
+
+
+    /*
+      どれにも入らない場合は
+      アイテムへ無理に分類せず
+      「すべて」のみで表示
+    */
+
+    return [
+      ...groups
+    ];
   }
 
-  function reset() { query.value = ""; categorySelect.value = ""; filter(); }
 
-  function revealHash() {
-    let id;
-    try { id = decodeURIComponent(location.hash.slice(1)); } catch { return; }
-    const target = document.getElementById(id);
-    if (!target || (!target.classList.contains("glossary-entry") && !target.classList.contains("glossary-category"))) return;
-    reset();
-    requestAnimationFrame(() => {
-      target.scrollIntoView({behavior:"instant",block:"start"});
-      if (target.classList.contains("glossary-entry")) target.focus({preventScroll:true});
-    });
+  /* ========================================
+     LETTER
+  ======================================== */
+
+  function latinInitial(term) {
+
+    const name =
+      String(
+        term.name_en || ""
+      )
+        .trim()
+        .normalize("NFKC");
+
+
+    const first =
+      name.charAt(0)
+        .toUpperCase();
+
+
+    if (
+      /^[A-Z]$/.test(
+        first
+      )
+    ) {
+      return first;
+    }
+
+
+    if (name) {
+      return "#";
+    }
+
+
+    return "";
   }
+
+
+  function japaneseInitial(term) {
+
+    const text =
+      String(
+        term.name_ja ||
+        term.aliases ||
+        ""
+      )
+        .trim()
+        .normalize("NFKC");
+
+
+    if (!text) {
+      return "";
+    }
+
+
+    let first =
+      text.charAt(0);
+
+
+    /*
+      カタカナ → ひらがな
+    */
+
+    const code =
+      first.charCodeAt(0);
+
+
+    if (
+      code >= 0x30A1 &&
+      code <= 0x30F6
+    ) {
+
+      first =
+        String.fromCharCode(
+          code - 0x60
+        );
+    }
+
+
+    return first;
+  }
+
+
+  /* ========================================
+     INDEX
+  ======================================== */
+
+  function buildIndexes() {
+
+    const alpha =
+      $("glossary-alpha-index");
+
+    const kana =
+      $("glossary-kana-index");
+
+
+    alpha.innerHTML =
+      [
+        `<button
+          type="button"
+          class="is-active"
+          data-index=""
+        >すべて</button>`,
+
+        ...ALPHA.map(
+          letter =>
+            `<button
+              type="button"
+              data-index="${letter}"
+            >${letter}</button>`
+        ),
+
+        `<button
+          type="button"
+          data-index="#"
+        >#</button>`
+      ].join("");
+
+
+    kana.innerHTML =
+      [
+        `<button
+          type="button"
+          data-index=""
+        >すべて</button>`,
+
+        ...KANA.map(
+          letter =>
+            `<button
+              type="button"
+              data-index="ja:${letter}"
+            >${letter}</button>`
+        )
+      ].join("");
+
+
+    document
+      .querySelectorAll(
+        "[data-index]"
+      )
+      .forEach(button => {
+
+        button.addEventListener(
+          "click",
+          () => {
+
+            filters.index =
+              button.dataset.index ||
+              "";
+
+
+            document
+              .querySelectorAll(
+                "[data-index]"
+              )
+              .forEach(item =>
+                item.classList.remove(
+                  "is-active"
+                )
+              );
+
+
+            button.classList.add(
+              "is-active"
+            );
+
+
+            renderTerms();
+          }
+        );
+
+      });
+  }
+
+
+  /* ========================================
+     MAJOR NAV
+  ======================================== */
+
+  function bindMajorIndex() {
+
+    document
+      .querySelectorAll(
+        "[data-major]"
+      )
+      .forEach(button => {
+
+        button.addEventListener(
+          "click",
+          () => {
+
+            filters.major =
+              button.dataset.major ||
+              "";
+
+
+            document
+              .querySelectorAll(
+                "[data-major]"
+              )
+              .forEach(item =>
+                item.classList.remove(
+                  "is-active"
+                )
+              );
+
+
+            button.classList.add(
+              "is-active"
+            );
+
+
+            renderTerms();
+          }
+        );
+
+      });
+  }
+
+
+  /* ========================================
+     CATEGORY OPTIONS
+  ======================================== */
 
   function categoryOptions() {
-    const selectedCategory = categorySelect.value;
-    categorySelect.innerHTML = '<option value="">すべて</option>' + categories.map(c => `<option value="${esc(c.name)}">${esc(c.name)}</option>`).join("");
-    categorySelect.value = categories.some(c => c.name === selectedCategory) ? selectedCategory : "";
-    const editCategory = document.getElementById("edit-category");
-    editCategory.innerHTML = '<option value="">分類を選択</option>' + categories.map(c => `<option value="${esc(c.id)}">${esc(c.name)}</option>`).join("");
-    if (anchorNav) anchorNav.innerHTML = categories.map((c,i) => `<a href="#category-${i}">${esc(c.name)}</a>`).join("");
+
+    const selected =
+      categorySelect.value;
+
+
+    categorySelect.innerHTML =
+      '<option value="">すべての分類</option>' +
+      categories
+        .map(
+          category =>
+            `<option value="${esc(category.name)}">
+              ${esc(category.name)}
+            </option>`
+        )
+        .join("");
+
+
+    categorySelect.value =
+      categories.some(
+        item =>
+          item.name ===
+          selected
+      )
+        ? selected
+        : "";
+
+
+    const editCategory =
+      $("edit-category");
+
+
+    editCategory.innerHTML =
+      '<option value="">分類を選択</option>' +
+      categories
+        .map(
+          category =>
+            `<option value="${esc(category.id)}">
+              ${esc(category.name)}
+            </option>`
+        )
+        .join("");
   }
 
-  function detail(label, value) {
-    return value ? `<div class="glossary-detail"><strong>${esc(label)}</strong>${esc(value).replace(/\n/g,"<br>")}</div>` : "";
+
+  /* ========================================
+     FILTER
+  ======================================== */
+
+  function filteredTerms() {
+
+    const words =
+      normalize(
+        query.value
+      )
+        .split(/\s+/)
+        .filter(Boolean);
+
+
+    return terms
+      .filter(term => {
+
+        const category =
+          getCategoryName(
+            term
+          );
+
+
+        /*
+          検索
+        */
+
+        const searchText =
+          normalize(
+            [
+              term.name_en,
+              term.name_ja,
+              term.aliases,
+              category,
+              term.description,
+              term.drop_location,
+              term.acquisition,
+              term.related_entity,
+              term.notes
+            ].join(" ")
+          );
+
+
+        if (
+          !words.every(
+            word =>
+              searchText.includes(
+                word
+              )
+          )
+        ) {
+          return false;
+        }
+
+
+        /*
+          分類
+        */
+
+        if (
+          categorySelect.value &&
+          category !==
+          categorySelect.value
+        ) {
+          return false;
+        }
+
+
+        /*
+          大カテゴリ
+        */
+
+        if (
+          filters.major &&
+          !getMajorGroups(term)
+            .includes(
+              filters.major
+            )
+        ) {
+          return false;
+        }
+
+
+        /*
+          文字索引
+        */
+
+        if (
+          filters.index
+        ) {
+
+          if (
+            filters.index.startsWith(
+              "ja:"
+            )
+          ) {
+
+            const letter =
+              filters.index.slice(3);
+
+
+            if (
+              japaneseInitial(term) !==
+              letter
+            ) {
+              return false;
+            }
+
+          } else {
+
+            if (
+              latinInitial(term) !==
+              filters.index
+            ) {
+              return false;
+            }
+          }
+        }
+
+
+        return true;
+      })
+      .sort(
+        (a, b) => {
+
+          const aa =
+            normalize(
+              a.name_en ||
+              a.name_ja
+            );
+
+          const bb =
+            normalize(
+              b.name_en ||
+              b.name_ja
+            );
+
+
+          return aa.localeCompare(
+            bb,
+            "en"
+          );
+        }
+      );
   }
 
-  function renderSharedTerms() {
-    document.querySelectorAll(".glossary-category").forEach(x => x.remove());
-    categories.forEach((cat,index) => {
-      const section = document.createElement("section");
-      section.className = "glossary-category";
-      section.id = `category-${index}`;
-      section.innerHTML = `<h2>${esc(cat.name)}</h2>`;
-      terms.filter(t => String(t.category_id) === String(cat.id)).forEach(t => {
-        const article = document.createElement("article");
-        article.className = "paper glossary-entry";
-        article.dataset.category = cat.name;
-        article.id = t.slug;
-        article.tabIndex = -1;
-        const image = safeUrl(t.image_url) ? `<img class="glossary-entry-image" src="${esc(safeUrl(t.image_url))}" alt="${esc(t.name_en || t.name_ja)}">` : "";
-        const alias = t.aliases ? `<p class="small">別表記：${esc(t.aliases)}</p>` : "";
-        const jp = t.name_ja ? `<p class="small">日本語名：${esc(t.name_ja)}</p>` : "";
-        const details = [
-          detail("ドロップ場所", t.drop_location),
-          detail("入手方法", t.acquisition),
-          detail("関連NPC / モンスター", t.related_entity),
-          detail("必要Lv", t.required_level === null ? "" : t.required_level),
-          detail("備考", t.notes)
-        ].filter(Boolean).join("");
-        const links = [
-          safeUrl(t.related_guide) ? `<a href="${esc(safeUrl(t.related_guide))}">関連ガイドへ</a>` : "",
-          safeUrl(t.source_url) ? `<a href="${esc(safeUrl(t.source_url))}" rel="noopener noreferrer" target="_blank">公式の出典 ↗</a>` : "",
-          `<a href="#${esc(t.slug)}">この項目へのリンク</a>`
-        ].filter(Boolean).join("");
-        article.innerHTML = `
-          <div class="${image ? "glossary-entry-media" : ""}">
+
+  /* ========================================
+     DETAILS
+  ======================================== */
+
+  function detail(
+    label,
+    value
+  ) {
+
+    if (
+      value === null ||
+      value === undefined ||
+      value === ""
+    ) {
+      return "";
+    }
+
+
+    return `
+      <div class="glossary-detail">
+
+        <strong>
+          ${esc(label)}
+        </strong>
+
+        <span>
+          ${esc(value)
+            .replace(
+              /\n/g,
+              "<br>"
+            )}
+        </span>
+
+      </div>
+    `;
+  }
+
+
+  /* ========================================
+     ENTRY
+  ======================================== */
+
+  function termHtml(term) {
+
+    const category =
+      getCategoryName(
+        term
+      );
+
+
+    const imageUrl =
+      safeUrl(
+        term.image_url
+      );
+
+
+    const image =
+      imageUrl
+        ? `
+          <img
+            class="glossary-thumb"
+            src="${esc(imageUrl)}"
+            alt="${esc(
+              term.name_en ||
+              term.name_ja
+            )}"
+            loading="lazy"
+          >
+        `
+        : `
+          <div
+            class="glossary-thumb glossary-thumb-empty"
+            aria-hidden="true"
+          >
+            ?
+          </div>
+        `;
+
+
+    const jp =
+      term.name_ja
+        ? `
+          <span class="glossary-name-ja">
+            ${esc(term.name_ja)}
+          </span>
+        `
+        : "";
+
+
+    const alias =
+      term.aliases
+        ? `
+          <span class="glossary-alias">
+            別表記：${esc(term.aliases)}
+          </span>
+        `
+        : "";
+
+
+    const details =
+      [
+        detail(
+          "ドロップ場所",
+          term.drop_location
+        ),
+
+        detail(
+          "入手方法",
+          term.acquisition
+        ),
+
+        detail(
+          "関連NPC / モンスター",
+          term.related_entity
+        ),
+
+        detail(
+          "必要Lv",
+          term.required_level
+        ),
+
+        detail(
+          "備考",
+          term.notes
+        )
+      ]
+        .filter(Boolean)
+        .join("");
+
+
+    const guide =
+      safeUrl(
+        term.related_guide
+      );
+
+
+    const source =
+      safeUrl(
+        term.source_url
+      );
+
+
+    const updated =
+      term.updated_at
+        ? new Date(
+            term.updated_at
+          ).toLocaleString(
+            "ja-JP"
+          )
+        : "";
+
+
+    return `
+      <article
+        class="glossary-entry"
+        id="${esc(term.slug)}"
+      >
+
+        <details>
+
+          <summary>
+
             ${image}
-            <div>
-              <h3>${esc(t.name_en || t.name_ja)}</h3>${jp}${alias}
-              <p>${esc(t.description).replace(/\n/g,"<br>")}</p>
-              ${details ? `<div class="glossary-detail-list">${details}</div>` : ""}
-              <div class="glossary-links">${links}<button type="button" class="glossary-edit-button" data-edit-id="${esc(t.id)}">編集</button></div>
-              <div class="glossary-updated">更新：${esc(new Date(t.updated_at).toLocaleString("ja-JP"))}${t.contributor_name ? " / 投稿：" + esc(t.contributor_name) : ""}</div>
+
+            <div class="glossary-summary-text">
+
+              <div class="glossary-title-line">
+
+                <strong class="glossary-name-en">
+                  ${esc(
+                    term.name_en ||
+                    term.name_ja
+                  )}
+                </strong>
+
+                ${jp}
+
+              </div>
+
+              <div class="glossary-summary-bottom">
+
+                <span class="glossary-category-badge">
+                  ${esc(category)}
+                </span>
+
+                ${alias}
+
+              </div>
+
             </div>
-          </div>`;
-        section.appendChild(article);
-      });
-      emptyEl.before(section);
-    });
-    bindEditButtons();
-    filter();
+
+            <span class="glossary-open-icon">
+              ＋
+            </span>
+
+          </summary>
+
+
+          <div class="glossary-entry-detail">
+
+            <p class="glossary-description">
+              ${esc(
+                term.description ||
+                ""
+              ).replace(
+                /\n/g,
+                "<br>"
+              )}
+            </p>
+
+
+            ${
+              details
+                ? `
+                  <div class="glossary-detail-list">
+                    ${details}
+                  </div>
+                `
+                : ""
+            }
+
+
+            <div class="glossary-links">
+
+              ${
+                guide
+                  ? `
+                    <a href="${esc(guide)}">
+                      関連ガイド
+                    </a>
+                  `
+                  : ""
+              }
+
+              ${
+                source
+                  ? `
+                    <a
+                      href="${esc(source)}"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                    >
+                      公式の出典 ↗
+                    </a>
+                  `
+                  : ""
+              }
+
+              <a href="#${esc(term.slug)}">
+                この項目へのリンク
+              </a>
+
+              <button
+                type="button"
+                class="glossary-edit-button"
+                data-edit-id="${esc(term.id)}"
+              >
+                編集
+              </button>
+
+            </div>
+
+
+            ${
+              updated
+                ? `
+                  <div class="glossary-updated">
+
+                    更新：
+                    ${esc(updated)}
+
+                    ${
+                      term.contributor_name
+                        ? `
+                          / 投稿：
+                          ${esc(
+                            term.contributor_name
+                          )}
+                        `
+                        : ""
+                    }
+
+                  </div>
+                `
+                : ""
+            }
+
+          </div>
+
+        </details>
+
+      </article>
+    `;
   }
+
+
+  /* ========================================
+     RENDER
+  ======================================== */
+
+  function renderTerms() {
+
+    const rows =
+      filteredTerms();
+
+
+    countEl.textContent =
+      `${rows.length} / ${terms.length}件`;
+
+
+    emptyEl.hidden =
+      rows.length !== 0;
+
+
+    if (
+      !rows.length
+    ) {
+
+      resultsEl.innerHTML =
+        "";
+
+      return;
+    }
+
+
+    /*
+      頭文字でグループ化
+    */
+
+    const groups =
+      new Map();
+
+
+    for (
+      const term of rows
+    ) {
+
+      let key;
+
+
+      if (
+        filters.index.startsWith(
+          "ja:"
+        )
+      ) {
+
+        key =
+          japaneseInitial(term) ||
+          "その他";
+
+      } else {
+
+        key =
+          latinInitial(term) ||
+          japaneseInitial(term) ||
+          "その他";
+      }
+
+
+      if (
+        !groups.has(key)
+      ) {
+
+        groups.set(
+          key,
+          []
+        );
+      }
+
+
+      groups.get(key)
+        .push(term);
+    }
+
+
+    resultsEl.innerHTML =
+      [
+        ...groups.entries()
+      ]
+        .map(
+          ([key, items]) => `
+
+            <section
+              class="glossary-letter-section"
+            >
+
+              <h2>
+                ${esc(key)}
+              </h2>
+
+              <div class="glossary-compact-list">
+
+                ${items
+                  .map(termHtml)
+                  .join("")}
+
+              </div>
+
+            </section>
+
+          `
+        )
+        .join("");
+
+
+    bindEditButtons();
+
+
+    openHashTarget();
+  }
+
+
+  /* ========================================
+     LOAD DATA
+  ======================================== */
 
   async function loadShared() {
-    if (!configured()) {
-      syncStatus.textContent = "共同編集の接続設定がありません。保存済みの用語を表示しています。";
+
+    if (
+      !configured()
+    ) {
+
+      syncStatus.textContent =
+        "共同編集の接続設定がありません。";
+
+      resultsEl.innerHTML =
+        "";
+
       return false;
     }
+
+
     try {
-      const [cRes,tRes] = await Promise.all([
-        api("/rest/v1/glossary_categories?select=*&order=sort_order.asc,name.asc"),
-        api("/rest/v1/glossary_terms?select=*&order=updated_at.desc")
-      ]);
-      if (!cRes.ok || !tRes.ok) throw new Error("共有用語集を取得できません");
-      categories = await cRes.json();
-      terms = await tRes.json();
-      if (!categories.length) throw new Error("分類を取得できません");
-      usingSharedData = true;
+
+      syncStatus.textContent =
+        "用語集を読み込んでいます…";
+
+
+      const [
+        categoryResponse,
+        termResponse
+      ] =
+        await Promise.all([
+
+          api(
+            "/rest/v1/glossary_categories?select=*&order=sort_order.asc,name.asc"
+          ),
+
+          api(
+            "/rest/v1/glossary_terms?select=*&order=name_en.asc,name_ja.asc"
+          )
+
+        ]);
+
+
+      if (
+        !categoryResponse.ok ||
+        !termResponse.ok
+      ) {
+
+        throw new Error(
+          "共有用語集を取得できません"
+        );
+      }
+
+
+      categories =
+        await categoryResponse.json();
+
+
+      terms =
+        await termResponse.json();
+
+
+      usingSharedData =
+        true;
+
+
       categoryOptions();
-      renderSharedTerms();
-      syncStatus.textContent = `共同編集に接続済み：${terms.length}件・${categories.length}分類`;
+
+      renderTerms();
+
+
+      syncStatus.textContent =
+        `共同編集に接続済み：${terms.length}件・${categories.length}分類`;
+
+
       return true;
-    } catch(err) {
-      console.warn(err);
-      syncStatus.textContent = "共同編集の取得に失敗しました。直前の表示を残しています。ページを再読み込みしてお試しください。";
+
+
+    } catch (
+      error
+    ) {
+
+      console.error(
+        "Glossary:",
+        error
+      );
+
+
+      syncStatus.textContent =
+        "用語集を取得できませんでした。ページを再読み込みしてください。";
+
+
+      resultsEl.innerHTML =
+        "";
+
+
       return false;
-      // Static 43 entries remain visible as fallback.
     }
   }
+
+
+  /* ========================================
+     HASH
+  ======================================== */
+
+  function openHashTarget() {
+
+    if (
+      !location.hash
+    ) {
+      return;
+    }
+
+
+    let id;
+
+
+    try {
+
+      id =
+        decodeURIComponent(
+          location.hash.slice(1)
+        );
+
+    } catch {
+
+      return;
+    }
+
+
+    const target =
+      document.getElementById(
+        id
+      );
+
+
+    if (!target) {
+      return;
+    }
+
+
+    const details =
+      target.querySelector(
+        "details"
+      );
+
+
+    if (details) {
+
+      details.open =
+        true;
+    }
+
+
+    requestAnimationFrame(
+      () => {
+
+        target.scrollIntoView({
+          block:
+            "center"
+        });
+
+      }
+    );
+  }
+
+
+  /* ========================================
+     MODAL
+  ======================================== */
 
   function openModal(id) {
-    modalOpener = document.activeElement;
-    const modal = document.getElementById(id);
-    modal.hidden = false;
-    document.body.style.overflow="hidden";
-    modal.querySelector("input:not([type=hidden]),button")?.focus();
-  }
-  function closeModal(id) {
-    document.getElementById(id).hidden = true;
-    document.body.style.overflow="";
-    modalOpener?.focus();
-  }
-  document.addEventListener("keydown", e => {
-    const modal = document.querySelector(".glossary-modal:not([hidden])");
-    if (!modal) return;
-    if (e.key === "Escape") closeModal(modal.id);
-    if (e.key === "Tab") {
-      const fields = [...modal.querySelectorAll("button,input:not([type=hidden]),select,textarea")].filter(el => !el.disabled);
-      const first = fields[0], last = fields[fields.length - 1];
-      if (e.shiftKey && document.activeElement === first) { e.preventDefault(); last.focus(); }
-      if (!e.shiftKey && document.activeElement === last) { e.preventDefault(); first.focus(); }
-    }
-  });
 
-  function fillTermForm(term=null) {
-    editingTerm = term;
-    document.getElementById("glossary-editor-title").textContent = term ? "用語を編集" : "用語を追加";
-    document.getElementById("edit-term-id").value = term?.id || "";
-    document.getElementById("edit-term-slug").value = term?.slug || "";
-    document.getElementById("edit-name-en").value = term?.name_en || "";
-    document.getElementById("edit-name-ja").value = term?.name_ja || "";
-    document.getElementById("edit-aliases").value = term?.aliases || "";
-    document.getElementById("edit-category").value = term?.category_id || "";
-    document.getElementById("edit-description").value = term?.description || "";
-    document.getElementById("edit-drop-location").value = term?.drop_location || "";
-    document.getElementById("edit-acquisition").value = term?.acquisition || "";
-    document.getElementById("edit-related-entity").value = term?.related_entity || "";
-    document.getElementById("edit-required-level").value = term?.required_level ?? "";
-    document.getElementById("edit-notes").value = term?.notes || "";
-    document.getElementById("edit-related-guide").value = term?.related_guide || "";
-    document.getElementById("edit-source-url").value = term?.source_url || "";
-    document.getElementById("edit-contributor").value = "";
-    const preview = document.getElementById("edit-image-preview");
-    preview.src = safeUrl(term?.image_url);
-    preview.hidden = !term?.image_url;
-    document.getElementById("edit-image").value = "";
-    document.getElementById("glossary-save-status").textContent = "";
+    modalOpener =
+      document.activeElement;
+
+
+    const modal =
+      $(id);
+
+
+    modal.hidden =
+      false;
+
+
+    document.body.style.overflow =
+      "hidden";
+
+
+    modal
+      .querySelector(
+        "input:not([type=hidden]),button"
+      )
+      ?.focus();
   }
+
+
+  function closeModal(id) {
+
+    $(id).hidden =
+      true;
+
+
+    document.body.style.overflow =
+      "";
+
+
+    modalOpener
+      ?.focus();
+  }
+
+
+  document
+    .querySelectorAll(
+      "[data-close-modal]"
+    )
+    .forEach(button => {
+
+      button.addEventListener(
+        "click",
+        () =>
+          closeModal(
+            button.dataset.closeModal
+          )
+      );
+
+    });
+
+
+  document
+    .querySelectorAll(
+      ".glossary-modal"
+    )
+    .forEach(modal => {
+
+      modal.addEventListener(
+        "click",
+        event => {
+
+          if (
+            event.target ===
+            modal
+          ) {
+
+            closeModal(
+              modal.id
+            );
+          }
+
+        }
+      );
+
+    });
+
+
+  document.addEventListener(
+    "keydown",
+    event => {
+
+      if (
+        event.key !==
+        "Escape"
+      ) {
+        return;
+      }
+
+
+      const modal =
+        document.querySelector(
+          ".glossary-modal:not([hidden])"
+        );
+
+
+      if (modal) {
+
+        closeModal(
+          modal.id
+        );
+      }
+
+    }
+  );
+
+
+  /* ========================================
+     FORM
+  ======================================== */
+
+  function clearPreview() {
+
+    selectedImageFile =
+      null;
+
+
+    if (
+      previewUrl
+    ) {
+
+      URL.revokeObjectURL(
+        previewUrl
+      );
+
+      previewUrl =
+        null;
+    }
+
+
+    const preview =
+      $("edit-image-preview");
+
+
+    preview.hidden =
+      true;
+
+
+    preview.removeAttribute(
+      "src"
+    );
+
+
+    $("edit-image").value =
+      "";
+
+
+    $("glossary-image-status")
+      .textContent =
+      "";
+  }
+
+
+  function fillTermForm(
+    term = null
+  ) {
+
+    editingTerm =
+      term;
+
+
+    $("glossary-editor-title")
+      .textContent =
+      term
+        ? "用語を編集"
+        : "用語を追加";
+
+
+    $("edit-term-id").value =
+      term?.id || "";
+
+
+    $("edit-term-slug").value =
+      term?.slug || "";
+
+
+    $("edit-name-en").value =
+      term?.name_en || "";
+
+
+    $("edit-name-ja").value =
+      term?.name_ja || "";
+
+
+    $("edit-aliases").value =
+      term?.aliases || "";
+
+
+    $("edit-category").value =
+      term?.category_id || "";
+
+
+    $("edit-description").value =
+      term?.description || "";
+
+
+    $("edit-drop-location").value =
+      term?.drop_location || "";
+
+
+    $("edit-acquisition").value =
+      term?.acquisition || "";
+
+
+    $("edit-related-entity").value =
+      term?.related_entity || "";
+
+
+    $("edit-required-level").value =
+      term?.required_level ??
+      "";
+
+
+    $("edit-notes").value =
+      term?.notes || "";
+
+
+    $("edit-related-guide").value =
+      term?.related_guide || "";
+
+
+    $("edit-source-url").value =
+      term?.source_url || "";
+
+
+    $("edit-contributor").value =
+      "";
+
+
+    selectedImageFile =
+      null;
+
+
+    $("edit-image").value =
+      "";
+
+
+    if (
+      previewUrl
+    ) {
+
+      URL.revokeObjectURL(
+        previewUrl
+      );
+
+      previewUrl =
+        null;
+    }
+
+
+    const preview =
+      $("edit-image-preview");
+
+
+    const existing =
+      safeUrl(
+        term?.image_url
+      );
+
+
+    if (
+      existing
+    ) {
+
+      preview.src =
+        existing;
+
+      preview.hidden =
+        false;
+
+    } else {
+
+      preview.hidden =
+        true;
+
+      preview.removeAttribute(
+        "src"
+      );
+    }
+
+
+    $("glossary-image-status")
+      .textContent =
+      "";
+
+
+    $("glossary-save-status")
+      .textContent =
+      "";
+  }
+
+
+  /* ========================================
+     IMAGE VALIDATION
+  ======================================== */
+
+  function validateImage(
+    file
+  ) {
+
+    if (!file) {
+
+      throw new Error(
+        "画像を取得できませんでした。"
+      );
+    }
+
+
+    if (
+      file.size >
+      5 * 1024 * 1024
+    ) {
+
+      throw new Error(
+        "画像は5MB以下にしてください。"
+      );
+    }
+
+
+    if (
+      ![
+        "image/png",
+        "image/jpeg",
+        "image/webp",
+        "image/gif"
+      ].includes(
+        file.type
+      )
+    ) {
+
+      throw new Error(
+        "PNG / JPG / WebP / GIF画像を使用してください。"
+      );
+    }
+  }
+
+
+  /* ========================================
+     IMAGE PREVIEW
+  ======================================== */
+
+  function setImage(
+    file,
+    source
+  ) {
+
+    try {
+
+      validateImage(
+        file
+      );
+
+
+      selectedImageFile =
+        file;
+
+
+      if (
+        previewUrl
+      ) {
+
+        URL.revokeObjectURL(
+          previewUrl
+        );
+      }
+
+
+      previewUrl =
+        URL.createObjectURL(
+          file
+        );
+
+
+      const preview =
+        $("edit-image-preview");
+
+
+      preview.src =
+        previewUrl;
+
+
+      preview.hidden =
+        false;
+
+
+      const label =
+        source === "paste"
+          ? "コピーした画像を貼り付けました"
+          : source === "drop"
+          ? "画像をドロップしました"
+          : "画像を選択しました";
+
+
+      $("glossary-image-status")
+        .textContent =
+        `📋 ${label}（${(
+          file.size /
+          1024 /
+          1024
+        ).toFixed(2)} MB）`;
+
+
+    } catch (
+      error
+    ) {
+
+      selectedImageFile =
+        null;
+
+
+      $("glossary-image-status")
+        .textContent =
+        error.message;
+    }
+  }
+
+
+  /* ========================================
+     FILE SELECT
+  ======================================== */
+
+  $("edit-image")
+    .addEventListener(
+      "change",
+      event => {
+
+        const file =
+          event.target.files?.[0];
+
+
+        if (!file) {
+          return;
+        }
+
+
+        setImage(
+          file,
+          "select"
+        );
+      }
+    );
+
+
+  /* ========================================
+     CTRL + V
+  ======================================== */
+
+  document.addEventListener(
+    "paste",
+    event => {
+
+      const modal =
+        $("glossary-editor-modal");
+
+
+      if (
+        modal.hidden
+      ) {
+        return;
+      }
+
+
+      const items =
+        Array.from(
+          event.clipboardData
+            ?.items || []
+        );
+
+
+      const imageItem =
+        items.find(
+          item =>
+            item.type
+              ?.startsWith(
+                "image/"
+              )
+        );
+
+
+      if (
+        !imageItem
+      ) {
+        return;
+      }
+
+
+      event.preventDefault();
+
+
+      const blob =
+        imageItem.getAsFile();
+
+
+      if (!blob) {
+        return;
+      }
+
+
+      const extensions = {
+
+        "image/png":
+          "png",
+
+        "image/jpeg":
+          "jpg",
+
+        "image/webp":
+          "webp",
+
+        "image/gif":
+          "gif"
+
+      };
+
+
+      const extension =
+        extensions[
+          blob.type
+        ] || "png";
+
+
+      const file =
+        new File(
+          [blob],
+          `clipboard-${Date.now()}.${extension}`,
+          {
+            type:
+              blob.type ||
+              "image/png"
+          }
+        );
+
+
+      setImage(
+        file,
+        "paste"
+      );
+
+    },
+    true
+  );
+
+
+  /* ========================================
+     DRAG DROP
+  ======================================== */
+
+  const pasteZone =
+    $("glossary-paste-zone");
+
+
+  [
+    "dragenter",
+    "dragover"
+  ].forEach(
+    eventName => {
+
+      pasteZone.addEventListener(
+        eventName,
+        event => {
+
+          event.preventDefault();
+
+          pasteZone
+            .classList.add(
+              "is-dragging"
+            );
+        }
+      );
+
+    }
+  );
+
+
+  [
+    "dragleave",
+    "drop"
+  ].forEach(
+    eventName => {
+
+      pasteZone.addEventListener(
+        eventName,
+        event => {
+
+          event.preventDefault();
+
+          pasteZone
+            .classList.remove(
+              "is-dragging"
+            );
+        }
+      );
+
+    }
+  );
+
+
+  pasteZone.addEventListener(
+    "drop",
+    event => {
+
+      const files =
+        Array.from(
+          event.dataTransfer
+            ?.files || []
+        );
+
+
+      const image =
+        files.find(
+          file =>
+            file.type
+              ?.startsWith(
+                "image/"
+              )
+        );
+
+
+      if (!image) {
+
+        $("glossary-image-status")
+          .textContent =
+          "画像ファイルをドロップしてください。";
+
+        return;
+      }
+
+
+      setImage(
+        image,
+        "drop"
+      );
+    }
+  );
+
+
+  pasteZone.addEventListener(
+    "click",
+    () => {
+
+      $("edit-image")
+        .click();
+    }
+  );
+
+
+  /* ========================================
+     UPLOAD
+  ======================================== */
+
+  async function uploadImage(
+    id,
+    file
+  ) {
+
+    if (!file) {
+
+      return (
+        editingTerm?.image_url ||
+        null
+      );
+    }
+
+
+    validateImage(
+      file
+    );
+
+
+    const extension =
+      (
+        file.name
+          ?.split(".")
+          .pop() ||
+        file.type.split("/")[1] ||
+        "png"
+      )
+        .replace(
+          /[^a-z0-9]/gi,
+          ""
+        )
+        .toLowerCase();
+
+
+    const objectName =
+      `${id}/${Date.now()}.${extension}`;
+
+
+    const response =
+      await fetch(
+
+        `${CFG.SUPABASE_URL}/storage/v1/object/glossary-images/${objectName}`,
+
+        {
+          method:
+            "POST",
+
+          headers:
+            {
+              ...authHeaders(),
+
+              "Content-Type":
+                file.type ||
+                "application/octet-stream"
+            },
+
+          body:
+            file
+        }
+      );
+
+
+    if (
+      !response.ok
+    ) {
+
+      throw new Error(
+        "画像をアップロードできませんでした。"
+      );
+    }
+
+
+    return (
+      `${CFG.SUPABASE_URL}/storage/v1/object/public/glossary-images/${objectName}`
+    );
+  }
+
+
+  /* ========================================
+     EDIT BUTTON
+  ======================================== */
 
   function bindEditButtons() {
-    document.querySelectorAll("[data-edit-id]").forEach(btn => btn.addEventListener("click", () => {
-      const term = terms.find(t => String(t.id) === btn.dataset.editId);
-      if (!term) return;
-      fillTermForm(term);
-      openModal("glossary-editor-modal");
-    }));
+
+    document
+      .querySelectorAll(
+        "[data-edit-id]"
+      )
+      .forEach(button => {
+
+        button.addEventListener(
+          "click",
+          event => {
+
+            event.preventDefault();
+
+
+            const term =
+              terms.find(
+                item =>
+                  String(item.id) ===
+                  String(
+                    button.dataset.editId
+                  )
+              );
+
+
+            if (!term) {
+              return;
+            }
+
+
+            fillTermForm(
+              term
+            );
+
+
+            openModal(
+              "glossary-editor-modal"
+            );
+          }
+        );
+
+      });
   }
 
-  async function uploadImage(id,file) {
-    if (!file) return editingTerm?.image_url || null;
-    if (file.size > 5*1024*1024) throw new Error("画像は5MB以下にしてください");
-    if (!["image/png","image/jpeg","image/webp","image/gif"].includes(file.type)) throw new Error("PNG/JPG/WebP/GIF画像を選択してください");
-    const ext=(file.name.split(".").pop()||"png").replace(/[^a-z0-9]/gi,"").toLowerCase();
-    const objectName=`${id}/${Date.now()}.${ext}`;
-    const res=await fetch(`${CFG.SUPABASE_URL}/storage/v1/object/glossary-images/${objectName}`,{
-      method:"POST",
-      headers:{
-        ...authHeaders(),
-        "Content-Type":file.type || "application/octet-stream"
-      },
-      body:file
-    });
-    if(!res.ok) throw new Error("画像をアップロードできませんでした");
-    return `${CFG.SUPABASE_URL}/storage/v1/object/public/glossary-images/${objectName}`;
-  }
 
-  document.getElementById("glossary-add-term")?.addEventListener("click", () => {
-    if (!configured()) return alert("共同編集機能を使うには assets/glossary-config.js のSupabase設定が必要です。");
-    if (!usingSharedData) return alert("共同編集に接続できていません。ページを再読み込みしてお試しください。");
-    fillTermForm();
-    openModal("glossary-editor-modal");
-  });
-  document.getElementById("glossary-add-category")?.addEventListener("click", () => {
-    if (!configured()) return alert("共同編集機能を使うには assets/glossary-config.js のSupabase設定が必要です。");
-    if (!usingSharedData) return alert("共同編集に接続できていません。ページを再読み込みしてお試しください。");
-    document.getElementById("category-save-status").textContent = "";
-    openModal("glossary-category-modal");
-  });
+  /* ========================================
+     ADD TERM
+  ======================================== */
 
-  document.querySelectorAll("[data-close-modal]").forEach(btn => btn.addEventListener("click", () => closeModal(btn.dataset.closeModal)));
-  document.querySelectorAll(".glossary-modal").forEach(modal => modal.addEventListener("click", e => { if (e.target === modal) closeModal(modal.id); }));
+  $("glossary-add-term")
+    .addEventListener(
+      "click",
+      () => {
 
-  document.getElementById("edit-image")?.addEventListener("change", e => {
-    const f=e.target.files[0],preview=document.getElementById("edit-image-preview");
-    if (previewUrl) URL.revokeObjectURL(previewUrl);
-    if(!f){preview.hidden=true;return;}
-    previewUrl=URL.createObjectURL(f);preview.src=previewUrl;preview.hidden=false;
-  });
+        if (
+          !configured()
+        ) {
 
-  document.getElementById("glossary-editor-form")?.addEventListener("submit", async e => {
-    e.preventDefault();
-    const submit=e.submitter,status=document.getElementById("glossary-save-status");
-    submit.disabled=true;status.textContent="保存中…";
-    try{
-      for (const field of ["edit-related-guide", "edit-source-url"]) {
-        const value = document.getElementById(field).value.trim();
-        if (value && !safeUrl(value)) throw new Error("リンクは http:// または https:// のURLか、サイト内の相対パスで入力してください");
+          alert(
+            "Supabase設定がありません。"
+          );
+
+          return;
+        }
+
+
+        if (
+          !usingSharedData
+        ) {
+
+          alert(
+            "共同編集に接続できていません。"
+          );
+
+          return;
+        }
+
+
+        fillTermForm();
+
+
+        openModal(
+          "glossary-editor-modal"
+        );
       }
-      const id=document.getElementById("edit-term-id").value || null;
-      const uploadId=id || crypto.randomUUID();
-      const imageUrl=await uploadImage(uploadId,document.getElementById("edit-image").files[0]);
-      const payload={
-        p_id:id,
-        p_slug:document.getElementById("edit-term-slug").value || null,
-        p_name_en:document.getElementById("edit-name-en").value.trim(),
-        p_name_ja:document.getElementById("edit-name-ja").value.trim() || null,
-        p_aliases:document.getElementById("edit-aliases").value.trim() || null,
-        p_category_id:document.getElementById("edit-category").value,
-        p_description:document.getElementById("edit-description").value.trim(),
-        p_drop_location:document.getElementById("edit-drop-location").value.trim() || null,
-        p_acquisition:document.getElementById("edit-acquisition").value.trim() || null,
-        p_related_entity:document.getElementById("edit-related-entity").value.trim() || null,
-        p_required_level:document.getElementById("edit-required-level").value ? Number(document.getElementById("edit-required-level").value) : null,
-        p_notes:document.getElementById("edit-notes").value.trim() || null,
-        p_related_guide:document.getElementById("edit-related-guide").value.trim() || null,
-        p_source_url:document.getElementById("edit-source-url").value.trim() || null,
-        p_image_url:imageUrl,
-        p_contributor_name:document.getElementById("edit-contributor").value.trim() || null
-      };
-      const res=await api("/rest/v1/rpc/glossary_save_term",{method:"POST",body:JSON.stringify(payload)});
-      if(!res.ok) throw new Error(await res.text());
-      status.textContent="保存しました。";
-      closeModal("glossary-editor-modal");
-      await loadShared();
-    }catch(err){console.error(err);status.textContent="保存できませんでした：" + err.message;}
-    finally{submit.disabled=false;}
-  });
+    );
 
-  document.getElementById("glossary-category-form")?.addEventListener("submit", async e => {
-    e.preventDefault();
-    const submit=e.submitter,status=document.getElementById("category-save-status");
-    submit.disabled=true;status.textContent="追加中…";
-    try{
-      const res=await api("/rest/v1/rpc/glossary_add_category",{method:"POST",body:JSON.stringify({
-        p_name:document.getElementById("new-category-name").value.trim(),
-        p_description:document.getElementById("new-category-description").value.trim() || null,
-        p_contributor_name:document.getElementById("new-category-contributor").value.trim() || null
-      })});
-      if(!res.ok) throw new Error(await res.text());
-      document.getElementById("glossary-category-form").reset();
-      closeModal("glossary-category-modal");
-      await loadShared();
-    }catch(err){console.error(err);status.textContent="追加できませんでした：" + err.message;}
-    finally{submit.disabled=false;}
-  });
 
-  query.addEventListener("input", filter);
-  categorySelect.addEventListener("change", filter);
-  document.getElementById("glossary-reset").addEventListener("click", () => {reset();query.focus();});
-  anchorNav?.addEventListener("click", e => { if(e.target.closest("a")) reset(); });
-  window.addEventListener("hashchange", revealHash);
-  window.addEventListener("pageshow", revealHash);
+  /* ========================================
+     SAVE TERM
+  ======================================== */
 
-  panel.hidden=false;
-  filter();
-  loadShared().then(revealHash);
+  $("glossary-editor-form")
+    .addEventListener(
+      "submit",
+      async event => {
+
+        event.preventDefault();
+
+
+        const submit =
+          event.submitter;
+
+
+        const status =
+          $("glossary-save-status");
+
+
+        submit.disabled =
+          true;
+
+
+        status.textContent =
+          "保存中…";
+
+
+        try {
+
+          const id =
+            $("edit-term-id").value ||
+            null;
+
+
+          const uploadId =
+            id ||
+            crypto.randomUUID();
+
+
+          const imageUrl =
+            await uploadImage(
+              uploadId,
+              selectedImageFile
+            );
+
+
+          const payload = {
+
+            p_id:
+              id,
+
+            p_slug:
+              $("edit-term-slug").value ||
+              null,
+
+            p_name_en:
+              $("edit-name-en")
+                .value
+                .trim(),
+
+            p_name_ja:
+              $("edit-name-ja")
+                .value
+                .trim() ||
+              null,
+
+            p_aliases:
+              $("edit-aliases")
+                .value
+                .trim() ||
+              null,
+
+            p_category_id:
+              $("edit-category")
+                .value,
+
+            p_description:
+              $("edit-description")
+                .value
+                .trim(),
+
+            p_drop_location:
+              $("edit-drop-location")
+                .value
+                .trim() ||
+              null,
+
+            p_acquisition:
+              $("edit-acquisition")
+                .value
+                .trim() ||
+              null,
+
+            p_related_entity:
+              $("edit-related-entity")
+                .value
+                .trim() ||
+              null,
+
+            p_required_level:
+              $("edit-required-level")
+                .value
+                ? Number(
+                    $("edit-required-level")
+                      .value
+                  )
+                : null,
+
+            p_notes:
+              $("edit-notes")
+                .value
+                .trim() ||
+              null,
+
+            p_related_guide:
+              $("edit-related-guide")
+                .value
+                .trim() ||
+              null,
+
+            p_source_url:
+              $("edit-source-url")
+                .value
+                .trim() ||
+              null,
+
+            p_image_url:
+              imageUrl,
+
+            p_contributor_name:
+              $("edit-contributor")
+                .value
+                .trim() ||
+              null
+
+          };
+
+
+          const response =
+            await api(
+              "/rest/v1/rpc/glossary_save_term",
+              {
+                method:
+                  "POST",
+
+                body:
+                  JSON.stringify(
+                    payload
+                  )
+              }
+            );
+
+
+          if (
+            !response.ok
+          ) {
+
+            throw new Error(
+              await response.text()
+            );
+          }
+
+
+          status.textContent =
+            "保存しました。";
+
+
+          closeModal(
+            "glossary-editor-modal"
+          );
+
+
+          await loadShared();
+
+
+        } catch (
+          error
+        ) {
+
+          console.error(
+            error
+          );
+
+
+          status.textContent =
+            "保存できませんでした：" +
+            error.message;
+
+
+        } finally {
+
+          submit.disabled =
+            false;
+        }
+      }
+    );
+
+
+  /* ========================================
+     ADD CATEGORY
+  ======================================== */
+
+  $("glossary-add-category")
+    .addEventListener(
+      "click",
+      () => {
+
+        if (
+          !usingSharedData
+        ) {
+
+          alert(
+            "共同編集に接続できていません。"
+          );
+
+          return;
+        }
+
+
+        $("category-save-status")
+          .textContent =
+          "";
+
+
+        openModal(
+          "glossary-category-modal"
+        );
+      }
+    );
+
+
+  $("glossary-category-form")
+    .addEventListener(
+      "submit",
+      async event => {
+
+        event.preventDefault();
+
+
+        const submit =
+          event.submitter;
+
+
+        submit.disabled =
+          true;
+
+
+        const status =
+          $("category-save-status");
+
+
+        status.textContent =
+          "追加中…";
+
+
+        try {
+
+          const response =
+            await api(
+              "/rest/v1/rpc/glossary_add_category",
+              {
+                method:
+                  "POST",
+
+                body:
+                  JSON.stringify({
+
+                    p_name:
+                      $("new-category-name")
+                        .value
+                        .trim(),
+
+                    p_description:
+                      $("new-category-description")
+                        .value
+                        .trim() ||
+                      null,
+
+                    p_contributor_name:
+                      $("new-category-contributor")
+                        .value
+                        .trim() ||
+                      null
+
+                  })
+              }
+            );
+
+
+          if (
+            !response.ok
+          ) {
+
+            throw new Error(
+              await response.text()
+            );
+          }
+
+
+          $("glossary-category-form")
+            .reset();
+
+
+          closeModal(
+            "glossary-category-modal"
+          );
+
+
+          await loadShared();
+
+
+        } catch (
+          error
+        ) {
+
+          status.textContent =
+            "追加できませんでした：" +
+            error.message;
+
+
+        } finally {
+
+          submit.disabled =
+            false;
+        }
+      }
+    );
+
+
+  /* ========================================
+     RESET
+  ======================================== */
+
+  function resetFilters() {
+
+    query.value =
+      "";
+
+
+    categorySelect.value =
+      "";
+
+
+    filters.major =
+      "";
+
+
+    filters.index =
+      "";
+
+
+    document
+      .querySelectorAll(
+        "[data-major]"
+      )
+      .forEach(button =>
+        button.classList.toggle(
+          "is-active",
+          button.dataset.major ===
+          ""
+        )
+      );
+
+
+    document
+      .querySelectorAll(
+        "[data-index]"
+      )
+      .forEach(button =>
+        button.classList.toggle(
+          "is-active",
+          button.dataset.index ===
+          ""
+        )
+      );
+
+
+    renderTerms();
+  }
+
+
+  /* ========================================
+     EVENTS
+  ======================================== */
+
+  query.addEventListener(
+    "input",
+    renderTerms
+  );
+
+
+  categorySelect.addEventListener(
+    "change",
+    renderTerms
+  );
+
+
+  $("glossary-reset")
+    .addEventListener(
+      "click",
+      resetFilters
+    );
+
+
+  window.addEventListener(
+    "hashchange",
+    openHashTarget
+  );
+
+
+  /* ========================================
+     INIT
+  ======================================== */
+
+  buildIndexes();
+
+  bindMajorIndex();
+
+  loadShared();
+
 })();
