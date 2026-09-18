@@ -1834,6 +1834,78 @@
       ).toFixed(2)} MB）`;
 
   });
+
+    // ========================================
+  // Ctrl + V 画像貼り付け
+  // ========================================
+
+  document.addEventListener('paste', e => {
+
+    const dialog = $('image-dialog');
+
+    if (!dialog || !dialog.open) {
+      return;
+    }
+
+    const items = Array.from(
+      e.clipboardData?.items || []
+    );
+
+    const imageItem = items.find(
+      item => item.type.startsWith('image/')
+    );
+
+    if (!imageItem) {
+      return;
+    }
+
+    e.preventDefault();
+
+    const blob = imageItem.getAsFile();
+
+    if (!blob) {
+      return;
+    }
+
+    if (blob.size > 5242880) {
+      $('image-form-status').textContent =
+        '貼り付け画像は5MB以下にしてください。';
+      return;
+    }
+
+    const extMap = {
+      'image/jpeg': 'jpg',
+      'image/png': 'png',
+      'image/webp': 'webp',
+      'image/gif': 'gif'
+    };
+
+    const ext =
+      extMap[blob.type] || 'png';
+
+    const file = new File(
+      [blob],
+      `clipboard-${Date.now()}.${ext}`,
+      {
+        type: blob.type || 'image/png'
+      }
+    );
+
+    const input =
+      $('image-form').elements.image;
+
+    const transfer =
+      new DataTransfer();
+
+    transfer.items.add(file);
+
+    input.files = transfer.files;
+
+    $('image-form-status').textContent =
+      `📋 画像を貼り付けました（${(
+        file.size / 1024 / 1024
+      ).toFixed(2)} MB）`;
+  });
   function openImage(stepId) {
 
     const f =
