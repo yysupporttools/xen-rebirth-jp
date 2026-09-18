@@ -1,65 +1,807 @@
 <!DOCTYPE html>
-<html lang="ja"><head><meta charset="utf-8"/><meta content="width=device-width,initial-scale=1" name="viewport"/>
-<title>クエスト情報 | Xen Rebirth 日本語攻略</title>
-<meta content="Xen Rebirthのクエスト攻略情報。誰でもクエスト、進行手順、NPC・マップ画像を追加・編集できます。" name="description"/>
-<link href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='6' fill='%230d2630'/%3E%3Cpath d='M8 7L24 25M24 7L8 25' stroke='%23e5bd77' stroke-width='4'/%3E%3C/svg%3E" rel="icon"/>
-<link href="assets/style.css" rel="stylesheet"/><link href="assets/quests.css?v=41" rel="stylesheet"/>
-<script defer src="assets/glossary-config.js"></script><script defer src="assets/vendor/supabase.js"></script><script defer src="assets/quests.js?v=35"></script><script defer src="assets/quest-paste.js?v=1"></script></head>
-<body><a class="skip" href="#main">本文へ移動</a><header><div class="brand"><a href="index.html"><span class="mark">X</span><span>XEN REBIRTH<small>日本語攻略ガイド</small></span></a><span class="edition">UNOFFICIAL · VER.3</span></div>
-<nav aria-label="メインナビゲーション"><a href="index.html">ホーム</a><a href="start.html">初心者ガイド</a><a href="classes.html">職業・スキル</a><a href="systems.html">ゲームシステム</a><a aria-current="page" href="quests.html">クエスト</a><a href="events.html">イベント</a><a href="bosses.html">ボスタイマー</a><a href="tools.html">精錬ツール</a><a href="glossary.html">用語集</a><a href="board.html">質問掲示板</a></nav></header>
-<main id="main"><div class="page-intro"><p class="eyebrow">QUEST DATABASE / みんなで作る攻略情報</p><h1>クエスト情報</h1><p>進行手順、NPC、場所、報酬、攻略画像をみんなで追加・編集できます。英語名でも日本語名でも検索できます。</p></div>
-<p class="note">登録不要で編集できます。公式情報やゲーム内で確認できた内容を中心に、他のプレイヤーにも分かりやすい説明をお願いします。</p>
-<p class="quest-status" id="quest-status" role="status"></p>
-<section id="quest-list-view"><div class="quest-toolbar"><input id="quest-search" type="search" placeholder="クエスト名・NPC・場所から検索" aria-label="クエスト検索"/><select id="quest-category" aria-label="カテゴリ"><option value="">すべてのカテゴリ</option><option>メインクエスト</option><option>転職クエスト</option><option>一般クエスト</option><option>ペットクエスト</option><option>デイリークエスト</option><option>イベントクエスト</option></select><button class="primary" id="quest-new">＋ クエストを追加</button><button id="quest-import">📥 一括インポート</button><button id="quest-deleted">削除済みクエスト</button></div><div class="quest-grid" id="quest-list"></div></section>
-<section id="quest-detail" hidden></section>
-  <!-- クエスト一括インポート -->
-<dialog class="quest-dialog" id="import-dialog">
+<html lang="ja">
+<head>
 
-  <h2>クエストを一括インポート</h2>
+  <meta charset="utf-8"/>
 
-  <p class="note">
-    クエスト基本情報と複数の攻略STEPをまとめて登録できます。
-  </p>
+  <meta
+    content="width=device-width,initial-scale=1"
+    name="viewport"
+  />
 
-  <form class="quest-form" id="import-form">
+  <title>
+    クエスト情報 | Xen Rebirth 日本語攻略
+  </title>
 
-    <label>
-      インポートデータ
-      <textarea
-        name="import_data"
-        rows="18"
-        placeholder="ここにインポート用データを貼り付けてください"
-        required></textarea>
-    </label>
+  <meta
+    content="Xen Rebirthのクエスト攻略情報。誰でもクエスト、進行手順、NPC・マップ画像を追加・編集できます。"
+    name="description"
+  />
 
-    <p class="quest-status" id="import-status"></p>
+  <link
+    href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='6' fill='%230d2630'/%3E%3Cpath d='M8 7L24 25M24 7L8 25' stroke='%23e5bd77' stroke-width='4'/%3E%3C/svg%3E"
+    rel="icon"
+  />
 
-    <div class="quest-actions">
+  <link
+    href="assets/style.css"
+    rel="stylesheet"
+  />
 
-      <button
-        type="button"
-        data-close="import-dialog">
-        キャンセル
-      </button>
+  <link
+    href="assets/quests.css?v=41"
+    rel="stylesheet"
+  />
 
-      <button
-        class="primary"
-        type="submit">
-        一括登録する
-      </button>
+
+  <!-- Supabase設定 -->
+
+  <script
+    defer
+    src="assets/glossary-config.js"
+  ></script>
+
+  <script
+    defer
+    src="assets/vendor/supabase.js"
+  ></script>
+
+
+  <!-- クエスト本体 -->
+
+  <script
+    defer
+    src="assets/quests.js?v=35"
+  ></script>
+
+
+  <!--
+    コピー＆ペースト
+    ドラッグ＆ドロップ対応
+  -->
+
+  <script
+    defer
+    src="assets/quest-paste.js?v=2"
+  ></script>
+
+</head>
+
+
+<body>
+
+  <a
+    class="skip"
+    href="#main"
+  >
+    本文へ移動
+  </a>
+
+
+  <!-- =====================================
+       HEADER
+  ====================================== -->
+
+  <header>
+
+    <div class="brand">
+
+      <a href="index.html">
+
+        <span class="mark">
+          X
+        </span>
+
+        <span>
+          XEN REBIRTH
+
+          <small>
+            日本語攻略ガイド
+          </small>
+        </span>
+
+      </a>
+
+      <span class="edition">
+        UNOFFICIAL · VER.3
+      </span>
 
     </div>
 
-  </form>
 
-</dialog>
-</main>
-<dialog class="quest-dialog" id="quest-dialog"><h2 id="quest-dialog-title">クエストを追加</h2><form class="quest-form" id="quest-form">
-<label>クエスト名（英語）<input name="title_en" maxlength="200" required></label><label>クエスト名（日本語）<input name="title_ja" maxlength="200"></label>
-<div class="two"><label>カテゴリ<select name="category"><option>一般クエスト</option><option>メインクエスト</option><option>転職クエスト</option><option>ペットクエスト</option><option>デイリークエスト</option><option>イベントクエスト</option></select></label><label>必要Lv<input name="required_level" type="number" min="0" max="999"></label></div>
-<div class="two"><label>開始NPC<input name="start_npc" maxlength="150"></label><label>開始場所<input name="start_location" maxlength="200"></label></div>
-<label>前提クエスト<input name="prerequisite" maxlength="300"></label><label>報酬<textarea name="rewards" maxlength="4000"></textarea></label><label>攻略メモ<textarea name="notes" maxlength="6000"></textarea></label><label>情報元URL<input name="source_url" type="url" maxlength="1000" placeholder="https://..."></label>
-<p class="quest-status" id="quest-form-status"></p><div class="quest-actions"><button type="button" data-close="quest-dialog">キャンセル</button><button class="primary" type="submit">保存する</button></div></form></dialog>
-<dialog class="quest-dialog" id="step-dialog"><h2 id="step-dialog-title">攻略STEPを追加</h2><form class="quest-form" id="step-form"><label>STEP番号<input name="step_number" type="number" min="1" max="100" required></label><label>見出し<input name="title" maxlength="200" placeholder="例：Brynhilldに話しかける"></label><label>進行内容<textarea name="description" maxlength="6000"></textarea></label><div class="two"><label>NPC名<input name="npc_name" maxlength="150"></label><label>場所<input name="location" maxlength="200"></label></div><p class="quest-status" id="step-form-status"></p><div class="quest-actions"><button type="button" data-close="step-dialog">キャンセル</button><button class="primary" type="submit">保存する</button></div></form></dialog>
-<dialog class="quest-dialog" id="image-dialog"><h2>攻略画像を追加</h2><p id="image-target"></p><form class="quest-form" id="image-form"><label>画像（JPEG / PNG / WebP / GIF、5MB以下）<input name="image" type="file" accept="image/jpeg,image/png,image/webp,image/gif" required></label><label>画像の説明<input name="caption" maxlength="300" placeholder="例：Brynhilldの位置"></label><p class="quest-status" id="image-form-status"></p><div class="quest-actions"><button type="button" data-close="image-dialog">キャンセル</button><button class="primary" type="submit">アップロードする</button></div></form></dialog>
-<footer><span>XEN REBIRTH / 日本語攻略ガイド</span><p>プレイヤー向け非公式サイト。ゲームの名称・画像等の権利は各権利者に帰属します。</p><a href="sources.html">出典・更新方針</a> <span>クエスト情報 / 共同編集対応</span></footer><script src="assets/quest-paste.js"></script></body></html>
+    <nav
+      aria-label="メインナビゲーション"
+    >
+
+      <a href="index.html">
+        ホーム
+      </a>
+
+      <a href="start.html">
+        初心者ガイド
+      </a>
+
+      <a href="classes.html">
+        職業・スキル
+      </a>
+
+      <a href="systems.html">
+        ゲームシステム
+      </a>
+
+      <a
+        aria-current="page"
+        href="quests.html"
+      >
+        クエスト
+      </a>
+
+      <a href="events.html">
+        イベント
+      </a>
+
+      <a href="bosses.html">
+        ボスタイマー
+      </a>
+
+      <a href="tools.html">
+        精錬ツール
+      </a>
+
+      <a href="glossary.html">
+        用語集
+      </a>
+
+      <a href="board.html">
+        質問掲示板
+      </a>
+
+    </nav>
+
+  </header>
+
+
+  <!-- =====================================
+       MAIN
+  ====================================== -->
+
+  <main id="main">
+
+
+    <!-- ページタイトル -->
+
+    <div class="page-intro">
+
+      <p class="eyebrow">
+        QUEST DATABASE / みんなで作る攻略情報
+      </p>
+
+      <h1>
+        クエスト情報
+      </h1>
+
+      <p>
+        進行手順、NPC、場所、報酬、攻略画像をみんなで追加・編集できます。
+        英語名でも日本語名でも検索できます。
+      </p>
+
+    </div>
+
+
+    <p class="note">
+      登録不要で編集できます。
+      公式情報やゲーム内で確認できた内容を中心に、
+      他のプレイヤーにも分かりやすい説明をお願いします。
+    </p>
+
+
+    <p
+      class="quest-status"
+      id="quest-status"
+      role="status"
+    ></p>
+
+
+    <!-- =================================
+         クエスト一覧
+    ================================== -->
+
+    <section id="quest-list-view">
+
+      <div class="quest-toolbar">
+
+
+        <input
+          id="quest-search"
+          type="search"
+          placeholder="クエスト名・NPC・場所から検索"
+          aria-label="クエスト検索"
+        />
+
+
+        <select
+          id="quest-category"
+          aria-label="カテゴリ"
+        >
+
+          <option value="">
+            すべてのカテゴリ
+          </option>
+
+          <option>
+            メインクエスト
+          </option>
+
+          <option>
+            転職クエスト
+          </option>
+
+          <option>
+            一般クエスト
+          </option>
+
+          <option>
+            ペットクエスト
+          </option>
+
+          <option>
+            デイリークエスト
+          </option>
+
+          <option>
+            イベントクエスト
+          </option>
+
+        </select>
+
+
+        <button
+          class="primary"
+          id="quest-new"
+        >
+          ＋ クエストを追加
+        </button>
+
+
+        <button id="quest-import">
+          📥 一括インポート
+        </button>
+
+
+        <button id="quest-deleted">
+          削除済みクエスト
+        </button>
+
+      </div>
+
+
+      <div
+        class="quest-grid"
+        id="quest-list"
+      ></div>
+
+    </section>
+
+
+    <!-- =================================
+         クエスト詳細
+    ================================== -->
+
+    <section
+      id="quest-detail"
+      hidden
+    ></section>
+
+
+    <!-- =================================
+         クエスト一括インポート
+    ================================== -->
+
+    <dialog
+      class="quest-dialog"
+      id="import-dialog"
+    >
+
+      <h2>
+        クエストを一括インポート
+      </h2>
+
+
+      <p class="note">
+        クエスト基本情報と複数の攻略STEPをまとめて登録できます。
+      </p>
+
+
+      <form
+        class="quest-form"
+        id="import-form"
+      >
+
+        <label>
+
+          インポートデータ
+
+          <textarea
+            name="import_data"
+            rows="18"
+            placeholder="ここにインポート用データを貼り付けてください"
+            required
+          ></textarea>
+
+        </label>
+
+
+        <p
+          class="quest-status"
+          id="import-status"
+        ></p>
+
+
+        <div class="quest-actions">
+
+          <button
+            type="button"
+            data-close="import-dialog"
+          >
+            キャンセル
+          </button>
+
+
+          <button
+            class="primary"
+            type="submit"
+          >
+            一括登録する
+          </button>
+
+        </div>
+
+      </form>
+
+    </dialog>
+
+  </main>
+
+
+  <!-- =====================================
+       クエスト追加・編集
+  ====================================== -->
+
+  <dialog
+    class="quest-dialog"
+    id="quest-dialog"
+  >
+
+    <h2 id="quest-dialog-title">
+      クエストを追加
+    </h2>
+
+
+    <form
+      class="quest-form"
+      id="quest-form"
+    >
+
+
+      <label>
+
+        クエスト名（英語）
+
+        <input
+          name="title_en"
+          maxlength="200"
+          required
+        >
+
+      </label>
+
+
+      <label>
+
+        クエスト名（日本語）
+
+        <input
+          name="title_ja"
+          maxlength="200"
+        >
+
+      </label>
+
+
+      <div class="two">
+
+
+        <label>
+
+          カテゴリ
+
+          <select name="category">
+
+            <option>
+              一般クエスト
+            </option>
+
+            <option>
+              メインクエスト
+            </option>
+
+            <option>
+              転職クエスト
+            </option>
+
+            <option>
+              ペットクエスト
+            </option>
+
+            <option>
+              デイリークエスト
+            </option>
+
+            <option>
+              イベントクエスト
+            </option>
+
+          </select>
+
+        </label>
+
+
+        <label>
+
+          必要Lv
+
+          <input
+            name="required_level"
+            type="number"
+            min="0"
+            max="999"
+          >
+
+        </label>
+
+      </div>
+
+
+      <div class="two">
+
+
+        <label>
+
+          開始NPC
+
+          <input
+            name="start_npc"
+            maxlength="150"
+          >
+
+        </label>
+
+
+        <label>
+
+          開始場所
+
+          <input
+            name="start_location"
+            maxlength="200"
+          >
+
+        </label>
+
+      </div>
+
+
+      <label>
+
+        前提クエスト
+
+        <input
+          name="prerequisite"
+          maxlength="300"
+        >
+
+      </label>
+
+
+      <label>
+
+        報酬
+
+        <textarea
+          name="rewards"
+          maxlength="4000"
+        ></textarea>
+
+      </label>
+
+
+      <label>
+
+        攻略メモ
+
+        <textarea
+          name="notes"
+          maxlength="6000"
+        ></textarea>
+
+      </label>
+
+
+      <label>
+
+        情報元URL
+
+        <input
+          name="source_url"
+          type="url"
+          maxlength="1000"
+          placeholder="https://..."
+        >
+
+      </label>
+
+
+      <p
+        class="quest-status"
+        id="quest-form-status"
+      ></p>
+
+
+      <div class="quest-actions">
+
+        <button
+          type="button"
+          data-close="quest-dialog"
+        >
+          キャンセル
+        </button>
+
+        <button
+          class="primary"
+          type="submit"
+        >
+          保存する
+        </button>
+
+      </div>
+
+    </form>
+
+  </dialog>
+
+
+  <!-- =====================================
+       STEP追加・編集
+  ====================================== -->
+
+  <dialog
+    class="quest-dialog"
+    id="step-dialog"
+  >
+
+    <h2 id="step-dialog-title">
+      攻略STEPを追加
+    </h2>
+
+
+    <form
+      class="quest-form"
+      id="step-form"
+    >
+
+      <label>
+
+        STEP番号
+
+        <input
+          name="step_number"
+          type="number"
+          min="1"
+          max="100"
+          required
+        >
+
+      </label>
+
+
+      <label>
+
+        見出し
+
+        <input
+          name="title"
+          maxlength="200"
+          placeholder="例：Brynhilldに話しかける"
+        >
+
+      </label>
+
+
+      <label>
+
+        進行内容
+
+        <textarea
+          name="description"
+          maxlength="6000"
+        ></textarea>
+
+      </label>
+
+
+      <div class="two">
+
+
+        <label>
+
+          NPC名
+
+          <input
+            name="npc_name"
+            maxlength="150"
+          >
+
+        </label>
+
+
+        <label>
+
+          場所
+
+          <input
+            name="location"
+            maxlength="200"
+          >
+
+        </label>
+
+      </div>
+
+
+      <p
+        class="quest-status"
+        id="step-form-status"
+      ></p>
+
+
+      <div class="quest-actions">
+
+        <button
+          type="button"
+          data-close="step-dialog"
+        >
+          キャンセル
+        </button>
+
+        <button
+          class="primary"
+          type="submit"
+        >
+          保存する
+        </button>
+
+      </div>
+
+    </form>
+
+  </dialog>
+
+
+  <!-- =====================================
+       攻略画像追加
+  ====================================== -->
+
+  <dialog
+    class="quest-dialog"
+    id="image-dialog"
+  >
+
+    <h2>
+      攻略画像を追加
+    </h2>
+
+
+    <p id="image-target"></p>
+
+
+    <form
+      class="quest-form"
+      id="image-form"
+    >
+
+      <!--
+        quest-paste.js によって
+        この上に
+
+        📋 Ctrl+V
+        ドラッグ＆ドロップ
+
+        のエリアが自動追加されます
+      -->
+
+
+      <label>
+
+        画像
+        （JPEG / PNG / WebP / GIF、5MB以下）
+
+        <input
+          name="image"
+          type="file"
+          accept="image/jpeg,image/png,image/webp,image/gif"
+          required
+        >
+
+      </label>
+
+
+      <label>
+
+        画像の説明
+
+        <input
+          name="caption"
+          maxlength="300"
+          placeholder="例：Brynhilldの位置"
+        >
+
+      </label>
+
+
+      <p
+        class="quest-status"
+        id="image-form-status"
+      ></p>
+
+
+      <div class="quest-actions">
+
+        <button
+          type="button"
+          data-close="image-dialog"
+        >
+          キャンセル
+        </button>
+
+
+        <button
+          class="primary"
+          type="submit"
+        >
+          アップロードする
+        </button>
+
+      </div>
+
+    </form>
+
+  </dialog>
+
+
+  <!-- =====================================
+       FOOTER
+  ====================================== -->
+
+  <footer>
+
+    <span>
+      XEN REBIRTH / 日本語攻略ガイド
+    </span>
+
+    <p>
+      プレイヤー向け非公式サイト。
+      ゲームの名称・画像等の権利は各権利者に帰属します。
+    </p>
+
+    <a href="sources.html">
+      出典・更新方針
+    </a>
+
+    <span>
+      クエスト情報 / 共同編集対応
+    </span>
+
+  </footer>
+
+</body>
+</html>
