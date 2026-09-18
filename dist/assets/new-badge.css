@@ -1,0 +1,49 @@
+/* ========================================
+   NEW ランプ
+======================================== */
+
+.xen-new-badge {
+  display: inline-block;
+  width: 54px;
+  height: 32px;
+  margin-left: 6px;
+  vertical-align: middle;
+
+  background-image:
+    url("new-badge/new-off.png");
+
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: contain;
+
+  opacity: 0;
+  transform: scale(.92);
+
+  transition:
+    opacity .25s ease,
+    transform .25s ease,
+    filter .25s ease;
+}
+
+.xen-new-badge.is-visible {
+  opacity: 1;
+  transform: scale(1);
+}
+
+.xen-new-badge.is-on {
+  background-image:
+    url("new-badge/new-on.png");
+
+  filter:
+    drop-shadow(0 0 7px rgba(255, 0, 180, .75))
+    drop-shadow(0 0 12px rgba(0, 190, 255, .45));
+}
+
+/* スマホ */
+@media (max-width: 800px) {
+  .xen-new-badge {
+    width: 46px;
+    height: 28px;
+    margin-left: 4px;
+  }
+}
