@@ -1,3 +1,24 @@
+(() => {
+  const head = document.head;
+
+  if (!document.querySelector('link[href="assets/new-badge.css"]')) {
+    const link = document.createElement("link");
+    link.rel = "stylesheet";
+    link.href = "assets/new-badge.css";
+    head.appendChild(link);
+  }
+
+  if (!document.querySelector('script[src="assets/new-badge.js"]')) {
+    const script = document.createElement("script");
+    script.src = "assets/new-badge.js";
+    script.defer = true;
+    document.body
+      ? document.body.appendChild(script)
+      : document.addEventListener("DOMContentLoaded", () => {
+          document.body.appendChild(script);
+        });
+  }
+})();
 "use strict";
 (() => {
   const jst = new Intl.DateTimeFormat('ja-JP', {timeZone:'Asia/Tokyo',month:'long',day:'numeric',weekday:'short',hour:'2-digit',minute:'2-digit',second:'2-digit',hourCycle:'h23'});
