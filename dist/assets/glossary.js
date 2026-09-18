@@ -377,6 +377,12 @@
   ======================================== */
 
   function latinInitial(term) {
+/* ========================================
+     頭文字判定
+     英字 / ひらがな / カタカナ対応
+  ======================================== */
+
+  function latinInitial(term) {
 
     const name =
       String(
@@ -386,28 +392,165 @@
         .normalize("NFKC");
 
 
+    if (!name) {
+      return "";
+    }
+
+
     const first =
       name.charAt(0)
         .toUpperCase();
 
 
+    /*
+      A～Zなら英字索引
+    */
+
     if (
-      /^[A-Z]$/.test(
-        first
-      )
+      /^[A-Z]$/.test(first)
     ) {
       return first;
     }
 
 
-    if (name) {
-      return "#";
+    /*
+      日本語なら # にしない
+      japaneseInitial() 側へ回す
+    */
+
+    if (
+      /[\u3040-\u30ff\u3400-\u9fff]/.test(
+        first
+      )
+    ) {
+      return "";
     }
 
 
-    return "";
+    /*
+      数字・記号など
+    */
+
+    return "#";
   }
 
+
+  function japaneseInitial(term) {
+
+    /*
+      日本語名があれば優先。
+      なければ英語名欄も確認する。
+      これで name_en に日本語が入っていても対応。
+    */
+
+    const text =
+      String(
+        term.name_ja ||
+        term.name_en ||
+        term.aliases ||
+        ""
+      )
+        .trim()
+        .normalize("NFKC");
+
+
+    if (!text) {
+      return "";
+    }
+
+
+    let first =
+      text.charAt(0);
+
+
+    /*
+      カタカナ → ひらがな
+      ア → あ
+      ボ → ぼ
+      パ → ぱ
+    */
+
+    const code =
+      first.charCodeAt(0);
+
+
+    if (
+      code >= 0x30A1 &&
+      code <= 0x30F6
+    ) {
+
+      first =
+        String.fromCharCode(
+          code - 0x60
+        );
+    }
+
+
+    /*
+      濁音・半濁音を
+      五十音の基本文字へまとめる
+
+      が → か
+      ざ → さ
+      だ → た
+      ば / ぱ → は
+    */
+
+    const kanaMap = {
+
+      "が": "か",
+      "ぎ": "き",
+      "ぐ": "く",
+      "げ": "け",
+      "ご": "こ",
+
+      "ざ": "さ",
+      "じ": "し",
+      "ず": "す",
+      "ぜ": "せ",
+      "ぞ": "そ",
+
+      "だ": "た",
+      "ぢ": "ち",
+      "づ": "つ",
+      "で": "て",
+      "ど": "と",
+
+      "ば": "は",
+      "び": "ひ",
+      "ぶ": "ふ",
+      "べ": "へ",
+      "ぼ": "ほ",
+
+      "ぱ": "は",
+      "ぴ": "ひ",
+      "ぷ": "ふ",
+      "ぺ": "へ",
+      "ぽ": "ほ",
+
+      "ゔ": "う",
+
+      "ぁ": "あ",
+      "ぃ": "い",
+      "ぅ": "う",
+      "ぇ": "え",
+      "ぉ": "お",
+
+      "ゃ": "や",
+      "ゅ": "ゆ",
+      "ょ": "よ",
+
+      "っ": "つ",
+
+      "ゎ": "わ"
+    };
+
+
+    return (
+      kanaMap[first] ||
+      first
+    );
+  }
 
   function japaneseInitial(term) {
 
