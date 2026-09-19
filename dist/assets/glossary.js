@@ -21,6 +21,7 @@
   let luckyBallGroups = [];
   let luckyBallItems = [];
   let luckyBallReady = false;
+  let luckyBallError = "";
   let usingSharedData = false;
   let editingTerm = null;
   let modalOpener = null;
@@ -141,7 +142,7 @@
 
   function isLuckyBallHub(term) {
     const values = [term.name_en, term.name_ja, term.aliases].map(normalize);
-    return values.some(v =>
+    return term.slug === "lucky-ball" || values.some(v =>
       v === "lucky ball" ||
       v === "lucky balls" ||
       v === "ラッキーボール" ||
@@ -195,7 +196,7 @@
     const editCategory = $("edit-category");
     if (editCategory) {
       editCategory.innerHTML = '<option value="">分類を選択</option>' +
-        categories.map(c => `<option value="${esc(c.id)}">${esc(c.name)}</option>`).join("");
+        categories.filter(c => c.id !== "catalog-items").map(c => `<option value="${esc(c.id)}">${esc(c.name)}</option>`).join("");
     }
   }
 
@@ -205,7 +206,10 @@
       const category = getCategoryName(term);
       const searchText = normalize([
         term.name_en, term.name_ja, term.aliases, category, term.description,
-        term.drop_location, term.acquisition, term.related_entity, term.notes
+        term.drop_location, term.acquisition, term.related_entity, term.notes,
+        isLuckyBallHub(term) ? luckyBallGroups.map(g => [g.name_en, g.name_ja,
+          ...luckyBallItems.filter(i => String(i.group_id) === String(g.id)).map(i =>
+            [i.name_en, i.name_ja, i.stats, i.stats_en, i.description].join(" "))].join(" ")).join(" ") : ""
       ].join(" "));
 
       if (!words.every(word => searchText.includes(word))) return false;
@@ -231,55 +235,77 @@
   }
 
   function luckyBallCatalogHtml() {
-    if (!luckyBallReady) {
-      return '<div class="lucky-ball-loading">ラッキーボール一覧を読み込んでいます…</div>';
-    }
-    if (!luckyBallGroups.length) {
-      return '<div class="lucky-ball-empty">ラッキーボールの獲得アイテムはまだ登録されていません。</div>';
-    }
-
+    if (!luckyBallReady) return '<p role="status">ラッキーボール一覧を読み込んでいます…</p>';
+    if (!luckyBallGroups.length) return `<p role="status">${esc(luckyBallError || "獲得アイテムはまだ登録されていません。")}</p>`;
+    const placeholder = '<span class="lucky-ball-image-empty">画像未掲載</span>';
     return `<div class="lucky-ball-catalog">
+      <p class="lucky-ball-note">公式Lexiconの掲載内容を収録（確認日：2026年9月19日）。日本語名・説明は参考訳です。共通アイテムはExtras欄にまとめています。</p>
+      <label class="lucky-ball-search-label">種類・獲得アイテムを検索
+        <input type="search" class="lucky-ball-search" placeholder="例：ブルー、Hockey Mask、防御力" aria-label="ラッキーボール内を検索">
+      </label>
+      <p class="lucky-ball-search-empty" hidden>該当する種類・アイテムはありません。</p>
       ${luckyBallGroups.map(group => {
-        const groupItems = luckyBallItems
-          .filter(item => String(item.group_id) === String(group.id))
+        const groupItems = luckyBallItems.filter(i => String(i.group_id) === String(group.id))
           .sort((a, b) => (Number(a.sort_order) || 0) - (Number(b.sort_order) || 0));
         const groupImage = safeUrl(group.image_url);
-        return `<section class="lucky-ball-group" id="lucky-ball-${esc(group.id)}">
-          <div class="lucky-ball-group-head">
-            ${groupImage ? `<img class="lucky-ball-group-image" src="${esc(groupImage)}" alt="${esc(group.name_en || group.name_ja || "Lucky Ball")}" loading="lazy">` : '<div class="lucky-ball-group-image lucky-ball-image-empty">?</div>'}
-            <div>
-              <h3>${esc(group.name_ja || group.name_en || "Lucky Ball")}</h3>
-              ${group.name_ja && group.name_en ? `<p class="lucky-ball-name-en">${esc(group.name_en)}</p>` : ""}
-              ${group.description ? `<p>${esc(group.description).replace(/\n/g, "<br>")}</p>` : ""}
-              <span class="lucky-ball-count">獲得アイテム ${groupItems.length}件</span>
-            </div>
-          </div>
-
-          <div class="lucky-ball-table-wrap">
+        return `<details class="lucky-ball-group" id="lucky-ball-${esc(group.slug || group.id)}" data-group-search="${esc(normalize([group.name_en, group.name_ja, group.section].join(" ")))}">
+          <summary class="lucky-ball-group-head">
+            ${groupImage ? `<img class="lucky-ball-group-image" src="${esc(groupImage)}" alt="${esc(group.name_en)}" loading="lazy" referrerpolicy="no-referrer">` : placeholder}
+            <span><strong>${esc(group.name_ja || group.name_en)}</strong>
+              <span class="lucky-ball-name-en">${esc(group.name_en)}</span>
+              <span class="lucky-ball-count">${esc(group.section || "")} · 掲載アイテム ${groupItems.length}件</span>
+            </span><span aria-hidden="true">＋</span>
+          </summary>
+          <div class="lucky-ball-group-body">
+            <p>${esc(group.description || "")}</p>
             <table class="lucky-ball-table">
-              <thead><tr><th>画像</th><th>アイテム名</th><th>詳細</th></tr></thead>
-              <tbody>
-                ${groupItems.length ? groupItems.map(item => {
-                  const itemImage = safeUrl(item.image_url);
-                  return `<tr>
-                    <td class="lucky-ball-item-image-cell">
-                      ${itemImage ? `<img class="lucky-ball-item-image" src="${esc(itemImage)}" alt="${esc(item.name_en || item.name_ja || "item")}" loading="lazy">` : '<div class="lucky-ball-item-image lucky-ball-image-empty">?</div>'}
-                    </td>
-                    <td>
-                      <strong>${esc(item.name_ja || item.name_en || "名称未設定")}</strong>
-                      ${item.name_ja && item.name_en ? `<div class="lucky-ball-item-en">${esc(item.name_en)}</div>` : ""}
-                    </td>
-                    <td>${esc(item.stats || item.description || "").replace(/\n/g, "<br>")}</td>
-                  </tr>`;
-                }).join("") : '<tr><td colspan="3" class="lucky-ball-no-items">獲得アイテムはまだ登録されていません。</td></tr>'}
-              </tbody>
+              <caption class="sr-only">${esc(group.name_ja || group.name_en)}の獲得アイテム</caption>
+              <thead><tr><th scope="col">画像</th><th scope="col">アイテム名</th><th scope="col">ステータス・詳細</th></tr></thead>
+              <tbody>${groupItems.map(item => {
+                const itemImage = safeUrl(item.image_url);
+                return `<tr data-item-search="${esc(normalize([item.name_en, item.name_ja, item.stats, item.stats_en, item.description].join(" ")))}">
+                  <td class="lucky-ball-item-image-cell">${itemImage ? `<img class="lucky-ball-item-image" src="${esc(itemImage)}" alt="${esc(item.name_en)}" loading="lazy" referrerpolicy="no-referrer">` : placeholder}</td>
+                  <td><strong>${esc(item.name_ja || item.name_en)}</strong><span class="lucky-ball-item-en">${esc(item.name_en)}</span></td>
+                  <td>${esc(item.stats || "公式ページにステータスの記載なし").replace(/\n/g, "<br>")}
+                    ${item.description ? `<p>${esc(item.description)}</p>` : ""}
+                    ${item.stats_en ? `<details class="lucky-ball-original"><summary>英語の原文</summary><p>${esc(item.stats_en).replace(/\n/g, "<br>")}</p></details>` : ""}
+                  </td></tr>`;
+              }).join("") || '<tr><td colspan="3">獲得アイテムはまだ登録されていません。</td></tr>'}</tbody>
             </table>
+            ${safeUrl(group.source_url) ? `<p><a href="${esc(safeUrl(group.source_url))}" target="_blank" rel="noopener noreferrer">公式Lexiconの該当箇所 ↗</a></p>` : ""}
+            ${safeUrl(group.image_source_url) ? `<a href="${esc(safeUrl(group.image_source_url))}" target="_blank" rel="noopener noreferrer">本体画像の出典 ↗</a>` : ""}
           </div>
-          ${safeUrl(group.source_url) ? `<div class="lucky-ball-source"><a href="${esc(safeUrl(group.source_url))}" target="_blank" rel="noopener noreferrer">公式Lexicon ↗</a></div>` : ""}
-        </section>`;
+        </details>`;
       }).join("")}
     </div>`;
   }
+
+  resultsEl.addEventListener("input", event => {
+    if (!event.target.matches(".lucky-ball-search")) return;
+    const catalog = event.target.closest(".lucky-ball-catalog");
+    const words = normalize(event.target.value).split(/\s+/).filter(Boolean);
+    let visible = 0;
+    catalog.querySelectorAll(".lucky-ball-group").forEach(group => {
+      let matches = 0;
+      group.querySelectorAll("[data-item-search]").forEach(row => {
+        row.hidden = !words.every(word => (group.dataset.groupSearch + " " + row.dataset.itemSearch).includes(word));
+        if (!row.hidden) matches++;
+      });
+      group.hidden = words.length > 0 && !matches;
+      if (!group.hidden) visible++;
+      group.open = words.length > 0 && !group.hidden;
+    });
+    catalog.querySelector(".lucky-ball-search-empty").hidden = visible !== 0;
+  });
+
+  resultsEl.addEventListener("error", event => {
+    if (event.target.matches?.(".lucky-ball-group-image, .lucky-ball-item-image")) {
+      const fallback = document.createElement("span");
+      fallback.className = "lucky-ball-image-empty";
+      fallback.textContent = "画像を取得できません";
+      event.target.replaceWith(fallback);
+    }
+  }, true);
 
   function termHtml(term) {
     const category = getCategoryName(term);
@@ -374,23 +400,52 @@
   }
 
   async function loadLuckyBallData() {
-    if (!configured()) return;
-    try {
-      const [gRes, iRes] = await Promise.all([
-        api("/rest/v1/lucky_ball_groups?select=*&order=sort_order.asc,name_en.asc"),
-        api("/rest/v1/lucky_ball_items?select=*&order=sort_order.asc,name_en.asc")
-      ]);
-      if (!gRes.ok || !iRes.ok) throw new Error("Lucky Ball tables are not ready");
-      luckyBallGroups = await gRes.json();
-      luckyBallItems = await iRes.json();
-      luckyBallReady = true;
-      renderTerms();
-    } catch (error) {
-      console.info("Glossary Lucky Ball:", error.message);
-      luckyBallReady = true;
-      luckyBallGroups = [];
-      luckyBallItems = [];
-      renderTerms();
+    luckyBallError = "";
+    const read = async promise => {
+      const response = await promise;
+      if (!response.ok) throw new Error(`HTTP ${response.status}`);
+      return response.json();
+    };
+    // The checked-in catalogue makes reading possible before the optional SQL import.
+    // Existing database entries take precedence; missing source entries are supplemented.
+    const [snapshot, groupsResult, itemsResult] = await Promise.allSettled([
+      read(fetch("assets/lucky-ball-catalog.json?v=20260919")),
+      read(api("/rest/v1/lucky_ball_groups?select=*&order=sort_order.asc,name_en.asc")),
+      read(api("/rest/v1/lucky_ball_items?select=*&order=sort_order.asc,name_en.asc"))
+    ]);
+    const sourceGroups = snapshot.status === "fulfilled" && Array.isArray(snapshot.value.groups) ? snapshot.value.groups : [];
+    const sharedAvailable = groupsResult.status === "fulfilled" && itemsResult.status === "fulfilled" &&
+      Array.isArray(groupsResult.value) && Array.isArray(itemsResult.value);
+    luckyBallGroups = sharedAvailable ? groupsResult.value.map(g => ({...g})) : [];
+    luckyBallItems = sharedAvailable ? itemsResult.value.map(i => ({...i})) : [];
+    for (const source of sourceGroups) {
+      let group = luckyBallGroups.find(g => g.slug === source.slug || normalize(g.name_en) === normalize(source.name_en));
+      if (!group) {
+        group = {...source, id: `source-${source.slug}`};
+        luckyBallGroups.push(group);
+      } else {
+        for (const key of ["section", "is_extra", "image_source_url"]) group[key] = source[key];
+        if (!group.image_url) group.image_url = source.image_url;
+      }
+      for (const sourceItem of source.items) {
+        const existing = luckyBallItems.find(i => String(i.group_id) === String(group.id) && normalize(i.name_en) === normalize(sourceItem.name_en));
+        if (existing) {
+          if (!existing.stats_en) existing.stats_en = sourceItem.stats_en;
+        } else luckyBallItems.push({...sourceItem, group_id: group.id});
+      }
+    }
+    luckyBallGroups.sort((a,b) => (Number(a.sort_order)||0) - (Number(b.sort_order)||0));
+    luckyBallReady = true;
+    if (!luckyBallGroups.length && !sharedAvailable) luckyBallError = "一覧を取得できませんでした。ページを再読み込みしてください。";
+    if (sourceGroups.length && !terms.some(isLuckyBallHub)) {
+      let category = categories.find(c => c.name === "アイテム");
+      if (!category) {
+        category = {id:"catalog-items", name:"アイテム"};
+        categories.push(category);
+      }
+      terms.push({id:"catalog-lucky-ball", slug:"lucky-ball", name_en:"Lucky Ball", name_ja:"ラッキーボール",
+        category_id:category.id, description:"種類ごとに獲得アイテム・画像・ステータスを確認できます。",
+        source_url:sourceGroups[0].source_url.split("#")[0], _catalogSeed:true});
     }
   }
 
@@ -414,10 +469,10 @@
       categories = await cRes.json();
       terms = await tRes.json();
       usingSharedData = true;
+      await loadLuckyBallData();
       categoryOptions();
       renderTerms();
-      if (syncStatus) syncStatus.textContent = `共同編集に接続済み：${terms.length}件・${categories.length}分類`;
-      loadLuckyBallData();
+      if (syncStatus) syncStatus.textContent = `共同編集に接続済み：${terms.length}件・${categories.length}分類（公式カタログを含む）`;
       return true;
     } catch (error) {
       console.error("Glossary load error:", error);
@@ -475,12 +530,12 @@
   function fillTermForm(term = null) {
     editingTerm = term;
     $("glossary-editor-title").textContent = term ? "用語を編集" : "用語を追加";
-    $("edit-term-id").value = term?.id || "";
+    $("edit-term-id").value = term?._catalogSeed ? "" : term?.id || "";
     $("edit-term-slug").value = term?.slug || "";
     $("edit-name-en").value = term?.name_en || "";
     $("edit-name-ja").value = term?.name_ja || "";
     $("edit-aliases").value = term?.aliases || "";
-    $("edit-category").value = term?.category_id || "";
+    $("edit-category").value = term?.category_id === "catalog-items" ? "" : term?.category_id || "";
     $("edit-description").value = term?.description || "";
     $("edit-drop-location").value = term?.drop_location || "";
     $("edit-acquisition").value = term?.acquisition || "";

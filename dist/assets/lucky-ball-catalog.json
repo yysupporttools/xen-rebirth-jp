@@ -1,0 +1,4239 @@
+{
+  "source_url": "https://www.xenrebirth.com/lexicon/index.php?entry/5-lucky-balls-item-list/",
+  "checked_at": "2026-09-19",
+  "source_sha256": "ab6f0b9a9a52614aecc5b2e44bc2eee5d27f20363658b2f5ceea9b08f121fb5a",
+  "groups": [
+    {
+      "slug": "regular-extras",
+      "name_en": "Regular Lucky Balls — Extras",
+      "name_ja": "通常の共通アイテム（Extras）",
+      "section": "通常",
+      "is_extra": true,
+      "image_url": null,
+      "image_source_url": null,
+      "description": "公式一覧の「通常」に掲載。日本語名は参考訳です。 これはラッキーボールの種類ではなく、原文の共通アイテム欄です。",
+      "source_url": "https://www.xenrebirth.com/lexicon/index.php?entry/5-lucky-balls-item-list/#1.1-Extras",
+      "sort_order": 10,
+      "items": [
+        {
+          "name_en": "Small HP Potion",
+          "name_ja": "小さなHPポーション",
+          "image_url": "https://www.xenrebirth.com/index.php?attachment/6226-small-hp-potion-png/",
+          "stats": "+100 HP 回復",
+          "stats_en": "Heals +100 HP",
+          "description": "",
+          "sort_order": 10
+        },
+        {
+          "name_en": "Medium HP Potion",
+          "name_ja": "中くらいのHPポーション",
+          "image_url": "https://www.xenrebirth.com/index.php?attachment/6227-medium-hp-potion-png/",
+          "stats": "+200 HP 回復",
+          "stats_en": "Heals +200 HP",
+          "description": "",
+          "sort_order": 20
+        },
+        {
+          "name_en": "Large HP Potion",
+          "name_ja": "大きなHPポーション",
+          "image_url": "https://www.xenrebirth.com/index.php?attachment/6221-large-hp-potion-png/",
+          "stats": "+300 HP 回復",
+          "stats_en": "Heals +300 HP",
+          "description": "",
+          "sort_order": 30
+        },
+        {
+          "name_en": "Small MP Potion",
+          "name_ja": "小さなMPポーション",
+          "image_url": "https://www.xenrebirth.com/index.php?attachment/6228-small-mp-potion-png/",
+          "stats": "+100 MP 回復",
+          "stats_en": "Heals +100 MP",
+          "description": "",
+          "sort_order": 40
+        },
+        {
+          "name_en": "Medium MP Potion",
+          "name_ja": "中くらいのMPポーション",
+          "image_url": "https://www.xenrebirth.com/index.php?attachment/6229-medium-mp-potion-png/",
+          "stats": "+200 MP 回復",
+          "stats_en": "Heals +200 MP",
+          "description": "",
+          "sort_order": 50
+        },
+        {
+          "name_en": "Large MP Potion",
+          "name_ja": "大きなMPポーション",
+          "image_url": "https://www.xenrebirth.com/index.php?attachment/6222-large-mp-potion-png/",
+          "stats": "+300 MP 回復",
+          "stats_en": "Heals +300 MP",
+          "description": "",
+          "sort_order": 60
+        },
+        {
+          "name_en": "Small Elixir",
+          "name_ja": "小さなエリクサー",
+          "image_url": "https://www.xenrebirth.com/index.php?attachment/6230-small-elixir-png/",
+          "stats": "+100 HP・+100 MP 回復",
+          "stats_en": "Heals +100 HP and +100 MP",
+          "description": "",
+          "sort_order": 70
+        },
+        {
+          "name_en": "Divine Protection of Jureah",
+          "name_ja": "ジュレアの加護",
+          "image_url": "https://www.xenrebirth.com/index.php?attachment/6223-divine-protection-of-jureah-png/",
+          "stats": "HP・MPを全回復して復活",
+          "stats_en": "Revive player with full HP and MP",
+          "description": "",
+          "sort_order": 80
+        },
+        {
+          "name_en": "Anti-Death Penalty Pendant 6%",
+          "name_ja": "デスペナルティ防止ペンダント6%",
+          "image_url": "https://www.xenrebirth.com/index.php?attachment/6224-anti-death-penalty-pendant-png/",
+          "stats": "死亡時の経験値6%減少を防ぐ",
+          "stats_en": "Prevents 6% EXP lost upon player death",
+          "description": "",
+          "sort_order": 90
+        },
+        {
+          "name_en": "Anti-Death Penalty Pendant 7%",
+          "name_ja": "デスペナルティ防止ペンダント7%",
+          "image_url": "https://www.xenrebirth.com/index.php?attachment/6224-anti-death-penalty-pendant-png/",
+          "stats": "死亡時の経験値7%減少を防ぐ",
+          "stats_en": "Prevents 7% EXP lost upon player death",
+          "description": "",
+          "sort_order": 100
+        },
+        {
+          "name_en": "Meridian R",
+          "name_ja": "メリディアンR",
+          "image_url": "https://www.xenrebirth.com/index.php?attachment/6225-meridian-r-png/",
+          "stats": "鉱石・魔法精錬によく使う強化アイテム",
+          "stats_en": "Enhancement item used often in Ore and Magic Refinery",
+          "description": "",
+          "sort_order": 110
+        }
+      ]
+    },
+    {
+      "slug": "blue-lucky-ball",
+      "name_en": "Blue Lucky Ball",
+      "name_ja": "ブルーラッキーボール",
+      "section": "通常",
+      "is_extra": false,
+      "image_url": "https://www.xenrebirth.com/index.php?attachment/1699-blue-lucky-ball-png/",
+      "image_source_url": "https://www.xenrebirth.com/lexicon/index.php?entry/19-token-exchange-tramis-mansion/",
+      "description": "公式一覧の「通常」に掲載。日本語名は参考訳です。 共通アイテム（Extras）も別欄で確認できます。",
+      "source_url": "https://www.xenrebirth.com/lexicon/index.php?entry/5-lucky-balls-item-list/#1.2-Blue-Lucky-Ball",
+      "sort_order": 20,
+      "items": [
+        {
+          "name_en": "Cloak of Love (Male)",
+          "name_ja": "愛のマント（男性用）",
+          "image_url": "https://www.xenrebirth.com/index.php?attachment/2274-love-cloak-male-png/",
+          "stats": "最大HP: +25\n 最大MP: +25\n 防御力: +16",
+          "stats_en": "Max HP: +25 | Max MP: +25 | DEF: +16",
+          "description": "",
+          "sort_order": 10
+        },
+        {
+          "name_en": "Cloak of Love (Female)",
+          "name_ja": "愛のマント（女性用）",
+          "image_url": "https://www.xenrebirth.com/index.php?attachment/2273-love-cloak-female-png/",
+          "stats": "最大HP: +25\n 最大MP: +25\n 防御力: +16",
+          "stats_en": "Max HP: +25 | Max MP: +25 | DEF: +16",
+          "description": "",
+          "sort_order": 20
+        },
+        {
+          "name_en": "Green Cowbell",
+          "name_ja": "緑のカウベル",
+          "image_url": "https://www.xenrebirth.com/index.php?attachment/2227-green-cowbell-png/",
+          "stats": "最大MP: +100\n 防御力: +15",
+          "stats_en": "Max MP: +100 | DEF: +15",
+          "description": "",
+          "sort_order": 30
+        },
+        {
+          "name_en": "Hockey Mask",
+          "name_ja": "ホッケーマスク",
+          "image_url": "https://www.xenrebirth.com/index.php?attachment/2310-hockey-mask-png/",
+          "stats": "最大MP: +100\n 防御力: +15",
+          "stats_en": "Max MP: +100 | DEF: +15",
+          "description": "",
+          "sort_order": 40
+        },
+        {
+          "name_en": "Skull Mask",
+          "name_ja": "ドクロのマスク",
+          "image_url": "https://www.xenrebirth.com/index.php?attachment/2305-skull-mask-png/",
+          "stats": "最大MP: +100\n 防御力: +15",
+          "stats_en": "Max MP: +100 | DEF: +15",
+          "description": "",
+          "sort_order": 50
+        }
+      ]
+    },
+    {
+      "slug": "red-lucky-ball",
+      "name_en": "Red Lucky Ball",
+      "name_ja": "レッドラッキーボール",
+      "section": "通常",
+      "is_extra": false,
+      "image_url": "https://www.xenrebirth.com/index.php?attachment/1703-red-lucky-ball-png/",
+      "image_source_url": "https://www.xenrebirth.com/lexicon/index.php?entry/19-token-exchange-tramis-mansion/",
+      "description": "公式一覧の「通常」に掲載。日本語名は参考訳です。 共通アイテム（Extras）も別欄で確認できます。",
+      "source_url": "https://www.xenrebirth.com/lexicon/index.php?entry/5-lucky-balls-item-list/#1.3-Red-Lucky-Ball",
+      "sort_order": 30,
+      "items": [
+        {
+          "name_en": "Cat Bell (INT)",
+          "name_ja": "猫の鈴（INT）",
+          "image_url": "https://www.xenrebirth.com/index.php?attachment/2218-cat-bell-png/",
+          "stats": "INT: +12\n 防御力: +15",
+          "stats_en": "INT: +12 | DEF: +15",
+          "description": "",
+          "sort_order": 10
+        },
+        {
+          "name_en": "Cat Bell (POW)",
+          "name_ja": "猫の鈴（POW）",
+          "image_url": "https://www.xenrebirth.com/index.php?attachment/2218-cat-bell-png/",
+          "stats": "POW: +12\n 防御力: +15",
+          "stats_en": "POW: +12 | DEF: +15",
+          "description": "",
+          "sort_order": 20
+        },
+        {
+          "name_en": "Horror Mask",
+          "name_ja": "ホラーマスク",
+          "image_url": "https://www.xenrebirth.com/index.php?attachment/2222-horror-mask-png/",
+          "stats": "攻撃力: +15\n クリティカル: +5",
+          "stats_en": "Attack: +15 | Crit: +5",
+          "description": "",
+          "sort_order": 30
+        },
+        {
+          "name_en": "Purple Cowbell",
+          "name_ja": "紫のカウベル",
+          "image_url": null,
+          "stats": "公式ページにステータスの記載なし",
+          "stats_en": "",
+          "description": "",
+          "sort_order": 40
+        },
+        {
+          "name_en": "Red Cowbell (Magic)",
+          "name_ja": "赤いカウベル（魔法）",
+          "image_url": "https://www.xenrebirth.com/index.php?attachment/2224-red-cowbell-png/",
+          "stats": "INT: +15\n 最大MP: +100",
+          "stats_en": "INT: +15 | Max MP: +100",
+          "description": "",
+          "sort_order": 50
+        },
+        {
+          "name_en": "Red Cowbell",
+          "name_ja": "赤いカウベル",
+          "image_url": "https://www.xenrebirth.com/index.php?attachment/2224-red-cowbell-png/",
+          "stats": "攻撃力: +15\n クリティカル: +8",
+          "stats_en": "Attack: +15 | Crit: +8",
+          "description": "",
+          "sort_order": 60
+        }
+      ]
+    },
+    {
+      "slug": "yellow-lucky-ball",
+      "name_en": "Yellow Lucky Ball",
+      "name_ja": "イエローラッキーボール",
+      "section": "通常",
+      "is_extra": false,
+      "image_url": null,
+      "image_source_url": null,
+      "description": "公式一覧の「通常」に掲載。日本語名は参考訳です。 共通アイテム（Extras）も別欄で確認できます。 本体画像は参照した公式ページに掲載がありません。",
+      "source_url": "https://www.xenrebirth.com/lexicon/index.php?entry/5-lucky-balls-item-list/#1.4-Yellow-Lucky-Ball",
+      "sort_order": 40,
+      "items": [
+        {
+          "name_en": "Bear Boost Suit",
+          "name_ja": "ベアブーストスーツ",
+          "image_url": "https://www.xenrebirth.com/index.php?attachment/2235-bear-boost-suit-png/",
+          "stats": "防御力: +18\n 経験値増加: +5%",
+          "stats_en": "DEF: +18 | EXP Boost: +5%",
+          "description": "",
+          "sort_order": 10
+        },
+        {
+          "name_en": "Bear Boost Helmet",
+          "name_ja": "ベアブーストヘルメット",
+          "image_url": "https://www.xenrebirth.com/index.php?attachment/1952-bear-boost-helmet-png/",
+          "stats": "防御力: +16\n 経験値増加: +5%",
+          "stats_en": "DEF: +16 | EXP Boost: +5%",
+          "description": "",
+          "sort_order": 20
+        },
+        {
+          "name_en": "Emo Hair",
+          "name_ja": "エモヘア",
+          "image_url": "https://www.xenrebirth.com/index.php?attachment/1980-emo-hair-png/",
+          "stats": "最大MP: +50\n 防御力: +18\n MP回復間隔: -0.2 秒",
+          "stats_en": "Max MP: +50 | DEF: +18 | MP Recovery Time: -0.2 sec",
+          "description": "",
+          "sort_order": 30
+        },
+        {
+          "name_en": "Kindergarten Hat",
+          "name_ja": "幼稚園の帽子",
+          "image_url": "https://www.xenrebirth.com/index.php?attachment/2186-kingdergarten-hat-png/",
+          "stats": "最大MP: +50\n 防御力: +14",
+          "stats_en": "Max MP: +50 | DEF: +14",
+          "description": "",
+          "sort_order": 40
+        },
+        {
+          "name_en": "Panda Suit",
+          "name_ja": "パンダのスーツ",
+          "image_url": "https://www.xenrebirth.com/index.php?attachment/2245-panda-suit-png/",
+          "stats": "最大HP: +50\n 防御力: +18",
+          "stats_en": "Max HP: +50 | DEF: +18",
+          "description": "",
+          "sort_order": 50
+        },
+        {
+          "name_en": "Panda Helmet",
+          "name_ja": "パンダのヘルメット",
+          "image_url": "https://www.xenrebirth.com/index.php?attachment/2228-panda-helmet-png/",
+          "stats": "最大MP: +50\n 防御力: +14",
+          "stats_en": "Max MP: +50 | DEF: +14",
+          "description": "",
+          "sort_order": 60
+        },
+        {
+          "name_en": "Safety Helmet of Defense",
+          "name_ja": "防御の安全ヘルメット",
+          "image_url": "https://www.xenrebirth.com/index.php?attachment/1991-safety-helmet-of-defense-png/",
+          "stats": "防御力: +20",
+          "stats_en": "DEF: +20",
+          "description": "",
+          "sort_order": 70
+        }
+      ]
+    },
+    {
+      "slug": "green-lucky-ball",
+      "name_en": "Green Lucky Ball",
+      "name_ja": "グリーンラッキーボール",
+      "section": "通常",
+      "is_extra": false,
+      "image_url": null,
+      "image_source_url": null,
+      "description": "公式一覧の「通常」に掲載。日本語名は参考訳です。 共通アイテム（Extras）も別欄で確認できます。 本体画像は参照した公式ページに掲載がありません。",
+      "source_url": "https://www.xenrebirth.com/lexicon/index.php?entry/5-lucky-balls-item-list/#1.5-Green-Lucky-Ball",
+      "sort_order": 50,
+      "items": [
+        {
+          "name_en": "Alarm Clock Emote",
+          "name_ja": "目覚まし時計エモート",
+          "image_url": "https://www.xenrebirth.com/index.php?attachment/6178-alarm-clock-icon-png/",
+          "stats": "公式ページにステータスの記載なし",
+          "stats_en": "",
+          "description": "",
+          "sort_order": 10
+        },
+        {
+          "name_en": "Attack Emote",
+          "name_ja": "攻撃エモート",
+          "image_url": "https://www.xenrebirth.com/index.php?attachment/6160-attack-icon-png/",
+          "stats": "公式ページにステータスの記載なし",
+          "stats_en": "",
+          "description": "",
+          "sort_order": 20
+        },
+        {
+          "name_en": "Birthday Cake Emote",
+          "name_ja": "誕生日ケーキエモート",
+          "image_url": "https://www.xenrebirth.com/index.php?attachment/6161-birthday-cake-icon-png/",
+          "stats": "公式ページにステータスの記載なし",
+          "stats_en": "",
+          "description": "",
+          "sort_order": 30
+        },
+        {
+          "name_en": "Brokenhearted Emote",
+          "name_ja": "失恋エモート",
+          "image_url": "https://www.xenrebirth.com/index.php?attachment/6162-broken-heart-icon-png/",
+          "stats": "公式ページにステータスの記載なし",
+          "stats_en": "",
+          "description": "",
+          "sort_order": 40
+        },
+        {
+          "name_en": "Buff Please Emote",
+          "name_ja": "バフをお願いしますエモート",
+          "image_url": "https://www.xenrebirth.com/index.php?attachment/6163-buff-please-icon-png/",
+          "stats": "公式ページにステータスの記載なし",
+          "stats_en": "",
+          "description": "",
+          "sort_order": 50
+        },
+        {
+          "name_en": "Cookie! Emote",
+          "name_ja": "クッキー！エモート",
+          "image_url": "https://www.xenrebirth.com/index.php?attachment/6337-cookie-icon-png/",
+          "stats": "公式ページにステータスの記載なし",
+          "stats_en": "",
+          "description": "",
+          "sort_order": 60
+        },
+        {
+          "name_en": "Cry Emote",
+          "name_ja": "泣くエモート",
+          "image_url": "https://www.xenrebirth.com/index.php?attachment/6149-cry-icon-png/",
+          "stats": "公式ページにステータスの記載なし",
+          "stats_en": "",
+          "description": "",
+          "sort_order": 70
+        },
+        {
+          "name_en": "Engagement Rings Emote",
+          "name_ja": "婚約指輪エモート",
+          "image_url": "https://www.xenrebirth.com/index.php?attachment/6164-engagement-rings-icon-png/",
+          "stats": "公式ページにステータスの記載なし",
+          "stats_en": "",
+          "description": "",
+          "sort_order": 80
+        },
+        {
+          "name_en": "FAIL! Emote",
+          "name_ja": "失敗！エモート",
+          "image_url": "https://www.xenrebirth.com/index.php?attachment/6165-fail-icon-png/",
+          "stats": "公式ページにステータスの記載なし",
+          "stats_en": "",
+          "description": "",
+          "sort_order": 90
+        },
+        {
+          "name_en": "Good Job Emote",
+          "name_ja": "よくできましたエモート",
+          "image_url": "https://www.xenrebirth.com/index.php?attachment/6167-good-job-icon-png/",
+          "stats": "公式ページにステータスの記載なし",
+          "stats_en": "",
+          "description": "",
+          "sort_order": 100
+        },
+        {
+          "name_en": "Happy Halloween Emote",
+          "name_ja": "ハッピーハロウィンエモート",
+          "image_url": "https://www.xenrebirth.com/index.php?attachment/6148-happy-halloween-icon-png/",
+          "stats": "公式ページにステータスの記載なし",
+          "stats_en": "",
+          "description": "",
+          "sort_order": 110
+        },
+        {
+          "name_en": "Heal Me Emote",
+          "name_ja": "回復してエモート",
+          "image_url": "https://www.xenrebirth.com/index.php?attachment/6169-heal-me-icon-png/",
+          "stats": "公式ページにステータスの記載なし",
+          "stats_en": "",
+          "description": "",
+          "sort_order": 120
+        },
+        {
+          "name_en": "I <3 U Emote",
+          "name_ja": "大好きエモート",
+          "image_url": "https://www.xenrebirth.com/index.php?attachment/6170-i-heart-u-icon-png/",
+          "stats": "公式ページにステータスの記載なし",
+          "stats_en": "",
+          "description": "",
+          "sort_order": 130
+        },
+        {
+          "name_en": "Kiss Emote",
+          "name_ja": "キスエモート",
+          "image_url": "https://www.xenrebirth.com/index.php?attachment/6172-kiss-icon-png/",
+          "stats": "公式ページにステータスの記載なし",
+          "stats_en": "",
+          "description": "",
+          "sort_order": 140
+        },
+        {
+          "name_en": "LOL Emote",
+          "name_ja": "大笑いエモート",
+          "image_url": "https://www.xenrebirth.com/index.php?attachment/6180-lol-icon-png/",
+          "stats": "公式ページにステータスの記載なし",
+          "stats_en": "",
+          "description": "",
+          "sort_order": 150
+        },
+        {
+          "name_en": "Need Help Emote",
+          "name_ja": "助けてエモート",
+          "image_url": "https://www.xenrebirth.com/index.php?attachment/6173-need-help-icon-png/",
+          "stats": "公式ページにステータスの記載なし",
+          "stats_en": "",
+          "description": "",
+          "sort_order": 160
+        },
+        {
+          "name_en": "Noobsteak Emote",
+          "name_ja": "ヌーブステーキエモート",
+          "image_url": "https://www.xenrebirth.com/index.php?attachment/6174-noobsteak-icon-png/",
+          "stats": "公式ページにステータスの記載なし",
+          "stats_en": "",
+          "description": "",
+          "sort_order": 170
+        },
+        {
+          "name_en": "Pie Emote",
+          "name_ja": "パイエモート",
+          "image_url": "https://www.xenrebirth.com/index.php?attachment/6177-pie-icon-png/",
+          "stats": "公式ページにステータスの記載なし",
+          "stats_en": "",
+          "description": "",
+          "sort_order": 180
+        },
+        {
+          "name_en": "Rainbow Emote",
+          "name_ja": "虹エモート",
+          "image_url": "https://www.xenrebirth.com/index.php?attachment/6181-rainbow-icon-png/",
+          "stats": "公式ページにステータスの記載なし",
+          "stats_en": "",
+          "description": "",
+          "sort_order": 190
+        },
+        {
+          "name_en": "ROFLcopter Emote",
+          "name_ja": "ロフルコプターエモート",
+          "image_url": "https://www.xenrebirth.com/index.php?attachment/6152-roflcopter-icon-png/",
+          "stats": "公式ページにステータスの記載なし",
+          "stats_en": "",
+          "description": "",
+          "sort_order": 200
+        },
+        {
+          "name_en": "Slap Emote",
+          "name_ja": "平手打ちエモート",
+          "image_url": "https://www.xenrebirth.com/index.php?attachment/6154-slap-icon-png/",
+          "stats": "公式ページにステータスの記載なし",
+          "stats_en": "",
+          "description": "",
+          "sort_order": 210
+        },
+        {
+          "name_en": "Target Set Emote",
+          "name_ja": "ターゲット設定エモート",
+          "image_url": "https://www.xenrebirth.com/index.php?attachment/6156-target-set-icon-png/",
+          "stats": "公式ページにステータスの記載なし",
+          "stats_en": "",
+          "description": "",
+          "sort_order": 220
+        },
+        {
+          "name_en": "XD Emote",
+          "name_ja": "XD（笑顔）エモート",
+          "image_url": "https://www.xenrebirth.com/index.php?attachment/6179-xd-icon-png/",
+          "stats": "公式ページにステータスの記載なし",
+          "stats_en": "",
+          "description": "",
+          "sort_order": 230
+        }
+      ]
+    },
+    {
+      "slug": "black-lucky-ball",
+      "name_en": "Black Lucky Ball",
+      "name_ja": "ブラックラッキーボール",
+      "section": "通常",
+      "is_extra": false,
+      "image_url": null,
+      "image_source_url": null,
+      "description": "公式一覧の「通常」に掲載。日本語名は参考訳です。 共通アイテム（Extras）も別欄で確認できます。 本体画像は参照した公式ページに掲載がありません。",
+      "source_url": "https://www.xenrebirth.com/lexicon/index.php?entry/5-lucky-balls-item-list/#1.6-Black-Lucky-Ball",
+      "sort_order": 60,
+      "items": [
+        {
+          "name_en": "Dizzy Glasses",
+          "name_ja": "ぐるぐるメガネ",
+          "image_url": "https://www.xenrebirth.com/index.php?attachment/2200-dizzy-glasses-png/",
+          "stats": "MP回復間隔: 0.2 秒\n スキルクリティカル: +3",
+          "stats_en": "MP Recovery Time: 0.2 sec | Skill Crit: +3",
+          "description": "",
+          "sort_order": 10
+        },
+        {
+          "name_en": "Eye Patch",
+          "name_ja": "眼帯",
+          "image_url": "https://www.xenrebirth.com/index.php?attachment/2201-eye-patch-png/",
+          "stats": "MP回復間隔: -0.2\n スキルクリティカル: +3",
+          "stats_en": "MP Recovery Time: -0.2 | Skill Crit: +3",
+          "description": "",
+          "sort_order": 20
+        },
+        {
+          "name_en": "Moonlight Glasses",
+          "name_ja": "ムーンライトメガネ",
+          "image_url": "https://www.xenrebirth.com/index.php?attachment/2213-moonlight-goggles-png/",
+          "stats": "MP回復間隔: -0.2 秒\n スキルクリティカル: +3",
+          "stats_en": "MP Recovery Time: -0.2 sec | Skill Crit: +3",
+          "description": "",
+          "sort_order": 30
+        },
+        {
+          "name_en": "Mystic Sunglasses",
+          "name_ja": "神秘のサングラス",
+          "image_url": "https://www.xenrebirth.com/index.php?attachment/2202-mystic-sunglasses-png/",
+          "stats": "MP回復間隔: -0.2\n スキルクリティカル: +3",
+          "stats_en": "MP Recovery Time: -0.2 | Skill Crit: +3",
+          "description": "",
+          "sort_order": 40
+        },
+        {
+          "name_en": "Nerdy Glasses",
+          "name_ja": "ナーディメガネ",
+          "image_url": "https://www.xenrebirth.com/index.php?attachment/2203-nerdy-glasses-png/",
+          "stats": "MP回復間隔: -0.2\n スキルクリティカル: +3",
+          "stats_en": "MP Recovery Time: -0.2 | Skill Crit: +3",
+          "description": "",
+          "sort_order": 50
+        },
+        {
+          "name_en": "Sensor",
+          "name_ja": "センサー",
+          "image_url": "https://www.xenrebirth.com/index.php?attachment/2204-sensor-png/",
+          "stats": "スキルクリティカル: +3",
+          "stats_en": "Skill Crit: +3",
+          "description": "",
+          "sort_order": 60
+        },
+        {
+          "name_en": "Shades",
+          "name_ja": "サングラス",
+          "image_url": "https://www.xenrebirth.com/index.php?attachment/2210-shades-png/",
+          "stats": "クリティカル: +3",
+          "stats_en": "Crit: +3",
+          "description": "",
+          "sort_order": 70
+        },
+        {
+          "name_en": "Sports Goggles",
+          "name_ja": "スポーツゴーグル",
+          "image_url": "https://www.xenrebirth.com/index.php?attachment/2210-shades-png/",
+          "stats": "MP回復間隔: -0.2\n スキルクリティカル: +3",
+          "stats_en": "MP Recovery Time: -0.2 | Skill Crit: +3",
+          "description": "",
+          "sort_order": 80
+        },
+        {
+          "name_en": "Spy Glasses",
+          "name_ja": "スパイメガネ",
+          "image_url": "https://www.xenrebirth.com/index.php?attachment/2211-spy-glasses-png/",
+          "stats": "MP回復間隔: -0.2 秒\n スキルクリティカル: +3",
+          "stats_en": "MP Recovery Time: -0.2 sec | Skill Crit: +3",
+          "description": "",
+          "sort_order": 90
+        },
+        {
+          "name_en": "Stunners",
+          "name_ja": "スタナーズ",
+          "image_url": "https://www.xenrebirth.com/index.php?attachment/2206-stunners-png/",
+          "stats": "クリティカル: +2\n スキルクリティカル: +2",
+          "stats_en": "Crit: +2 | Skill Crit: +2",
+          "description": "",
+          "sort_order": 100
+        },
+        {
+          "name_en": "Sun Glasses",
+          "name_ja": "サングラス",
+          "image_url": "https://www.xenrebirth.com/index.php?attachment/2207-sunglasses-png/",
+          "stats": "クリティカル: +2\n スキルクリティカル: +2",
+          "stats_en": "Crit: +2 | Skill Crit: +2",
+          "description": "",
+          "sort_order": 110
+        },
+        {
+          "name_en": "White Glasses",
+          "name_ja": "白いメガネ",
+          "image_url": "https://www.xenrebirth.com/index.php?attachment/2206-stunners-png/",
+          "stats": "MP回復間隔: -0.2\n スキルクリティカル: +3",
+          "stats_en": "MP Recovery Time: -0.2 | Skill Crit: +3",
+          "description": "",
+          "sort_order": 120
+        }
+      ]
+    },
+    {
+      "slug": "white-lucky-ball",
+      "name_en": "White Lucky Ball",
+      "name_ja": "ホワイトラッキーボール",
+      "section": "通常",
+      "is_extra": false,
+      "image_url": null,
+      "image_source_url": null,
+      "description": "公式一覧の「通常」に掲載。日本語名は参考訳です。 共通アイテム（Extras）も別欄で確認できます。 本体画像は参照した公式ページに掲載がありません。",
+      "source_url": "https://www.xenrebirth.com/lexicon/index.php?entry/5-lucky-balls-item-list/#1.7-White-Lucky-Ball",
+      "sort_order": 70,
+      "items": [
+        {
+          "name_en": "Angel PJ's",
+          "name_ja": "天使のパジャマ",
+          "image_url": "https://www.xenrebirth.com/index.php?attachment/2232-angel-pjs-png/",
+          "stats": "最大HP: +50\n 防御力: +18",
+          "stats_en": "Max HP: +50 | DEF: +18",
+          "description": "",
+          "sort_order": 10
+        },
+        {
+          "name_en": "Blue School Uniform (Male)",
+          "name_ja": "青い制服（男性用）",
+          "image_url": "https://www.xenrebirth.com/index.php?attachment/2320-blue-school-uniform-male-png/",
+          "stats": "最大HP: +75\n HP回復間隔: -0.2秒",
+          "stats_en": "Max HP: +75 | HP Recovery Time: -0.2sec",
+          "description": "",
+          "sort_order": 20
+        },
+        {
+          "name_en": "Blue School Uniform (Female)",
+          "name_ja": "青い制服（女性用）",
+          "image_url": "https://www.xenrebirth.com/index.php?attachment/2530-blue-school-uniform-female-png/",
+          "stats": "最大HP: +75\n HP回復間隔: -0.2秒",
+          "stats_en": "Max HP: +75 | HP Recovery Time: -0.2sec",
+          "description": "",
+          "sort_order": 30
+        },
+        {
+          "name_en": "Doctor Costume",
+          "name_ja": "医師の衣装",
+          "image_url": "https://www.xenrebirth.com/index.php?attachment/2345-doctor-costume-png/",
+          "stats": "最大HP: +100\n 防御力: +22",
+          "stats_en": "Max HP: +100 | DEF: +22",
+          "description": "",
+          "sort_order": 40
+        },
+        {
+          "name_en": "Doctor's Head Band",
+          "name_ja": "医師のヘッドバンド",
+          "image_url": "https://www.xenrebirth.com/index.php?attachment/1978-doctor-s-head-band-png/",
+          "stats": "最大MP: +100\n 防御力: +15",
+          "stats_en": "Max MP: +100 | DEF: +15",
+          "description": "",
+          "sort_order": 50
+        },
+        {
+          "name_en": "Green School Uniform (Male)",
+          "name_ja": "緑の制服（男性用）",
+          "image_url": "https://www.xenrebirth.com/index.php?attachment/2326-green-school-uniform-male-png/",
+          "stats": "最大HP: +75\n 最大MP: +75\n 防御力: +18",
+          "stats_en": "Max HP: +75 | Max MP: +75 | DEF: +18",
+          "description": "",
+          "sort_order": 60
+        },
+        {
+          "name_en": "Green School Uniform (Female)",
+          "name_ja": "緑の制服（女性用）",
+          "image_url": "https://www.xenrebirth.com/index.php?attachment/2445-green-school-uniform-female-png/",
+          "stats": "最大HP: +75\n 最大MP: +75\n 防御力: +18",
+          "stats_en": "Max HP: +75 | Max MP: +75 | DEF: +18",
+          "description": "",
+          "sort_order": 70
+        },
+        {
+          "name_en": "Nurse Cap",
+          "name_ja": "ナースキャップ",
+          "image_url": "https://www.xenrebirth.com/index.php?attachment/2302-nurse-cap-png/",
+          "stats": "最大MP: +100\n 防御力: +15",
+          "stats_en": "Max MP: +100 | DEF: +15",
+          "description": "",
+          "sort_order": 80
+        },
+        {
+          "name_en": "Nurse Outfit",
+          "name_ja": "ナース服",
+          "image_url": "https://www.xenrebirth.com/index.php?attachment/2332-nurse-outfit-png/",
+          "stats": "最大HP: +100\n 防御力: +22",
+          "stats_en": "Max HP: +100 | DEF: +22",
+          "description": "",
+          "sort_order": 90
+        },
+        {
+          "name_en": "Red School Uniform (Male)",
+          "name_ja": "赤い制服（男性用）",
+          "image_url": "https://www.xenrebirth.com/index.php?attachment/2448-red-school-uniform-male-png/",
+          "stats": "POW: +3\n 最大HP: +25\n 最大MP: +25\n 防御力: +18",
+          "stats_en": "POW: +3 | Max HP: +25 | Max MP: +25 | DEF: +18",
+          "description": "",
+          "sort_order": 100
+        },
+        {
+          "name_en": "Red School Uniform (Female)",
+          "name_ja": "赤い制服（女性用）",
+          "image_url": "https://www.xenrebirth.com/index.php?attachment/2447-red-school-uniform-female-png/",
+          "stats": "POW: +3\n 最大HP: +25\n 最大MP: +25\n 防御力: +18",
+          "stats_en": "POW: +3 | Max HP: +25 | Max MP: +25 | DEF: +18",
+          "description": "",
+          "sort_order": 110
+        },
+        {
+          "name_en": "School Uniform (Male)",
+          "name_ja": "制服（男性用）",
+          "image_url": "https://www.xenrebirth.com/index.php?attachment/2351-school-uniform-male-png/",
+          "stats": "最大HP: +50\n 防御力: +18",
+          "stats_en": "Max HP: +50 | DEF: +18",
+          "description": "",
+          "sort_order": 120
+        },
+        {
+          "name_en": "School Uniform (Female)",
+          "name_ja": "制服（女性用）",
+          "image_url": "https://www.xenrebirth.com/index.php?attachment/2346-school-uniform-female-png/",
+          "stats": "最大HP: +50\n 防御力: +18",
+          "stats_en": "Max HP: +50 | DEF: +18",
+          "description": "",
+          "sort_order": 130
+        }
+      ]
+    },
+    {
+      "slug": "pink-lucky-ball",
+      "name_en": "Pink Lucky Ball",
+      "name_ja": "ピンクラッキーボール",
+      "section": "通常",
+      "is_extra": false,
+      "image_url": null,
+      "image_source_url": null,
+      "description": "公式一覧の「通常」に掲載。日本語名は参考訳です。 共通アイテム（Extras）も別欄で確認できます。 本体画像は参照した公式ページに掲載がありません。",
+      "source_url": "https://www.xenrebirth.com/lexicon/index.php?entry/5-lucky-balls-item-list/#1.8-Pink-Lucky-Ball",
+      "sort_order": 80,
+      "items": [
+        {
+          "name_en": "Angel Wings",
+          "name_ja": "天使の翼",
+          "image_url": "https://www.xenrebirth.com/index.php?attachment/2264-angel-wings-png/",
+          "stats": "回避率: +3\n 移動速度: +3",
+          "stats_en": "Successful Dodge Rate: +3 | Movement Rate: +3",
+          "description": "",
+          "sort_order": 10
+        },
+        {
+          "name_en": "Blue Polka Dots of Stamina",
+          "name_ja": "体力の青い水玉",
+          "image_url": "https://www.xenrebirth.com/index.php?attachment/2177-blue-polka-dots-of-stamina-png/",
+          "stats": "STA: +5\n 防御力: +14",
+          "stats_en": "STA: +5 | DEF: +14",
+          "description": "",
+          "sort_order": 20
+        },
+        {
+          "name_en": "Blue Star Hairband",
+          "name_ja": "青い星のヘアバンド",
+          "image_url": "https://www.xenrebirth.com/index.php?attachment/1925-blue-star-headband-png/",
+          "stats": "最大MP: +50\n 防御力: +14",
+          "stats_en": "Max MP: +50 | DEF: +14",
+          "description": "",
+          "sort_order": 30
+        },
+        {
+          "name_en": "Blue Star Hairpin",
+          "name_ja": "青い星のヘアピン",
+          "image_url": "https://www.xenrebirth.com/index.php?attachment/2105-blue-star-hairpin-png/",
+          "stats": "最大MP: +50\n 防御力: +14",
+          "stats_en": "Max MP: +50 | DEF: +14",
+          "description": "",
+          "sort_order": 40
+        },
+        {
+          "name_en": "Cat Ears",
+          "name_ja": "猫の耳",
+          "image_url": "https://www.xenrebirth.com/index.php?attachment/1940-cat-ears-png/",
+          "stats": "最大MP: +50\n 防御力: +14",
+          "stats_en": "Max MP: +50 | DEF: +14",
+          "description": "",
+          "sort_order": 50
+        },
+        {
+          "name_en": "Red Big Flower",
+          "name_ja": "赤い大きな花",
+          "image_url": "https://www.xenrebirth.com/index.php?attachment/2188-red-big-flower-png/",
+          "stats": "最大MP: +50\n 防御力: +14",
+          "stats_en": "Max MP: +50 | DEF: +14",
+          "description": "",
+          "sort_order": 60
+        },
+        {
+          "name_en": "Red Polka Dots",
+          "name_ja": "赤い水玉",
+          "image_url": "https://www.xenrebirth.com/index.php?attachment/2111-red-polka-dots-of-stamina-png/",
+          "stats": "STA: +5\n 防御力: +14",
+          "stats_en": "STA: +5 | DEF: +14",
+          "description": "",
+          "sort_order": 70
+        },
+        {
+          "name_en": "Red Star Hairband",
+          "name_ja": "赤い星のヘアバンド",
+          "image_url": "https://www.xenrebirth.com/index.php?attachment/1984-red-star-hairband-png/",
+          "stats": "最大MP: +50\n 防御力: +14",
+          "stats_en": "Max MP: +50 | DEF: +14",
+          "description": "",
+          "sort_order": 80
+        },
+        {
+          "name_en": "Red Star Hairpin",
+          "name_ja": "赤い星のヘアピン",
+          "image_url": "https://www.xenrebirth.com/index.php?attachment/1946-red-star-hairpin-png/",
+          "stats": "最大MP: +50\n 防御力: +14",
+          "stats_en": "Max MP: +50 | DEF: +14",
+          "description": "",
+          "sort_order": 90
+        },
+        {
+          "name_en": "Yellow Big Flower",
+          "name_ja": "黄色い大きな花",
+          "image_url": "https://www.xenrebirth.com/index.php?attachment/1985-yellow-big-flower-png/",
+          "stats": "最大MP: +50\n 防御力: +14",
+          "stats_en": "Max MP: +50 | DEF: +14",
+          "description": "",
+          "sort_order": 100
+        }
+      ]
+    },
+    {
+      "slug": "orange-lucky-ball",
+      "name_en": "Orange Lucky Ball",
+      "name_ja": "オレンジラッキーボール",
+      "section": "通常",
+      "is_extra": false,
+      "image_url": null,
+      "image_source_url": null,
+      "description": "公式一覧の「通常」に掲載。日本語名は参考訳です。 共通アイテム（Extras）も別欄で確認できます。 本体画像は参照した公式ページに掲載がありません。",
+      "source_url": "https://www.xenrebirth.com/lexicon/index.php?entry/5-lucky-balls-item-list/#1.9-Orange-Lucky-Ball",
+      "sort_order": 90,
+      "items": [
+        {
+          "name_en": "Doggie Ears",
+          "name_ja": "犬の耳",
+          "image_url": "https://www.xenrebirth.com/index.php?attachment/1979-doggie-ears-png/",
+          "stats": "最大HP: +100\n 防御力: +18",
+          "stats_en": "Max HP: +100 | DEF: +18",
+          "description": "",
+          "sort_order": 10
+        },
+        {
+          "name_en": "Fox Ears",
+          "name_ja": "キツネの耳",
+          "image_url": "https://www.xenrebirth.com/index.php?attachment/1981-fox-ears-png/",
+          "stats": "最大HP: +100\n 防御力: +18",
+          "stats_en": "Max HP: +100 | DEF: +18",
+          "description": "",
+          "sort_order": 20
+        },
+        {
+          "name_en": "Green Scarf",
+          "name_ja": "緑のスカーフ",
+          "image_url": "https://www.xenrebirth.com/index.php?attachment/2221-green-scarf-png/",
+          "stats": "クリティカル: +3\n HP回復間隔: -0.2秒",
+          "stats_en": "Crit: +3 | HP Recovery Time: -0.2sec",
+          "description": "",
+          "sort_order": 30
+        },
+        {
+          "name_en": "Headphones",
+          "name_ja": "ヘッドホン",
+          "image_url": "https://www.xenrebirth.com/index.php?attachment/1953-headphones-png/",
+          "stats": "最大HP: +100\n 防御力: +18",
+          "stats_en": "Max HP: +100 | DEF: +18",
+          "description": "",
+          "sort_order": 40
+        },
+        {
+          "name_en": "Red Scarf",
+          "name_ja": "赤いスカーフ",
+          "image_url": "https://www.xenrebirth.com/index.php?attachment/2225-red-scarf-png/",
+          "stats": "クリティカル: +3\n HP回復間隔: -0.2秒",
+          "stats_en": "Crit: +3 | HP Recovery Time: -0.2sec",
+          "description": "",
+          "sort_order": 50
+        },
+        {
+          "name_en": "Teddy Bear White",
+          "name_ja": "白いテディベア",
+          "image_url": "https://www.xenrebirth.com/index.php?attachment/2297-teddy-bear-white-png/",
+          "stats": "最大所持重量: +500",
+          "stats_en": "Max WT: +500",
+          "description": "",
+          "sort_order": 60
+        },
+        {
+          "name_en": "Teddy Bear Red",
+          "name_ja": "赤いテディベア",
+          "image_url": "https://www.xenrebirth.com/index.php?attachment/2296-teddy-bear-red-png/",
+          "stats": "最大所持重量: +500",
+          "stats_en": "Max WT: +500",
+          "description": "",
+          "sort_order": 70
+        },
+        {
+          "name_en": "Violet Backpack",
+          "name_ja": "紫のリュック",
+          "image_url": "https://www.xenrebirth.com/index.php?attachment/2281-violet-backpack-png/",
+          "stats": "最大所持重量: +500",
+          "stats_en": "Max WT: +500",
+          "description": "",
+          "sort_order": 80
+        },
+        {
+          "name_en": "Yellow Backpack",
+          "name_ja": "黄色いリュック",
+          "image_url": "https://www.xenrebirth.com/index.php?attachment/2283-yellow-backpack-png/",
+          "stats": "最大所持重量: +500",
+          "stats_en": "Max WT: +500",
+          "description": "",
+          "sort_order": 90
+        }
+      ]
+    },
+    {
+      "slug": "purple-lucky-ball",
+      "name_en": "Purple Lucky Ball",
+      "name_ja": "パープルラッキーボール",
+      "section": "通常",
+      "is_extra": false,
+      "image_url": null,
+      "image_source_url": null,
+      "description": "公式一覧の「通常」に掲載。日本語名は参考訳です。 共通アイテム（Extras）も別欄で確認できます。 本体画像は参照した公式ページに掲載がありません。",
+      "source_url": "https://www.xenrebirth.com/lexicon/index.php?entry/5-lucky-balls-item-list/#1.10-Purple-Lucky-Ball",
+      "sort_order": 100,
+      "items": [
+        {
+          "name_en": "Baby Starfish Blue",
+          "name_ja": "青い小さなヒトデ",
+          "image_url": "https://www.xenrebirth.com/index.php?attachment/2105-blue-star-hairpin-png/",
+          "stats": "最大HP: +100\n 防御力: +18",
+          "stats_en": "Max HP: +100 | DEF: +18",
+          "description": "",
+          "sort_order": 10
+        },
+        {
+          "name_en": "Baby Starfish Red",
+          "name_ja": "赤い小さなヒトデ",
+          "image_url": "https://www.xenrebirth.com/index.php?attachment/1946-red-star-hairpin-png/",
+          "stats": "最大HP: +100\n 防御力: +18",
+          "stats_en": "Max HP: +100 | DEF: +18",
+          "description": "",
+          "sort_order": 20
+        },
+        {
+          "name_en": "Baseball Cap",
+          "name_ja": "野球帽",
+          "image_url": "https://www.xenrebirth.com/index.php?attachment/1950-baseball-cap-png/",
+          "stats": "最大MP: +75\n 防御力: +21",
+          "stats_en": "Max MP: +75 | DEF: +21",
+          "description": "",
+          "sort_order": 30
+        },
+        {
+          "name_en": "Black Cat Ears",
+          "name_ja": "黒猫の耳",
+          "image_url": "https://www.xenrebirth.com/index.php?attachment/1924-black-cat-ears-png/",
+          "stats": "最大MP: +100\n 防御力: +18",
+          "stats_en": "Max MP: +100 | DEF: +18",
+          "description": "",
+          "sort_order": 40
+        },
+        {
+          "name_en": "Black Cat Tail",
+          "name_ja": "黒猫のしっぽ",
+          "image_url": "https://www.xenrebirth.com/index.php?attachment/2265-black-cat-tail-png/",
+          "stats": "移動速度: +3",
+          "stats_en": "Movement Rate: +3",
+          "description": "",
+          "sort_order": 50
+        },
+        {
+          "name_en": "Flower Tiara",
+          "name_ja": "花のティアラ",
+          "image_url": "https://www.xenrebirth.com/index.php?attachment/2098-flower-tiara-png/",
+          "stats": "最大MP: +100\n 防御力: +18",
+          "stats_en": "Max MP: +100 | DEF: +18",
+          "description": "",
+          "sort_order": 60
+        },
+        {
+          "name_en": "Fox's Tail",
+          "name_ja": "キツネのしっぽ",
+          "image_url": "https://www.xenrebirth.com/index.php?attachment/2293-fox-s-tail-png/",
+          "stats": "回避率: +1\n 移動速度: +1",
+          "stats_en": "Successful Dodge Rate: +1 | Movement Rate: +1",
+          "description": "",
+          "sort_order": 70
+        },
+        {
+          "name_en": "Rabbit Ears of Speed",
+          "name_ja": "素早さのうさぎ耳",
+          "image_url": "https://www.xenrebirth.com/index.php?attachment/1954-rabbit-ears-of-speed-png/",
+          "stats": "移動速度: +3\n 攻撃間隔: -0.1 秒",
+          "stats_en": "Movement Rate: +3 | Attack Rate: -0.1 sec",
+          "description": "",
+          "sort_order": 80
+        }
+      ]
+    },
+    {
+      "slug": "maroon-lucky-ball",
+      "name_en": "Maroon Lucky Ball",
+      "name_ja": "マルーンラッキーボール",
+      "section": "通常",
+      "is_extra": false,
+      "image_url": null,
+      "image_source_url": null,
+      "description": "公式一覧の「通常」に掲載。日本語名は参考訳です。 共通アイテム（Extras）も別欄で確認できます。 本体画像は参照した公式ページに掲載がありません。",
+      "source_url": "https://www.xenrebirth.com/lexicon/index.php?entry/5-lucky-balls-item-list/#1.11-Maroon-Lucky-Ball",
+      "sort_order": 110,
+      "items": [
+        {
+          "name_en": "Baldy Helmet",
+          "name_ja": "はげ頭のヘルメット",
+          "image_url": "https://www.xenrebirth.com/index.php?attachment/2103-baldy-helmet-png/",
+          "stats": "最大HP: +100\n 防御力: +18",
+          "stats_en": "Max HP: +100 | DEF: +18",
+          "description": "",
+          "sort_order": 10
+        },
+        {
+          "name_en": "Cow Helmet",
+          "name_ja": "牛のヘルメット",
+          "image_url": "https://www.xenrebirth.com/index.php?attachment/1976-cow-helmet-png/",
+          "stats": "最大HP: +100\n 防御力: +18",
+          "stats_en": "Max HP: +100 | DEF: +18",
+          "description": "",
+          "sort_order": 20
+        },
+        {
+          "name_en": "Disco Hair of Power",
+          "name_ja": "力のディスコヘア",
+          "image_url": "https://www.xenrebirth.com/index.php?attachment/2106-disco-hair-of-power-png/",
+          "stats": "POW: +5\n 防御力: +14",
+          "stats_en": "POW: +5 | DEF: +14",
+          "description": "",
+          "sort_order": 30
+        },
+        {
+          "name_en": "Green Afro of Intelligence",
+          "name_ja": "知力の緑アフロ",
+          "image_url": "https://www.xenrebirth.com/index.php?attachment/1944-green-afro-png/",
+          "stats": "INT: +15\n 防御力: +16",
+          "stats_en": "INT: +15 | DEF: +16",
+          "description": "",
+          "sort_order": 40
+        },
+        {
+          "name_en": "Green Afro of Power",
+          "name_ja": "力の緑アフロ",
+          "image_url": "https://www.xenrebirth.com/index.php?attachment/1944-green-afro-png/",
+          "stats": "POW: +15\n 防御力: +16",
+          "stats_en": "POW: +15 | DEF: +16",
+          "description": "",
+          "sort_order": 50
+        },
+        {
+          "name_en": "Martian Suit",
+          "name_ja": "火星人のスーツ",
+          "image_url": "https://www.xenrebirth.com/index.php?attachment/2330-martian-suit-png/",
+          "stats": "最大HP: +75\n 防御力: +18",
+          "stats_en": "Max HP: +75 | DEF: +18",
+          "description": "",
+          "sort_order": 60
+        },
+        {
+          "name_en": "Martian Helmet",
+          "name_ja": "火星人のヘルメット",
+          "image_url": "https://www.xenrebirth.com/index.php?attachment/1982-martian-helmet-png/",
+          "stats": "最大HP: +100\n 防御力: +18",
+          "stats_en": "Max HP: +100 | DEF: +18",
+          "description": "",
+          "sort_order": 70
+        },
+        {
+          "name_en": "Ox Helmet",
+          "name_ja": "雄牛のヘルメット",
+          "image_url": "https://www.xenrebirth.com/index.php?attachment/2108-ox-helmet-png/",
+          "stats": "最大HP: +100\n 防御力: +18",
+          "stats_en": "Max HP: +100 | DEF: +18",
+          "description": "",
+          "sort_order": 80
+        },
+        {
+          "name_en": "Pink Disco Hair of Intelligence",
+          "name_ja": "知力のピンクディスコヘア",
+          "image_url": "https://www.xenrebirth.com/index.php?attachment/2109-pink-disco-hair-of-intelligence-png/",
+          "stats": "INT: +5\n 防御力: +14",
+          "stats_en": "INT: +5 | DEF: +14",
+          "description": "",
+          "sort_order": 90
+        },
+        {
+          "name_en": "Pink Disco Hair of Power",
+          "name_ja": "力のピンクディスコヘア",
+          "image_url": "https://www.xenrebirth.com/index.php?attachment/2109-pink-disco-hair-of-intelligence-png/",
+          "stats": "公式ページにステータスの記載なし",
+          "stats_en": "",
+          "description": "",
+          "sort_order": 100
+        }
+      ]
+    },
+    {
+      "slug": "villain-lucky-ball",
+      "name_en": "Villain Lucky Ball",
+      "name_ja": "ヴィランラッキーボール",
+      "section": "通常",
+      "is_extra": false,
+      "image_url": null,
+      "image_source_url": null,
+      "description": "公式一覧の「通常」に掲載。日本語名は参考訳です。 共通アイテム（Extras）も別欄で確認できます。 本体画像は参照した公式ページに掲載がありません。",
+      "source_url": "https://www.xenrebirth.com/lexicon/index.php?entry/5-lucky-balls-item-list/#1.12-Villain-Lucky-Ball",
+      "sort_order": 120,
+      "items": [
+        {
+          "name_en": "Bandit Bandanna of Dexterity",
+          "name_ja": "器用さの盗賊バンダナ",
+          "image_url": "https://www.xenrebirth.com/index.php?attachment/2307-bandit-bandanna-of-dexterity-png/",
+          "stats": "攻撃間隔: -0.5 秒\n HP回復間隔: -0.2 秒",
+          "stats_en": "Attack Speed: -0.5 sec | HP Recovery Time: -0.2 sec",
+          "description": "",
+          "sort_order": 10
+        },
+        {
+          "name_en": "Bandit Mask",
+          "name_ja": "盗賊のマスク",
+          "image_url": "https://www.xenrebirth.com/index.php?attachment/2196-bandit-mask-png/",
+          "stats": "MP回復間隔: -0.2 秒\n スキルクリティカル: +3",
+          "stats_en": "MP recovery time: -0.2 sec | Skill Crit: +3",
+          "description": "",
+          "sort_order": 20
+        },
+        {
+          "name_en": "Devil Head",
+          "name_ja": "悪魔の頭",
+          "image_url": "https://www.xenrebirth.com/index.php?attachment/1977-devil-head-png/",
+          "stats": "最大MP: +100\n 防御力: +15",
+          "stats_en": "Max MP: +100 | DEF: +15",
+          "description": "",
+          "sort_order": 30
+        },
+        {
+          "name_en": "Tiny Devil's Wings",
+          "name_ja": "小さな悪魔の翼",
+          "image_url": null,
+          "stats": "公式ページにステータスの記載なし",
+          "stats_en": "",
+          "description": "",
+          "sort_order": 40
+        },
+        {
+          "name_en": "Villain Cloak",
+          "name_ja": "悪役のマント",
+          "image_url": "https://www.xenrebirth.com/index.php?attachment/2280-villain-cloak-png/",
+          "stats": "回避率: +2\n 移動速度: +2",
+          "stats_en": "Successful Dodge Rate: +2 | Movement Rate: +2",
+          "description": "",
+          "sort_order": 50
+        }
+      ]
+    },
+    {
+      "slug": "recycle-extras",
+      "name_en": "Recycle Lucky Balls — Extras",
+      "name_ja": "リサイクルの共通アイテム（Extras）",
+      "section": "リサイクル",
+      "is_extra": true,
+      "image_url": null,
+      "image_source_url": null,
+      "description": "公式一覧の「リサイクル」に掲載。日本語名は参考訳です。 これはラッキーボールの種類ではなく、原文の共通アイテム欄です。",
+      "source_url": "https://www.xenrebirth.com/lexicon/index.php?entry/5-lucky-balls-item-list/#2.1-Extras",
+      "sort_order": 130,
+      "items": [
+        {
+          "name_en": "Mystic Flask of Health",
+          "name_ja": "神秘のHPフラスコ",
+          "image_url": "https://www.xenrebirth.com/index.php?attachment/6231-mystic-flask-of-health-png/",
+          "stats": "+50000 HP 回復",
+          "stats_en": "Heals +50000 HP",
+          "description": "",
+          "sort_order": 10
+        },
+        {
+          "name_en": "Mystic Flask of Magic",
+          "name_ja": "神秘のMPフラスコ",
+          "image_url": "https://www.xenrebirth.com/index.php?attachment/6232-mystic-flask-of-magic-png/",
+          "stats": "+50000 MP 回復",
+          "stats_en": "Heals +50000 MP",
+          "description": "",
+          "sort_order": 20
+        }
+      ]
+    },
+    {
+      "slug": "red-lucky-ball-r",
+      "name_en": "Red Lucky Ball R",
+      "name_ja": "レッドラッキーボール R",
+      "section": "リサイクル",
+      "is_extra": false,
+      "image_url": null,
+      "image_source_url": null,
+      "description": "公式一覧の「リサイクル」に掲載。日本語名は参考訳です。 共通アイテム（Extras）も別欄で確認できます。 本体画像は参照した公式ページに掲載がありません。",
+      "source_url": "https://www.xenrebirth.com/lexicon/index.php?entry/5-lucky-balls-item-list/#2.2-Red-Lucky-Ball-R",
+      "sort_order": 140,
+      "items": [
+        {
+          "name_en": "Bamboo Hat",
+          "name_ja": "竹の笠",
+          "image_url": "https://www.xenrebirth.com/index.php?attachment/2929-bamboo-hat-png/",
+          "stats": "最大MP: +100\n 防御力: +18",
+          "stats_en": "Max MP: +100 | DEF: +18",
+          "description": "",
+          "sort_order": 10
+        },
+        {
+          "name_en": "Clown Mask",
+          "name_ja": "ピエロのマスク",
+          "image_url": "https://www.xenrebirth.com/index.php?attachment/2219-clown-mask-png/",
+          "stats": "最大MP: +100\n 防御力: +15",
+          "stats_en": "Max MP: +100 | DEF: +15",
+          "description": "",
+          "sort_order": 20
+        },
+        {
+          "name_en": "Pirate's Eye Patch of Skill",
+          "name_ja": "技巧の海賊眼帯",
+          "image_url": "https://www.xenrebirth.com/index.php?attachment/2209-pirate-s-eye-patch-of-skill-png/",
+          "stats": "スキルクリティカル: +3",
+          "stats_en": "Skill Crit: +3",
+          "description": "",
+          "sort_order": 30
+        },
+        {
+          "name_en": "Rain Hat",
+          "name_ja": "レインハット",
+          "image_url": "https://www.xenrebirth.com/index.php?attachment/1990-rain-helmet-png/",
+          "stats": "最大HP: +100\n 防御力: +18",
+          "stats_en": "Max HP: +100 | DEF: +18",
+          "description": "",
+          "sort_order": 40
+        },
+        {
+          "name_en": "Rain Suit",
+          "name_ja": "レインスーツ",
+          "image_url": "https://www.xenrebirth.com/index.php?attachment/2247-rain-suit-png/",
+          "stats": "最大HP: +100\n 防御力: +22",
+          "stats_en": "Max HP: +100 | DEF: +22",
+          "description": "",
+          "sort_order": 50
+        }
+      ]
+    },
+    {
+      "slug": "blue-lucky-ball-r",
+      "name_en": "Blue Lucky Ball R",
+      "name_ja": "ブルーラッキーボール R",
+      "section": "リサイクル",
+      "is_extra": false,
+      "image_url": null,
+      "image_source_url": null,
+      "description": "公式一覧の「リサイクル」に掲載。日本語名は参考訳です。 共通アイテム（Extras）も別欄で確認できます。 本体画像は参照した公式ページに掲載がありません。",
+      "source_url": "https://www.xenrebirth.com/lexicon/index.php?entry/5-lucky-balls-item-list/#2.3-Blue-Lucky-Ball-R",
+      "sort_order": 150,
+      "items": [
+        {
+          "name_en": "Maid Hat (Female)",
+          "name_ja": "メイドの帽子（女性用）",
+          "image_url": "https://www.xenrebirth.com/index.php?attachment/2179-maid-hat-female-png/",
+          "stats": "最大MP: +50\n 防御力: +14",
+          "stats_en": "Max MP: +50 | DEF: +14",
+          "description": "",
+          "sort_order": 10
+        },
+        {
+          "name_en": "Maid Outfit (Female)",
+          "name_ja": "メイド服（女性用）",
+          "image_url": "https://www.xenrebirth.com/index.php?attachment/2347-maid-outfit-female-png/",
+          "stats": "最大HP: +50\n 防御力: +18",
+          "stats_en": "Max HP: +50 | DEF: +18",
+          "description": "",
+          "sort_order": 20
+        },
+        {
+          "name_en": "Pirate's Eye Patch of Skill",
+          "name_ja": "技巧の海賊眼帯",
+          "image_url": "https://www.xenrebirth.com/index.php?attachment/2209-pirate-s-eye-patch-of-skill-png/",
+          "stats": "スキルクリティカル: +3",
+          "stats_en": "Skill Crit: +3",
+          "description": "",
+          "sort_order": 30
+        },
+        {
+          "name_en": "Sheep Ears of Wisdom",
+          "name_ja": "知恵の羊耳",
+          "image_url": "https://www.xenrebirth.com/index.php?attachment/6133-sheep-ears-of-wisdom-png/",
+          "stats": "WIS: +5\n 防御力: +14",
+          "stats_en": "WIS: +5 | DEF: +14",
+          "description": "",
+          "sort_order": 40
+        }
+      ]
+    },
+    {
+      "slug": "green-lucky-ball-r",
+      "name_en": "Green Lucky Ball R",
+      "name_ja": "グリーンラッキーボール R",
+      "section": "リサイクル",
+      "is_extra": false,
+      "image_url": null,
+      "image_source_url": null,
+      "description": "公式一覧の「リサイクル」に掲載。日本語名は参考訳です。 共通アイテム（Extras）も別欄で確認できます。 本体画像は参照した公式ページに掲載がありません。",
+      "source_url": "https://www.xenrebirth.com/lexicon/index.php?entry/5-lucky-balls-item-list/#2.4-Green-Lucky-Ball-R",
+      "sort_order": 160,
+      "items": [
+        {
+          "name_en": "Gods Grace Emote",
+          "name_ja": "神の恵みエモート",
+          "image_url": "https://www.xenrebirth.com/index.php?attachment/6166-god-s-grace-icon-png/",
+          "stats": "公式ページにステータスの記載なし",
+          "stats_en": "",
+          "description": "",
+          "sort_order": 10
+        },
+        {
+          "name_en": "Inner Peace Emote",
+          "name_ja": "心の平穏エモート",
+          "image_url": "https://www.xenrebirth.com/index.php?attachment/6171-inner-peace-icon-png/",
+          "stats": "公式ページにステータスの記載なし",
+          "stats_en": "",
+          "description": "",
+          "sort_order": 20
+        },
+        {
+          "name_en": "Pendant Emote",
+          "name_ja": "ペンダントエモート",
+          "image_url": "https://www.xenrebirth.com/index.php?attachment/6176-pendant-icon-png/",
+          "stats": "公式ページにステータスの記載なし",
+          "stats_en": "",
+          "description": "",
+          "sort_order": 30
+        },
+        {
+          "name_en": "Rejected Emote",
+          "name_ja": "お断りエモート",
+          "image_url": "https://www.xenrebirth.com/index.php?attachment/6185-rejected-icon-png/",
+          "stats": "公式ページにステータスの記載なし",
+          "stats_en": "",
+          "description": "",
+          "sort_order": 40
+        }
+      ]
+    },
+    {
+      "slug": "snowman-lucky-ball",
+      "name_en": "Snowman Lucky Ball",
+      "name_ja": "スノーマンラッキーボール",
+      "section": "季節限定",
+      "is_extra": false,
+      "image_url": null,
+      "image_source_url": null,
+      "description": "公式一覧の「季節限定」に掲載。日本語名は参考訳です。 本体画像は参照した公式ページに掲載がありません。",
+      "source_url": "https://www.xenrebirth.com/lexicon/index.php?entry/5-lucky-balls-item-list/#3.1-Snowman-Lucky-Ball",
+      "sort_order": 170,
+      "items": [
+        {
+          "name_en": "Frosty Suit",
+          "name_ja": "フロスティスーツ",
+          "image_url": "https://www.xenrebirth.com/index.php?attachment/2323-frosty-suit-png/",
+          "stats": "最大HP: +75\n 防御力: +22",
+          "stats_en": "Max HP: +75 | DEF: +22",
+          "description": "",
+          "sort_order": 10
+        },
+        {
+          "name_en": "Frosty Helmet",
+          "name_ja": "フロスティヘルメット",
+          "image_url": "https://www.xenrebirth.com/index.php?attachment/2107-frosty-helmet-png/",
+          "stats": "最大MP: +75\n 防御力: +18",
+          "stats_en": "Max MP: +75 | DEF: +18",
+          "description": "",
+          "sort_order": 20
+        },
+        {
+          "name_en": "Parka (Male)",
+          "name_ja": "パーカー（男性用）",
+          "image_url": "https://www.xenrebirth.com/index.php?attachment/2333-parka-male-png/",
+          "stats": "最大HP: +25\n 最大MP: +25\n 防御力: +18",
+          "stats_en": "Max HP: +25 | Max MP: +25 | DEF: +18",
+          "description": "",
+          "sort_order": 30
+        },
+        {
+          "name_en": "Parka (Female)",
+          "name_ja": "パーカー（女性用）",
+          "image_url": "https://www.xenrebirth.com/index.php?attachment/2343-parka-female-png/",
+          "stats": "最大HP: +25\n 最大MP: +25\n 防御力: +18",
+          "stats_en": "Max HP: +25 | Max MP: +25 | DEF: +18",
+          "description": "",
+          "sort_order": 40
+        },
+        {
+          "name_en": "Snowman Hat",
+          "name_ja": "雪だるまの帽子",
+          "image_url": "https://www.xenrebirth.com/index.php?attachment/2112-snowman-hat-png/",
+          "stats": "最大MP: +50\n 防御力: +14",
+          "stats_en": "Max MP: +50 | DEF: +14",
+          "description": "",
+          "sort_order": 50
+        },
+        {
+          "name_en": "Winter Wonder Hat (Male)",
+          "name_ja": "ウィンターワンダーハット（男性用）",
+          "image_url": "https://www.xenrebirth.com/index.php?attachment/2114-winter-wonder-hat-male-png/",
+          "stats": "POW: +10\n 防御力: +5",
+          "stats_en": "POW: +10 | DEF: +5",
+          "description": "",
+          "sort_order": 60
+        },
+        {
+          "name_en": "Winter Wonder Hat (Female)",
+          "name_ja": "ウィンターワンダーハット（女性用）",
+          "image_url": "https://www.xenrebirth.com/index.php?attachment/2113-winter-wonder-hat-female-png/",
+          "stats": "POW: +10\n 防御力: +5",
+          "stats_en": "POW: +10 | DEF: +5",
+          "description": "",
+          "sort_order": 70
+        },
+        {
+          "name_en": "Wool Hat",
+          "name_ja": "ウールの帽子",
+          "image_url": "https://www.xenrebirth.com/index.php?attachment/2115-wool-hat-png/",
+          "stats": "最大MP: +50\n 防御力: +14",
+          "stats_en": "Max MP: +50 | DEF: +14",
+          "description": "",
+          "sort_order": 80
+        }
+      ]
+    },
+    {
+      "slug": "christmas-lucky-ball",
+      "name_en": "Christmas Lucky Ball",
+      "name_ja": "クリスマスラッキーボール",
+      "section": "季節限定",
+      "is_extra": false,
+      "image_url": null,
+      "image_source_url": null,
+      "description": "公式一覧の「季節限定」に掲載。日本語名は参考訳です。 本体画像は参照した公式ページに掲載がありません。",
+      "source_url": "https://www.xenrebirth.com/lexicon/index.php?entry/5-lucky-balls-item-list/#3.2-Christmas-Lucky-Ball",
+      "sort_order": 180,
+      "items": [
+        {
+          "name_en": "Antler",
+          "name_ja": "枝角",
+          "image_url": "https://www.xenrebirth.com/index.php?attachment/1921-antler-png/",
+          "stats": "最大MP: +50\n 防御力: +14",
+          "stats_en": "Max MP: +50 | DEF: +14",
+          "description": "",
+          "sort_order": 10
+        },
+        {
+          "name_en": "Reindeer Helmet",
+          "name_ja": "トナカイのヘルメット",
+          "image_url": "https://www.xenrebirth.com/index.php?attachment/2229-reindeer-helmet-png/",
+          "stats": "最大MP: +100\n 防御力: +15",
+          "stats_en": "Max MP: +100 | DEF: +15",
+          "description": "",
+          "sort_order": 20
+        },
+        {
+          "name_en": "Rudolph Bag (Female)",
+          "name_ja": "ルドルフバッグ（女性用）",
+          "image_url": "https://www.xenrebirth.com/index.php?attachment/2295-rudolph-bag-female-png/",
+          "stats": "最大所持重量: +800",
+          "stats_en": "Max WT: +800",
+          "description": "",
+          "sort_order": 30
+        },
+        {
+          "name_en": "Rudolph Bag (Male)",
+          "name_ja": "ルドルフバッグ（男性用）",
+          "image_url": "https://www.xenrebirth.com/index.php?attachment/2278-rudolph-bag-male-png/",
+          "stats": "最大所持重量: +800",
+          "stats_en": "Max WT: +800",
+          "description": "",
+          "sort_order": 40
+        },
+        {
+          "name_en": "Santa Beard",
+          "name_ja": "サンタのひげ",
+          "image_url": "https://www.xenrebirth.com/index.php?attachment/2304-santa-beard-png/",
+          "stats": "クリティカル: +3\n HP回復間隔: -0.2 秒",
+          "stats_en": "Crit: +3 | HP Recovery Time: -0.2 sec",
+          "description": "",
+          "sort_order": 50
+        },
+        {
+          "name_en": "Santa Costume",
+          "name_ja": "サンタの衣装",
+          "image_url": "https://www.xenrebirth.com/index.php?attachment/2249-santa-costume-png/",
+          "stats": "最大HP: +50\n 防御力: +18",
+          "stats_en": "Max HP: +50 | DEF: +18",
+          "description": "",
+          "sort_order": 60
+        },
+        {
+          "name_en": "Santa Hat",
+          "name_ja": "サンタの帽子",
+          "image_url": "https://www.xenrebirth.com/index.php?attachment/1947-santa-hat-png/",
+          "stats": "最大MP: +50\n 防御力: +14",
+          "stats_en": "Max MP: +50 | DEF: +14",
+          "description": "",
+          "sort_order": 70
+        },
+        {
+          "name_en": "Tree Hat",
+          "name_ja": "ツリーの帽子",
+          "image_url": "https://www.xenrebirth.com/index.php?attachment/2187-tree-hat-png/",
+          "stats": "最大MP: +50\n 防御力: +14",
+          "stats_en": "Max MP: +50 | DEF: +14",
+          "description": "",
+          "sort_order": 80
+        }
+      ]
+    },
+    {
+      "slug": "lunar-new-year-lucky-ball",
+      "name_en": "Lunar New Year Lucky Ball",
+      "name_ja": "旧正月ラッキーボール",
+      "section": "季節限定",
+      "is_extra": false,
+      "image_url": null,
+      "image_source_url": null,
+      "description": "公式一覧の「季節限定」に掲載。日本語名は参考訳です。 本体画像は参照した公式ページに掲載がありません。",
+      "source_url": "https://www.xenrebirth.com/lexicon/index.php?entry/5-lucky-balls-item-list/#3.3-Lunar-New-Year-Lucky-Ball",
+      "sort_order": 190,
+      "items": [
+        {
+          "name_en": "Chinese New Year Lantern Helmet",
+          "name_ja": "旧正月のランタンヘルメット",
+          "image_url": "https://www.xenrebirth.com/index.php?attachment/1989-chinese-new-year-lantern-helmet-png/",
+          "stats": "最大HP: +25\n 最大MP: 25\n 防御力: +16",
+          "stats_en": "Max HP: +25 | Max MP: 25 | DEF: +16",
+          "description": "",
+          "sort_order": 10
+        },
+        {
+          "name_en": "Fire Crackers Emote",
+          "name_ja": "爆竹エモート",
+          "image_url": "https://www.xenrebirth.com/index.php?attachment/6184-fire-crackers-icon-png/",
+          "stats": "バフなし",
+          "stats_en": "No buffs",
+          "description": "",
+          "sort_order": 20
+        },
+        {
+          "name_en": "Green Dim Sum Head",
+          "name_ja": "緑の点心ヘッド",
+          "image_url": "https://www.xenrebirth.com/index.php?attachment/6118-green-dim-sum-head-png/",
+          "stats": "最大MP: +75\n 防御力: +18",
+          "stats_en": "Max MP: +75 | DEF: +18",
+          "description": "",
+          "sort_order": 30
+        },
+        {
+          "name_en": "White Dim Sum Head",
+          "name_ja": "白い点心ヘッド",
+          "image_url": "https://www.xenrebirth.com/index.php?attachment/1949-white-dim-sum-head-png/",
+          "stats": "最大MP: +75\n 防御力: +18",
+          "stats_en": "Max MP: +75 | DEF: +18",
+          "description": "",
+          "sort_order": 40
+        }
+      ]
+    },
+    {
+      "slug": "cupid-lucky-ball",
+      "name_en": "Cupid Lucky Ball",
+      "name_ja": "キューピッドラッキーボール",
+      "section": "季節限定",
+      "is_extra": false,
+      "image_url": null,
+      "image_source_url": null,
+      "description": "公式一覧の「季節限定」に掲載。日本語名は参考訳です。 本体画像は参照した公式ページに掲載がありません。",
+      "source_url": "https://www.xenrebirth.com/lexicon/index.php?entry/5-lucky-balls-item-list/#3.4-Cupid-Lucky-Ball",
+      "sort_order": 200,
+      "items": [
+        {
+          "name_en": "Bouquet Emote",
+          "name_ja": "花束エモート",
+          "image_url": "https://www.xenrebirth.com/index.php?attachment/6256-bouquet-icon-png/",
+          "stats": "バフなし",
+          "stats_en": "No buffs",
+          "description": "",
+          "sort_order": 10
+        },
+        {
+          "name_en": "Loyalty Mask",
+          "name_ja": "忠誠のマスク",
+          "image_url": "https://www.xenrebirth.com/index.php?attachment/1931-love-mask-png/",
+          "stats": "最大MP: +50\n 防御力: +14",
+          "stats_en": "Max MP: +50 | DEF: +14",
+          "description": "",
+          "sort_order": 20
+        },
+        {
+          "name_en": "Passionate Chocolate",
+          "name_ja": "情熱のチョコレート",
+          "image_url": "https://www.xenrebirth.com/index.php?attachment/6320-passionate-chocolate-png/",
+          "stats": "1時間、最大HPを200増加",
+          "stats_en": "Increase Max HP by 200 for 1 hour",
+          "description": "",
+          "sort_order": 30
+        },
+        {
+          "name_en": "Seal of Love",
+          "name_ja": "愛の印",
+          "image_url": "https://www.xenrebirth.com/index.php?attachment/1948-seal-of-love-png/",
+          "stats": "最大MP: +50\n 防御力: +14",
+          "stats_en": "Max MP: +50 | DEF: +14",
+          "description": "",
+          "sort_order": 40
+        }
+      ]
+    },
+    {
+      "slug": "valentine-s-day-lucky-ball",
+      "name_en": "Valentine's Day Lucky Ball",
+      "name_ja": "バレンタインラッキーボール",
+      "section": "季節限定",
+      "is_extra": false,
+      "image_url": null,
+      "image_source_url": null,
+      "description": "公式一覧の「季節限定」に掲載。日本語名は参考訳です。 本体画像は参照した公式ページに掲載がありません。",
+      "source_url": "https://www.xenrebirth.com/lexicon/index.php?entry/5-lucky-balls-item-list/#3.5-Valentines-Day-Lucky-Ball",
+      "sort_order": 210,
+      "items": [
+        {
+          "name_en": "Loving Heart Emote",
+          "name_ja": "愛する心エモート",
+          "image_url": "https://www.xenrebirth.com/index.php?attachment/6258-loving-heart-icon-png/",
+          "stats": "バフなし",
+          "stats_en": "No buffs",
+          "description": "",
+          "sort_order": 10
+        },
+        {
+          "name_en": "Loyalty Mask",
+          "name_ja": "忠誠のマスク",
+          "image_url": "https://www.xenrebirth.com/index.php?attachment/1931-love-mask-png/",
+          "stats": "最大MP: +50\n 防御力: +14",
+          "stats_en": "Max MP: +50 | DEF: +14",
+          "description": "",
+          "sort_order": 20
+        },
+        {
+          "name_en": "Rose Emote",
+          "name_ja": "バラエモート",
+          "image_url": "https://www.xenrebirth.com/index.php?attachment/6257-rose-icon-png/",
+          "stats": "バフなし",
+          "stats_en": "No buffs",
+          "description": "",
+          "sort_order": 30
+        },
+        {
+          "name_en": "Confessional Chocolate",
+          "name_ja": "告白のチョコレート",
+          "image_url": "https://www.xenrebirth.com/index.php?attachment/11479-confessionalchocolate-png/",
+          "stats": "1時間、最大MPを100増加",
+          "stats_en": "Increase Max MP by 100 for 1 hour",
+          "description": "",
+          "sort_order": 40
+        }
+      ]
+    },
+    {
+      "slug": "flower-lucky-ball",
+      "name_en": "Flower Lucky Ball",
+      "name_ja": "フラワーラッキーボール",
+      "section": "季節限定",
+      "is_extra": false,
+      "image_url": null,
+      "image_source_url": null,
+      "description": "公式一覧の「季節限定」に掲載。日本語名は参考訳です。 本体画像は参照した公式ページに掲載がありません。",
+      "source_url": "https://www.xenrebirth.com/lexicon/index.php?entry/5-lucky-balls-item-list/#3.6-Flower-Lucky-Ball",
+      "sort_order": 220,
+      "items": [
+        {
+          "name_en": "Red Flower Helm",
+          "name_ja": "赤い花の兜",
+          "image_url": "https://www.xenrebirth.com/index.php?attachment/1984-red-star-hairband-png/",
+          "stats": "最大MP: +75\n 防御力: +18\n MP回復間隔: -0.1 秒",
+          "stats_en": "Max MP: +75 | DEF: +18 | MP Recovery Time: -0.1 sec",
+          "description": "",
+          "sort_order": 10
+        },
+        {
+          "name_en": "Blue Flower Helm",
+          "name_ja": "青い花の兜",
+          "image_url": "https://www.xenrebirth.com/index.php?attachment/1925-blue-star-headband-png/",
+          "stats": "最大MP: +75\n 防御力: +18\n MP回復間隔: -0.1 秒",
+          "stats_en": "Max MP: +75 | DEF: +18 | MP Recovery Time: -0.1 sec",
+          "description": "",
+          "sort_order": 20
+        },
+        {
+          "name_en": "Red Flower Pin",
+          "name_ja": "赤い花のピン",
+          "image_url": "https://www.xenrebirth.com/index.php?attachment/2188-red-big-flower-png/",
+          "stats": "防御力: +18\n MP回復間隔: -0.3 秒",
+          "stats_en": "DEF: +18 | MP Recovery Time: -0.3 sec",
+          "description": "",
+          "sort_order": 30
+        }
+      ]
+    },
+    {
+      "slug": "rainbow-lucky-ball",
+      "name_en": "Rainbow Lucky Ball",
+      "name_ja": "レインボーラッキーボール",
+      "section": "季節限定",
+      "is_extra": false,
+      "image_url": null,
+      "image_source_url": null,
+      "description": "公式一覧の「季節限定」に掲載。日本語名は参考訳です。 本体画像は参照した公式ページに掲載がありません。",
+      "source_url": "https://www.xenrebirth.com/lexicon/index.php?entry/5-lucky-balls-item-list/#3.7-Rainbow-Lucky-Ball",
+      "sort_order": 230,
+      "items": [
+        {
+          "name_en": "Rain Hat",
+          "name_ja": "レインハット",
+          "image_url": "https://www.xenrebirth.com/index.php?attachment/1990-rain-helmet-png/",
+          "stats": "最大HP: +100\n 防御力: +18",
+          "stats_en": "Max HP: +100 | DEF: +18",
+          "description": "",
+          "sort_order": 10
+        },
+        {
+          "name_en": "Rain Suit",
+          "name_ja": "レインスーツ",
+          "image_url": "https://www.xenrebirth.com/index.php?attachment/2247-rain-suit-png/",
+          "stats": "最大HP: +100\n 防御力: +22",
+          "stats_en": "Max HP: +100 | DEF: +22",
+          "description": "",
+          "sort_order": 20
+        }
+      ]
+    },
+    {
+      "slug": "spring-lucky-ball",
+      "name_en": "Spring Lucky Ball",
+      "name_ja": "スプリングラッキーボール",
+      "section": "季節限定",
+      "is_extra": false,
+      "image_url": null,
+      "image_source_url": null,
+      "description": "公式一覧の「季節限定」に掲載。日本語名は参考訳です。 本体画像は参照した公式ページに掲載がありません。",
+      "source_url": "https://www.xenrebirth.com/lexicon/index.php?entry/5-lucky-balls-item-list/#3.8-Spring-Lucky-Ball",
+      "sort_order": 240,
+      "items": [
+        {
+          "name_en": "Carrot Helmet",
+          "name_ja": "ニンジンのヘルメット",
+          "image_url": "https://www.xenrebirth.com/index.php?attachment/1970-carrot-helmet-png/",
+          "stats": "最大HP: +75\n 最大MP: +75\n 防御力: +8",
+          "stats_en": "Max HP: +75 | Max MP: +75 | DEF: +8",
+          "description": "",
+          "sort_order": 10
+        },
+        {
+          "name_en": "Carrot Suit",
+          "name_ja": "ニンジンのスーツ",
+          "image_url": "https://www.xenrebirth.com/index.php?attachment/2237-carrot-suit-png/",
+          "stats": "最大HP: +15\n最大MP: +15\n 防御力: +12\n クリティカル: +1",
+          "stats_en": "Max HP: +15 |Max MP: +15 | DEF: +12 | Crit: +1",
+          "description": "",
+          "sort_order": 20
+        },
+        {
+          "name_en": "Earth Helmet",
+          "name_ja": "アースヘルメット",
+          "image_url": "https://www.xenrebirth.com/index.php?attachment/2093-earth-helmet-png/",
+          "stats": "POW: +1\n INT: +1\n STA: +1\n AGI +1\n MEN: +1\n WIS: +1",
+          "stats_en": "POW: +1 | INT: +1 | STA: +1 | AGI +1 | MEN: +1 | WIS: +1",
+          "description": "",
+          "sort_order": 30
+        }
+      ]
+    },
+    {
+      "slug": "star-lucky-ball",
+      "name_en": "Star Lucky Ball",
+      "name_ja": "スターラッキーボール",
+      "section": "季節限定",
+      "is_extra": false,
+      "image_url": null,
+      "image_source_url": null,
+      "description": "公式一覧の「季節限定」に掲載。日本語名は参考訳です。 本体画像は参照した公式ページに掲載がありません。",
+      "source_url": "https://www.xenrebirth.com/lexicon/index.php?entry/5-lucky-balls-item-list/#3.9-Star-Lucky-Ball",
+      "sort_order": 250,
+      "items": [
+        {
+          "name_en": "Baby Starfish Blue",
+          "name_ja": "青い小さなヒトデ",
+          "image_url": "https://www.xenrebirth.com/index.php?attachment/2105-blue-star-hairpin-png/",
+          "stats": "最大HP: +100\n 防御力: +18",
+          "stats_en": "Max HP: +100 | DEF: +18",
+          "description": "",
+          "sort_order": 10
+        },
+        {
+          "name_en": "Baby Starfish Red",
+          "name_ja": "赤い小さなヒトデ",
+          "image_url": "https://www.xenrebirth.com/index.php?attachment/1946-red-star-hairpin-png/",
+          "stats": "最大HP: +100\n 防御力: +18",
+          "stats_en": "Max HP: +100 | DEF: +18",
+          "description": "",
+          "sort_order": 20
+        },
+        {
+          "name_en": "Starfish",
+          "name_ja": "ヒトデ",
+          "image_url": null,
+          "stats": "最大MP: +100\n 防御力: +18",
+          "stats_en": "Max MP: +100 | DEF: +18",
+          "description": "",
+          "sort_order": 30
+        }
+      ]
+    },
+    {
+      "slug": "luck-of-the-irish-lucky-ball",
+      "name_en": "Luck of the Irish Lucky Ball",
+      "name_ja": "アイルランドの幸運ラッキーボール",
+      "section": "季節限定",
+      "is_extra": false,
+      "image_url": null,
+      "image_source_url": null,
+      "description": "公式一覧の「季節限定」に掲載。日本語名は参考訳です。 本体画像は参照した公式ページに掲載がありません。",
+      "source_url": "https://www.xenrebirth.com/lexicon/index.php?entry/5-lucky-balls-item-list/#3.10-Luck-of-the-Irish-Lucky-Ball",
+      "sort_order": 260,
+      "items": [
+        {
+          "name_en": "Leprechaun Pet",
+          "name_ja": "レプラコーンのペット",
+          "image_url": "https://www.xenrebirth.com/index.php?attachment/1997-leprechaun-png/",
+          "stats": "最大HP: +100",
+          "stats_en": "Max HP: +100",
+          "description": "",
+          "sort_order": 10
+        },
+        {
+          "name_en": "Leprechaun Shoes of Speed",
+          "name_ja": "素早さのレプラコーンシューズ",
+          "image_url": "https://www.xenrebirth.com/index.php?attachment/2309-leprechaun-shoes-of-speed-png/",
+          "stats": "防御力: +5\n 移動速度: +5",
+          "stats_en": "DEF: +5 | Movement Rate: +5",
+          "description": "",
+          "sort_order": 20
+        },
+        {
+          "name_en": "Shamrock Emote",
+          "name_ja": "シャムロックエモート",
+          "image_url": "https://www.xenrebirth.com/index.php?attachment/6153-shamrock-icon-png/",
+          "stats": "30分間 HP +50",
+          "stats_en": "+50 HP for 30 minutes",
+          "description": "",
+          "sort_order": 30
+        },
+        {
+          "name_en": "Shamrock Shake",
+          "name_ja": "シャムロックシェイク",
+          "image_url": "https://www.xenrebirth.com/index.php?attachment/6186-shamrock-shake-png/",
+          "stats": "HP: +250\n MP: +250",
+          "stats_en": "HP: +250 | MP: +250",
+          "description": "",
+          "sort_order": 40
+        }
+      ]
+    },
+    {
+      "slug": "clover-lucky-ball",
+      "name_en": "Clover Lucky Ball",
+      "name_ja": "クローバーラッキーボール",
+      "section": "季節限定",
+      "is_extra": false,
+      "image_url": null,
+      "image_source_url": null,
+      "description": "公式一覧の「季節限定」に掲載。日本語名は参考訳です。 本体画像は参照した公式ページに掲載がありません。",
+      "source_url": "https://www.xenrebirth.com/lexicon/index.php?entry/5-lucky-balls-item-list/#3.11-Clover-Lucky-Ball",
+      "sort_order": 270,
+      "items": [
+        {
+          "name_en": "Leprechaun Pet",
+          "name_ja": "レプラコーンのペット",
+          "image_url": "https://www.xenrebirth.com/index.php?attachment/1997-leprechaun-png/",
+          "stats": "最大HP: +100",
+          "stats_en": "Max HP: +100",
+          "description": "",
+          "sort_order": 10
+        },
+        {
+          "name_en": "Shamrock Emote",
+          "name_ja": "シャムロックエモート",
+          "image_url": "https://www.xenrebirth.com/index.php?attachment/6153-shamrock-icon-png/",
+          "stats": "30分間 HP +50",
+          "stats_en": "+50 HP for 30 minutes",
+          "description": "",
+          "sort_order": 20
+        },
+        {
+          "name_en": "Shamrock Shake",
+          "name_ja": "シャムロックシェイク",
+          "image_url": "https://www.xenrebirth.com/index.php?attachment/6186-shamrock-shake-png/",
+          "stats": "HP: +250\n MP: +250",
+          "stats_en": "HP: +250 | MP: +250",
+          "description": "",
+          "sort_order": 30
+        }
+      ]
+    },
+    {
+      "slug": "easter-lucky-ball",
+      "name_en": "Easter Lucky Ball",
+      "name_ja": "イースターラッキーボール",
+      "section": "季節限定",
+      "is_extra": false,
+      "image_url": null,
+      "image_source_url": null,
+      "description": "公式一覧の「季節限定」に掲載。日本語名は参考訳です。 本体画像は参照した公式ページに掲載がありません。",
+      "source_url": "https://www.xenrebirth.com/lexicon/index.php?entry/5-lucky-balls-item-list/#3.12-Easter-Lucky-Ball",
+      "sort_order": 280,
+      "items": [
+        {
+          "name_en": "Bunny Hood",
+          "name_ja": "うさぎのフード",
+          "image_url": null,
+          "stats": "防御力: +10\n 回避: +5\n 移動速度: +2",
+          "stats_en": "DEF: +10 | Successful Dodge: +5 | Movement Rate: +2",
+          "description": "",
+          "sort_order": 10
+        },
+        {
+          "name_en": "Bunny PJs",
+          "name_ja": "うさぎのパジャマ",
+          "image_url": "https://www.xenrebirth.com/index.php?attachment/13740-bunny-pjs-png/",
+          "stats": "防御力: +10\n 移動速度: +2\n スキルクリティカル: +5",
+          "stats_en": "DEF: +10 | Movement Rate: +2 | Skill Crit: +5",
+          "description": "",
+          "sort_order": 20
+        },
+        {
+          "name_en": "Rabbit Helmet",
+          "name_ja": "うさぎのヘルメット",
+          "image_url": "https://www.xenrebirth.com/index.php?attachment/2011-rabbit-helmet-png/",
+          "stats": "最大HP: +75\n 防御力: +10\n\n原文の同名別行：\nHP回復間隔: -1.0 秒\n MP回復間隔: -1.0 秒",
+          "stats_en": "Max HP: +75 | DEF: +10\n\n[Second source row with the same name]\nHP Recovery Time: -1.0 sec | MP Recovery Time: -1.0 sec",
+          "description": "公式一覧に同名で異なるステータスの2行があるため、両方を併記。合算値ではありません。",
+          "sort_order": 30
+        },
+        {
+          "name_en": "Rabbit Suit",
+          "name_ja": "うさぎのスーツ",
+          "image_url": "https://www.xenrebirth.com/index.php?attachment/2344-rabbit-suit-png/",
+          "stats": "最大HP: +100\n 防御力: +12",
+          "stats_en": "Max HP: +100 | DEF: +12",
+          "description": "",
+          "sort_order": 50
+        },
+        {
+          "name_en": "Happy Easter Emote",
+          "name_ja": "イースターおめでとうエモート",
+          "image_url": "https://www.xenrebirth.com/index.php?attachment/6182-happy-easter-icon-png/",
+          "stats": "バフなし",
+          "stats_en": "No buffs.",
+          "description": "",
+          "sort_order": 60
+        }
+      ]
+    },
+    {
+      "slug": "cinco-de-mayo-lucky-ball",
+      "name_en": "Cinco De Mayo Lucky Ball",
+      "name_ja": "シンコ・デ・マヨラッキーボール",
+      "section": "季節限定",
+      "is_extra": false,
+      "image_url": null,
+      "image_source_url": null,
+      "description": "公式一覧の「季節限定」に掲載。日本語名は参考訳です。 本体画像は参照した公式ページに掲載がありません。",
+      "source_url": "https://www.xenrebirth.com/lexicon/index.php?entry/5-lucky-balls-item-list/#3.13-Cinco-De-Mayo-Lucky-Ball",
+      "sort_order": 290,
+      "items": [
+        {
+          "name_en": "Happy Cinco De Mayo Emote",
+          "name_ja": "シンコ・デ・マヨおめでとうエモート",
+          "image_url": "https://www.xenrebirth.com/index.php?attachment/6168-happy-cinco-de-mayo-icon-png/",
+          "stats": "バフなし",
+          "stats_en": "No buffs.",
+          "description": "",
+          "sort_order": 10
+        },
+        {
+          "name_en": "Poncho (Male)",
+          "name_ja": "ポンチョ（男性用）",
+          "image_url": "https://www.xenrebirth.com/index.php?attachment/2446-poncho-male-png/",
+          "stats": "最大HP: +100\n 最大MP: +100\n 防御力: +18",
+          "stats_en": "Max HP: +100 | Max MP: +100 | DEF: +18",
+          "description": "",
+          "sort_order": 20
+        },
+        {
+          "name_en": "Poncho (Female)",
+          "name_ja": "ポンチョ（女性用）",
+          "image_url": "https://www.xenrebirth.com/index.php?attachment/2246-poncho-female-png/",
+          "stats": "最大HP: +100\n 最大MP: +100\n 防御力: +18",
+          "stats_en": "Max HP: +100 | Max MP: +100 | DEF: +18",
+          "description": "",
+          "sort_order": 30
+        },
+        {
+          "name_en": "Sombrero Hat",
+          "name_ja": "ソンブレロ",
+          "image_url": "https://www.xenrebirth.com/index.php?attachment/2251-sombrero-hat-png/",
+          "stats": "最大HP: +50\n 最大MP: +50\n 防御力: +18",
+          "stats_en": "Max HP: +50 | Max MP: +50 | DEF: +18",
+          "description": "",
+          "sort_order": 40
+        }
+      ]
+    },
+    {
+      "slug": "freedom-lucky-ball",
+      "name_en": "Freedom Lucky Ball",
+      "name_ja": "フリーダムラッキーボール",
+      "section": "季節限定",
+      "is_extra": false,
+      "image_url": null,
+      "image_source_url": null,
+      "description": "公式一覧の「季節限定」に掲載。日本語名は参考訳です。 本体画像は参照した公式ページに掲載がありません。",
+      "source_url": "https://www.xenrebirth.com/lexicon/index.php?entry/5-lucky-balls-item-list/#3.14-Freedom-Lucky-Ball",
+      "sort_order": 300,
+      "items": [
+        {
+          "name_en": "4th of July Fireworks Emote",
+          "name_ja": "独立記念日の花火エモート",
+          "image_url": "https://www.xenrebirth.com/index.php?attachment/6184-fire-crackers-icon-png/",
+          "stats": "バフなし",
+          "stats_en": "No buffs",
+          "description": "",
+          "sort_order": 10
+        },
+        {
+          "name_en": "Grog-Zilla Head",
+          "name_ja": "グログジラの頭",
+          "image_url": "https://www.xenrebirth.com/index.php?attachment/1951-grog-zilla-head-png/",
+          "stats": "POW: +1\n 防御力: +15\n 魔法防御力: +15\n 移動速度: -1",
+          "stats_en": "POW: +1 | DEF: +15 | Magic DEF: +15 | Movement Rate: -1",
+          "description": "",
+          "sort_order": 20
+        },
+        {
+          "name_en": "Grog-Zilla Suit",
+          "name_ja": "グログジラのスーツ",
+          "image_url": "https://www.xenrebirth.com/index.php?attachment/3427-grog-zilla-suit-png/",
+          "stats": "公式ページにステータスの記載なし",
+          "stats_en": "",
+          "description": "",
+          "sort_order": 30
+        },
+        {
+          "name_en": "Grog-Zilla Tail",
+          "name_ja": "グログジラのしっぽ",
+          "image_url": "https://www.xenrebirth.com/index.php?attachment/2294-grog-zilla-tail-png/",
+          "stats": "POW: +1\n 防御力: +5\n 魔法防御力: +5\n クリティカル: +3",
+          "stats_en": "POW: +1 | DEF: +5 | Magic DEF: +5 | Crit: +3",
+          "description": "",
+          "sort_order": 40
+        }
+      ]
+    },
+    {
+      "slug": "patriot-lucky-ball",
+      "name_en": "Patriot Lucky Ball",
+      "name_ja": "パトリオットラッキーボール",
+      "section": "季節限定",
+      "is_extra": false,
+      "image_url": null,
+      "image_source_url": null,
+      "description": "公式一覧の「季節限定」に掲載。日本語名は参考訳です。 本体画像は参照した公式ページに掲載がありません。",
+      "source_url": "https://www.xenrebirth.com/lexicon/index.php?entry/5-lucky-balls-item-list/#3.15-Patriot-Lucky-Ball",
+      "sort_order": 310,
+      "items": [
+        {
+          "name_en": "Stars and Stripes Emote",
+          "name_ja": "星条旗エモート",
+          "image_url": "https://www.xenrebirth.com/index.php?attachment/6183-stars-and-stripes-icon-png/",
+          "stats": "30分間 MP +50",
+          "stats_en": "+50 MP for 30 minutes",
+          "description": "",
+          "sort_order": 10
+        },
+        {
+          "name_en": "Steam Hat (Male)",
+          "name_ja": "スチームハット（男性用）",
+          "image_url": null,
+          "stats": "POW: +1\n STA: +1\n AGI: +1\n 防御力: +10\n 魔法防御力: +10",
+          "stats_en": "POW: +1 | STA: +1 | AGI: +1 | DEF: +10 | Magic DEF: +10",
+          "description": "",
+          "sort_order": 20
+        },
+        {
+          "name_en": "Steam Hat (Female)",
+          "name_ja": "スチームハット（女性用）",
+          "image_url": null,
+          "stats": "POW: +1\n STA: +1\n AGI: +1\n 防御力: +10\n 魔法防御力: +10",
+          "stats_en": "POW: +1 | STA: +1 | AGI: +1 | DEF: +10 | Magic DEF: +10",
+          "description": "",
+          "sort_order": 30
+        },
+        {
+          "name_en": "Steam Suit (Male)",
+          "name_ja": "スチームスーツ（男性用）",
+          "image_url": "https://www.xenrebirth.com/index.php?attachment/6340-steam-suit-male-png/",
+          "stats": "STA: +20\n WIS: +3\n 攻撃力: +25\n 魔法攻撃力: +25\n 防御力: +5",
+          "stats_en": "STA: +20 | WIS: +3 | Attack: +25 | Magic: +25 | DEF: +5",
+          "description": "",
+          "sort_order": 40
+        },
+        {
+          "name_en": "Steam Suit (Female)",
+          "name_ja": "スチームスーツ（女性用）",
+          "image_url": "https://www.xenrebirth.com/index.php?attachment/6259-steam-suit-female-png/",
+          "stats": "STA: +20\n WIS: +3\n 攻撃力: +25\n 魔法攻撃力: +25\n 防御力: +5",
+          "stats_en": "STA: +20 | WIS: +3 | Attack: +25 | Magic: +25 | DEF: +5",
+          "description": "",
+          "sort_order": 50
+        }
+      ]
+    },
+    {
+      "slug": "sun-lucky-ball",
+      "name_en": "Sun Lucky Ball",
+      "name_ja": "サンラッキーボール",
+      "section": "季節限定",
+      "is_extra": false,
+      "image_url": null,
+      "image_source_url": null,
+      "description": "公式一覧の「季節限定」に掲載。日本語名は参考訳です。 本体画像は参照した公式ページに掲載がありません。",
+      "source_url": "https://www.xenrebirth.com/lexicon/index.php?entry/5-lucky-balls-item-list/#3.16-Sun-Lucky-Ball",
+      "sort_order": 320,
+      "items": [
+        {
+          "name_en": "Beach Cap (Male)",
+          "name_ja": "ビーチキャップ（男性用）",
+          "image_url": null,
+          "stats": "最大HP: +85\n 防御力: +18",
+          "stats_en": "Max HP: +85 | DEF: +18",
+          "description": "",
+          "sort_order": 10
+        },
+        {
+          "name_en": "Beach Cap (Female)",
+          "name_ja": "ビーチキャップ（女性用）",
+          "image_url": "https://www.xenrebirth.com/index.php?attachment/1933-beach-cap-female-png/",
+          "stats": "最大HP: +85\n 防御力: +18",
+          "stats_en": "Max HP: +85 | DEF: +18",
+          "description": "",
+          "sort_order": 20
+        },
+        {
+          "name_en": "Snorkel Mask",
+          "name_ja": "シュノーケルマスク",
+          "image_url": "https://www.xenrebirth.com/index.php?attachment/2212-snorkel-mask-png/",
+          "stats": "命中率: +3\n クリティカル: +1\n スキルクリティカル: +3",
+          "stats_en": "Successful Hit-Rate: +3 | Crit: +1 | Skill Crit: +3",
+          "description": "",
+          "sort_order": 30
+        },
+        {
+          "name_en": "Summer Swimsuit (Male)",
+          "name_ja": "夏の水着（男性用）",
+          "image_url": "https://www.xenrebirth.com/index.php?attachment/2334-summer-swimsuit-male-png/",
+          "stats": "最大HP: +85\n 防御力: +22",
+          "stats_en": "Max HP: +85 | DEF: +22",
+          "description": "",
+          "sort_order": 40
+        },
+        {
+          "name_en": "Summer Swimsuit (Female)",
+          "name_ja": "夏の水着（女性用）",
+          "image_url": "https://www.xenrebirth.com/index.php?attachment/2449-summer-swimsuit-female-png/",
+          "stats": "最大HP: +85\n 防御力: +22",
+          "stats_en": "Max HP: +85 | DEF: +22",
+          "description": "",
+          "sort_order": 50
+        },
+        {
+          "name_en": "Swim Cap (Male)",
+          "name_ja": "水泳帽（男性用）",
+          "image_url": null,
+          "stats": "最大MP: +100\n 防御力: +15",
+          "stats_en": "Max MP: +100 | DEF: +15",
+          "description": "",
+          "sort_order": 60
+        },
+        {
+          "name_en": "Swim Cap (Female)",
+          "name_ja": "水泳帽（女性用）",
+          "image_url": "https://www.xenrebirth.com/index.php?attachment/1938-swim-cap-female-png/",
+          "stats": "最大MP: +100\n 防御力: +15",
+          "stats_en": "Max MP: +100 | DEF: +15",
+          "description": "",
+          "sort_order": 70
+        }
+      ]
+    },
+    {
+      "slug": "moon-lucky-ball",
+      "name_en": "Moon Lucky Ball",
+      "name_ja": "ムーンラッキーボール",
+      "section": "季節限定",
+      "is_extra": false,
+      "image_url": null,
+      "image_source_url": null,
+      "description": "公式一覧の「季節限定」に掲載。日本語名は参考訳です。 本体画像は参照した公式ページに掲載がありません。",
+      "source_url": "https://www.xenrebirth.com/lexicon/index.php?entry/5-lucky-balls-item-list/#3.17-Moon-Lucky-Ball",
+      "sort_order": 330,
+      "items": [
+        {
+          "name_en": "Fishhead Male",
+          "name_ja": "魚の頭（男性用）",
+          "image_url": "https://www.xenrebirth.com/index.php?attachment/2010-fishhead-male-png/",
+          "stats": "最大MP: +100\n 防御力: +18",
+          "stats_en": "Max MP: +100 | DEF: +18",
+          "description": "",
+          "sort_order": 10
+        },
+        {
+          "name_en": "Fishhead Female",
+          "name_ja": "魚の頭（女性用）",
+          "image_url": "https://www.xenrebirth.com/index.php?attachment/2009-fishhead-female-png/",
+          "stats": "最大MP: +100\n 防御力: +18",
+          "stats_en": "Max MP: +100 | DEF: +18",
+          "description": "",
+          "sort_order": 20
+        },
+        {
+          "name_en": "Heavy Metal Hair",
+          "name_ja": "ヘビーメタルヘア",
+          "image_url": null,
+          "stats": "最大HP: +25\n 最大MP: +25\n 防御力: +20",
+          "stats_en": "Max HP: +25 | Max MP: +25 | DEF: +20",
+          "description": "",
+          "sort_order": 30
+        },
+        {
+          "name_en": "Purple Punk Hair",
+          "name_ja": "紫のパンクヘア",
+          "image_url": null,
+          "stats": "最大HP: +125\n 最大MP: +125",
+          "stats_en": "Max HP: +125 | Max MP: +125",
+          "description": "",
+          "sort_order": 40
+        },
+        {
+          "name_en": "Ragin' Red Hair",
+          "name_ja": "荒ぶる赤髪",
+          "image_url": null,
+          "stats": "最大HP: +25\n 最大MP: +25\n 防御力: +10\n クリティカル: +3",
+          "stats_en": "Max HP: +25 | Max MP: +25 | DEF: +10 | Crit: +3",
+          "description": "",
+          "sort_order": 50
+        }
+      ]
+    },
+    {
+      "slug": "skull-lucky-ball",
+      "name_en": "Skull Lucky Ball",
+      "name_ja": "スカルラッキーボール",
+      "section": "季節限定",
+      "is_extra": false,
+      "image_url": null,
+      "image_source_url": null,
+      "description": "公式一覧の「季節限定」に掲載。日本語名は参考訳です。 本体画像は参照した公式ページに掲載がありません。",
+      "source_url": "https://www.xenrebirth.com/lexicon/index.php?entry/5-lucky-balls-item-list/#3.18-Skull-Lucky-Ball",
+      "sort_order": 340,
+      "items": [
+        {
+          "name_en": "Wolf Head",
+          "name_ja": "オオカミの頭",
+          "image_url": "https://www.xenrebirth.com/index.php?attachment/2097-wolf-head-png/",
+          "stats": "最大MP: +100\n 防御力: +15",
+          "stats_en": "Max MP: +100 | DEF: +15",
+          "description": "",
+          "sort_order": 10
+        },
+        {
+          "name_en": "Ghost Suit",
+          "name_ja": "ゴーストスーツ",
+          "image_url": "https://www.xenrebirth.com/index.php?attachment/2325-ghost-suit-png/",
+          "stats": "POW: +1\n 防御力: +10",
+          "stats_en": "POW: +1 | DEF: +10",
+          "description": "",
+          "sort_order": 20
+        },
+        {
+          "name_en": "Skull Mask",
+          "name_ja": "ドクロのマスク",
+          "image_url": null,
+          "stats": "最大MP +100\n 防御力+ 15",
+          "stats_en": "Max MP +100 | DEF+ 15",
+          "description": "",
+          "sort_order": 30
+        },
+        {
+          "name_en": "Eyemo Hair",
+          "name_ja": "アイモヘア",
+          "image_url": null,
+          "stats": "最大MP +50\n 防御力 +14",
+          "stats_en": "Max MP +50| DEF +14",
+          "description": "",
+          "sort_order": 40
+        }
+      ]
+    },
+    {
+      "slug": "ghoul-lucky-ball",
+      "name_en": "Ghoul Lucky Ball",
+      "name_ja": "グールラッキーボール",
+      "section": "季節限定",
+      "is_extra": false,
+      "image_url": null,
+      "image_source_url": null,
+      "description": "公式一覧の「季節限定」に掲載。日本語名は参考訳です。 本体画像は参照した公式ページに掲載がありません。",
+      "source_url": "https://www.xenrebirth.com/lexicon/index.php?entry/5-lucky-balls-item-list/#3.19-Ghoul-Lucky-Ball",
+      "sort_order": 350,
+      "items": [
+        {
+          "name_en": "Ceremonial Scythe",
+          "name_ja": "儀式の鎌",
+          "image_url": "https://www.xenrebirth.com/index.php?attachment/13228-ceremonial-scythe-png/",
+          "stats": "POW: +5\n INT: +5\n AGI: +5\n 最大HP: +50\n 最大MP: +50\n 攻撃力: + 50\n 魔法攻撃力: +50",
+          "stats_en": "POW: +5 | INT: +5 | AGI: +5 | Max HP: +50 | Max MP: +50 | Attack: + 50 | Magic: +50",
+          "description": "",
+          "sort_order": 10
+        },
+        {
+          "name_en": "Dark Magic Hood",
+          "name_ja": "ダークマジックフード",
+          "image_url": null,
+          "stats": "最大HP: +50\n 最大MP: +100\n 防御力: +15",
+          "stats_en": "Max HP: +50 | Max MP: +100 | DEF: +15",
+          "description": "",
+          "sort_order": 20
+        },
+        {
+          "name_en": "Dark Magic Suit",
+          "name_ja": "ダークマジックスーツ",
+          "image_url": "https://www.xenrebirth.com/index.php?attachment/2240-dark-magic-suit-png/",
+          "stats": "最大HP: +50\n 最大MP: +100\n 防御力: +15",
+          "stats_en": "Max HP: +50 | Max MP: +100 | DEF: +15",
+          "description": "",
+          "sort_order": 30
+        },
+        {
+          "name_en": "Devil Head",
+          "name_ja": "悪魔の頭",
+          "image_url": "https://www.xenrebirth.com/index.php?attachment/1977-devil-head-png/",
+          "stats": "最大MP: +100\n 防御力: +15",
+          "stats_en": "Max MP: +100 | DEF: +15",
+          "description": "",
+          "sort_order": 40
+        },
+        {
+          "name_en": "Imp's Tail",
+          "name_ja": "小悪魔のしっぽ",
+          "image_url": "https://www.xenrebirth.com/index.php?attachment/6219-imp-s-tail-png/",
+          "stats": "回避率: +3\n 移動速度: +3",
+          "stats_en": "Successful Dodge Rate: +3 | Movement Rate: +3",
+          "description": "",
+          "sort_order": 50
+        }
+      ]
+    },
+    {
+      "slug": "muertes-lucky-ball",
+      "name_en": "Muertes Lucky Ball",
+      "name_ja": "ムエルテスラッキーボール",
+      "section": "季節限定",
+      "is_extra": false,
+      "image_url": null,
+      "image_source_url": null,
+      "description": "公式一覧の「季節限定」に掲載。日本語名は参考訳です。 本体画像は参照した公式ページに掲載がありません。",
+      "source_url": "https://www.xenrebirth.com/lexicon/index.php?entry/5-lucky-balls-item-list/#3.20-Muertes-Lucky-Ball",
+      "sort_order": 360,
+      "items": [
+        {
+          "name_en": "Battle Helmet",
+          "name_ja": "バトルヘルメット",
+          "image_url": "https://www.xenrebirth.com/index.php?attachment/2300-battle-helmet-png/",
+          "stats": "POW: +1\n 防御力: +15\n 魔法防御力: +15\n 移動速度: -1",
+          "stats_en": "POW: +1 | DEF: +15 | Magic DEF: +15 | Movement Rate: -1",
+          "description": "",
+          "sort_order": 10
+        },
+        {
+          "name_en": "Battle Suit",
+          "name_ja": "バトルスーツ",
+          "image_url": "https://www.xenrebirth.com/index.php?attachment/2318-battle-suit-png/",
+          "stats": "POW: +3\n STA: +20\n 攻撃力: +25\n 魔法攻撃力: +25\n 防御力: +15\n 移動速度: -1",
+          "stats_en": "POW: +3 | STA: +20 | Attack: +25 | Magic: +25 | DEF: +15 | Movement Rate: -1",
+          "description": "",
+          "sort_order": 20
+        },
+        {
+          "name_en": "Hockey Mask",
+          "name_ja": "ホッケーマスク",
+          "image_url": "https://www.xenrebirth.com/index.php?attachment/2310-hockey-mask-png/",
+          "stats": "最大MP: +100\n 防御力: +15",
+          "stats_en": "Max MP: +100 | DEF: +15",
+          "description": "",
+          "sort_order": 30
+        }
+      ]
+    },
+    {
+      "slug": "pumpkin-lucky-ball",
+      "name_en": "Pumpkin Lucky Ball",
+      "name_ja": "パンプキンラッキーボール",
+      "section": "季節限定",
+      "is_extra": false,
+      "image_url": null,
+      "image_source_url": null,
+      "description": "公式一覧の「季節限定」に掲載。日本語名は参考訳です。 本体画像は参照した公式ページに掲載がありません。",
+      "source_url": "https://www.xenrebirth.com/lexicon/index.php?entry/5-lucky-balls-item-list/#3.21-Pumpkin-Lucky-Ball",
+      "sort_order": 370,
+      "items": [
+        {
+          "name_en": "Buxom Hair",
+          "name_ja": "バクサムヘア",
+          "image_url": null,
+          "stats": "最大HP: +125\n 最大MP: +125",
+          "stats_en": "Max HP: +125 | Max MP: +125",
+          "description": "",
+          "sort_order": 10
+        },
+        {
+          "name_en": "Clown Mask",
+          "name_ja": "ピエロのマスク",
+          "image_url": "https://www.xenrebirth.com/index.php?attachment/2219-clown-mask-png/",
+          "stats": "最大MP: +100\n 防御力: +15",
+          "stats_en": "Max MP: +100 | DEF: +15",
+          "description": "",
+          "sort_order": 20
+        },
+        {
+          "name_en": "Luscious Layer Hair",
+          "name_ja": "ラシャスレイヤーヘア",
+          "image_url": null,
+          "stats": "AGI: +3\n 最大HP: +25\n 最大MP: +25\n 防御力: +10",
+          "stats_en": "AGI: +3 | Max HP: +25 | Max MP: +25 | DEF: +10",
+          "description": "",
+          "sort_order": 30
+        },
+        {
+          "name_en": "Pumpkin Helmet",
+          "name_ja": "カボチャのヘルメット",
+          "image_url": null,
+          "stats": "最大MP: +50\n 防御力: +14",
+          "stats_en": "Max MP: +50 | DEF: +14",
+          "description": "",
+          "sort_order": 40
+        }
+      ]
+    },
+    {
+      "slug": "hero-lucky-ball",
+      "name_en": "Hero Lucky Ball",
+      "name_ja": "ヒーローラッキーボール",
+      "section": "特別",
+      "is_extra": false,
+      "image_url": null,
+      "image_source_url": null,
+      "description": "公式一覧の「特別」に掲載。日本語名は参考訳です。 本体画像は参照した公式ページに掲載がありません。",
+      "source_url": "https://www.xenrebirth.com/lexicon/index.php?entry/5-lucky-balls-item-list/#4.1-Hero-Lucky-Ball",
+      "sort_order": 380,
+      "items": [
+        {
+          "name_en": "Hero's Cloak",
+          "name_ja": "英雄のマント",
+          "image_url": "https://www.xenrebirth.com/index.php?attachment/2271-hero-s-cloak-png/",
+          "stats": "移動速度: +3",
+          "stats_en": "Movement Rate: +3",
+          "description": "",
+          "sort_order": 10
+        },
+        {
+          "name_en": "Long Cape",
+          "name_ja": "ロングケープ",
+          "image_url": "https://www.xenrebirth.com/index.php?attachment/2272-long-cape-png/",
+          "stats": "最大HP: +50\n 防御力: +16",
+          "stats_en": "Max HP: +50 | DEF: +16",
+          "description": "",
+          "sort_order": 20
+        },
+        {
+          "name_en": "Royal Cape",
+          "name_ja": "ロイヤルケープ",
+          "image_url": "https://www.xenrebirth.com/index.php?attachment/2277-royal-cape-png/",
+          "stats": "最大MP: +50\n 防御力: +16",
+          "stats_en": "Max MP: +50 | DEF: +16",
+          "description": "",
+          "sort_order": 30
+        },
+        {
+          "name_en": "Power Pearl",
+          "name_ja": "力のパール",
+          "image_url": "https://www.xenrebirth.com/index.php?attachment/6264-power-pearl-png/",
+          "stats": "POW: +6",
+          "stats_en": "POW: +6",
+          "description": "",
+          "sort_order": 40
+        },
+        {
+          "name_en": "Pearl of Intelligence",
+          "name_ja": "知力のパール",
+          "image_url": "https://www.xenrebirth.com/index.php?attachment/6374-pearl-of-intelligence-png/",
+          "stats": "INT: +10",
+          "stats_en": "INT: +10",
+          "description": "",
+          "sort_order": 50
+        },
+        {
+          "name_en": "Agility Pearl",
+          "name_ja": "敏捷のパール",
+          "image_url": "https://www.xenrebirth.com/index.php?attachment/6510-agility-pearl-png/",
+          "stats": "AGI: +6",
+          "stats_en": "AGI: +6",
+          "description": "",
+          "sort_order": 60
+        },
+        {
+          "name_en": "Pearl of Talent",
+          "name_ja": "才能のパール",
+          "image_url": "https://www.xenrebirth.com/index.php?attachment/6262-pearl-of-talent-png/",
+          "stats": "MEN: +5",
+          "stats_en": "MEN: +5",
+          "description": "",
+          "sort_order": 70
+        },
+        {
+          "name_en": "Pearl of Life",
+          "name_ja": "生命のパール",
+          "image_url": "https://www.xenrebirth.com/index.php?attachment/6263-pearl-of-life-png/",
+          "stats": "STA: +5",
+          "stats_en": "STA: +5",
+          "description": "",
+          "sort_order": 80
+        },
+        {
+          "name_en": "Wisdom Pearl",
+          "name_ja": "知恵のパール",
+          "image_url": "https://www.xenrebirth.com/index.php?attachment/6397-wisdom-pearl-png/",
+          "stats": "WIS: +6",
+          "stats_en": "WIS: +6",
+          "description": "",
+          "sort_order": 90
+        },
+        {
+          "name_en": "Xen Stone",
+          "name_ja": "ゼンストーン",
+          "image_url": "https://www.xenrebirth.com/index.php?attachment/6260-xen-stone-png/",
+          "stats": "鍛冶屋での装備強化によく使う強化アイテム",
+          "stats_en": "Enhancement item used often in Gear enhancing in Blacksmith Shop",
+          "description": "",
+          "sort_order": 100
+        }
+      ]
+    },
+    {
+      "slug": "dragon-lucky-ball",
+      "name_en": "Dragon Lucky Ball",
+      "name_ja": "ドラゴンラッキーボール",
+      "section": "特別",
+      "is_extra": false,
+      "image_url": null,
+      "image_source_url": null,
+      "description": "公式一覧の「特別」に掲載。日本語名は参考訳です。 本体画像は参照した公式ページに掲載がありません。",
+      "source_url": "https://www.xenrebirth.com/lexicon/index.php?entry/5-lucky-balls-item-list/#4.2-Dragon-Lucky-Ball",
+      "sort_order": 390,
+      "items": [
+        {
+          "name_en": "Amaranth Wings G",
+          "name_ja": "アマランスの翼 G",
+          "image_url": "https://www.xenrebirth.com/index.php?attachment/2261-amaranth-wings-g-png/",
+          "stats": "移動速度: +3",
+          "stats_en": "Movement Rate: +3",
+          "description": "",
+          "sort_order": 10
+        },
+        {
+          "name_en": "Amaranth Wings O",
+          "name_ja": "アマランスの翼 O",
+          "image_url": "https://www.xenrebirth.com/index.php?attachment/2262-amaranth-wings-o-png/",
+          "stats": "移動速度: +3",
+          "stats_en": "Movement Rate: +3",
+          "description": "",
+          "sort_order": 20
+        },
+        {
+          "name_en": "Amaranth Wings P",
+          "name_ja": "アマランスの翼 P",
+          "image_url": "https://www.xenrebirth.com/index.php?attachment/2263-amaranth-wings-p-png/",
+          "stats": "移動速度: +3",
+          "stats_en": "Movement Rate: +3",
+          "description": "",
+          "sort_order": 30
+        },
+        {
+          "name_en": "Dragon",
+          "name_ja": "ドラゴン",
+          "image_url": "https://www.xenrebirth.com/index.php?attachment/6137-dragon-png/",
+          "stats": "INT: +15\n 最大所持重量: +300\n 移動速度: +2",
+          "stats_en": "INT: +15 | Max WT: +300 | Movement Rate: +2",
+          "description": "",
+          "sort_order": 40
+        }
+      ]
+    },
+    {
+      "slug": "golem-lucky-ball",
+      "name_en": "Golem Lucky Ball",
+      "name_ja": "ゴーレムラッキーボール",
+      "section": "特別",
+      "is_extra": false,
+      "image_url": null,
+      "image_source_url": null,
+      "description": "公式一覧の「特別」に掲載。日本語名は参考訳です。 本体画像は参照した公式ページに掲載がありません。",
+      "source_url": "https://www.xenrebirth.com/lexicon/index.php?entry/5-lucky-balls-item-list/#4.3-Golem-Lucky-Ball",
+      "sort_order": 400,
+      "items": [
+        {
+          "name_en": "Beaver Pearl",
+          "name_ja": "ビーバーのパール",
+          "image_url": "https://www.xenrebirth.com/index.php?attachment/13085-beaver-pearl-png/",
+          "stats": "MEN: +20\n WIS: +6",
+          "stats_en": "MEN: +20 | WIS: +6",
+          "description": "",
+          "sort_order": 10
+        },
+        {
+          "name_en": "Buffalo's Pearl",
+          "name_ja": "バッファローのパール",
+          "image_url": "https://www.xenrebirth.com/index.php?attachment/13084-buffalo-s-pearl-png/",
+          "stats": "POW: +20",
+          "stats_en": "POW: +20",
+          "description": "",
+          "sort_order": 20
+        },
+        {
+          "name_en": "Golem",
+          "name_ja": "ゴーレム",
+          "image_url": "https://www.xenrebirth.com/index.php?attachment/10163-golem-png/",
+          "stats": "POW: +10\n INT: +10\n STA: +10\n MEN: +5\n 最大所持重量: +1000\n 移動速度: +2\n スキルクリティカル: +3",
+          "stats_en": "POW: +10 | INT: +10 | STA: +10 | MEN: +5 | Max WT: +1000 | Movement Rate: +2 | Skill Crit: +3",
+          "description": "",
+          "sort_order": 30
+        },
+        {
+          "name_en": "Great Serpent Pearl",
+          "name_ja": "大蛇のパール",
+          "image_url": "https://www.xenrebirth.com/index.php?attachment/13086-great-serpent-pearl-png/",
+          "stats": "INT: +20",
+          "stats_en": "INT: +20",
+          "description": "",
+          "sort_order": 40
+        },
+        {
+          "name_en": "Obsidian Token (x1)",
+          "name_ja": "オブシディアントークン（×1）",
+          "image_url": null,
+          "stats": "ステータスなし",
+          "stats_en": "No stats",
+          "description": "",
+          "sort_order": 50
+        }
+      ]
+    },
+    {
+      "slug": "white-tiger-lucky-ball",
+      "name_en": "White Tiger Lucky Ball",
+      "name_ja": "ホワイトタイガーラッキーボール",
+      "section": "特別",
+      "is_extra": false,
+      "image_url": null,
+      "image_source_url": null,
+      "description": "公式一覧の「特別」に掲載。日本語名は参考訳です。 本体画像は参照した公式ページに掲載がありません。",
+      "source_url": "https://www.xenrebirth.com/lexicon/index.php?entry/5-lucky-balls-item-list/#4.4-White-Tiger-Lucky-Ball",
+      "sort_order": 410,
+      "items": [
+        {
+          "name_en": "White Tiger",
+          "name_ja": "白虎",
+          "image_url": "https://www.xenrebirth.com/index.php?attachment/1969-white-tiger-png/",
+          "stats": "POW: +10\n AGI: +10\n 移動速度: +2",
+          "stats_en": "POW: +10 | AGI: +10 | Movement Rate: +2",
+          "description": "",
+          "sort_order": 10
+        },
+        {
+          "name_en": "White Tiger Hood",
+          "name_ja": "白虎のフード",
+          "image_url": "https://www.xenrebirth.com/index.php?attachment/1932-white-tiger-hood-png/",
+          "stats": "防御力: +10\n 魔法防御力: +10",
+          "stats_en": "DEF: +10 | Magic DEF: +10",
+          "description": "",
+          "sort_order": 20
+        },
+        {
+          "name_en": "White Tiger Tail",
+          "name_ja": "白虎のしっぽ",
+          "image_url": "https://www.xenrebirth.com/index.php?attachment/2298-white-tiger-tail-png/",
+          "stats": "クリティカル: +2\n 移動速度: +2",
+          "stats_en": "Crit: +2 | Movement Rate: +2",
+          "description": "",
+          "sort_order": 30
+        },
+        {
+          "name_en": "White Tiger Suit",
+          "name_ja": "白虎のスーツ",
+          "image_url": "https://www.xenrebirth.com/index.php?attachment/2338-white-tiger-suit-png/",
+          "stats": "STA: +10\n WIS: +5\n 攻撃力: +20\n 魔法攻撃力: +20",
+          "stats_en": "STA: +10 | WIS: +5 | Attack: +20 | Magic: +20",
+          "description": "",
+          "sort_order": 40
+        }
+      ]
+    },
+    {
+      "slug": "dark-lucky-ball",
+      "name_en": "Dark Lucky Ball",
+      "name_ja": "ダークラッキーボール",
+      "section": "オブシディアントークン",
+      "is_extra": false,
+      "image_url": "https://www.xenrebirth.com/index.php?attachment/7182-screenshot-2021-01-08-202323-jpg/",
+      "image_source_url": "https://www.xenrebirth.com/lexicon/index.php?entry/19-token-exchange-tramis-mansion/",
+      "description": "公式一覧の「オブシディアントークン」に掲載。日本語名は参考訳です。",
+      "source_url": "https://www.xenrebirth.com/lexicon/index.php?entry/5-lucky-balls-item-list/#5.1-Dark-Lucky-Ball",
+      "sort_order": 420,
+      "items": [
+        {
+          "name_en": "Blue Bamboo-Leaf Scarf",
+          "name_ja": "青い笹のスカーフ",
+          "image_url": "https://www.xenrebirth.com/index.php?attachment/6102-blue-bamboo-leaf-scarf-png/",
+          "stats": "スキルクリティカル: +2\n クリティカル: +3\n MP回復量: +10",
+          "stats_en": "Skill Crit: +2 | Crit: +3 | MP Recovery Amount: +10",
+          "description": "",
+          "sort_order": 10
+        },
+        {
+          "name_en": "Cat-Hand Backpack",
+          "name_ja": "猫の手リュック",
+          "image_url": "https://www.xenrebirth.com/index.php?attachment/6119-cat-hand-backpack-png/",
+          "stats": "最大所持重量: +500\n スキルクリティカル: +2",
+          "stats_en": "Max WT: +500 | Skill Crit: +2",
+          "description": "",
+          "sort_order": 20
+        },
+        {
+          "name_en": "Dango Hat",
+          "name_ja": "団子の帽子",
+          "image_url": "https://www.xenrebirth.com/index.php?attachment/6117-dango-hat-png/",
+          "stats": "最大HP: +50\n 防御力: +10\n HP回復: +5",
+          "stats_en": "Max HP: +50 | DEF: +10 | HP Recovery: +5",
+          "description": "",
+          "sort_order": 30
+        },
+        {
+          "name_en": "Green Bamboo-Leaf Scarf",
+          "name_ja": "緑の笹のスカーフ",
+          "image_url": "https://www.xenrebirth.com/index.php?attachment/6103-green-bamboo-leaf-scarf-png/",
+          "stats": "スキルクリティカル: +2\n クリティカル: +3\n HP回復量: +10",
+          "stats_en": "Skill Crit: +2 | Crit: +3 | HP Recovery Amount: +10",
+          "description": "",
+          "sort_order": 40
+        }
+      ]
+    },
+    {
+      "slug": "korean-lucky-ball",
+      "name_en": "Korean Lucky Ball",
+      "name_ja": "コリアンラッキーボール",
+      "section": "ギルドトークン",
+      "is_extra": false,
+      "image_url": null,
+      "image_source_url": null,
+      "description": "公式一覧の「ギルドトークン」に掲載。日本語名は参考訳です。 本体画像は参照した公式ページに掲載がありません。",
+      "source_url": "https://www.xenrebirth.com/lexicon/index.php?entry/5-lucky-balls-item-list/#6.1-Korean-Lucky-Ball",
+      "sort_order": 430,
+      "items": [
+        {
+          "name_en": "Korean Hat (Female)",
+          "name_ja": "韓国風の帽子（女性用）",
+          "image_url": "https://www.xenrebirth.com/index.php?attachment/11278-korean-hat-female-png/",
+          "stats": "最大HP: +100\n 防御力: +22",
+          "stats_en": "Max HP: +100 | DEF: +22",
+          "description": "",
+          "sort_order": 10
+        },
+        {
+          "name_en": "Korean Hat (Male)",
+          "name_ja": "韓国風の帽子（男性用）",
+          "image_url": "https://www.xenrebirth.com/index.php?attachment/11279-korean-hat-male-png/",
+          "stats": "最大HP: +100\n 防御力: +22",
+          "stats_en": "Max HP: +100 | DEF: +22",
+          "description": "",
+          "sort_order": 20
+        },
+        {
+          "name_en": "Korean Mask",
+          "name_ja": "韓国風の面",
+          "image_url": "https://www.xenrebirth.com/index.php?attachment/11280-korean-mask-png/",
+          "stats": "クリティカル: +3\n HP回復: -0.20s",
+          "stats_en": "Crit: +3 | HP Recovery: -0.20s",
+          "description": "",
+          "sort_order": 30
+        },
+        {
+          "name_en": "Korean Suit (Female)",
+          "name_ja": "韓国風の衣装（女性用）",
+          "image_url": "https://www.xenrebirth.com/index.php?attachment/11283-korean-suit-female-png/",
+          "stats": "最大MP: +100\n 防御力: +18",
+          "stats_en": "Max MP: +100 | DEF: +18",
+          "description": "",
+          "sort_order": 40
+        },
+        {
+          "name_en": "Korean Suit (Male)",
+          "name_ja": "韓国風の衣装（男性用）",
+          "image_url": "https://www.xenrebirth.com/index.php?attachment/11281-korean-suit-male-png/",
+          "stats": "最大MP: +100\n 防御力: +18",
+          "stats_en": "Max MP: +100 | DEF: +18",
+          "description": "",
+          "sort_order": 50
+        }
+      ]
+    },
+    {
+      "slug": "adrienne-lucky-ball",
+      "name_en": "Adrienne Lucky Ball",
+      "name_ja": "アドリエンヌラッキーボール",
+      "section": "GM",
+      "is_extra": false,
+      "image_url": null,
+      "image_source_url": null,
+      "description": "公式一覧の「GM」に掲載。日本語名は参考訳です。 本体画像は参照した公式ページに掲載がありません。",
+      "source_url": "https://www.xenrebirth.com/lexicon/index.php?entry/5-lucky-balls-item-list/#7.1-Adrienne-Lucky-Ball",
+      "sort_order": 440,
+      "items": [
+        {
+          "name_en": "Dungeon Limit Decrease",
+          "name_ja": "ダンジョン制限短縮",
+          "image_url": null,
+          "stats": "使用するとダンジョンの入場タイマーを1回分解除",
+          "stats_en": "(Consume to remove 1 Dungeon Run Timer)",
+          "description": "",
+          "sort_order": 10
+        },
+        {
+          "name_en": "Scarlet Hakama Kamui (M)",
+          "name_ja": "緋色の袴カムイ（男性用）",
+          "image_url": "https://www.xenrebirth.com/index.php?attachment/11711-scarlet-hakama-kamui-m-png/",
+          "stats": "最大HP: +100\n 防御力: +8",
+          "stats_en": "Max HP: +100 | Def: +8",
+          "description": "",
+          "sort_order": 20
+        },
+        {
+          "name_en": "Walker's Cloak",
+          "name_ja": "旅人のマント",
+          "image_url": null,
+          "stats": "回避 +2\n 移動速度: +2",
+          "stats_en": "Dodge +2 | Movement Rate: +2",
+          "description": "",
+          "sort_order": 30
+        },
+        {
+          "name_en": "Rufus Ears",
+          "name_ja": "ルーファスの耳",
+          "image_url": null,
+          "stats": "移動速度: +2\n 攻撃間隔: -0.2 秒",
+          "stats_en": "Movement Rate: +2 | Attack Rate: -0.2 Sec",
+          "description": "",
+          "sort_order": 40
+        },
+        {
+          "name_en": "Pun Mask",
+          "name_ja": "パンマスク",
+          "image_url": null,
+          "stats": "最大HP: +50\n 最大MP: +50\n 防御力+15",
+          "stats_en": "Max HP: +50 | Max MP: +50 | Def+15",
+          "description": "",
+          "sort_order": 50
+        },
+        {
+          "name_en": "Storm Shields",
+          "name_ja": "ストームシールド",
+          "image_url": "https://www.xenrebirth.com/index.php?attachment/2205-storm-shields-png/",
+          "stats": "クリティカル: +3",
+          "stats_en": "Crit: +3",
+          "description": "",
+          "sort_order": 60
+        }
+      ]
+    },
+    {
+      "slug": "cherryblooms-lucky-ball",
+      "name_en": "CherryBlooms Lucky Ball",
+      "name_ja": "チェリーブルームスラッキーボール",
+      "section": "GM",
+      "is_extra": false,
+      "image_url": null,
+      "image_source_url": null,
+      "description": "公式一覧の「GM」に掲載。日本語名は参考訳です。 本体画像は参照した公式ページに掲載がありません。",
+      "source_url": "https://www.xenrebirth.com/lexicon/index.php?entry/5-lucky-balls-item-list/#7.2-CherryBlooms-Lucky-Ball",
+      "sort_order": 450,
+      "items": [
+        {
+          "name_en": "Buxom Hair",
+          "name_ja": "バクサムヘア",
+          "image_url": null,
+          "stats": "最大HP: +125\n 最大MP: +125",
+          "stats_en": "Max HP: +125 | Max MP: +125",
+          "description": "",
+          "sort_order": 10
+        },
+        {
+          "name_en": "Cat-Hand Backpack",
+          "name_ja": "猫の手リュック",
+          "image_url": "https://www.xenrebirth.com/index.php?attachment/6119-cat-hand-backpack-png/",
+          "stats": "最大所持重量: +500\n スキルクリティカル: +2",
+          "stats_en": "Max WT: +500 | Skill Crit: +2",
+          "description": "",
+          "sort_order": 20
+        },
+        {
+          "name_en": "Night Vision",
+          "name_ja": "暗視ゴーグル",
+          "image_url": "https://www.xenrebirth.com/index.php?attachment/6070-night-vision-png/",
+          "stats": "クリティカル: +3\n スキルクリティカル: +2",
+          "stats_en": "Crit: +3 | Skill Crit: +2",
+          "description": "",
+          "sort_order": 30
+        },
+        {
+          "name_en": "Summer Swimsuit (Male)",
+          "name_ja": "夏の水着（男性用）",
+          "image_url": "https://www.xenrebirth.com/index.php?attachment/2334-summer-swimsuit-male-png/",
+          "stats": "防御力: +22",
+          "stats_en": "DEF: +22",
+          "description": "",
+          "sort_order": 40
+        },
+        {
+          "name_en": "Summer Swimsuit (Female)",
+          "name_ja": "夏の水着（女性用）",
+          "image_url": "https://www.xenrebirth.com/index.php?attachment/2449-summer-swimsuit-female-png/",
+          "stats": "防御力: +22",
+          "stats_en": "DEF: +22",
+          "description": "",
+          "sort_order": 50
+        },
+        {
+          "name_en": "Marshmallow Ghosts",
+          "name_ja": "マシュマロゴースト",
+          "image_url": "https://www.xenrebirth.com/index.php?attachment/13753-marshmallow-ghosts-png/",
+          "stats": "90秒間、姿が見えなくなる",
+          "stats_en": "User becomes invisible for 90 seconds",
+          "description": "",
+          "sort_order": 60
+        },
+        {
+          "name_en": "Taiwanese Traditional Clothing (Male)",
+          "name_ja": "台湾の伝統衣装（男性用）",
+          "image_url": "https://www.xenrebirth.com/index.php?attachment/2353-taiwanese-traditional-clothing-male-png/",
+          "stats": "最大HP: +20",
+          "stats_en": "Max HP: +20",
+          "description": "",
+          "sort_order": 70
+        },
+        {
+          "name_en": "Taiwanese Traditional Clothing (Female)",
+          "name_ja": "台湾の伝統衣装（女性用）",
+          "image_url": "https://www.xenrebirth.com/index.php?attachment/2250-taiwanese-traditional-clothing-female-png/",
+          "stats": "最大HP: +20",
+          "stats_en": "Max HP: +20",
+          "description": "",
+          "sort_order": 80
+        },
+        {
+          "name_en": "Taiwanese Traditional Hair (Male)",
+          "name_ja": "台湾の伝統的な髪型（男性用）",
+          "image_url": null,
+          "stats": "最大HP: +75\n 最大MP: +75\n 防御力: +22",
+          "stats_en": "Max HP: +75 | Max MP: +75 | DEF: +22",
+          "description": "",
+          "sort_order": 90
+        },
+        {
+          "name_en": "Taiwanese Traditional Hair (Female)",
+          "name_ja": "台湾の伝統的な髪型（女性用）",
+          "image_url": "https://www.xenrebirth.com/index.php?attachment/1939-taiwanese-tradition-hair-female-png/",
+          "stats": "最大HP: +75\n 最大MP: +75\n 防御力: +22",
+          "stats_en": "Max HP: +75 | Max MP: +75 | DEF: +22",
+          "description": "",
+          "sort_order": 100
+        }
+      ]
+    },
+    {
+      "slug": "chocolab-lucky-ball",
+      "name_en": "ChocoLab Lucky Ball",
+      "name_ja": "チョコラボラッキーボール",
+      "section": "GM",
+      "is_extra": false,
+      "image_url": null,
+      "image_source_url": null,
+      "description": "公式一覧の「GM」に掲載。日本語名は参考訳です。 本体画像は参照した公式ページに掲載がありません。",
+      "source_url": "https://www.xenrebirth.com/lexicon/index.php?entry/5-lucky-balls-item-list/#7.3-ChocoLab-Lucky-Ball",
+      "sort_order": 460,
+      "items": [
+        {
+          "name_en": "Amaranth Wings O",
+          "name_ja": "アマランスの翼 O",
+          "image_url": "https://www.xenrebirth.com/index.php?attachment/2262-amaranth-wings-o-png/",
+          "stats": "移動速度: +3",
+          "stats_en": "Movement Rate: +3",
+          "description": "",
+          "sort_order": 10
+        },
+        {
+          "name_en": "Arrow Hat",
+          "name_ja": "矢の帽子",
+          "image_url": "https://www.xenrebirth.com/index.php?attachment/6113-arrow-hat-png/",
+          "stats": "最大HP: +150\n 回避率: +1",
+          "stats_en": "Max HP: +150 | Successful Dodge Rate: +1",
+          "description": "",
+          "sort_order": 20
+        },
+        {
+          "name_en": "Horse Helmet",
+          "name_ja": "馬のヘルメット",
+          "image_url": "https://www.xenrebirth.com/index.php?attachment/1971-horse-helmet-png/",
+          "stats": "最大MP: +100\n 防御力: +18",
+          "stats_en": "Max MP: +100 | DEF: +18",
+          "description": "",
+          "sort_order": 30
+        },
+        {
+          "name_en": "Old Guy Mask",
+          "name_ja": "老人のマスク",
+          "image_url": "https://www.xenrebirth.com/index.php?attachment/6208-old-guy-mask-png/",
+          "stats": "WIS: +10\n INT: +10",
+          "stats_en": "WIS: +10 | INT: +10",
+          "description": "",
+          "sort_order": 40
+        },
+        {
+          "name_en": "Passionate Chocolate",
+          "name_ja": "情熱のチョコレート",
+          "image_url": "https://www.xenrebirth.com/index.php?attachment/6320-passionate-chocolate-png/",
+          "stats": "1時間、最大HPを200増加",
+          "stats_en": "Increase Max HP by 200 for 1 hour",
+          "description": "",
+          "sort_order": 50
+        },
+        {
+          "name_en": "Snorkel Mask",
+          "name_ja": "シュノーケルマスク",
+          "image_url": "https://www.xenrebirth.com/index.php?attachment/2212-snorkel-mask-png/",
+          "stats": "命中率: +3\n クリティカル: +1\n スキルクリティカル: +3",
+          "stats_en": "Successful Hit - Rate: +3 | Crit: +1 | Skill Crit: +3",
+          "description": "",
+          "sort_order": 60
+        }
+      ]
+    },
+    {
+      "slug": "ego-lucky-ball",
+      "name_en": "Ego Lucky Ball",
+      "name_ja": "エゴラッキーボール",
+      "section": "GM",
+      "is_extra": false,
+      "image_url": null,
+      "image_source_url": null,
+      "description": "公式一覧の「GM」に掲載。日本語名は参考訳です。 本体画像は参照した公式ページに掲載がありません。",
+      "source_url": "https://www.xenrebirth.com/lexicon/index.php?entry/5-lucky-balls-item-list/#7.4-Ego-Lucky-Ball",
+      "sort_order": 470,
+      "items": [
+        {
+          "name_en": "Bandito Mask",
+          "name_ja": "バンディートマスク",
+          "image_url": "https://www.xenrebirth.com/index.php?attachment/2197-bandito-mask-png/",
+          "stats": "AGI: +1\n クリティカル: +1",
+          "stats_en": "AGI: +1 | Crit: +1",
+          "description": "",
+          "sort_order": 10
+        },
+        {
+          "name_en": "El Bandito",
+          "name_ja": "エル・バンディート",
+          "image_url": "https://www.xenrebirth.com/index.php?attachment/7953-el-bandito-png/",
+          "stats": "AGI: +2\n 最大HP: +25\n 防御力: +15",
+          "stats_en": "AGI: +2 | Max HP: +25 | DEF: +15",
+          "description": "",
+          "sort_order": 20
+        },
+        {
+          "name_en": "Flora Tiara",
+          "name_ja": "フローラティアラ",
+          "image_url": null,
+          "stats": "AGI: +1\n 最大MP: +25\n 防御力: +5",
+          "stats_en": "AGI: +1 | Max MP: +25 | DEF: +5",
+          "description": "",
+          "sort_order": 30
+        },
+        {
+          "name_en": "Gaucho Hat",
+          "name_ja": "ガウチョハット",
+          "image_url": null,
+          "stats": "AGI: +1\n 最大MP: +25\n 防御力: +5",
+          "stats_en": "AGI: +1 | Max MP: +25 | DEF: +5",
+          "description": "",
+          "sort_order": 40
+        },
+        {
+          "name_en": "Tundra Wolf Ears",
+          "name_ja": "ツンドラウルフの耳",
+          "image_url": "https://www.xenrebirth.com/index.php?attachment/2195-tundra-wolf-ears-png/",
+          "stats": "最大HP: +75\n 最大MP: +75\n 防御力: +18",
+          "stats_en": "Max HP: +75 | Max MP: +75 | DEF: +18",
+          "description": "",
+          "sort_order": 50
+        },
+        {
+          "name_en": "Tundra Wolf Suit (Male)",
+          "name_ja": "ツンドラウルフのスーツ（男性用）",
+          "image_url": "https://www.xenrebirth.com/index.php?attachment/2450-tundra-wolf-suit-male-png/",
+          "stats": "防御力: +10\n クリティカル: +2",
+          "stats_en": "DEF: +10 | Crit: +2",
+          "description": "",
+          "sort_order": 60
+        },
+        {
+          "name_en": "Tundra Wolf Suit (Female)",
+          "name_ja": "ツンドラウルフのスーツ（女性用）",
+          "image_url": "https://www.xenrebirth.com/index.php?attachment/2336-tundra-wolf-suit-female-png/",
+          "stats": "防御力: +10\n クリティカル: +2",
+          "stats_en": "DEF: +10 | Crit: +2",
+          "description": "",
+          "sort_order": 70
+        },
+        {
+          "name_en": "Tundra Wolf Tail",
+          "name_ja": "ツンドラウルフのしっぽ",
+          "image_url": "https://www.xenrebirth.com/index.php?attachment/2284-tundra-wolf-tail-png/",
+          "stats": "回避率: +1\n 移動速度: +1",
+          "stats_en": "Successful Dodge Rate: +1 | Movement Rate: +1",
+          "description": "",
+          "sort_order": 80
+        },
+        {
+          "name_en": "Vestido",
+          "name_ja": "ベスティード",
+          "image_url": "https://www.xenrebirth.com/index.php?attachment/7954-vestido-png/",
+          "stats": "AGI: +2\n 最大HP: +25\n 防御力: +15",
+          "stats_en": "AGI: +2 | Max HP: +25 | DEF: +15",
+          "description": "",
+          "sort_order": 90
+        }
+      ]
+    },
+    {
+      "slug": "emet-selch-lucky-ball",
+      "name_en": "Emet-selch Lucky Ball",
+      "name_ja": "エメトセルクラッキーボール",
+      "section": "GM",
+      "is_extra": false,
+      "image_url": null,
+      "image_source_url": null,
+      "description": "公式一覧の「GM」に掲載。日本語名は参考訳です。 本体画像は参照した公式ページに掲載がありません。",
+      "source_url": "https://www.xenrebirth.com/lexicon/index.php?entry/5-lucky-balls-item-list/#7.5-Emet-selch-Lucky-Ball",
+      "sort_order": 480,
+      "items": [
+        {
+          "name_en": "Dark Magic Hood",
+          "name_ja": "ダークマジックフード",
+          "image_url": null,
+          "stats": "最大HP: +50\n 最大MP: +100\n 防御力: +15",
+          "stats_en": "Max HP: +50 | Max MP: +100 | DEF: +15",
+          "description": "",
+          "sort_order": 10
+        },
+        {
+          "name_en": "Dark Magic Suit",
+          "name_ja": "ダークマジックスーツ",
+          "image_url": "https://www.xenrebirth.com/index.php?attachment/2240-dark-magic-suit-png/",
+          "stats": "最大HP: +50\n 最大MP: +100\n 防御力: +15",
+          "stats_en": "Max HP: +50 | Max MP: +100 | DEF: +15",
+          "description": "",
+          "sort_order": 20
+        },
+        {
+          "name_en": "Earth Helmet",
+          "name_ja": "アースヘルメット",
+          "image_url": "https://www.xenrebirth.com/index.php?attachment/2093-earth-helmet-png/",
+          "stats": "POW: +1\n INT: +1\n STA: +1\n AGI +1\n MEN: +1\n WIS: +1",
+          "stats_en": "POW: +1 | INT: +1 | STA: +1 | AGI +1 | MEN: +1 | WIS: +1",
+          "description": "",
+          "sort_order": 30
+        },
+        {
+          "name_en": "Japanese Traditional Hair (Male)",
+          "name_ja": "日本の伝統的な髪型（男性用）",
+          "image_url": null,
+          "stats": "最大HP: +100\n 最大MP: +100\n 防御力: +10",
+          "stats_en": "Max HP: +100 | Max MP: +100 | DEF: +10",
+          "description": "",
+          "sort_order": 40
+        },
+        {
+          "name_en": "Japanese Kamishimo (Male)",
+          "name_ja": "裃（男性用）",
+          "image_url": "https://www.xenrebirth.com/index.php?attachment/2328-japanese-kamishimo-male-png/",
+          "stats": "POW: +1\n 最大MP: +20\n 防御力: +10",
+          "stats_en": "POW: +1 | Max MP: +20 | DEF: +10",
+          "description": "",
+          "sort_order": 50
+        },
+        {
+          "name_en": "Japanese Kimono (Female)",
+          "name_ja": "着物（女性用）",
+          "image_url": "https://www.xenrebirth.com/index.php?attachment/2329-japanese-kimono-female-png/",
+          "stats": "POW: +1\n 最大MP: +20\n 防御力: +10",
+          "stats_en": "POW: +1 | Max MP: +20 | DEF: +10",
+          "description": "",
+          "sort_order": 60
+        },
+        {
+          "name_en": "Kappa Head",
+          "name_ja": "河童の頭",
+          "image_url": "https://www.xenrebirth.com/index.php?attachment/1943-duck-helmet-png/",
+          "stats": "ステータスなし",
+          "stats_en": "No stats",
+          "description": "",
+          "sort_order": 70
+        },
+        {
+          "name_en": "Sakura Hair (Female)",
+          "name_ja": "桜の髪型（女性用）",
+          "image_url": "https://www.xenrebirth.com/index.php?attachment/1937-sakura-hair-female-png/",
+          "stats": "最大HP: +100\n 最大MP: +100\n 防御力: +10",
+          "stats_en": "Max HP: +100 | Max MP: +100 | DEF: +10",
+          "description": "",
+          "sort_order": 80
+        }
+      ]
+    },
+    {
+      "slug": "enigma-lucky-ball",
+      "name_en": "Enigma Lucky Ball",
+      "name_ja": "エニグマラッキーボール",
+      "section": "GM",
+      "is_extra": false,
+      "image_url": null,
+      "image_source_url": null,
+      "description": "公式一覧の「GM」に掲載。日本語名は参考訳です。 本体画像は参照した公式ページに掲載がありません。",
+      "source_url": "https://www.xenrebirth.com/lexicon/index.php?entry/5-lucky-balls-item-list/#7.6-Enigma-Lucky-Ball",
+      "sort_order": 490,
+      "items": [
+        {
+          "name_en": "Black Steel Striker Armor (Male)",
+          "name_ja": "ブラックスチールストライカーアーマー（男性用）",
+          "image_url": "https://www.xenrebirth.com/index.php?attachment/2444-black-steel-striker-armor-male-png/",
+          "stats": "防御力: +10\n クリティカル: +2",
+          "stats_en": "DEF: +10 | Crit: +2",
+          "description": "",
+          "sort_order": 10
+        },
+        {
+          "name_en": "Black Steel Striker Helmet (Male)",
+          "name_ja": "ブラックスチールストライカーヘルメット（男性用）",
+          "image_url": "https://www.xenrebirth.com/index.php?attachment/2192-black-steel-strike-helmet-male-png/",
+          "stats": "最大HP: +75\n 最大MP: +75\n 防御力: +18",
+          "stats_en": "Max HP: +75 | Max MP: +75 | DEF: +18",
+          "description": "",
+          "sort_order": 20
+        },
+        {
+          "name_en": "Box Helmet",
+          "name_ja": "箱のヘルメット",
+          "image_url": "https://www.xenrebirth.com/index.php?attachment/1926-box-helmet-png/",
+          "stats": "HP回復間隔: -0.1 秒\n MP回復間隔: -0.1 秒",
+          "stats_en": "HP Recovery Time: -0.1 sec | MP Recovery Time: -0.1 sec",
+          "description": "",
+          "sort_order": 30
+        },
+        {
+          "name_en": "Full Force Armor (Female)",
+          "name_ja": "フルフォースアーマー（女性用）",
+          "image_url": "https://www.xenrebirth.com/index.php?attachment/2324-full-force-armor-female-png/",
+          "stats": "防御力: +10\n クリティカル: +2",
+          "stats_en": "DEF: +10 | Crit: +2",
+          "description": "",
+          "sort_order": 40
+        },
+        {
+          "name_en": "Full Force Helmet (Female)",
+          "name_ja": "フルフォースヘルメット（女性用）",
+          "image_url": "https://www.xenrebirth.com/index.php?attachment/2193-full-force-helmet-female-png/",
+          "stats": "最大HP: +75\n 最大MP: +75\n 防御力: +18",
+          "stats_en": "Max HP: +75 | Max MP: +75 | DEF: +18",
+          "description": "",
+          "sort_order": 50
+        },
+        {
+          "name_en": "Gas Mask",
+          "name_ja": "ガスマスク",
+          "image_url": "https://www.xenrebirth.com/index.php?attachment/7062-gas-mask-png/",
+          "stats": "ステータスなし",
+          "stats_en": "No stats",
+          "description": "",
+          "sort_order": 60
+        },
+        {
+          "name_en": "Red Kimono",
+          "name_ja": "赤い着物",
+          "image_url": "https://www.xenrebirth.com/index.php?attachment/2248-red-kimono-female-png/",
+          "stats": "防御力: +22\n HP回復間隔: -0.3 秒",
+          "stats_en": "DEF: +22 | HP Recovery Time: -0.3 sec",
+          "description": "",
+          "sort_order": 70
+        },
+        {
+          "name_en": "Sakura Spirits (x15)",
+          "name_ja": "桜の精霊（×15）",
+          "image_url": "https://www.xenrebirth.com/index.php?attachment/7955-sakura-spirits-png/",
+          "stats": "+250 MP 回復",
+          "stats_en": "Recover +250 MP",
+          "description": "",
+          "sort_order": 80
+        },
+        {
+          "name_en": "Storm Shields",
+          "name_ja": "ストームシールド",
+          "image_url": "https://www.xenrebirth.com/index.php?attachment/2205-storm-shields-png/",
+          "stats": "クリティカル: +3",
+          "stats_en": "Crit: +3",
+          "description": "",
+          "sort_order": 90
+        },
+        {
+          "name_en": "Surgical Mask",
+          "name_ja": "医療用マスク",
+          "image_url": "https://www.xenrebirth.com/index.php?attachment/2226-surgical-mask-png/",
+          "stats": "クリティカル: +2\n HP回復間隔: -0.2 秒",
+          "stats_en": "Crit: +2 | HP Recovery Time: -0.2 sec",
+          "description": "",
+          "sort_order": 100
+        }
+      ]
+    },
+    {
+      "slug": "ganta-lucky-ball",
+      "name_en": "Ganta Lucky Ball",
+      "name_ja": "ガンタラッキーボール",
+      "section": "GM",
+      "is_extra": false,
+      "image_url": null,
+      "image_source_url": null,
+      "description": "公式一覧の「GM」に掲載。日本語名は参考訳です。 本体画像は参照した公式ページに掲載がありません。",
+      "source_url": "https://www.xenrebirth.com/lexicon/index.php?entry/5-lucky-balls-item-list/#7.7-Ganta-Lucky-Ball",
+      "sort_order": 500,
+      "items": [
+        {
+          "name_en": "Abyss Mask",
+          "name_ja": "深淵のマスク",
+          "image_url": "https://www.xenrebirth.com/index.php?attachment/6146-abyss-mask-png/",
+          "stats": "ステータスなし",
+          "stats_en": "No stats",
+          "description": "",
+          "sort_order": 10
+        },
+        {
+          "name_en": "Black Kamishimo (Male)",
+          "name_ja": "黒い裃（男性用）",
+          "image_url": "https://www.xenrebirth.com/index.php?attachment/2352-black-kamishimo-male-png/",
+          "stats": "防御力: +22\n HP回復間隔: -0.3 秒",
+          "stats_en": "DEF: +22 | HP Recovery Time: -0.3 sec",
+          "description": "",
+          "sort_order": 20
+        },
+        {
+          "name_en": "Green Kamishimo (Male)",
+          "name_ja": "緑の裃（男性用）",
+          "image_url": "https://www.xenrebirth.com/index.php?attachment/7956-green-kamishimo-male-png/",
+          "stats": "最大HP: +100\n 防御力: +22",
+          "stats_en": "Max HP: +100 | DEF: +22",
+          "description": "",
+          "sort_order": 30
+        },
+        {
+          "name_en": "Pink Kimono (Female)",
+          "name_ja": "ピンクの着物（女性用）",
+          "image_url": "https://www.xenrebirth.com/index.php?attachment/5704-pink-kimono-female-png/",
+          "stats": "最大HP: +100\n 防御力: +22",
+          "stats_en": "Max HP: +100 | DEF: +22",
+          "description": "",
+          "sort_order": 40
+        },
+        {
+          "name_en": "Pirate Cloak of Speed",
+          "name_ja": "素早さの海賊マント",
+          "image_url": "https://www.xenrebirth.com/index.php?attachment/7061-pirate-cloak-of-speed-png/",
+          "stats": "移動速度: +3\n 攻撃間隔: -0.3 秒",
+          "stats_en": "Movement Rate: +3 | Attack Rate: -0.3 sec",
+          "description": "",
+          "sort_order": 50
+        },
+        {
+          "name_en": "Red Kimono (Female)",
+          "name_ja": "赤い着物（女性用）",
+          "image_url": "https://www.xenrebirth.com/index.php?attachment/2248-red-kimono-female-png/",
+          "stats": "防御力: +22\n HP回復間隔: -0.3 秒",
+          "stats_en": "DEF: +22 | HP Recovery Time: -0.3 sec",
+          "description": "",
+          "sort_order": 60
+        }
+      ]
+    },
+    {
+      "slug": "goose-lucky-ball",
+      "name_en": "Goose Lucky Ball",
+      "name_ja": "グースラッキーボール",
+      "section": "GM",
+      "is_extra": false,
+      "image_url": null,
+      "image_source_url": null,
+      "description": "公式一覧の「GM」に掲載。日本語名は参考訳です。 本体画像は参照した公式ページに掲載がありません。",
+      "source_url": "https://www.xenrebirth.com/lexicon/index.php?entry/5-lucky-balls-item-list/#7.8-Goose-Lucky-Ball",
+      "sort_order": 510,
+      "items": [
+        {
+          "name_en": "1 acello?",
+          "name_ja": "1 アチェロ？（原文も疑問符付き）",
+          "image_url": "https://www.xenrebirth.com/index.php?attachment/13750-1-acello-png/",
+          "stats": "命中率: +5\n スキルクリティカル: +1",
+          "stats_en": "Hit Rate: +5 | Skill Crit: +1",
+          "description": "",
+          "sort_order": 10
+        },
+        {
+          "name_en": "Angel Wing",
+          "name_ja": "天使の翼",
+          "image_url": "https://www.xenrebirth.com/index.php?attachment/2264-angel-wings-png/",
+          "stats": "回避: +3\n 移動速度: +3",
+          "stats_en": "Dodge: +3 | Movement Rate: +3",
+          "description": "",
+          "sort_order": 20
+        },
+        {
+          "name_en": "Angel's Wing",
+          "name_ja": "天使の翼",
+          "image_url": "https://www.xenrebirth.com/index.php?attachment/13743-angel-s-wing-png/",
+          "stats": "最大所持重量: +300\n 移動速度: +2",
+          "stats_en": "Max WT: +300 | Movement Rate: +2",
+          "description": "",
+          "sort_order": 30
+        },
+        {
+          "name_en": "Devil's Wing",
+          "name_ja": "悪魔の翼",
+          "image_url": "https://www.xenrebirth.com/index.php?attachment/13744-devil-s-wing-png/",
+          "stats": "最大所持重量: +300\n 移動速度: +2",
+          "stats_en": "Max WT: +300 | Movement Rate: +2",
+          "description": "",
+          "sort_order": 40
+        },
+        {
+          "name_en": "Duck Helmet",
+          "name_ja": "アヒルのヘルメット",
+          "image_url": "https://www.xenrebirth.com/index.php?attachment/1943-duck-helmet-png/",
+          "stats": "防御力: +18\n MP回復間隔: -0.3 秒",
+          "stats_en": "DEF: +18 | MP Recovery Time: -0.3 sec",
+          "description": "",
+          "sort_order": 50
+        },
+        {
+          "name_en": "Parka (Male)",
+          "name_ja": "パーカー（男性用）",
+          "image_url": "https://www.xenrebirth.com/index.php?attachment/2333-parka-male-png/",
+          "stats": "最大HP: +25\n 最大MP: +25\n 防御力: +18",
+          "stats_en": "Max HP: +25 | Max MP: +25 | DEF: +18",
+          "description": "",
+          "sort_order": 60
+        },
+        {
+          "name_en": "Parka (Female)",
+          "name_ja": "パーカー（女性用）",
+          "image_url": "https://www.xenrebirth.com/index.php?attachment/2343-parka-female-png/",
+          "stats": "最大HP: +25\n 最大MP: +25\n 防御力: +18",
+          "stats_en": "Max HP: +25 | Max MP: +25 | DEF: +18",
+          "description": "",
+          "sort_order": 70
+        },
+        {
+          "name_en": "Toasty Hot Spring Egg",
+          "name_ja": "ほかほか温泉卵",
+          "image_url": "https://www.xenrebirth.com/index.php?attachment/13751-toasty-hot-spring-egg-png/",
+          "stats": "30分間 攻撃力 +20・魔法攻撃力 +10",
+          "stats_en": "Attack: +20 and Magic: +10 for 30 minutes",
+          "description": "",
+          "sort_order": 80
+        }
+      ]
+    },
+    {
+      "slug": "gummy-lucky-ball",
+      "name_en": "Gummy Lucky Ball",
+      "name_ja": "グミラッキーボール",
+      "section": "GM",
+      "is_extra": false,
+      "image_url": null,
+      "image_source_url": null,
+      "description": "公式一覧の「GM」に掲載。日本語名は参考訳です。 本体画像は参照した公式ページに掲載がありません。",
+      "source_url": "https://www.xenrebirth.com/lexicon/index.php?entry/5-lucky-balls-item-list/#7.9-Gummy-Lucky-Ball",
+      "sort_order": 520,
+      "items": [
+        {
+          "name_en": "Censor",
+          "name_ja": "センサーマスク",
+          "image_url": "https://www.xenrebirth.com/index.php?attachment/2199-censor-png/",
+          "stats": "クリティカル: +3",
+          "stats_en": "Crit: +3",
+          "description": "",
+          "sort_order": 10
+        },
+        {
+          "name_en": "Ghost Suit",
+          "name_ja": "ゴーストスーツ",
+          "image_url": "https://www.xenrebirth.com/index.php?attachment/2325-ghost-suit-png/",
+          "stats": "POW: +1\n 防御力: +10",
+          "stats_en": "POW: +1| DEF: +10",
+          "description": "",
+          "sort_order": 20
+        },
+        {
+          "name_en": "HG (Male)",
+          "name_ja": "HG衣装（男性用）",
+          "image_url": "https://www.xenrebirth.com/index.php?attachment/7971-hg-png/",
+          "stats": "防御力: +12\n 最大MP: +50\n 最大HP: +50",
+          "stats_en": "DEF: +12 | Max MP: +50 | Max HP: +50",
+          "description": "",
+          "sort_order": 30
+        },
+        {
+          "name_en": "HG (Female)",
+          "name_ja": "HG衣装（女性用）",
+          "image_url": "https://www.xenrebirth.com/index.php?attachment/7971-hg-png/",
+          "stats": "防御力: +12\n 最大MP: +50\n 最大HP: +50",
+          "stats_en": "DEF: +12 | Max MP: +50 | Max HP: +50",
+          "description": "",
+          "sort_order": 40
+        },
+        {
+          "name_en": "HG Hat (Male)",
+          "name_ja": "HGの帽子（男性用）",
+          "image_url": null,
+          "stats": "最大HP: +50\n 最大MP: +50\n クリティカル: +5",
+          "stats_en": "Max HP: +50 | Max MP: +50 | Crit: +5",
+          "description": "",
+          "sort_order": 50
+        },
+        {
+          "name_en": "HG Hat (Female)",
+          "name_ja": "HGの帽子（女性用）",
+          "image_url": null,
+          "stats": "最大HP: +50\n 最大MP: +50\n クリティカル: +5",
+          "stats_en": "Max HP: +50 | Max MP: +50 | Crit: +5",
+          "description": "",
+          "sort_order": 60
+        },
+        {
+          "name_en": "Turtle Shell",
+          "name_ja": "亀の甲羅",
+          "image_url": "https://www.xenrebirth.com/index.php?attachment/7974-turtle-shell-png/",
+          "stats": "最大所持重量: +500\n 移動速度: +1",
+          "stats_en": "Max WT: +500 | Movement Rate: +1",
+          "description": "",
+          "sort_order": 70
+        },
+        {
+          "name_en": "Wig (Male)",
+          "name_ja": "かつら（男性用）",
+          "image_url": null,
+          "stats": "最大MP: +50\n 防御力: +18\n MP回復間隔: -0.2 秒",
+          "stats_en": "Max MP: +50 | DEF: +18 | MP Recovery Time: -0.2 sec",
+          "description": "",
+          "sort_order": 80
+        },
+        {
+          "name_en": "Wig (Female)",
+          "name_ja": "かつら（女性用）",
+          "image_url": null,
+          "stats": "最大MP: +50\n 防御力: +18\n MP回復間隔: -0.2 秒",
+          "stats_en": "Max MP: +50 | DEF: +18 | MP Recovery Time: -0.2 sec",
+          "description": "",
+          "sort_order": 90
+        }
+      ]
+    },
+    {
+      "slug": "jinn-lucky-ball",
+      "name_en": "Jinn Lucky Ball",
+      "name_ja": "ジンラッキーボール",
+      "section": "GM",
+      "is_extra": false,
+      "image_url": null,
+      "image_source_url": null,
+      "description": "公式一覧の「GM」に掲載。日本語名は参考訳です。 本体画像は参照した公式ページに掲載がありません。",
+      "source_url": "https://www.xenrebirth.com/lexicon/index.php?entry/5-lucky-balls-item-list/#7.10-Jinn-Lucky-Ball",
+      "sort_order": 530,
+      "items": [
+        {
+          "name_en": "Benkei Hood (M)",
+          "name_ja": "弁慶の頭巾（男性用）",
+          "image_url": null,
+          "stats": "最大MP: +100",
+          "stats_en": "Max MP: +100",
+          "description": "",
+          "sort_order": 10
+        },
+        {
+          "name_en": "Benkei Hood (F)",
+          "name_ja": "弁慶の頭巾（女性用）",
+          "image_url": null,
+          "stats": "最大MP: +100",
+          "stats_en": "Max MP: +100",
+          "description": "",
+          "sort_order": 20
+        },
+        {
+          "name_en": "Benkei (M)",
+          "name_ja": "弁慶（男性用）",
+          "image_url": null,
+          "stats": "最大HP: +100",
+          "stats_en": "Max HP: +100",
+          "description": "",
+          "sort_order": 30
+        },
+        {
+          "name_en": "Benkei (F)",
+          "name_ja": "弁慶（女性用）",
+          "image_url": "https://www.xenrebirth.com/index.php?attachment/13747-benkei-f-png/",
+          "stats": "最大HP: +100",
+          "stats_en": "Max HP: +100",
+          "description": "",
+          "sort_order": 40
+        },
+        {
+          "name_en": "Butter",
+          "name_ja": "バター",
+          "image_url": null,
+          "stats": "Jarikaのペットクエストで使用",
+          "stats_en": "For Jarika Pet Quest Steps",
+          "description": "",
+          "sort_order": 50
+        },
+        {
+          "name_en": "Chocopoko Hat",
+          "name_ja": "チョコポコの帽子",
+          "image_url": "https://www.xenrebirth.com/index.php?attachment/1928-chokopoko-hat-png/",
+          "stats": "ステータスなし",
+          "stats_en": "No stats",
+          "description": "",
+          "sort_order": 60
+        },
+        {
+          "name_en": "Sakura Cake",
+          "name_ja": "桜のケーキ",
+          "image_url": null,
+          "stats": "500 HP 回復",
+          "stats_en": "Recovers 500 HP",
+          "description": "",
+          "sort_order": 70
+        },
+        {
+          "name_en": "Soccer Head",
+          "name_ja": "サッカーヘッド",
+          "image_url": "https://www.xenrebirth.com/index.php?attachment/2096-soccer-head-png/",
+          "stats": "防御力: +14\n 最大MP: +50",
+          "stats_en": "DEF: +14 | Max MP: +50",
+          "description": "",
+          "sort_order": 80
+        }
+      ]
+    },
+    {
+      "slug": "marmalade-lucky-ball",
+      "name_en": "Marmalade Lucky Ball",
+      "name_ja": "マーマレードラッキーボール",
+      "section": "GM",
+      "is_extra": false,
+      "image_url": null,
+      "image_source_url": null,
+      "description": "公式一覧の「GM」に掲載。日本語名は参考訳です。 本体画像は参照した公式ページに掲載がありません。",
+      "source_url": "https://www.xenrebirth.com/lexicon/index.php?entry/5-lucky-balls-item-list/#7.11-Marmalade-Lucspanspanky-Ball",
+      "sort_order": 540,
+      "items": [
+        {
+          "name_en": "Bard Hat",
+          "name_ja": "吟遊詩人の帽子",
+          "image_url": "https://www.xenrebirth.com/index.php?attachment/2191-bard-hat-png/",
+          "stats": "移動速度: +1\n 最大HP: +100",
+          "stats_en": "Movement Rate: +1 | Max HP: +100",
+          "description": "",
+          "sort_order": 10
+        },
+        {
+          "name_en": "Bard Dress (Female)",
+          "name_ja": "吟遊詩人のドレス（女性用）",
+          "image_url": "https://www.xenrebirth.com/index.php?attachment/2337-bard-dress-female-png/",
+          "stats": "最大HP: +50\n 最大MP: +100\n 防御力: +18",
+          "stats_en": "Max HP: +50 | Max MP: +100 | DEF: +18",
+          "description": "",
+          "sort_order": 20
+        },
+        {
+          "name_en": "Bard Suit (Male)",
+          "name_ja": "吟遊詩人の服（男性用）",
+          "image_url": "https://www.xenrebirth.com/index.php?attachment/2233-bard-suit-png/",
+          "stats": "最大HP: +50\n 最大MP: +100\n 防御力: +18",
+          "stats_en": "Max HP: +50 | Max MP: +100 | DEF: +18",
+          "description": "",
+          "sort_order": 30
+        },
+        {
+          "name_en": "Chocolate Piece x5",
+          "name_ja": "チョコレートのかけら ×5",
+          "image_url": "https://www.xenrebirth.com/index.php?attachment/13752-chocolate-piece-png/",
+          "stats": "1 HP 回復",
+          "stats_en": "Recovers 1 HP",
+          "description": "",
+          "sort_order": 40
+        },
+        {
+          "name_en": "Dandy Shirt",
+          "name_ja": "ダンディシャツ",
+          "image_url": "https://www.xenrebirth.com/index.php?attachment/13748-dandy-shirt-png/",
+          "stats": "最大HP: +50\n 最大MP: +50",
+          "stats_en": "Max HP: +50 | Max MP: +50",
+          "description": "",
+          "sort_order": 50
+        },
+        {
+          "name_en": "Mythical Sheep Helmet",
+          "name_ja": "神話の羊のヘルメット",
+          "image_url": "https://www.xenrebirth.com/index.php?attachment/1983-mythical-sheep-helmet-png/",
+          "stats": "最大MP: +50\n HP回復: +50\n MP回復: +50\n 防御力: +10",
+          "stats_en": "Max MP: +50 | HP recovery: +50 | MP recovery: +50 | DEF: +10",
+          "description": "",
+          "sort_order": 60
+        },
+        {
+          "name_en": "Rain Hat",
+          "name_ja": "レインハット",
+          "image_url": "https://www.xenrebirth.com/index.php?attachment/1990-rain-helmet-png/",
+          "stats": "最大HP: +100",
+          "stats_en": "Max HP: +100",
+          "description": "",
+          "sort_order": 70
+        },
+        {
+          "name_en": "Rain Suit",
+          "name_ja": "レインスーツ",
+          "image_url": "https://www.xenrebirth.com/index.php?attachment/2247-rain-suit-png/",
+          "stats": "最大HP: +100",
+          "stats_en": "Max HP: +100",
+          "description": "",
+          "sort_order": 80
+        },
+        {
+          "name_en": "White Dim Sum Head",
+          "name_ja": "白い点心ヘッド",
+          "image_url": "https://www.xenrebirth.com/index.php?attachment/1949-white-dim-sum-head-png/",
+          "stats": "最大MP: +75",
+          "stats_en": "Max MP: +75",
+          "description": "",
+          "sort_order": 90
+        }
+      ]
+    },
+    {
+      "slug": "mebae-lucky-ball",
+      "name_en": "Mebae Lucky Ball",
+      "name_ja": "メバエラッキーボール",
+      "section": "GM",
+      "is_extra": false,
+      "image_url": null,
+      "image_source_url": null,
+      "description": "公式一覧の「GM」に掲載。日本語名は参考訳です。 本体画像は参照した公式ページに掲載がありません。",
+      "source_url": "https://www.xenrebirth.com/lexicon/index.php?entry/5-lucky-balls-item-list/#7.12-Mebae-Lucky-Ball",
+      "sort_order": 550,
+      "items": [
+        {
+          "name_en": "Japanese Cake Hat",
+          "name_ja": "和菓子の帽子",
+          "image_url": "https://www.xenrebirth.com/index.php?attachment/11710-japanese-cake-hat-png/",
+          "stats": "最大MP: +50",
+          "stats_en": "Max MP: +50",
+          "description": "",
+          "sort_order": 10
+        },
+        {
+          "name_en": "Kimono Hair (M)",
+          "name_ja": "着物の髪型（男性用）",
+          "image_url": "https://www.xenrebirth.com/index.php?attachment/11709-kimono-hair-m-png/",
+          "stats": "最大HP: +100",
+          "stats_en": "Max HP: +100",
+          "description": "",
+          "sort_order": 20
+        },
+        {
+          "name_en": "Kimono Hair (F)",
+          "name_ja": "着物の髪型（女性用）",
+          "image_url": "https://www.xenrebirth.com/index.php?attachment/11726-kimono-hair-f-png/",
+          "stats": "最大HP: +100",
+          "stats_en": "Max HP: +100",
+          "description": "",
+          "sort_order": 30
+        },
+        {
+          "name_en": "Lollipop Hat",
+          "name_ja": "棒付きキャンディーの帽子",
+          "image_url": "https://www.xenrebirth.com/index.php?attachment/11743-lollipop-hat-png/",
+          "stats": "AGI: +3\n 防御力: +6\n 命中率: +2",
+          "stats_en": "AGI: +3 | DEF: +6 | Hit Rate: +2",
+          "description": "",
+          "sort_order": 40
+        },
+        {
+          "name_en": "Scarlet Hakama-Kamui (M)",
+          "name_ja": "緋色の袴カムイ（男性用）",
+          "image_url": "https://www.xenrebirth.com/index.php?attachment/11711-scarlet-hakama-kamui-m-png/",
+          "stats": "最大HP: +100",
+          "stats_en": "Max HP: +100",
+          "description": "",
+          "sort_order": 50
+        },
+        {
+          "name_en": "Scarlet Hakama-Kamui (F)",
+          "name_ja": "緋色の袴カムイ（女性用）",
+          "image_url": "https://www.xenrebirth.com/index.php?attachment/11708-scarlet-hakama-kamui-f-png/",
+          "stats": "最大HP: +100",
+          "stats_en": "Max HP: +100",
+          "description": "",
+          "sort_order": 60
+        }
+      ]
+    },
+    {
+      "slug": "redire-lucky-ball",
+      "name_en": "Redire Lucky Ball",
+      "name_ja": "レディーレラッキーボール",
+      "section": "GM",
+      "is_extra": false,
+      "image_url": null,
+      "image_source_url": null,
+      "description": "公式一覧の「GM」に掲載。日本語名は参考訳です。 本体画像は参照した公式ページに掲載がありません。",
+      "source_url": "https://www.xenrebirth.com/lexicon/index.php?entry/5-lucky-balls-item-list/#7.13-Redire-Lucky-Ball",
+      "sort_order": 560,
+      "items": [
+        {
+          "name_en": "Chinese Hanfu (Male)",
+          "name_ja": "漢服（男性用）",
+          "image_url": "https://www.xenrebirth.com/index.php?attachment/2322-chinese-hanfu-male-png/",
+          "stats": "MEN: +2\n 最大HP: +10\n 最大MP: +20\n 防御力: +10",
+          "stats_en": "MEN: +2 | Max HP: +10 | Max MP: +20 | DEF: +10",
+          "description": "",
+          "sort_order": 10
+        },
+        {
+          "name_en": "Chinese Hanfu (Female)",
+          "name_ja": "漢服（女性用）",
+          "image_url": "https://www.xenrebirth.com/index.php?attachment/2321-chinese-hanfu-female-png/",
+          "stats": "MEN: +2\n 最大HP: +10\n 最大MP: +20\n 防御力: +10",
+          "stats_en": "MEN: +2 | Max HP: +10 | Max MP: +20 | DEF: +10",
+          "description": "",
+          "sort_order": 20
+        },
+        {
+          "name_en": "Chinese Hat (Male)",
+          "name_ja": "中国風の帽子（男性用）",
+          "image_url": null,
+          "stats": "防御力: +18\n MP回復間隔: -0.3 秒",
+          "stats_en": "DEF: +18 | MP Recovery Time: -0.3 sec",
+          "description": "",
+          "sort_order": 30
+        },
+        {
+          "name_en": "Chinese Hat (Female)",
+          "name_ja": "中国風の帽子（女性用）",
+          "image_url": "https://www.xenrebirth.com/index.php?attachment/1934-chinese-hat-female-png/",
+          "stats": "最大HP: +100\n 最大MP: 100\n 防御力: +10",
+          "stats_en": "Max HP: +100 | Max MP: 100 | DEF: +10",
+          "description": "",
+          "sort_order": 40
+        },
+        {
+          "name_en": "Fancy Ulpes Ears (Male)",
+          "name_ja": "華やかなウルペスの耳（男性用）",
+          "image_url": "https://www.xenrebirth.com/index.php?attachment/1929-fancy-ulpes-ears-png/",
+          "stats": "最大HP: +75\n 最大MP: +75\n 防御力: +18",
+          "stats_en": "Max HP: +75 | Max MP: +75 | DEF: +18",
+          "description": "",
+          "sort_order": 50
+        },
+        {
+          "name_en": "Fancy Ulpes Ears (Female)",
+          "name_ja": "華やかなウルペスの耳（女性用）",
+          "image_url": "https://www.xenrebirth.com/index.php?attachment/1929-fancy-ulpes-ears-png/",
+          "stats": "最大HP: +75\n 最大MP: +75\n 防御力: +18",
+          "stats_en": "Max HP: +75 | Max MP: +75 | DEF: +18",
+          "description": "",
+          "sort_order": 60
+        },
+        {
+          "name_en": "Fancy Ulpes Suit (Male)",
+          "name_ja": "華やかなウルペスのスーツ（男性用）",
+          "image_url": "https://www.xenrebirth.com/index.php?attachment/2241-fancy-ulpes-suit-male-png/",
+          "stats": "防御力: +10\n クリティカル: +2",
+          "stats_en": "DEF: +10 | Crit: +2",
+          "description": "",
+          "sort_order": 70
+        },
+        {
+          "name_en": "Fancy Ulpes Suit (Female)",
+          "name_ja": "華やかなウルペスのスーツ（女性用）",
+          "image_url": "https://www.xenrebirth.com/index.php?attachment/2339-fancy-ulpes-suit-female-png/",
+          "stats": "防御力: +10\n クリティカル: +2",
+          "stats_en": "DEF: +10 | Crit: +2",
+          "description": "",
+          "sort_order": 80
+        },
+        {
+          "name_en": "Ulpes Tail",
+          "name_ja": "ウルペスのしっぽ",
+          "image_url": "https://www.xenrebirth.com/index.php?attachment/2279-ulpes-tail-png/",
+          "stats": "回避率: +1\n 移動速度: +1",
+          "stats_en": "Successful Dodge Rate: +1 | Movement Rate: +1",
+          "description": "",
+          "sort_order": 90
+        }
+      ]
+    },
+    {
+      "slug": "synex-lucky-ball",
+      "name_en": "Synex Lucky Ball",
+      "name_ja": "シネックスラッキーボール",
+      "section": "GM",
+      "is_extra": false,
+      "image_url": null,
+      "image_source_url": null,
+      "description": "公式一覧の「GM」に掲載。日本語名は参考訳です。 本体画像は参照した公式ページに掲載がありません。",
+      "source_url": "https://www.xenrebirth.com/lexicon/index.php?entry/5-lucky-balls-item-list/#7.14-Synex-Lucky-Ball",
+      "sort_order": 570,
+      "items": [
+        {
+          "name_en": "General Armor (Male)",
+          "name_ja": "将軍の鎧（男性用）",
+          "image_url": "https://www.xenrebirth.com/index.php?attachment/7976-general-armor-male-png/",
+          "stats": "最大HP: +50\n 防御力: +18",
+          "stats_en": "Max HP: +50 | DEF: +18",
+          "description": "",
+          "sort_order": 10
+        },
+        {
+          "name_en": "General Armor (Female)",
+          "name_ja": "将軍の鎧（女性用）",
+          "image_url": "https://www.xenrebirth.com/index.php?attachment/7975-general-armor-female-png/",
+          "stats": "最大HP: +50\n 防御力: +18",
+          "stats_en": "Max HP: +50 | DEF: +18",
+          "description": "",
+          "sort_order": 20
+        },
+        {
+          "name_en": "General Helmet (Male)",
+          "name_ja": "将軍の兜（男性用）",
+          "image_url": null,
+          "stats": "最大MP: +50\n 防御力: +14",
+          "stats_en": "Max MP: +50 | DEF: +14",
+          "description": "",
+          "sort_order": 30
+        },
+        {
+          "name_en": "General Helmet (Female)",
+          "name_ja": "将軍の兜（女性用）",
+          "image_url": null,
+          "stats": "最大MP: +50\n 防御力: +14",
+          "stats_en": "Max MP: +50 | DEF: +14",
+          "description": "",
+          "sort_order": 40
+        },
+        {
+          "name_en": "General Mask (Male)",
+          "name_ja": "将軍の面（男性用）",
+          "image_url": "https://www.xenrebirth.com/index.php?attachment/7973-general-mask-male-png/",
+          "stats": "クリティカル: +3\n HP回復間隔: -0.2 秒",
+          "stats_en": "Crit: +3 | HP Recovery Time: -0.2 sec",
+          "description": "",
+          "sort_order": 50
+        },
+        {
+          "name_en": "General Mask (Female)",
+          "name_ja": "将軍の面（女性用）",
+          "image_url": "https://www.xenrebirth.com/index.php?attachment/7972-general-mask-female-png/",
+          "stats": "クリティカル: +3\n HP回復間隔: -0.2 秒",
+          "stats_en": "Crit: +3 | HP Recovery Time: -0.2 sec",
+          "description": "",
+          "sort_order": 60
+        },
+        {
+          "name_en": "Rocket Hat",
+          "name_ja": "ロケットの帽子",
+          "image_url": null,
+          "stats": "ステータスなし",
+          "stats_en": "No stats",
+          "description": "",
+          "sort_order": 70
+        }
+      ]
+    },
+    {
+      "slug": "toast-lucky-ball",
+      "name_en": "Toast Lucky Ball",
+      "name_ja": "トーストラッキーボール",
+      "section": "GM",
+      "is_extra": false,
+      "image_url": null,
+      "image_source_url": null,
+      "description": "公式一覧の「GM」に掲載。日本語名は参考訳です。 本体画像は参照した公式ページに掲載がありません。",
+      "source_url": "https://www.xenrebirth.com/lexicon/index.php?entry/5-lucky-balls-item-list/#7.15-Toast-Lucky-Ball",
+      "sort_order": 580,
+      "items": [
+        {
+          "name_en": "Chocopoko Hat",
+          "name_ja": "チョコポコの帽子",
+          "image_url": "https://www.xenrebirth.com/index.php?attachment/1928-chokopoko-hat-png/",
+          "stats": "ステータスなし",
+          "stats_en": "No stats",
+          "description": "",
+          "sort_order": 10
+        },
+        {
+          "name_en": "Fish Head (Male)",
+          "name_ja": "魚の頭（男性用）",
+          "image_url": "https://www.xenrebirth.com/index.php?attachment/2010-fishhead-male-png/",
+          "stats": "最大MP: +100\n 防御力: +18",
+          "stats_en": "Max MP: +100 | DEF: +18",
+          "description": "",
+          "sort_order": 20
+        },
+        {
+          "name_en": "Fish Head (female)",
+          "name_ja": "魚の頭（女性用）",
+          "image_url": "https://www.xenrebirth.com/index.php?attachment/2009-fishhead-female-png/",
+          "stats": "最大MP: +100\n 防御力: +18",
+          "stats_en": "Max MP: +100 | DEF: +18",
+          "description": "",
+          "sort_order": 30
+        },
+        {
+          "name_en": "Fox Mask",
+          "name_ja": "キツネの面",
+          "image_url": "https://www.xenrebirth.com/index.php?attachment/6112-fox-mask-png/",
+          "stats": "クリティカル: +3\n スキルクリティカル: +3",
+          "stats_en": "Crit: +3 | Skill Crit: +3",
+          "description": "",
+          "sort_order": 40
+        },
+        {
+          "name_en": "Gothic Dress (Female)",
+          "name_ja": "ゴシックドレス（女性用）",
+          "image_url": "https://www.xenrebirth.com/index.php?attachment/6144-gothic-dress-female-png/",
+          "stats": "防御力: +14\n 最大HP: +100\n 最大MP: +25",
+          "stats_en": "DEF: +14 | Max HP: +100 | Max MP: +25",
+          "description": "",
+          "sort_order": 50
+        },
+        {
+          "name_en": "Inner Peace Emote",
+          "name_ja": "心の平穏エモート",
+          "image_url": "https://www.xenrebirth.com/index.php?attachment/6171-inner-peace-icon-png/",
+          "stats": "ステータスなし",
+          "stats_en": "No stats",
+          "description": "",
+          "sort_order": 60
+        },
+        {
+          "name_en": "Lovely Chocolate",
+          "name_ja": "ラブリーチョコレート",
+          "image_url": "https://www.xenrebirth.com/index.php?attachment/7984-lovely-chocolate-png/",
+          "stats": "1時間、移動速度を2増加",
+          "stats_en": "Increases moving speed by 2 for 1 hour",
+          "description": "",
+          "sort_order": 70
+        },
+        {
+          "name_en": "Military Coat (Male)",
+          "name_ja": "軍用コート（男性用）",
+          "image_url": "https://www.xenrebirth.com/index.php?attachment/6220-military-coat-male-png/",
+          "stats": "防御力: + 14\n 最大HP: +100\n 最大MP: +25",
+          "stats_en": "DEF: + 14 | Max HP: +100 | Max MP: +25",
+          "description": "",
+          "sort_order": 80
+        },
+        {
+          "name_en": "Poncho (Male)",
+          "name_ja": "ポンチョ（男性用）",
+          "image_url": "https://www.xenrebirth.com/index.php?attachment/2446-poncho-male-png/",
+          "stats": "最大HP: +100\n 最大MP: +100\n 防御力: +18",
+          "stats_en": "Max HP: +100 | Max MP: +100 | DEF: +18",
+          "description": "",
+          "sort_order": 90
+        },
+        {
+          "name_en": "Poncho (Female)",
+          "name_ja": "ポンチョ（女性用）",
+          "image_url": "https://www.xenrebirth.com/index.php?attachment/2246-poncho-female-png/",
+          "stats": "最大HP: +100\n 最大MP: +100\n 防御力: +18",
+          "stats_en": "Max HP: +100 | Max MP: +100 | DEF: +18",
+          "description": "",
+          "sort_order": 100
+        },
+        {
+          "name_en": "Tie",
+          "name_ja": "ネクタイ",
+          "image_url": "https://www.xenrebirth.com/index.php?attachment/6147-tie-png/",
+          "stats": "クリティカル: +4\n HP回復量: +15",
+          "stats_en": "Crit: +4 | HP Recovery Amount: +15",
+          "description": "",
+          "sort_order": 110
+        }
+      ]
+    }
+  ]
+}
