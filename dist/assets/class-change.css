@@ -1,0 +1,48 @@
+/* Scoped to the class-change guide; other page sections keep their existing styles. */
+.cc-guide {--cc-soft:#edf5f3;--cc-border:#cbded9}
+.cc-picker{display:flex;align-items:center;gap:14px;flex-wrap:wrap;background:#fff;border:1px solid var(--cc-border);border-radius:6px;padding:18px 22px;margin-bottom:20px}
+.cc-picker[hidden],.cc-guide [data-cc-class][hidden]{display:none!important}
+.cc-picker label{font-weight:700}
+.cc-picker select{font:inherit;padding:9px 35px 9px 12px;max-width:100%;border:1px solid #708c87;border-radius:4px;background:white;color:var(--ink)}
+.cc-picker p{margin:0;color:var(--muted);font-size:14px}
+.cc-level-nav{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));padding:0;gap:12px;overflow:visible;margin:0 0 28px}
+.cc-level-nav a{display:flex;align-items:center;gap:12px;white-space:normal;border:1px solid var(--cc-border);border-top:3px solid var(--teal);border-radius:4px;background:white;padding:14px 18px;color:var(--ink)}
+.cc-level-nav a:hover{background:var(--cc-soft)}
+.cc-level-nav b{font-size:23px;color:var(--teal)}
+.cc-level-nav span{font-size:13px}
+.cc-start{border-radius:5px;background:var(--dark);color:white;padding:26px 30px;margin-bottom:30px}
+.cc-start h2{font-size:20px}.cc-start>div{display:grid;grid-template-columns:1fr 1fr;gap:24px}.cc-start .small{color:#c5d8dd}.cc-start p:last-child{margin-bottom:0}
+.cc-stage{scroll-margin-top:24px;padding:30px;margin-bottom:30px}
+.cc-stage-head{display:flex;align-items:center;gap:18px;padding-bottom:22px;margin-bottom:26px;border-bottom:1px solid var(--line)}
+.cc-stage-head h2,.cc-stage-head h3{margin:0;font-size:24px;line-height:1.5}.cc-stage-head p{margin:4px 0 0;color:var(--muted);font-size:14px}
+.cc-level{flex:none;background:var(--teal);color:#fff;border-radius:5px;padding:10px 14px;font-size:22px;font-weight:bold}
+.cc-layout{display:grid;grid-template-columns:minmax(220px,.8fr) minmax(0,2fr);gap:30px;align-items:start}
+.cc-prep{background:var(--cc-soft);border:1px solid var(--cc-border);padding:20px;border-radius:5px}
+.cc-guide h4{margin:0 0 12px;font-size:17px;line-height:1.6;overflow-wrap:anywhere}
+.cc-prep ul{padding-left:20px;margin:0 0 16px}.cc-prep li{margin-bottom:12px}.cc-prep p{font-size:14px;margin:0}
+.cc-important{border-top:1px solid #b2cbc4;padding-top:12px;font-weight:700}
+.cc-steps{counter-reset:cc-step;list-style:none;margin:0;padding:0}
+.cc-steps>li{position:relative;padding:0 0 24px 46px;margin:0;border-left:1px solid var(--cc-border);margin-left:15px}
+.cc-steps>li:last-child{border-left:0;padding-bottom:6px}
+.cc-steps>li:before{counter-increment:cc-step;content:counter(cc-step);position:absolute;left:-16px;top:0;border-radius:50%;width:31px;height:31px;display:grid;place-items:center;background:var(--teal);color:white;font-weight:700;font-size:15px;line-height:1}
+.cc-steps>li>strong{display:block;font-size:18px;margin-bottom:7px}.cc-steps p{font-size:15px;margin:0;line-height:1.95}
+.cc-choice{display:inline;background:#edf3f4;border-radius:3px;padding:2px 5px;font-weight:700;box-decoration-break:clone;-webkit-box-decoration-break:clone}
+.cc-job-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px;margin:18px 0}
+.cc-job-grid.cc-filtered{grid-template-columns:1fr}
+.cc-job-grid.cc-filtered .cc-job-card dl{display:grid;grid-template-columns:1fr 1fr;gap:20px}
+.cc-job-card,.cc-boss{padding:20px;border:1px solid var(--line);border-radius:5px;background:#fff;min-width:0}
+.cc-job-card h4{padding-bottom:10px;border-bottom:1px solid var(--line)}.cc-job-card p{margin-bottom:12px;font-size:14px}.cc-job-card p:last-child{margin-bottom:0}
+.cc-guide dl{margin:0 0 14px}.cc-guide dl>div{margin-bottom:10px}.cc-guide dt{font-size:12px;color:var(--muted)}.cc-guide dd{margin:0;overflow-wrap:anywhere;font-size:15px}
+.cc-answer{color:#08695f;background:#e5f3ed;border-radius:3px;padding:2px 7px;font-size:19px}
+.cc-path{padding-left:24px;margin:8px 0 0;font-size:14px}.cc-path li{margin-bottom:8px;padding-left:3px;overflow-wrap:anywhere}.cc-path li::marker{color:var(--teal);font-weight:700}
+.cc-route-box,.cc-item-note{background:#f4f8f9;border:1px solid #cfdee2;border-left:4px solid var(--teal);border-radius:4px;padding:22px;margin:24px 0}
+.cc-item-note p{font-size:14px}.cc-item-note dl{display:grid;grid-template-columns:1.5fr 1fr .7fr;gap:18px}.cc-item-note .source{margin:0;font-size:13px}.cc-route-box .small{margin:0}
+.cc-boss-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px;margin:22px 0}
+.cc-boss .eyebrow{font-size:12px;letter-spacing:1px;margin-bottom:8px}.cc-boss h4{font-size:20px}.cc-boss dl{margin:0}.cc-boss dl>div:last-child{margin:0}
+.cc-note{font-size:14px;border-top:1px solid var(--line);margin:18px 0}.cc-note p{margin-top:12px}
+.cc-top{display:inline-block;font-size:14px;margin-top:22px}.cc-related{border-top:1px solid var(--line);padding-top:16px;margin:22px 0 0;font-size:14px}
+.cc-location{background:var(--cc-soft);padding:15px;margin:20px 0;font-size:14px}.cc-sources{font-size:14px}.cc-sources h2{font-size:20px}
+.cc-intro{margin:32px 0 20px}.cc-intro p:last-child{color:var(--muted)}
+@media(max-width:900px){.cc-layout{grid-template-columns:1fr;gap:24px}.cc-job-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.cc-level-nav a{gap:4px;flex-direction:column;align-items:start}.cc-prep ul{display:grid;grid-template-columns:1fr 1fr;gap:4px 24px}.cc-item-note dl{grid-template-columns:1fr 1fr}}
+@media(max-width:600px){.cc-stage{padding:20px 16px}.cc-stage-head{gap:12px;align-items:start}.cc-stage-head h2,.cc-stage-head h3{font-size:21px}.cc-level{font-size:18px;padding:8px 10px}.cc-level-nav{gap:7px}.cc-level-nav a{padding:10px 9px}.cc-level-nav b{font-size:18px}.cc-level-nav span{font-size:11px}.cc-picker{padding:15px}.cc-picker p{width:100%}.cc-start{padding:22px}.cc-start>div,.cc-job-grid,.cc-boss-grid,.cc-item-note dl,.cc-prep ul{grid-template-columns:1fr}.cc-start>div{gap:12px}.cc-steps>li{padding-left:30px}.cc-steps>li>strong{font-size:17px}.cc-item-note{padding:17px}.cc-item-note dl{gap:3px}}
+@media print{.cc-picker,.cc-top,.cc-related{display:none}.cc-stage{break-before:auto}.cc-prep,.cc-job-card,.cc-boss{break-inside:avoid}.cc-steps>li{break-inside:avoid}}
