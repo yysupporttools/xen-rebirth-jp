@@ -1245,3 +1245,29 @@ label > span {
   .lucky-ball-table td:last-child { grid-column: 1 / -1; }
 }
 
+
+.lucky-ball-edit-actions { margin-top: 1rem; padding-top: 1rem; border-top: 1px solid #dce3e4; text-align: right; }
+.lucky-ball-edit-actions button, .lucky-image-add, [data-add-category] { cursor: pointer; padding: 9px 12px; border: 1px solid #8da6aa; border-radius: 4px; background: white; color: #176d72; font: inherit; }
+.lucky-image-add { padding: 6px; font-size: 11px; }
+.lucky-editor-card { max-width: 850px; }
+.lucky-editor-record { border: 1px solid #b9cdd0; border-radius: 6px; padding: 16px; margin: 20px 0; min-width: 0; }
+.lucky-editor-record legend { font-weight: 700; padding: 0 7px; }
+.lucky-editor-grid { display: grid; grid-template-columns: repeat(2,minmax(0,1fr)); gap: 14px; margin-top: 14px; }
+.lucky-editor-grid label { display: block; }
+.lucky-editor-grid label span { display: block; margin-bottom: 5px; }
+.lucky-editor-grid input, .lucky-editor-grid textarea { width: 100%; box-sizing: border-box; padding: 9px; font: inherit; border: 1px solid #9bb4b7; border-radius: 4px; }
+.lucky-editor-grid textarea { min-height: 100px; resize: vertical; }
+.lucky-image-input { display: flex; align-items: center; flex-wrap: wrap; gap: 12px; padding: 14px; background: #eff6f5; border: 2px dashed #a8c2c6; border-radius: 6px; }
+.lucky-image-input:focus, .lucky-image-input:focus-within { outline: 3px solid #29848a; outline-offset: 2px; }
+.lucky-editor-preview { width: 64px; height: 64px; object-fit: contain; }
+.lucky-image-input input { display: block; max-width: 100%; margin-top: 5px; }
+.lucky-image-status { display: block; width: 100%; font-size: .85rem; }
+#lucky-editor-status { position: sticky; bottom: 60px; background: #fff; padding: 10px; }
+#lucky-editor-form > .glossary-modal-actions { position: sticky; bottom: 0; background: white; padding: 12px 0; }
+#lucky-editor-modal [hidden] { display: none !important; }
+#lucky-editor-modal button:disabled { opacity: .6; cursor: wait; }
+@media(max-width:700px) {
+  .lucky-editor-grid { grid-template-columns: 1fr; }
+  .lucky-editor-record { padding: 10px; }
+}
+

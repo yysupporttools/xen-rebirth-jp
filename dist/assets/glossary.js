@@ -176,18 +176,34 @@
     });
   }
 
+  function renderCategoryButtons() {
+    const panel = $("glossary-major-index");
+    if (!panel) return;
+    const fixed = [["", "すべて"], ["class", "クラス"], ["item", "アイテム"],
+      ["lucky", "ラッキーボール"], ["world", "世界地図"], ["quest", "クエスト"], ["dungeon", "ダンジョン・ボス"]];
+    const fixedNames = new Set(fixed.map(x => x[1]));
+    const buttons = [...fixed, ...categories.filter(c => !fixedNames.has(c.name)).map(c => [`category:${c.id}`, c.name])];
+    panel.innerHTML = buttons.map(([id, name]) => `<button type="button" data-major="${esc(id)}" class="${filters.major === id ? "is-active" : ""}" aria-pressed="${filters.major === id}">${esc(name)}</button>`).join("") +
+      '<button type="button" data-add-category>＋ カテゴリを追加</button>';
+  }
   function bindMajorIndex() {
-    document.querySelectorAll("[data-major]").forEach(button => {
-      button.addEventListener("click", () => {
-        filters.major = button.dataset.major || "";
-        document.querySelectorAll("[data-major]").forEach(b => b.classList.remove("is-active"));
-        button.classList.add("is-active");
-        renderTerms();
-      });
+    $("glossary-major-index")?.addEventListener("click", event => {
+      if (event.target.closest("[data-add-category]")) { $("glossary-add-category")?.click(); return; }
+      const button = event.target.closest("[data-major]");
+      if (!button) return;
+      filters.major = button.dataset.major || "";
+      categorySelect.value = "";
+      if (filters.major === "lucky") {
+        query.value = ""; filters.index = "";
+        document.querySelectorAll("[data-index]").forEach(b => b.classList.toggle("is-active", b.dataset.index === ""));
+      }
+      renderCategoryButtons();
+      renderTerms();
     });
   }
 
   function categoryOptions() {
+    renderCategoryButtons();
     const selected = categorySelect.value;
     categorySelect.innerHTML = '<option value="">すべての分類</option>' +
       categories.map(c => `<option value="${esc(c.name)}">${esc(c.name)}</option>`).join("");
@@ -213,8 +229,12 @@
       ].join(" "));
 
       if (!words.every(word => searchText.includes(word))) return false;
-      if (categorySelect.value && category !== categorySelect.value) return false;
-      if (filters.major && !getMajorGroups(term).includes(filters.major)) return false;
+      if (categorySelect.value && category !== categorySelect.value && !(categorySelect.value === "ラッキーボール" && isLuckyBallHub(term))) return false;
+      if (filters.major === "lucky") {
+        if (!isLuckyBallHub(term) && category !== "ラッキーボール") return false;
+      } else if (filters.major.startsWith("category:")) {
+        if (String(term.category_id) !== filters.major.slice(9)) return false;
+      } else if (filters.major && !getMajorGroups(term).includes(filters.major)) return false;
 
       if (filters.index) {
         if (filters.index.startsWith("ja:")) {
@@ -258,13 +278,14 @@
           </summary>
           <div class="lucky-ball-group-body">
             <p>${esc(group.description || "")}</p>
+            ${!groupImage ? `<p><button type="button" class="lucky-image-add" data-lucky-edit="${esc(group.id)}" data-lucky-item="group">本体画像を追加（Ctrl+V / アップロード）</button></p>` : ""}
             <table class="lucky-ball-table">
               <caption class="sr-only">${esc(group.name_ja || group.name_en)}の獲得アイテム</caption>
               <thead><tr><th scope="col">画像</th><th scope="col">アイテム名</th><th scope="col">ステータス・詳細</th></tr></thead>
-              <tbody>${groupItems.map(item => {
+              <tbody>${groupItems.map((item, itemIndex) => {
                 const itemImage = safeUrl(item.image_url);
                 return `<tr data-item-search="${esc(normalize([item.name_en, item.name_ja, item.stats, item.stats_en, item.description].join(" ")))}">
-                  <td class="lucky-ball-item-image-cell">${itemImage ? `<img class="lucky-ball-item-image" src="${esc(itemImage)}" alt="${esc(item.name_en)}" loading="lazy" referrerpolicy="no-referrer">` : placeholder}</td>
+                  <td class="lucky-ball-item-image-cell">${itemImage ? `<img class="lucky-ball-item-image" src="${esc(itemImage)}" alt="${esc(item.name_en)}" loading="lazy" referrerpolicy="no-referrer">` : `<button type="button" class="lucky-image-add" data-lucky-edit="${esc(group.id)}" data-lucky-item="${itemIndex}" aria-label="${esc(item.name_ja || item.name_en)}の画像を追加">画像を追加<br><small>Ctrl+V / 選択</small></button>`}</td>
                   <td><strong>${esc(item.name_ja || item.name_en)}</strong><span class="lucky-ball-item-en">${esc(item.name_en)}</span></td>
                   <td>${esc(item.stats || "公式ページにステータスの記載なし").replace(/\n/g, "<br>")}
                     ${item.description ? `<p>${esc(item.description)}</p>` : ""}
@@ -274,6 +295,7 @@
             </table>
             ${safeUrl(group.source_url) ? `<p><a href="${esc(safeUrl(group.source_url))}" target="_blank" rel="noopener noreferrer">公式Lexiconの該当箇所 ↗</a></p>` : ""}
             ${safeUrl(group.image_source_url) ? `<a href="${esc(safeUrl(group.image_source_url))}" target="_blank" rel="noopener noreferrer">本体画像の出典 ↗</a>` : ""}
+            <div class="lucky-ball-edit-actions"><button type="button" data-lucky-edit="${esc(group.id)}">このラッキーボールを編集</button></div>
           </div>
         </details>`;
       }).join("")}
@@ -396,6 +418,7 @@
     `).join("");
 
     bindEditButtons();
+    if (filters.major === "lucky") resultsEl.querySelector(".glossary-entry-lucky-ball > details")?.setAttribute("open", "");
     openHashTarget();
   }
 
@@ -416,7 +439,7 @@
     const sourceGroups = snapshot.status === "fulfilled" && Array.isArray(snapshot.value.groups) ? snapshot.value.groups : [];
     const sharedAvailable = groupsResult.status === "fulfilled" && itemsResult.status === "fulfilled" &&
       Array.isArray(groupsResult.value) && Array.isArray(itemsResult.value);
-    luckyBallGroups = sharedAvailable ? groupsResult.value.map(g => ({...g})) : [];
+    luckyBallGroups = sharedAvailable ? groupsResult.value.map(g => ({...g, _stored:true})) : [];
     luckyBallItems = sharedAvailable ? itemsResult.value.map(i => ({...i})) : [];
     for (const source of sourceGroups) {
       let group = luckyBallGroups.find(g => g.slug === source.slug || normalize(g.name_en) === normalize(source.name_en));
@@ -428,7 +451,7 @@
         if (!group.image_url) group.image_url = source.image_url;
       }
       for (const sourceItem of source.items) {
-        const existing = luckyBallItems.find(i => String(i.group_id) === String(group.id) && normalize(i.name_en) === normalize(sourceItem.name_en));
+        const existing = luckyBallItems.find(i => String(i.group_id) === String(group.id) && normalize(i.source_name || i.name_en) === normalize(sourceItem.name_en));
         if (existing) {
           if (!existing.stats_en) existing.stats_en = sourceItem.stats_en;
         } else luckyBallItems.push({...sourceItem, group_id: group.id});
@@ -746,7 +769,7 @@
     categorySelect.value = "";
     filters.major = "";
     filters.index = "";
-    document.querySelectorAll("[data-major]").forEach(button => button.classList.toggle("is-active", button.dataset.major === ""));
+    renderCategoryButtons();
     document.querySelectorAll("[data-index]").forEach(button => button.classList.toggle("is-active", button.dataset.index === ""));
     renderTerms();
   }
@@ -755,6 +778,176 @@
   categorySelect.addEventListener("change", renderTerms);
   $("glossary-reset")?.addEventListener("click", resetFilters);
   window.addEventListener("hashchange", openHashTarget);
+
+  let luckyEditing = null;
+  const luckyFiles = new Map();
+  const luckyPreviews = new Map();
+  const luckyModal = document.createElement("div");
+  luckyModal.id = "lucky-editor-modal";
+  luckyModal.className = "glossary-modal";
+  luckyModal.hidden = true;
+  luckyModal.setAttribute("role", "dialog");
+  luckyModal.setAttribute("aria-modal", "true");
+  luckyModal.setAttribute("aria-labelledby", "lucky-editor-title");
+  luckyModal.innerHTML = `<div class="glossary-modal-card lucky-editor-card paper">
+    <div class="glossary-modal-head"><h2 id="lucky-editor-title">ラッキーボールを編集</h2>
+      <button type="button" class="glossary-close" data-lucky-close>閉じる</button></div>
+    <form id="lucky-editor-form">
+      <p>本体と獲得アイテムを個別に編集できます。画像欄を選んでCtrl+V、またはファイルを選択してください。</p>
+      <div id="lucky-editor-fields"></div>
+      <p id="lucky-editor-status" role="status" aria-live="polite"></p>
+      <div class="glossary-modal-actions"><button type="button" data-lucky-close>キャンセル</button>
+        <button type="submit" class="glossary-manage-primary">変更を保存</button></div>
+    </form></div>`;
+  document.body.append(luckyModal);
+
+  function releaseLuckyPreviews() {
+    for (const url of luckyPreviews.values()) URL.revokeObjectURL(url);
+    luckyFiles.clear(); luckyPreviews.clear();
+  }
+  function closeLuckyEditor() {
+    if (luckyModal.dataset.saving === "true") return;
+    closeModal(luckyModal.id);
+    releaseLuckyPreviews(); luckyEditing = null;
+  }
+  function luckyField(label, name, value, multiline = false, required = false) {
+    return `<label><span>${esc(label)}</span>${multiline
+      ? `<textarea data-field="${name}" maxlength="5000">${esc(value)}</textarea>`
+      : `<input data-field="${name}" value="${esc(value)}" maxlength="200" ${required ? "required" : ""}>`}</label>`;
+  }
+  function luckyRecordFields(record, key, heading, isGroup) {
+    const url = safeUrl(record.image_url);
+    return `<fieldset class="lucky-editor-record" data-record="${esc(key)}"><legend>${esc(heading)}</legend>
+      <div class="lucky-image-input" tabindex="0" role="group" aria-label="${esc(heading)}の画像：選択してCtrl+V">
+        <img class="lucky-editor-preview" src="${esc(url || "")}" alt="${esc(heading)}の画像プレビュー" ${url ? "" : "hidden"}>
+        <span class="lucky-image-hint">${url ? "画像を差し替え" : "画像を追加"}：この欄を選んでCtrl+V</span>
+        <label>画像をアップロード<input type="file" accept="image/png,image/jpeg,image/webp,image/gif" data-image-input></label>
+        <span class="lucky-image-status" role="status"></span>
+      </div>
+      <div class="lucky-editor-grid">
+        ${luckyField("英語名", "name_en", record.name_en, false, true)}
+        ${luckyField("日本語名", "name_ja", record.name_ja)}
+        ${isGroup ? "" : luckyField("ステータス（日本語）", "stats", record.stats, true)}
+        ${luckyField("説明・備考", "description", record.description, true)}
+      </div>
+      ${!isGroup && record.stats_en ? `<details><summary>公式の英語原文を確認</summary><p>${esc(record.stats_en).replace(/\n/g,"<br>")}</p></details>` : ""}
+    </fieldset>`;
+  }
+  function openLuckyEditor(groupKey, itemKey) {
+    const group = luckyBallGroups.find(g => String(g.id) === groupKey);
+    if (!group) return;
+    releaseLuckyPreviews();
+    const items = luckyBallItems.filter(i => String(i.group_id) === groupKey).sort((a,b) => (Number(a.sort_order)||0) - (Number(b.sort_order)||0));
+    luckyEditing = {group, items};
+    $("lucky-editor-title").textContent = `${group.name_ja || group.name_en}を編集`;
+    $("lucky-editor-fields").innerHTML = luckyRecordFields(group, "group", "ラッキーボール本体", true) +
+      items.map((item, index) => luckyRecordFields(item, String(index), item.name_ja || item.name_en, false)).join("");
+    $("lucky-editor-status").textContent = group._stored ? "" : "現在は閲覧用カタログです。共有保存にはラッキーボール編集設定SQLの実行が必要です。";
+    openModal(luckyModal.id);
+    if (itemKey !== undefined) {
+      const field = [...$("lucky-editor-fields").querySelectorAll("[data-record]")].find(el => el.dataset.record === itemKey);
+      field?.querySelector(".lucky-image-input")?.focus();
+    }
+  }
+  resultsEl.addEventListener("click", event => {
+    const button = event.target.closest("[data-lucky-edit]");
+    if (!button) return;
+    event.preventDefault(); event.stopPropagation();
+    openLuckyEditor(button.dataset.luckyEdit, button.dataset.luckyItem);
+  });
+  function selectLuckyImage(field, file) {
+    const status = field.querySelector(".lucky-image-status");
+    try {
+      validateImage(file);
+      const key = field.dataset.record;
+      if (luckyPreviews.has(key)) URL.revokeObjectURL(luckyPreviews.get(key));
+      const url = URL.createObjectURL(file);
+      luckyFiles.set(key, file); luckyPreviews.set(key, url);
+      const img = field.querySelector(".lucky-editor-preview");
+      img.src = url; img.hidden = false;
+      status.textContent = "画像を選択しました。変更を保存すると反映されます。";
+    } catch (error) { status.textContent = error.message; }
+  }
+  luckyModal.addEventListener("change", event => {
+    if (event.target.matches("[data-image-input]") && event.target.files?.[0]) {
+      selectLuckyImage(event.target.closest("[data-record]"), event.target.files[0]);
+    }
+  });
+  luckyModal.addEventListener("paste", event => {
+    if (luckyModal.dataset.saving === "true") return;
+    const item = [...(event.clipboardData?.items || [])].find(i => i.type.startsWith("image/"));
+    if (!item) return;
+    event.preventDefault();
+    const field = event.target.closest("[data-record]");
+    if (!field) { $("lucky-editor-status").textContent = "貼り付け先の画像欄を先に選択してください。"; return; }
+    const file = item.getAsFile();
+    if (file) selectLuckyImage(field, file);
+  });
+  luckyModal.addEventListener("click", event => {
+    if (event.target === luckyModal || event.target.closest("[data-lucky-close]")) closeLuckyEditor();
+  });
+  luckyModal.addEventListener("keydown", event => {
+    if (event.key === "Escape") { event.stopPropagation(); closeLuckyEditor(); }
+    if (event.key === "Tab") {
+      const focusable = [...luckyModal.querySelectorAll('button:not(:disabled),input:not(:disabled),textarea:not(:disabled),[tabindex="0"]')].filter(e => e.getClientRects().length);
+      if (!focusable.length) return;
+      if (event.shiftKey && document.activeElement === focusable[0]) { event.preventDefault(); focusable.at(-1).focus(); }
+      else if (!event.shiftKey && document.activeElement === focusable.at(-1)) { event.preventDefault(); focusable[0].focus(); }
+    }
+  });
+  $("lucky-editor-form").addEventListener("submit", async event => {
+    event.preventDefault();
+    if (!luckyEditing || luckyModal.dataset.saving === "true") return;
+    const status = $("lucky-editor-status");
+    if (!luckyEditing.group._stored) {
+      status.textContent = "共有保存の設定がまだ完了していません。ラッキーボール編集設定SQLを実行し、ページを再読み込みしてください。";
+      return;
+    }
+    const changed = [];
+    for (const field of $("lucky-editor-fields").querySelectorAll("[data-record]")) {
+      const key = field.dataset.record;
+      const original = key === "group" ? luckyEditing.group : luckyEditing.items[Number(key)];
+      const patch = {};
+      for (const input of field.querySelectorAll("[data-field]")) {
+        const value = input.value.trim();
+        if (value !== String(original[input.dataset.field] ?? "")) patch[input.dataset.field] = value;
+      }
+      if (Object.keys(patch).length || luckyFiles.has(key)) changed.push({key, original, patch});
+    }
+    if (!changed.length) { status.textContent = "変更はありません。"; return; }
+    luckyModal.dataset.saving = "true";
+    luckyModal.querySelectorAll("button,input,textarea").forEach(el => el.disabled = true);
+    status.textContent = "保存中…";
+    try {
+      // Verify the save function before uploading images, so missing SQL creates no orphan upload.
+      const probe = await api("/rest/v1/rpc/lucky_ball_edit", {method:"POST", body:JSON.stringify({p_slug:luckyEditing.group.slug,p_group:{},p_items:[]})});
+      if (!probe.ok) throw new Error("共有保存に接続できません。編集設定SQLを実行済みか確認してください。");
+      for (const change of changed) {
+        if (luckyFiles.has(change.key)) {
+          change.patch.image_url = await uploadImage(`lucky-ball/${luckyEditing.group.slug}/${crypto.randomUUID()}`, luckyFiles.get(change.key));
+        }
+      }
+      const groupPatch = changed.find(c => c.key === "group")?.patch || {};
+      const itemPatches = changed.filter(c => c.key !== "group").map(c => ({original_name:c.original.name_en, ...c.patch}));
+      const response = await api("/rest/v1/rpc/lucky_ball_edit", {method:"POST", body:JSON.stringify({p_slug:luckyEditing.group.slug,p_group:groupPatch,p_items:itemPatches})});
+      if (!response.ok) throw new Error("保存できませんでした。入力内容を残しています。通信状態と英語名の重複を確認してください。");
+      const slug = luckyEditing.group.slug;
+      luckyModal.dataset.saving = "false";
+      closeLuckyEditor();
+      await loadShared();
+      const groupNode = document.getElementById(`lucky-ball-${slug}`);
+      if (groupNode) {
+        const hub = groupNode.closest(".glossary-entry")?.querySelector("details");
+        if (hub) hub.open = true;
+        groupNode.open = true;
+        groupNode.scrollIntoView({block:"start"});
+      }
+    } catch (error) { status.textContent = error.message; }
+    finally {
+      luckyModal.dataset.saving = "false";
+      luckyModal.querySelectorAll("button,input,textarea").forEach(el => el.disabled = false);
+    }
+  });
 
   buildIndexes();
   bindMajorIndex();
