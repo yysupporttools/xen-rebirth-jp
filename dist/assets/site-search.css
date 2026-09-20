@@ -1,0 +1,18 @@
+.site-search-panel{padding:24px;border:1px solid var(--line);background:white;border-radius:6px;margin-bottom:25px}
+.site-search-panel label{display:block;font-weight:bold;margin-bottom:8px}
+.site-search-row{display:flex;gap:10px;align-items:stretch}
+.site-search-row input{min-width:0;flex:1;font:inherit;padding:13px 15px;border:1px solid #94aaa9;border-radius:4px;color:var(--ink);background:white}
+.site-search-row button,.site-search-more{font:inherit;font-weight:bold;padding:12px 24px;border:0;border-radius:4px;background:var(--teal);color:white;cursor:pointer}
+.site-search-row button:hover,.site-search-more:hover{background:#065e59}
+.site-search-options{display:flex;align-items:center;flex-wrap:wrap;gap:12px;margin-top:18px}
+.site-search-options label{margin:0;font-size:14px}.site-search-options select{font:inherit;max-width:100%;padding:9px 12px;border:1px solid #94aaa9;border-radius:4px;background:white;color:var(--ink)}
+.site-search-options button{font:inherit;padding:8px 12px;border:1px solid var(--line);border-radius:4px;background:white;color:var(--teal);cursor:pointer}
+.site-search-help{font-size:14px;color:var(--muted);margin:14px 0 0}
+.site-search-count{font-weight:bold;margin:25px 0 16px}
+.site-search-result{border:1px solid var(--line);background:white;border-radius:5px;padding:22px 26px;margin-bottom:14px;overflow-wrap:anywhere}
+.site-search-result h2{font-size:21px;margin:3px 0 12px}.site-search-result>p:last-child{margin:0;font-size:15px}
+.site-search-meta{color:var(--muted);font-size:12px;margin:0;line-height:1.7}
+.site-search-examples{display:flex;gap:9px;flex-wrap:wrap;margin:18px 0}.site-search-examples a{border:1px solid var(--line);background:white;padding:6px 12px;border-radius:20px;text-decoration:none;font-size:14px}
+.site-search-status{font-size:13px;color:var(--muted)}
+.site-search-page [hidden]{display:none!important}
+@media(max-width:600px){.site-search-panel{padding:18px}.site-search-row button{padding:12px 15px}.site-search-result{padding:19px}.site-search-result h2{font-size:19px}.site-search-options{gap:10px}.site-search-options select{flex:1}}

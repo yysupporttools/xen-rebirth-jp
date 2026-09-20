@@ -512,6 +512,11 @@
     try { id = decodeURIComponent(location.hash.slice(1)); } catch { return; }
     const target = document.getElementById(id);
     if (!target) return;
+    let ancestor = target;
+    while (ancestor) {
+      if (ancestor.tagName === "DETAILS") ancestor.open = true;
+      ancestor = ancestor.parentElement;
+    }
     const detailsEl = target.querySelector("details");
     if (detailsEl) detailsEl.open = true;
     requestAnimationFrame(() => target.scrollIntoView({ behavior: "smooth", block: "center" }));
