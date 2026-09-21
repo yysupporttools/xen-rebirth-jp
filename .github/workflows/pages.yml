@@ -25,6 +25,8 @@ jobs:
           python-version: '3.13'
       - name: Refresh official boss schedule
         run: python scripts/update_bosses.py
+      - name: Build site search index
+        run: python scripts/build_site_search.py
       - uses: actions/configure-pages@v5
       - uses: actions/upload-pages-artifact@v4
         with:
