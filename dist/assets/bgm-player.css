@@ -728,4 +728,4 @@
   }
 }
 
-.xen-bgm-message { margin: 8px 0; font-size: 12px; line-height: 1.6; color: var(--bgm-deep); }
+.xen-bgm-message { margin: 8px 12px; padding: 8px 10px; border-radius: 6px; background: #f6f0df; font-size: 12px; line-height: 1.6; color: #123f41; }
