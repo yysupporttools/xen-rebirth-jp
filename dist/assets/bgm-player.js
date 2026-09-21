@@ -3,6 +3,11 @@
 
   const TRACK_COUNT = 58;
   const STORAGE_KEY = "xenRebirthBgmPlayerV1";
+  const SESSION_KEY = "xenRebirthBgmPlaybackV1";
+  let playback = {};
+  try { playback = JSON.parse(sessionStorage.getItem(SESSION_KEY) || "{}") || {}; }
+  catch { /* Storage may be unavailable in private browsing. */ }
+
 
   /* Supabase */
   const SUPABASE_URL = "https://dzxxjtmpcfsmvdgkcwvn.supabase.co";
@@ -41,6 +46,7 @@
     ...savedState
   };
 
+  if (Number.isInteger(playback.track)) state.track = playback.track;
   state.track = Math.max(
     0,
     Math.min(TRACK_COUNT - 1, Number(state.track) || 0)
@@ -50,12 +56,12 @@
     0,
     Math.min(
       1,
-      Number(state.volume) || defaultState.volume
+      Number.isFinite(Number(state.volume)) ? Number(state.volume) : defaultState.volume
     )
   );
 
   function saveState() {
-    localStorage.setItem(
+    try { localStorage.setItem(
       STORAGE_KEY,
       JSON.stringify({
         track: state.track,
@@ -64,7 +70,7 @@
         repeat: state.repeat,
         expanded: state.expanded
       })
-    );
+    ); } catch { /* Playback remains available without storage. */ }
   }
 
   function formatTime(seconds) {
@@ -190,8 +196,7 @@
       return;
     }
 
-    /* 最初に曲名を取得 */
-    await fetchBgmTitles();
+    // Show controls immediately; title loading must not delay playback.
 
     const player = document.createElement("section");
 
@@ -271,6 +276,7 @@
 
         </div>
 
+        <p class="xen-bgm-message" role="status" hidden></p>
         <div class="xen-bgm-progress-wrap">
 
           <span class="xen-bgm-current-time">
@@ -394,6 +400,57 @@
 
     const audio =
       player.querySelector(".xen-bgm-audio");
+
+    const message = player.querySelector(".xen-bgm-message");
+    let pendingTime = Math.max(0, Number(playback.time) || 0);
+    let wantsPlayback = playback.playing === true;
+    let leaving = false;
+    let lastSaved = 0;
+
+    function savePlayback() {
+      if (leaving) return;
+      try {
+        sessionStorage.setItem(SESSION_KEY, JSON.stringify({
+          track: state.track,
+          time: pendingTime === null ? audio.currentTime : pendingTime,
+          playing: wantsPlayback
+        }));
+      } catch { /* Ignore unavailable storage. */ }
+    }
+
+    function startPlayback() {
+      wantsPlayback = true;
+      message.hidden = true;
+      savePlayback();
+      audio.play().catch(error => {
+        if (error.name === "AbortError") return;
+        message.textContent = error.name === "NotAllowedError"
+          ? "続きから聴くには ▶ 再生を押してください。"
+          : "BGMを再生できませんでした。再生ボタンで再試行できます。";
+        message.hidden = false;
+        updatePlayState();
+        miniStatus.textContent = "▶ 再開";
+      });
+    }
+
+    window.addEventListener("pagehide", () => {
+      savePlayback();
+      leaving = true;
+    });
+    document.addEventListener("visibilitychange", () => {
+      if (document.visibilityState === "hidden") savePlayback();
+    });
+    window.addEventListener("pageshow", event => {
+      if (!event.persisted) return;
+      leaving = false;
+      try { playback = JSON.parse(sessionStorage.getItem(SESSION_KEY) || "{}") || {}; }
+      catch { playback = {}; }
+      if (Number.isInteger(playback.track) && playback.track >= 0 && playback.track < TRACK_COUNT) {
+        pendingTime = Math.max(0, Number(playback.time) || 0);
+        wantsPlayback = playback.playing === true;
+        loadTrack(playback.track, false, true);
+      }
+    });
 
     const miniButton =
       player.querySelector(".xen-bgm-mini");
@@ -695,9 +752,12 @@
 
     function loadTrack(
       index,
-      autoplay = false
+      autoplay = false,
+      restoring = false
     ) {
-
+      if (!restoring) pendingTime = null;
+      if (!restoring) wantsPlayback = autoplay;
+      message.hidden = true;
       state.track = index;
 
       const track =
@@ -728,9 +788,7 @@
 
       if (autoplay) {
 
-        audio.play().catch(() => {
-          updatePlayState();
-        });
+        startPlayback();
       }
     }
 
@@ -850,11 +908,14 @@
 
         if (audio.paused) {
 
-          audio.play().catch(() => {});
+          startPlayback();
 
         } else {
 
+          wantsPlayback = false;
           audio.pause();
+          message.hidden = true;
+          savePlayback();
         }
       }
     );
@@ -954,10 +1015,13 @@
       "loadedmetadata",
       () => {
 
-        duration.textContent =
-          formatTime(
-            audio.duration
-          );
+        duration.textContent = formatTime(audio.duration);
+        if (pendingTime !== null) {
+          audio.currentTime = Number.isFinite(audio.duration)
+            ? Math.min(pendingTime, Math.max(0, audio.duration - 0.1)) : pendingTime;
+          pendingTime = null;
+          if (wantsPlayback) startPlayback();
+        }
       }
     );
 
@@ -965,6 +1029,10 @@
       "timeupdate",
       () => {
 
+        if (Date.now() - lastSaved > 1000) {
+          savePlayback();
+          lastSaved = Date.now();
+        }
         currentTime.textContent =
           formatTime(
             audio.currentTime
@@ -989,7 +1057,7 @@
 
     audio.addEventListener(
       "play",
-      updatePlayState
+      () => { wantsPlayback = true; message.hidden = true; updatePlayState(); savePlayback(); }
     );
 
     audio.addEventListener(
@@ -1005,9 +1073,7 @@
 
           audio.currentTime = 0;
 
-          audio.play().catch(
-            () => {}
-          );
+          startPlayback();
 
           return;
         }
@@ -1037,14 +1103,18 @@
 
     loadTrack(
       state.track,
-      false
+      false,
+      true
     );
 
     updatePlayState();
 
-    setExpanded(
-      Boolean(state.expanded)
-    );
+    setExpanded(Boolean(state.expanded));
+    fetchBgmTitles().then(() => {
+      buildTrackList();
+      title.textContent = tracks[state.track].title;
+      if (!audio.paused) miniStatus.textContent = tracks[state.track].title;
+    });
   }
 
   if (

@@ -727,3 +727,5 @@
     width: 42px;
   }
 }
+
+.xen-bgm-message { margin: 8px 0; font-size: 12px; line-height: 1.6; color: var(--bgm-deep); }
