@@ -21,6 +21,10 @@
   let luckyBallGroups = [];
   let luckyBallItems = [];
   let luckyBallReady = false;
+  let classEquipmentSources = [];
+  let classEquipmentItems = [];
+  let classEquipmentReady = false;
+  let classEquipmentError = "";
   let luckyBallError = "";
   let usingSharedData = false;
   let referenceCatalog = null;
@@ -151,6 +155,30 @@
     );
   }
 
+  function classKeyForTerm(term) {
+    const slug = String(term.slug || "");
+    const slugMatch = slug.match(/^class-(knight|mage|archer|cleric|rogue|templar|xenian)$/);
+    if (slugMatch) return slugMatch[1];
+    const values = [term.name_en, term.name_ja, term.aliases].map(normalize).join(" ");
+    const map = [
+      ["knight", ["knight", "ナイト"]], ["mage", ["mage", "メイジ"]],
+      ["archer", ["archer", "アーチャー"]], ["cleric", ["cleric", "クレリック"]],
+      ["rogue", ["rogue", "ローグ"]], ["templar", ["templar", "テンプラー"]],
+      ["xenian", ["xenian", "ゼニアン"]]
+    ];
+    return map.find(([, names]) => names.some(name => values.includes(normalize(name))))?.[0] || "";
+  }
+
+  function classEquipmentSearchText(term) {
+    const key = classKeyForTerm(term);
+    if (!key) return "";
+    const source = classEquipmentSources.find(s => s.class_key === key);
+    if (!source) return "";
+    return classEquipmentItems.filter(i => String(i.source_id) === String(source.id))
+      .map(i => [i.name_en, i.name_ja, i.section_en, i.section_ja, i.item_type_en, i.item_type_ja, i.required_level, i.stats, i.description].join(" "))
+      .join(" ");
+  }
+
   function buildIndexes() {
     const alpha = $("glossary-alpha-index");
     const kana = $("glossary-kana-index");
@@ -226,7 +254,8 @@
         term.drop_location, term.acquisition, term.related_entity, term.notes, term._section,
         isLuckyBallHub(term) ? luckyBallGroups.map(g => [g.name_en, g.name_ja,
           ...luckyBallItems.filter(i => String(i.group_id) === String(g.id)).map(i =>
-            [i.name_en, i.name_ja, i.stats, i.stats_en, i.description].join(" "))].join(" ")).join(" ") : ""
+            [i.name_en, i.name_ja, i.stats, i.stats_en, i.description].join(" "))].join(" ")).join(" ") : "",
+        classEquipmentSearchText(term)
       ].join(" "));
 
       if (!words.every(word => searchText.includes(word))) return false;
@@ -305,7 +334,68 @@
     </div>`;
   }
 
+  function classEquipmentCatalogHtml(term) {
+    const key = classKeyForTerm(term);
+    if (!key) return "";
+    if (!classEquipmentReady) return '<p role="status">装備一覧を読み込んでいます…</p>';
+    const source = classEquipmentSources.find(s => s.class_key === key);
+    if (!source) return '<p role="status">この職業の装備データはまだ登録されていません。</p>';
+    const items = classEquipmentItems.filter(i => String(i.source_id) === String(source.id))
+      .sort((a,b) => (Number(a.sort_order)||0) - (Number(b.sort_order)||0));
+    if (!items.length) return `<p role="status">${esc(classEquipmentError || "この職業の装備一覧はまだ同期されていません。")}</p>`;
+
+    const sections = new Map();
+    for (const item of items) {
+      const section = item.section_ja || item.section_en || "装備一覧";
+      if (!sections.has(section)) sections.set(section, []);
+      sections.get(section).push(item);
+    }
+    return `<div class="class-equipment-catalog" data-class-key="${esc(key)}">
+      <div class="class-equipment-heading"><h3>${esc(source.class_name_ja || source.class_name_en)} 装備一覧</h3>
+        <span class="class-equipment-total">掲載 ${items.length}件</span></div>
+      <p class="class-equipment-note">公式Xen Rebirth Lexicon掲載データをもとに整理しています。装備画像は公式ページの画像を表示しています。</p>
+      <label class="class-equipment-search-label">装備を検索
+        <input type="search" class="class-equipment-search" placeholder="例：剣、Lv 40、Defense" aria-label="${esc(source.class_name_ja || source.class_name_en)}の装備を検索">
+      </label>
+      <p class="class-equipment-search-empty" hidden>該当する装備はありません。</p>
+      ${[...sections.entries()].map(([section, rows], sectionIndex) => `<details class="class-equipment-section" ${sectionIndex === 0 ? "open" : ""}>
+        <summary><strong>${esc(section)}</strong><span>${rows.length}件</span></summary>
+        <div class="class-equipment-table-wrap"><table class="class-equipment-table">
+          <thead><tr><th>画像</th><th>装備名</th><th>種類</th><th>必要Lv</th><th>性能・詳細</th></tr></thead>
+          <tbody>${rows.map(item => {
+            const img = safeUrl(item.image_url);
+            const search = normalize([item.name_en,item.name_ja,item.section_en,item.section_ja,item.item_type_en,item.item_type_ja,item.required_level,item.stats,item.description].join(" "));
+            return `<tr data-equipment-search="${esc(search)}">
+              <td class="class-equipment-image-cell">${img ? `<img class="class-equipment-image" src="${esc(img)}" alt="${esc(item.name_en)}" loading="lazy" referrerpolicy="no-referrer">` : '<span class="class-equipment-image-empty">画像なし</span>'}</td>
+              <td><strong>${esc(item.name_ja || item.name_en)}</strong>${item.name_ja ? `<span class="class-equipment-name-en">${esc(item.name_en)}</span>` : ""}</td>
+              <td>${esc(item.item_type_ja || item.item_type_en || "装備")}</td>
+              <td>${esc(item.required_level || "—")}</td>
+              <td>${esc(item.stats || item.description || "公式ページに詳細記載なし").replace(/\n/g,"<br>")}</td>
+            </tr>`;
+          }).join("")}</tbody>
+        </table></div>
+      </details>`).join("")}
+      ${safeUrl(source.source_url) ? `<p class="class-equipment-source"><a href="${esc(safeUrl(source.source_url))}" target="_blank" rel="noopener noreferrer">公式Lexiconの装備一覧 ↗</a></p>` : ""}
+    </div>`;
+  }
+
   resultsEl.addEventListener("input", event => {
+    if (event.target.matches(".class-equipment-search")) {
+      const catalog = event.target.closest(".class-equipment-catalog");
+      const words = normalize(event.target.value).split(/\s+/).filter(Boolean);
+      let visible = 0;
+      catalog.querySelectorAll(".class-equipment-section").forEach(section => {
+        let sectionVisible = 0;
+        section.querySelectorAll("[data-equipment-search]").forEach(row => {
+          row.hidden = !words.every(word => row.dataset.equipmentSearch.includes(word));
+          if (!row.hidden) { visible++; sectionVisible++; }
+        });
+        section.hidden = words.length > 0 && sectionVisible === 0;
+        if (words.length > 0 && sectionVisible > 0) section.open = true;
+      });
+      catalog.querySelector(".class-equipment-search-empty").hidden = visible !== 0;
+      return;
+    }
     if (!event.target.matches(".lucky-ball-search")) return;
     const catalog = event.target.closest(".lucky-ball-catalog");
     const words = normalize(event.target.value).split(/\s+/).filter(Boolean);
@@ -324,7 +414,7 @@
   });
 
   resultsEl.addEventListener("error", event => {
-    if (event.target.matches?.(".lucky-ball-group-image, .lucky-ball-item-image")) {
+    if (event.target.matches?.(".lucky-ball-group-image, .lucky-ball-item-image, .class-equipment-image")) {
       const fallback = document.createElement("span");
       fallback.className = "lucky-ball-image-empty";
       fallback.textContent = "画像を取得できません";
@@ -352,8 +442,10 @@
     const updated = term.updated_at ? new Date(term.updated_at).toLocaleString("ja-JP") : "";
     const id = term.slug || term.id;
     const luckyCatalog = isLuckyBallHub(term) ? luckyBallCatalogHtml() : "";
+    const classKey = classKeyForTerm(term);
+    const equipmentCatalog = classKey ? classEquipmentCatalogHtml(term) : "";
 
-    return `<article class="glossary-entry${isLuckyBallHub(term) ? " glossary-entry-lucky-ball" : ""}" id="${esc(id)}">
+    return `<article class="glossary-entry${isLuckyBallHub(term) ? " glossary-entry-lucky-ball" : ""}${classKey ? " glossary-entry-class-equipment" : ""}" id="${esc(id)}">
       <details>
         <summary>
           ${image}
@@ -367,6 +459,7 @@
               ${alias}
               ${term._section ? `<span class="glossary-category-badge">${esc(term._section)}</span>` : ""}
               ${isLuckyBallHub(term) ? '<span class="lucky-ball-hub-badge">獲得アイテム一覧</span>' : ""}
+              ${classKey ? '<span class="class-equipment-badge">装備一覧</span>' : ""}
             </div>
           </div>
           <span class="glossary-open-icon" aria-hidden="true">＋</span>
@@ -376,6 +469,7 @@
           <p class="glossary-description">${esc(term.description || "").replace(/\n/g, "<br>")}</p>
           ${details ? `<div class="glossary-detail-list">${details}</div>` : ""}
           ${luckyCatalog}
+          ${equipmentCatalog}
           ${referenceHtml(term)}
           <div class="glossary-links">
             ${guide ? `<a href="${esc(guide)}">関連ガイド</a>` : ""}
@@ -480,6 +574,26 @@
     }
   }
 
+  async function loadClassEquipmentData() {
+    classEquipmentError = "";
+    try {
+      const [sRes, iRes] = await Promise.all([
+        api("/rest/v1/class_equipment_sources?select=*&order=sort_order.asc,class_name_en.asc"),
+        api("/rest/v1/class_equipment_items?select=*&order=source_id.asc,sort_order.asc")
+      ]);
+      if (!sRes.ok || !iRes.ok) throw new Error(`HTTP ${!sRes.ok ? sRes.status : iRes.status}`);
+      classEquipmentSources = await sRes.json();
+      classEquipmentItems = await iRes.json();
+      classEquipmentReady = true;
+    } catch (error) {
+      console.error("Class equipment load error:", error);
+      classEquipmentSources = [];
+      classEquipmentItems = [];
+      classEquipmentReady = true;
+      classEquipmentError = "装備一覧を取得できませんでした。ページを再読み込みしてください。";
+    }
+  }
+
   async function loadReferenceCatalog() {
     try {
       if (!referenceCatalog) {
@@ -525,7 +639,7 @@
       categories = await cRes.json();
       terms = await tRes.json();
       usingSharedData = true;
-      await Promise.all([loadLuckyBallData(), loadReferenceCatalog()]);
+      await Promise.all([loadLuckyBallData(), loadClassEquipmentData(), loadReferenceCatalog()]);
       categoryOptions();
       renderTerms();
       if (syncStatus) syncStatus.textContent = `共同編集に接続済み：${terms.length}件・${categories.length}分類（公式カタログを含む）`;
