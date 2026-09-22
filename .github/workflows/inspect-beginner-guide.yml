@@ -1,0 +1,57 @@
+name: Inspect beginner guide source
+on:
+  push:
+    paths:
+      - '.github/workflows/inspect-beginner-guide.yml'
+  workflow_dispatch:
+
+jobs:
+  inspect:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Fetch official beginner guide
+        run: |
+          python -m pip install -q beautifulsoup4
+          python - <<'PY'
+          import urllib.request, re
+          from bs4 import BeautifulSoup
+          from urllib.parse import urljoin
+          url='https://www.xenrebirth.com/lexicon/index.php?entry/167-xenian-level-1-10-beginner-s-guide/'
+          req=urllib.request.Request(url,headers={'User-Agent':'XenRebirthJP-GuideSync/1.0'})
+          html=urllib.request.urlopen(req,timeout=30).read().decode('utf-8','replace')
+          soup=BeautifulSoup(html,'html.parser')
+          print('TITLE:', soup.title.get_text(' ',strip=True) if soup.title else '')
+          # Prefer the lexicon/article body, then fall back to the page.
+          candidates=[]
+          for sel in ['.lexiconEntryContent','.messageText','.htmlContent','.content','article','main']:
+              for node in soup.select(sel):
+                  txt=node.get_text(' ',strip=True)
+                  if 'Beginner' in txt and len(txt)>500:
+                      candidates.append((len(txt),sel,node))
+          if candidates:
+              _,sel,root=min(candidates,key=lambda x:x[0])
+              print('ROOT:',sel)
+          else:
+              root=soup
+              print('ROOT: document')
+          print('--- STRUCTURED TEXT ---')
+          seen=set()
+          for el in root.find_all(['h1','h2','h3','h4','p','li','tr']):
+              t=' '.join(el.get_text(' ',strip=True).split())
+              if not t or t in seen: continue
+              seen.add(t)
+              print(f'[{el.name}] {t}')
+          print('--- IMAGES ---')
+          for i,img in enumerate(root.find_all('img'),1):
+              attrs={k:img.get(k) for k in ['src','data-src','data-original','data-url','data-lazy-src','srcset','alt','title'] if img.get(k)}
+              cand=next((attrs.get(k) for k in ['data-src','data-original','data-url','data-lazy-src','src'] if attrs.get(k)),None)
+              resolved=urljoin(url,cand) if cand else ''
+              parent=img.find_parent(['figure','p','td','div'])
+              ctx=' '.join(parent.get_text(' ',strip=True).split())[:220] if parent else ''
+              print(f'IMAGE {i}: {resolved} | attrs={attrs} | context={ctx}')
+          print('--- ATTACHMENT LINKS ---')
+          for a in root.find_all('a',href=True):
+              href=urljoin(url,a['href'])
+              if 'attachment' in href.lower():
+                  print(href,'|',' '.join(a.get_text(' ',strip=True).split())[:120])
+          PY
