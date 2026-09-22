@@ -1442,3 +1442,19 @@ label > span {
     align-items: flex-start;
   }
 }
+
+
+/* CLASS EQUIPMENT IMAGE EDITOR */
+.class-equipment-image-add{
+  width:64px; min-height:58px; padding:5px; border:1px dashed #8baeb1;
+  border-radius:7px; background:#f7fbfb; cursor:pointer; font:inherit; line-height:1.15;
+}
+.class-equipment-image-add small{font-size:.68rem;color:#567}
+.equipment-image-card{max-width:560px}
+.equipment-image-dropzone{
+  display:grid; gap:8px; place-items:center; min-height:220px; padding:20px;
+  border:2px dashed #8baeb1; border-radius:10px; background:#f7fbfb; text-align:center;
+}
+.equipment-image-dropzone:focus{outline:3px solid rgba(20,130,130,.2)}
+#equipment-image-preview{max-width:180px;max-height:180px;object-fit:contain}
+.equipment-image-dropzone input{max-width:100%}
