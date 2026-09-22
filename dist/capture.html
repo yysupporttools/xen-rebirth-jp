@@ -13,7 +13,7 @@
   <script defer src="assets/glossary-config.js"></script>
   <script defer src="assets/vendor/supabase.js"></script>
   <script defer src="https://cdn.jsdelivr.net/npm/tesseract.js@5/dist/tesseract.min.js"></script>
-  <script defer src="assets/capture.js?v=12"></script>
+  <script defer src="assets/capture.js?v=13"></script>
   <script defer src="assets/saved-items.js?v=1"></script>
 </head>
 <body>
@@ -158,7 +158,7 @@
 
   <section class="paper capture-section" id="npc-database">
     <div class="section-heading"><div><p class="eyebrow">NPC / QUEST DATABASE</p><h2>3. 登録済み情報を検索</h2></div><span id="record-count">0件</span></div>
-    <p class="note">ゲーム画面と同じ考え方で、上側を「会話内容」、下側を「選択項目」として分けて表示します。次の会話が登録されている選択肢はクリックすると、その会話画面へ切り替わります。</p>
+    <p class="note">保存済みの会話は内部に残しますが、画面には現在選択・解析しているNPCの会話を1件だけ表示します。次の会話が登録されている選択肢はクリックすると、その会話画面へ切り替わります。</p>
     <div class="knowledge-toolbar">
       <input id="knowledge-search" type="search" placeholder="NPC名・マップ・クエスト名・本文から検索" aria-label="NPC・クエスト検索">
       <select id="map-filter" aria-label="マップ絞り込み"><option value="">すべてのマップ</option></select>
