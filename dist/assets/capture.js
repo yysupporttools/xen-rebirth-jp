@@ -12,6 +12,8 @@
   let records=[];
   let quests=[];
   let npcProfiles=[];
+  let dialogueTransitions=[];
+  const dialogueNavStacks=new Map();
   let npcImageBlob=null;
   let npcImagePreviewUrl="";
   let aiAnalyzing=false;
@@ -645,6 +647,84 @@
     }
   }
 
+  async function loadDialogueTransitions(){
+    const res=await db.from("game_dialogue_transitions").select("*").order("created_at",{ascending:true}).limit(5000);
+    if(!res.error){
+      dialogueTransitions=res.data||[];
+      if(records.length) renderRecords();
+    }
+  }
+
+  function transitionFor(recordId,choiceIndex){
+    return dialogueTransitions.find(function(t){
+      return t.from_record_id===recordId&&Number(t.choice_index)===Number(choiceIndex);
+    })||null;
+  }
+
+  function renderDialogueCard(r,cardKey){
+    const quest=[r.quest_name_ja,r.quest_name_en].filter(Boolean).join(" / ");
+    const profile=findNpcProfile(r.npc_name,r.map_name);
+    const dialogueEn=r.dialogue_text_en||r.english_text||"";
+    const dialogueJa=r.dialogue_text_ja||r.japanese_text||"";
+    const choicesEn=choicesArray(r.choices_en);
+    const choicesJa=choicesArray(r.choices_ja);
+    const count=Math.max(choicesEn.length,choicesJa.length);
+    const choiceRows=[];
+    for(let i=0;i<count;i++){
+      const transition=transitionFor(r.id,i);
+      const inner=
+        '<span class="game-choice-mark">✦</span><div>'+
+        (choicesEn[i]?'<div class="choice-en">'+esc(choicesEn[i])+'</div>':"")+
+        (choicesJa[i]?'<div class="choice-ja">'+esc(choicesJa[i])+'</div>':"")+
+        '</div>'+
+        (transition?'<span class="choice-next">→</span>':"");
+      choiceRows.push(
+        transition
+          ? '<button type="button" class="game-choice-row game-choice-link" data-dialogue-target="'+esc(transition.to_record_id)+'">'+inner+'</button>'
+          : '<div class="game-choice-row">'+inner+'</div>'
+      );
+    }
+
+    const extra=[
+      r.requirements?'<div><strong>必要アイテム</strong><br>'+esc(r.requirements)+'</div>':"",
+      r.targets?'<div><strong>討伐対象</strong><br>'+esc(r.targets)+'</div>':"",
+      r.rewards?'<div><strong>報酬</strong><br>'+esc(r.rewards)+'</div>':""
+    ].join("");
+
+    const stack=dialogueNavStacks.get(cardKey)||[];
+    return '<article class="knowledge-card game-dialog-card" data-card-key="'+esc(cardKey)+'" data-record-id="'+esc(r.id)+'">'+
+      '<div class="game-dialog-title"><strong>'+esc(r.npc_name)+'</strong>'+
+        '<span>'+esc(r.map_name||"MAP未登録")+'</span>'+
+      '</div>'+
+      '<div class="knowledge-meta">'+
+        (stack.length?'<button type="button" class="dialogue-back" data-dialogue-back="1">← 前の会話へ</button>':"")+
+        (r.required_level!=null?'<span>Lv '+esc(r.required_level)+'</span>':"")+
+        (quest?'<span>'+esc(quest)+'</span>':"")+
+        (r.confidence!=null?'<span>AI '+esc(r.confidence)+'%</span>':"")+
+      '</div>'+
+      '<div class="game-dialog-layout">'+
+        '<aside class="game-npc-portrait">'+
+          (profile&&profile.image_url?'<img src="'+esc(profile.image_url)+'" alt="'+esc(r.npc_name)+'">':'<div class="portrait-placeholder">NPC<br>IMAGE</div>')+
+        '</aside>'+
+        '<div class="game-dialog-main">'+
+          '<section class="game-dialog-upper">'+
+            '<div class="game-panel-label">会話内容 / DIALOGUE</div>'+
+            '<div class="dialog-en">'+esc(dialogueEn||"会話内容未登録")+'</div>'+
+            (dialogueJa?'<div class="dialog-ja">'+esc(dialogueJa)+'</div>':"")+
+          '</section>'+
+          '<section class="game-dialog-lower">'+
+            '<div class="game-panel-label">選択項目 / CHOICES</div>'+
+            (choiceRows.length?choiceRows.join(""):'<div class="no-choices">選択項目なし / 未登録</div>')+
+          '</section>'+
+        '</div>'+
+      '</div>'+
+      (extra?'<div class="knowledge-extra">'+extra+'</div>':"")+
+      (r.notes?'<p><strong>メモ：</strong>'+esc(r.notes)+'</p>':"")+
+      (r.source_image_url?'<a class="knowledge-image" href="'+esc(r.source_image_url)+'" target="_blank" rel="noopener noreferrer">登録時のゲーム画面を見る ↗</a>':"")+
+      (r.quest_id?'<p><a href="quests.html#'+esc(r.quest_id)+'">既存クエストページを開く →</a></p>':"")+
+    '</article>';
+  }
+
   async function loadRecords(silent){
     if(!silent) setStatus("capture-status","登録済みデータを読み込み中…");
     const res=await db.from("game_knowledge").select("*").order("created_at",{ascending:false}).limit(1000);
@@ -690,61 +770,44 @@
     }
 
     $("knowledge-results").innerHTML=rows.map(function(r){
-      const quest=[r.quest_name_ja,r.quest_name_en].filter(Boolean).join(" / ");
-      const profile=findNpcProfile(r.npc_name,r.map_name);
-      const dialogueEn=r.dialogue_text_en||r.english_text||"";
-      const dialogueJa=r.dialogue_text_ja||r.japanese_text||"";
-      const choicesEn=choicesArray(r.choices_en);
-      const choicesJa=choicesArray(r.choices_ja);
-      const count=Math.max(choicesEn.length,choicesJa.length);
-      const choiceRows=[];
-      for(let i=0;i<count;i++){
-        choiceRows.push(
-          '<div class="game-choice-row"><span class="game-choice-mark">✦</span><div>'+
-          (choicesEn[i]?'<div class="choice-en">'+esc(choicesEn[i])+'</div>':"")+
-          (choicesJa[i]?'<div class="choice-ja">'+esc(choicesJa[i])+'</div>':"")+
-          '</div></div>'
-        );
-      }
-
-      const extra=[
-        r.requirements?'<div><strong>必要アイテム</strong><br>'+esc(r.requirements)+'</div>':"",
-        r.targets?'<div><strong>討伐対象</strong><br>'+esc(r.targets)+'</div>':"",
-        r.rewards?'<div><strong>報酬</strong><br>'+esc(r.rewards)+'</div>':""
-      ].join("");
-
-      return '<article class="knowledge-card game-dialog-card">'+
-        '<div class="game-dialog-title"><strong>'+esc(r.npc_name)+'</strong>'+
-          '<span>'+esc(r.map_name||"MAP未登録")+'</span>'+
-        '</div>'+
-        '<div class="knowledge-meta">'+
-          (r.required_level!=null?'<span>Lv '+esc(r.required_level)+'</span>':"")+
-          (quest?'<span>'+esc(quest)+'</span>':"")+
-          (r.confidence!=null?'<span>AI '+esc(r.confidence)+'%</span>':"")+
-        '</div>'+
-        '<div class="game-dialog-layout">'+
-          '<aside class="game-npc-portrait">'+
-            (profile&&profile.image_url?'<img src="'+esc(profile.image_url)+'" alt="'+esc(r.npc_name)+'">':'<div class="portrait-placeholder">NPC<br>IMAGE</div>')+
-          '</aside>'+
-          '<div class="game-dialog-main">'+
-            '<section class="game-dialog-upper">'+
-              '<div class="game-panel-label">会話内容 / DIALOGUE</div>'+
-              '<div class="dialog-en">'+esc(dialogueEn||"会話内容未登録")+'</div>'+
-              (dialogueJa?'<div class="dialog-ja">'+esc(dialogueJa)+'</div>':"")+
-            '</section>'+
-            '<section class="game-dialog-lower">'+
-              '<div class="game-panel-label">選択項目 / CHOICES</div>'+
-              (choiceRows.length?choiceRows.join(""):'<div class="no-choices">選択項目なし / 未登録</div>')+
-            '</section>'+
-          '</div>'+
-        '</div>'+
-        (extra?'<div class="knowledge-extra">'+extra+'</div>':"")+
-        (r.notes?'<p><strong>メモ：</strong>'+esc(r.notes)+'</p>':"")+
-        (r.source_image_url?'<a class="knowledge-image" href="'+esc(r.source_image_url)+'" target="_blank" rel="noopener noreferrer">登録時のゲーム画面を見る ↗</a>':"")+
-        (r.quest_id?'<p><a href="quests.html#'+esc(r.quest_id)+'">既存クエストページを開く →</a></p>':"")+
-      '</article>';
+      const key=r.id;
+      if(!dialogueNavStacks.has(key)) dialogueNavStacks.set(key,[]);
+      return renderDialogueCard(r,key);
     }).join("");
   }
+
+  function openDialogueTarget(button){
+    const card=button.closest(".game-dialog-card");
+    if(!card) return;
+    const targetId=button.dataset.dialogueTarget;
+    const target=records.find(function(r){return r.id===targetId;});
+    if(!target) return;
+
+    const cardKey=card.dataset.cardKey||card.dataset.recordId;
+    const currentId=card.dataset.recordId;
+    const stack=dialogueNavStacks.get(cardKey)||[];
+    stack.push(currentId);
+    dialogueNavStacks.set(cardKey,stack);
+    card.outerHTML=renderDialogueCard(target,cardKey);
+  }
+
+  function goDialogueBack(button){
+    const card=button.closest(".game-dialog-card");
+    if(!card) return;
+    const cardKey=card.dataset.cardKey||card.dataset.recordId;
+    const stack=dialogueNavStacks.get(cardKey)||[];
+    const previousId=stack.pop();
+    dialogueNavStacks.set(cardKey,stack);
+    const previous=records.find(function(r){return r.id===previousId;});
+    if(previous) card.outerHTML=renderDialogueCard(previous,cardKey);
+  }
+
+  $("knowledge-results").addEventListener("click",function(e){
+    const next=e.target.closest("[data-dialogue-target]");
+    if(next){openDialogueTarget(next);return;}
+    const back=e.target.closest("[data-dialogue-back]");
+    if(back){goDialogueBack(back);}
+  });
 
   $("ai-run").addEventListener("click",function(){runOpenAiAnalysis("manual");});
   $("auto-mode").addEventListener("change",function(){
@@ -809,5 +872,5 @@
   });
   window.addEventListener("beforeunload",stopScreen);
 
-  Promise.all([loadQuests(),loadNpcProfiles(),loadRecords()]).catch(function(err){setStatus("capture-status",err.message);});
+  Promise.all([loadQuests(),loadNpcProfiles(),loadDialogueTransitions(),loadRecords()]).catch(function(err){setStatus("capture-status",err.message);});
 })();
