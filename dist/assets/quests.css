@@ -502,3 +502,17 @@
   }
 
 }
+
+
+/* STEP内の関連ガイドリンク */
+.quest-related-link{
+  margin-top:12px;
+}
+.quest-related-link a{
+  display:inline-block;
+  font-weight:700;
+  text-decoration:none;
+}
+.quest-related-link a:hover{
+  text-decoration:underline;
+}
