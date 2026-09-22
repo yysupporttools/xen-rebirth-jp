@@ -734,8 +734,174 @@
     setStatus("capture-status",msg);
   }
 
+  function dialogueUnits(text){
+    const value=String(text||"").replace(/\r/g,"").trim();
+    if(!value) return [];
+    const paragraphs=value.split(/\n{2,}/).map(function(x){return x.trim();}).filter(Boolean);
+    const out=[];
+    paragraphs.forEach(function(p){
+      const parts=p.match(/[^.!?。！？]+(?:[.!?。！？]+|$)/g)||[p];
+      parts.map(function(x){return x.trim();}).filter(Boolean).forEach(function(x){out.push(x);});
+    });
+    return out.length?out:[value];
+  }
+
+  function compactUnit(text){
+    return String(text||"").normalize("NFKC").toLowerCase()
+      .replace(/[\s\p{P}\p{S}]+/gu,"");
+  }
+
+  function bigramDice(a,b){
+    a=compactUnit(a); b=compactUnit(b);
+    if(!a||!b) return 0;
+    if(a===b) return 1;
+    if(a.includes(b)||b.includes(a)) return Math.min(a.length,b.length)/Math.max(a.length,b.length);
+    if(a.length<2||b.length<2) return 0;
+    const counts=new Map();
+    for(let i=0;i<a.length-1;i++){
+      const g=a.slice(i,i+2);
+      counts.set(g,(counts.get(g)||0)+1);
+    }
+    let common=0;
+    for(let i=0;i<b.length-1;i++){
+      const g=b.slice(i,i+2);
+      const n=counts.get(g)||0;
+      if(n){common++;counts.set(g,n-1);}
+    }
+    return 2*common/((a.length-1)+(b.length-1));
+  }
+
+  function unitsMatch(a,b){
+    const na=compactUnit(a),nb=compactUnit(b);
+    if(!na||!nb) return false;
+    if(na===nb) return true;
+    if((na.includes(nb)||nb.includes(na))&&Math.min(na.length,nb.length)>=28) return true;
+    return bigramDice(a,b)>=0.72;
+  }
+
+  function mergeDialogueFragments(base,incoming){
+    base=String(base||"").trim();
+    incoming=String(incoming||"").trim();
+    if(!base) return {text:incoming,overlap:!!incoming,changed:!!incoming};
+    if(!incoming) return {text:base,overlap:false,changed:false};
+
+    const aKey=compactUnit(base),bKey=compactUnit(incoming);
+    if(aKey===bKey||aKey.includes(bKey)) return {text:base,overlap:true,changed:false};
+    if(bKey.includes(aKey)) return {text:incoming,overlap:true,changed:true};
+
+    const a=dialogueUnits(base),b=dialogueUnits(incoming);
+    const max=Math.min(a.length,b.length);
+
+    function acceptable(k,left,right){
+      if(k>=2) return true;
+      const x=left[left.length-1],y=right[0];
+      return Math.max(compactUnit(x).length,compactUnit(y).length)>=55&&bigramDice(x,y)>=0.72;
+    }
+
+    for(let k=max;k>=1;k--){
+      let good=true;
+      for(let i=0;i<k;i++){
+        if(!unitsMatch(a[a.length-k+i],b[i])){good=false;break;}
+      }
+      if(good&&acceptable(k,a,b)){
+        return {text:a.concat(b.slice(k)).join("\n\n"),overlap:true,changed:true};
+      }
+    }
+
+    for(let k=max;k>=1;k--){
+      let good=true;
+      for(let i=0;i<k;i++){
+        if(!unitsMatch(b[b.length-k+i],a[i])){good=false;break;}
+      }
+      if(good&&acceptable(k,b,a)){
+        return {text:b.concat(a.slice(k)).join("\n\n"),overlap:true,changed:true};
+      }
+    }
+
+    return {text:base,overlap:false,changed:false};
+  }
+
+  function choiceSignature(value){
+    return choicesArray(value).map(function(x){return compactUnit(x);}).join("|");
+  }
+
+  function sameDialogueContext(record,result){
+    if(normText(record.npc_name)!==normText(result.npc_name)) return false;
+    const rq=compactUnit(record.quest_name_en||"");
+    const nq=compactUnit(result.quest_name_en||"");
+    if(rq&&nq&&rq!==nq) return false;
+    return choiceSignature(record.choices_en)===choiceSignature(result.choices_en);
+  }
+
+  function findLongDialogueMerge(result){
+    const incoming=String(result.dialogue_text_en||result.english_text||"").trim();
+    if(!incoming) return null;
+    const candidates=records.filter(function(r){return sameDialogueContext(r,result);})
+      .sort(function(a,b){return new Date(a.created_at||0)-new Date(b.created_at||0);});
+    let best=null;
+    candidates.forEach(function(record){
+      const merged=mergeDialogueFragments(record.dialogue_text_en||record.english_text||"",incoming);
+      if(!merged.overlap) return;
+      const gain=compactUnit(merged.text).length-compactUnit(record.dialogue_text_en||record.english_text||"").length;
+      const score=(gain>0?1000+gain:1);
+      if(!best||score>best.score) best={record:record,merged:merged,score:score};
+    });
+    return best;
+  }
+
+  async function mergeLongDialogueRecord(match,result,imageHash){
+    const record=match.record;
+    const en=match.merged.text;
+    const jaMerge=mergeDialogueFragments(record.dialogue_text_ja||record.japanese_text||"",result.dialogue_text_ja||result.japanese_text||"");
+    let ja=jaMerge.overlap?jaMerge.text:String(record.dialogue_text_ja||record.japanese_text||"").trim();
+    const incomingJa=String(result.dialogue_text_ja||result.japanese_text||"").trim();
+    if(!ja&&incomingJa) ja=incomingJa;
+    if(!jaMerge.overlap&&incomingJa&&ja&&compactUnit(incomingJa)!==compactUnit(ja)){
+      // If Japanese overlap was too fuzzy to prove, keep both fragments rather than losing translated text.
+      ja=[ja,incomingJa].filter(Boolean).join("\n\n");
+    }
+
+    const choicesEn=choicesArray(result.choices_en).length?choicesArray(result.choices_en):choicesArray(record.choices_en);
+    const choicesJa=choicesArray(result.choices_ja).length?choicesArray(result.choices_ja):choicesArray(record.choices_ja);
+    const fullEn=[en].concat(choicesEn).filter(Boolean).join("\n\n");
+    const fullJa=[ja].concat(choicesJa).filter(Boolean).join("\n\n");
+
+    const res=await db.rpc("game_knowledge_merge_fragment",{
+      p_record_id:record.id,
+      p_map_name:String(result.map_name||record.map_name||""),
+      p_dialogue_text_en:en,
+      p_dialogue_text_ja:ja,
+      p_english_text:fullEn,
+      p_japanese_text:fullJa,
+      p_notes:"スクロール式の長文会話を複数画面から自動統合。",
+      p_confidence:Number.isFinite(Number(result.confidence))?Number(result.confidence):null,
+      p_image_hash:imageHash||""
+    });
+    if(res.error) throw new Error("長文会話の統合に失敗しました："+res.error.message);
+
+    activeRecordId=record.id;
+    activeNpcName=record.npc_name||String(result.npc_name||"").trim();
+    if(result._client_image_hash&&!needsTranslation(result)) rememberFastScreen(result._client_image_hash,activeRecordId,activeNpcName);
+    await loadRecords(true);
+    const refreshed=records.find(function(r){return r.id===record.id;});
+    if(refreshed){
+      activeRecordId=refreshed.id;
+      activeNpcName=refreshed.npc_name||activeNpcName;
+      renderRecords();
+    }
+    await rememberKnownNpcSignature(result);
+    setStatus("form-status","長い会話の続きとして統合保存しました。次回は全文を表示します。");
+    return {saved:true,id:record.id,merged:true};
+  }
+
   async function autoSaveAiResult(result,imageHash){
     result=cleanTranslations(result);
+
+    const longMerge=findLongDialogueMerge(result);
+    if(longMerge){
+      return await mergeLongDialogueRecord(longMerge,result,imageHash);
+    }
+
     const res=await db.rpc("game_knowledge_auto_save_v2",{
       p_map_name:String(result.map_name||""),
       p_npc_name:String(result.npc_name||""),
