@@ -2670,6 +2670,183 @@
           "url": "https://www.xenrebirth.com/lexicon/index.php?entry/51-alchemist-blacksmith-enhancement-guide/#2-Gears"
         }
       ]
+    },
+    {
+      "slug": "pet-reroll-master-of-fate",
+      "name_en": "Reroll: Master of Fate",
+      "name_ja": "ペット・マウントのリロール／ステータス付与",
+      "source_url": "https://www.xenrebirth.com/lexicon/index.php?entry/161-reroll-master-of-fate/",
+      "_blocks": [
+        {
+          "heading": "Master of Fateでできること",
+          "text": "Essene南側、Acolyte's Guildの下にいる「Master of Fate」で、ペットやマウントのステータス強化を変更できます。対象は未強化（Un-Enhanced / UE）・強化済み（Enhanced）のペット、Basic Mount、Advanced Mountです。主な素材として Seal of Fate / Rebirth、Miracle Wisp、Xen Stone、Silkion、Sirius Star、Hypermill、Kron が案内されています。",
+          "images": [
+            {
+              "url": "https://www.xenrebirth.com/index.php?attachment/11152-master-of-fate-jpg/",
+              "label": "Master of Fate NPC"
+            }
+          ]
+        },
+        {
+          "heading": "Seal of Fate / Rebirthの交換",
+          "text": "リロールに使うSeal of FateまたはRebirthの交換は、EsseneのMiracle Researcherで行えます。公式ガイドではMiracle WispsとWisps Exchangesを使う案内になっています。",
+          "images": [
+            {
+              "url": "https://www.xenrebirth.com/index.php?attachment/18376-xen-rebirth-miracle-researcher-npc-jpg/",
+              "label": "Miracle Researcher"
+            },
+            {
+              "url": "https://www.xenrebirth.com/index.php?attachment/18375-xen-rebirth-miracle-researcher-npc-two-jpg/",
+              "label": "交換画面"
+            }
+          ]
+        },
+        {
+          "heading": "強化済み：狙ったステータスへリロール",
+          "text": "強化済みのペット／マウントは、現在のステータス強化を指定系統へ変更できます。公式ではコスト帯が4段階に分かれています。①最高コスト：Defense（全種）／Attack（Pet）。②中コスト：Hit Rate・Dodge（Pet）／その他ステータス（Basic Mount）／Attack・Magic（Advanced Mount）。③低コスト：その他ステータス（Pet）／HP・MP（Advanced Mount）。④最低コスト：全種を対象にランダムなステータスへ変更。強化済みBasic / Advanced Mountをステータスリロールすると、強化レベルはLv1へ戻ると明記されています。",
+          "images": [
+            {
+              "url": "https://www.xenrebirth.com/index.php?attachment/11172-enhanced-pet-reroll-attack-or-defense-jpg/",
+              "label": "Pet：Attack / Defense リロール"
+            },
+            {
+              "url": "https://www.xenrebirth.com/index.php?attachment/11175-enhanced-pet-reroll-hit-rate-and-dodge-jpg/",
+              "label": "Pet：Hit Rate / Dodge リロール"
+            },
+            {
+              "url": "https://www.xenrebirth.com/index.php?attachment/11179-enhanced-pet-reroll-other-stats-jpg/",
+              "label": "Pet：その他ステータス リロール"
+            },
+            {
+              "url": "https://www.xenrebirth.com/index.php?attachment/11182-enhanced-pet-reroll-random-jpg/",
+              "label": "Pet：ランダム リロール"
+            }
+          ]
+        },
+        {
+          "heading": "強化済み → 未強化へ戻す（De-Enhance）",
+          "text": "強化済みのPet / Basic Mount / Advanced Mountから現在のステータス強化を取り除き、Un-Enhanced（未強化）状態へ戻す機能です。必要コストは公式画像に掲載されています。",
+          "images": [
+            {
+              "url": "https://www.xenrebirth.com/index.php?attachment/11169-enhanced-pet-de-enhance-jpg/",
+              "label": "Pet：De-Enhance"
+            },
+            {
+              "url": "https://www.xenrebirth.com/index.php?attachment/11168-enhanced-basic-mount-de-enhance-jpg/",
+              "label": "Basic Mount：De-Enhance"
+            },
+            {
+              "url": "https://www.xenrebirth.com/index.php?attachment/11167-enhanced-advanced-mount-de-enhance-jpg/",
+              "label": "Advanced Mount：De-Enhance"
+            }
+          ]
+        },
+        {
+          "heading": "未強化：好きなステータスを選んで付与（Enhance）",
+          "text": "未強化のPet / Basic Mount / Advanced Mountには、希望するステータス強化を選んで付与できます。公式ガイドでは「ANY of the desired stat enhancement options」とされ、3カテゴリとも全ステータスのコストは同じと説明されています。ランダムではなく狙ったステータスを付けたい場合はこちらを使います。",
+          "images": [
+            {
+              "url": "https://www.xenrebirth.com/index.php?attachment/11158-ue-pet-enhance-all-stats-jpg/",
+              "label": "Pet：ステータス選択付与"
+            },
+            {
+              "url": "https://www.xenrebirth.com/index.php?attachment/11163-ue-basic-mount-enhance-all-stats-jpg/",
+              "label": "Basic Mount：ステータス選択付与"
+            },
+            {
+              "url": "https://www.xenrebirth.com/index.php?attachment/11153-ue-advanced-mount-enhance-all-jpg/",
+              "label": "Advanced Mount：ステータス選択付与"
+            }
+          ]
+        },
+        {
+          "heading": "未強化：Rebirth Exchange",
+          "text": "未強化のPet / Basic Mount / Advanced Mountを、同じカテゴリ内の別の個体へ変更できます。公式例：Fatty → Parrot、Bernard → Felix、Dragon → White Tiger。",
+          "images": [
+            {
+              "url": "https://www.xenrebirth.com/index.php?attachment/11159-ue-pet-rebirth-exchange-jpg/",
+              "label": "Pet：Rebirth Exchange"
+            },
+            {
+              "url": "https://www.xenrebirth.com/index.php?attachment/11164-ue-basic-mount-rebirth-exchange-jpg/",
+              "label": "Basic Mount：Rebirth Exchange"
+            },
+            {
+              "url": "https://www.xenrebirth.com/index.php?attachment/11154-ue-advanced-mount-rebirth-exchange-jpg/",
+              "label": "Advanced Mount：Rebirth Exchange"
+            }
+          ]
+        },
+        {
+          "heading": "未強化Basic Mount：Rebirth Upgrade",
+          "text": "未強化のBasic Mountを、Platinum Token Mount以上のマウントへ変更する機能です。公式例では Bernard → Ifrixion が掲載されています。",
+          "images": [
+            {
+              "url": "https://www.xenrebirth.com/index.php?attachment/11165-ue-basic-mount-rebirth-upgrade-jpg/",
+              "label": "Basic Mount：Rebirth Upgrade"
+            }
+          ]
+        },
+        {
+          "heading": "使い分け早見",
+          "text": "今の強化ステータスだけ変えたい → Reroll。強化を完全に外したい → De-Enhance。未強化状態から狙ったステータスを付けたい → Enhance。未強化の個体そのものを同カテゴリ内で変えたい → Rebirth Exchange。未強化Basic Mountを上位系統へ変えたい → Rebirth Upgrade。"
+        }
+      ],
+      "_tables": [
+        {
+          "caption": "Master of Fate 機能早見表",
+          "headers": [
+            "機能",
+            "対象状態",
+            "できること",
+            "重要ポイント"
+          ],
+          "rows": [
+            [
+              "Reroll",
+              "強化済み",
+              "現在のステータス強化を変更",
+              "Basic / Advanced Mountはリロール時にLv1へ戻る"
+            ],
+            [
+              "Random Reroll",
+              "強化済み",
+              "ランダムなステータス強化へ変更",
+              "公式区分では最も低いコスト帯"
+            ],
+            [
+              "De-Enhance",
+              "強化済み",
+              "強化を取り除いて未強化へ戻す",
+              "Enhanced → Un-Enhanced"
+            ],
+            [
+              "Enhance",
+              "未強化",
+              "希望するステータスを選択して付与",
+              "3カテゴリとも全ステータス同コスト"
+            ],
+            [
+              "Rebirth Exchange",
+              "未強化",
+              "同カテゴリ内の別個体へ変更",
+              "Pet / Basic / Advancedに対応"
+            ],
+            [
+              "Rebirth Upgrade",
+              "未強化Basic Mount",
+              "Platinum Token Mount以上へ変更",
+              "Basic UE Mountのみ"
+            ]
+          ]
+        }
+      ],
+      "_links": [
+        {
+          "label": "公式Lexicon：Reroll: Master of Fate",
+          "url": "https://www.xenrebirth.com/lexicon/index.php?entry/161-reroll-master-of-fate/"
+        }
+      ]
     }
   ]
 }
