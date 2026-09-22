@@ -10,6 +10,8 @@
   let imageSourceType="manual";
   let previewUrl="";
   let records=[];
+  let activeRecordId="";
+  let activeNpcName="";
   let quests=[];
   let npcProfiles=[];
   let dialogueTransitions=[];
@@ -380,7 +382,9 @@
     if(res.error) throw new Error("自動保存に失敗しました："+res.error.message);
     const info=res.data||{};
     if(info.saved){
-      setStatus("form-status",info.inserted?"AI解析結果を自動保存しました。":"同じ内容は登録済みのため更新のみ行いました。");
+      activeRecordId=String(info.id||"");
+      activeNpcName=String(result.npc_name||"").trim();
+      setStatus("form-status",info.inserted?"AI解析結果を自動保存しました。現在の会話だけ表示します。":"同じ内容は登録済みのため更新のみ行いました。");
       await loadRecords(true);
       return info;
     }
@@ -1038,7 +1042,13 @@
       return '<button type="button" data-npc="'+esc(n)+'">'+esc(n)+' <small>('+counts[n]+')</small></button>';
     }).join("");
     $("npc-index").querySelectorAll("[data-npc]").forEach(function(btn){
-      btn.addEventListener("click",function(){$("knowledge-search").value=btn.dataset.npc;renderRecords();});
+      btn.addEventListener("click",function(){
+        activeNpcName=btn.dataset.npc||"";
+        const latest=records.find(function(r){return r.npc_name===activeNpcName;});
+        activeRecordId=latest?latest.id:"";
+        $("knowledge-search").value=activeNpcName;
+        renderRecords();
+      });
     });
   }
 
@@ -1050,17 +1060,34 @@
       const hay=[r.npc_name,r.map_name,r.quest_name_en,r.quest_name_ja,r.english_text,r.japanese_text,r.dialogue_text_en,r.dialogue_text_ja,choices,r.requirements,r.targets,r.rewards,r.notes].join(" ").toLowerCase();
       return (!word||hay.includes(word))&&(!map||r.map_name===map);
     });
-    $("record-count").textContent=rows.length+"件";
+
     if(!rows.length){
+      $("record-count").textContent="0件";
       $("knowledge-results").innerHTML='<div class="notice">該当する登録情報はありません。</div>';
       return;
     }
 
-    $("knowledge-results").innerHTML=rows.map(function(r){
-      const key=r.id;
-      if(!dialogueNavStacks.has(key)) dialogueNavStacks.set(key,[]);
-      return renderDialogueCard(r,key);
-    }).join("");
+    let current=null;
+    if(activeRecordId){
+      current=rows.find(function(r){return r.id===activeRecordId;})||null;
+    }
+    if(!current&&activeNpcName){
+      current=rows.find(function(r){return r.npc_name===activeNpcName;})||null;
+    }
+    if(!current&&word){
+      current=rows.find(function(r){return String(r.npc_name||"").toLowerCase()===word;})||rows[0];
+    }
+    if(!current) current=rows[0];
+
+    activeRecordId=current.id;
+    activeNpcName=current.npc_name||"";
+    const sameNpcCount=records.filter(function(r){
+      return r.npc_name===current.npc_name&&(!map||r.map_name===map);
+    }).length;
+
+    $("record-count").textContent="現在の会話 1件 / 保存 "+sameNpcCount+"件";
+    if(!dialogueNavStacks.has(current.id)) dialogueNavStacks.set(current.id,[]);
+    $("knowledge-results").innerHTML=renderDialogueCard(current,current.id);
   }
 
   function openDialogueTarget(button){
@@ -1094,6 +1121,9 @@
     const target=e.target.closest("[data-map-npc]");
     if(!target) return;
     const npc=target.dataset.mapNpc;
+    activeNpcName=npc;
+    const latest=records.find(function(r){return r.npc_name===npc;});
+    activeRecordId=latest?latest.id:"";
     $("knowledge-search").value=npc;
     renderRecords();
     $("npc-database").scrollIntoView({behavior:"smooth",block:"start"});
@@ -1159,8 +1189,15 @@
   $("capture-form").addEventListener("submit",saveRecord);
   $("form-clear").addEventListener("click",clearForm);
   $("quest-link").addEventListener("change",changeQuest);
-  $("knowledge-search").addEventListener("input",renderRecords);
-  $("map-filter").addEventListener("change",renderRecords);
+  $("knowledge-search").addEventListener("input",function(){
+    activeRecordId="";
+    activeNpcName=this.value.trim();
+    renderRecords();
+  });
+  $("map-filter").addEventListener("change",function(){
+    activeRecordId="";
+    renderRecords();
+  });
   $("knowledge-reload").addEventListener("click",loadRecords);
   document.addEventListener("paste",function(e){
     const items=Array.from(e.clipboardData&&e.clipboardData.items||[]);
