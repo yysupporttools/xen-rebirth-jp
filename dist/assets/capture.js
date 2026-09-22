@@ -639,7 +639,10 @@
 
   async function loadNpcProfiles(){
     const res=await db.from("npc_profiles").select("*").order("updated_at",{ascending:false}).limit(1000);
-    if(!res.error) npcProfiles=res.data||[];
+    if(!res.error){
+      npcProfiles=res.data||[];
+      if(records.length) renderRecords();
+    }
   }
 
   async function loadRecords(silent){
