@@ -27,6 +27,13 @@ jobs:
         run: python scripts/update_bosses.py
       - name: Build site search index
         run: python scripts/build_site_search.py
+      - name: Restore Master of Fate guide images
+        run: |
+          mkdir -p dist/assets/guides/master-of-fate
+          base64 -d scripts/image-payloads/master-of-fate-20260922/miracle-researcher.b64 > dist/assets/guides/master-of-fate/miracle-researcher.webp
+          cat scripts/image-payloads/master-of-fate-20260922/miracle-researcher-menu.part*.b64 | base64 -d > dist/assets/guides/master-of-fate/miracle-researcher-menu.webp
+          test -s dist/assets/guides/master-of-fate/miracle-researcher.webp
+          test -s dist/assets/guides/master-of-fate/miracle-researcher-menu.webp
       - uses: actions/configure-pages@v5
       - uses: actions/upload-pages-artifact@v4
         with:
