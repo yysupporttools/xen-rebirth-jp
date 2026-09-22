@@ -19,6 +19,26 @@
     if (!nav || nav.dataset.compactReady) return;
     nav.dataset.compactReady = 'true';
 
+    const brandLink = header.querySelector('.brand > a');
+    if (brandLink && !brandLink.dataset.visualBrandReady) {
+      brandLink.dataset.visualBrandReady = 'true';
+      brandLink.classList.add('xen-visual-brand');
+      brandLink.innerHTML =
+        '<img class="xen-brand-wing" src="assets/xen-wing-logo.webp?v=1" alt="">' +
+        '<img class="xen-brand-title" src="assets/xen-title-banner.webp?v=1" alt="Xen Rebirth 日本語攻略ガイド">';
+    }
+    const edition = header.querySelector('.edition');
+    if (edition) edition.textContent = 'UNOFFICIAL FAN GUIDE';
+
+    let icon = document.querySelector('link[rel~="icon"]');
+    if (!icon) {
+      icon = document.createElement('link');
+      icon.rel = 'icon';
+      document.head.appendChild(icon);
+    }
+    icon.href = 'assets/xen-wing-logo.webp?v=1';
+    icon.type = 'image/webp';
+
     const currentFile = location.pathname.split('/').pop() || 'index.html';
     const removeFiles = new Set(['search.html','bosses.html','tools.html','capture.html','favorites.html']);
     [...nav.querySelectorAll('a')].forEach(link => {
