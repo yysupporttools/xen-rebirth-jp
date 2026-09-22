@@ -49,6 +49,25 @@ jobs:
               parent=img.find_parent(['figure','p','td','div'])
               ctx=' '.join(parent.get_text(' ',strip=True).split())[:220] if parent else ''
               print(f'IMAGE {i}: {resolved} | attrs={attrs} | context={ctx}')
+          print('--- IMAGE STEP MAP ---')
+          current=''
+          seen_nodes=set()
+          for el in root.descendants:
+              if not getattr(el,'name',None):
+                  continue
+              if el.name=='p':
+                  t=' '.join(el.get_text(' ',strip=True).split())
+                  m=re.match(r'^(\\d+)\\.',t)
+                  if m:
+                      current=t[:180]
+              elif el.name=='img':
+                  ident=id(el)
+                  if ident in seen_nodes: continue
+                  seen_nodes.add(ident)
+                  attrs={k:el.get(k) for k in ['data-src','data-original','data-url','data-lazy-src','src'] if el.get(k)}
+                  cand=next((attrs.get(k) for k in ['data-src','data-original','data-url','data-lazy-src','src'] if attrs.get(k)),None)
+                  if cand:
+                      print('MAP',current,'=>',urljoin(url,cand))
           print('--- ATTACHMENT LINKS ---')
           for a in root.find_all('a',href=True):
               href=urljoin(url,a['href'])
