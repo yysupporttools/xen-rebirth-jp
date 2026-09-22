@@ -1271,3 +1271,5 @@ label > span {
   .lucky-editor-record { padding: 10px; }
 }
 
+
+.reference-block{margin:18px 0;padding:16px;background:#edf5f4;border-left:3px solid #247b77}.reference-block h3{margin:0 0 10px}.reference-links{display:flex;flex-wrap:wrap;gap:8px 16px}.reference-links a{padding:6px 0;font-size:14px}.reference-table-wrap{overflow-x:auto;margin:16px 0}.reference-table-wrap th,.reference-table-wrap td{padding:10px;white-space:nowrap}.reference-table-wrap caption{text-align:left;font-weight:bold}.glossary-entry-detail .glossary-description{line-height:1.9}

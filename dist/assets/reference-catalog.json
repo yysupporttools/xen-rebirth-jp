@@ -1,0 +1,2234 @@
+{
+  "checked_at": "2026-09-22",
+  "terms": [
+    {
+      "slug": "poku",
+      "name_en": "Poku",
+      "name_ja": "ポク",
+      "aliases": "ポク",
+      "description": "入門ペット\nステータス補正なし。",
+      "source_url": "https://www.xenrebirth.com/lexicon/index.php?entry/27-pets-mounts/",
+      "_catalogType": "pets",
+      "notes": "公式Lexiconの掲載内容を整理（2026年9月22日確認）。日本語名は本サイトの参考訳です。",
+      "acquisition": "Poku / Poko / Poyoのペット・騎乗クエスト。",
+      "related_entity": "Brynhilld / EsseneのPet MerchantでLv25クエスト「Tame a Monster」を受注。帽子付きは隣のPet NPCのLv60クエスト「Let’s Put a Hat on the Pet」。どちらもYellow Watermelonが必要ですが、このページに個数の記載はありません。",
+      "image_url": "https://www.xenrebirth.com/index.php?attachment/2173-poku-png/",
+      "_section": "入門ペット",
+      "_links": [
+        {
+          "label": "Poku, Poko, Poyo Pet & Mount Quest",
+          "url": "https://www.xenrebirth.com/lexicon/index.php?entry/65-poku-poko-poyo-pet-mount-quest/"
+        }
+      ],
+      "_blocks": [
+        {
+          "heading": "公式ガイド補足",
+          "text": "入門ペット\nステータス補正なし。\nPoku / Poko / Poyoのペット・騎乗クエスト。\nBrynhilld / EsseneのPet MerchantでLv25クエスト「Tame a Monster」を受注。帽子付きは隣のPet NPCのLv60クエスト「Let’s Put a Hat on the Pet」。どちらもYellow Watermelonが必要ですが、このページに個数の記載はありません。"
+        }
+      ]
+    },
+    {
+      "slug": "poko",
+      "name_en": "Poko",
+      "name_ja": "ポコ",
+      "aliases": "ポコ",
+      "description": "入門ペット\nステータス補正なし。",
+      "source_url": "https://www.xenrebirth.com/lexicon/index.php?entry/27-pets-mounts/",
+      "_catalogType": "pets",
+      "notes": "公式Lexiconの掲載内容を整理（2026年9月22日確認）。日本語名は本サイトの参考訳です。",
+      "acquisition": "Poku / Poko / Poyoのペット・騎乗クエスト。",
+      "related_entity": "Brynhilld / EsseneのPet MerchantでLv25クエスト「Tame a Monster」を受注。帽子付きは隣のPet NPCのLv60クエスト「Let’s Put a Hat on the Pet」。どちらもYellow Watermelonが必要ですが、このページに個数の記載はありません。",
+      "image_url": "https://www.xenrebirth.com/index.php?attachment/2172-poko-png/",
+      "_section": "入門ペット",
+      "_links": [
+        {
+          "label": "Poku, Poko, Poyo Pet & Mount Quest",
+          "url": "https://www.xenrebirth.com/lexicon/index.php?entry/65-poku-poko-poyo-pet-mount-quest/"
+        }
+      ],
+      "_blocks": [
+        {
+          "heading": "公式ガイド補足",
+          "text": "入門ペット\nステータス補正なし。\nPoku / Poko / Poyoのペット・騎乗クエスト。\nBrynhilld / EsseneのPet MerchantでLv25クエスト「Tame a Monster」を受注。帽子付きは隣のPet NPCのLv60クエスト「Let’s Put a Hat on the Pet」。どちらもYellow Watermelonが必要ですが、このページに個数の記載はありません。"
+        }
+      ]
+    },
+    {
+      "slug": "poyo",
+      "name_en": "Poyo",
+      "name_ja": "ポヨ",
+      "aliases": "ポヨ",
+      "description": "入門ペット\nステータス補正なし。",
+      "source_url": "https://www.xenrebirth.com/lexicon/index.php?entry/27-pets-mounts/",
+      "_catalogType": "pets",
+      "notes": "公式Lexiconの掲載内容を整理（2026年9月22日確認）。日本語名は本サイトの参考訳です。",
+      "acquisition": "Poku / Poko / Poyoのペット・騎乗クエスト。",
+      "related_entity": "Brynhilld / EsseneのPet MerchantでLv25クエスト「Tame a Monster」を受注。帽子付きは隣のPet NPCのLv60クエスト「Let’s Put a Hat on the Pet」。どちらもYellow Watermelonが必要ですが、このページに個数の記載はありません。",
+      "image_url": "https://www.xenrebirth.com/index.php?attachment/2174-poyo-png/",
+      "_section": "入門ペット",
+      "_links": [
+        {
+          "label": "Poku, Poko, Poyo Pet & Mount Quest",
+          "url": "https://www.xenrebirth.com/lexicon/index.php?entry/65-poku-poko-poyo-pet-mount-quest/"
+        }
+      ],
+      "_blocks": [
+        {
+          "heading": "公式ガイド補足",
+          "text": "入門ペット\nステータス補正なし。\nPoku / Poko / Poyoのペット・騎乗クエスト。\nBrynhilld / EsseneのPet MerchantでLv25クエスト「Tame a Monster」を受注。帽子付きは隣のPet NPCのLv60クエスト「Let’s Put a Hat on the Pet」。どちらもYellow Watermelonが必要ですが、このページに個数の記載はありません。"
+        }
+      ]
+    },
+    {
+      "slug": "ref-pointy-hat-poku",
+      "name_en": "Pointy Hat Poku",
+      "name_ja": "とんがり帽子のポク",
+      "aliases": "とんがり帽子のポク",
+      "description": "入門ペット\nステータス補正なし。",
+      "source_url": "https://www.xenrebirth.com/lexicon/index.php?entry/27-pets-mounts/",
+      "_catalogType": "pets",
+      "notes": "公式Lexiconの掲載内容を整理（2026年9月22日確認）。日本語名は本サイトの参考訳です。",
+      "acquisition": "Poku / Poko / Poyoのペット・騎乗クエスト。",
+      "related_entity": "Brynhilld / EsseneのPet MerchantでLv25クエスト「Tame a Monster」を受注。帽子付きは隣のPet NPCのLv60クエスト「Let’s Put a Hat on the Pet」。どちらもYellow Watermelonが必要ですが、このページに個数の記載はありません。",
+      "image_url": "https://www.xenrebirth.com/index.php?attachment/2003-pointy-hat-poku-png/",
+      "_section": "入門ペット",
+      "_links": [
+        {
+          "label": "Poku, Poko, Poyo Pet & Mount Quest",
+          "url": "https://www.xenrebirth.com/lexicon/index.php?entry/65-poku-poko-poyo-pet-mount-quest/"
+        }
+      ]
+    },
+    {
+      "slug": "ref-pointy-hat-poko",
+      "name_en": "Pointy Hat Poko",
+      "name_ja": "とんがり帽子のポコ",
+      "aliases": "とんがり帽子のポコ",
+      "description": "入門ペット\nステータス補正なし。",
+      "source_url": "https://www.xenrebirth.com/lexicon/index.php?entry/27-pets-mounts/",
+      "_catalogType": "pets",
+      "notes": "公式Lexiconの掲載内容を整理（2026年9月22日確認）。日本語名は本サイトの参考訳です。",
+      "acquisition": "Poku / Poko / Poyoのペット・騎乗クエスト。",
+      "related_entity": "Brynhilld / EsseneのPet MerchantでLv25クエスト「Tame a Monster」を受注。帽子付きは隣のPet NPCのLv60クエスト「Let’s Put a Hat on the Pet」。どちらもYellow Watermelonが必要ですが、このページに個数の記載はありません。",
+      "image_url": "https://www.xenrebirth.com/index.php?attachment/2002-pointy-hat-poko-png/",
+      "_section": "入門ペット",
+      "_links": [
+        {
+          "label": "Poku, Poko, Poyo Pet & Mount Quest",
+          "url": "https://www.xenrebirth.com/lexicon/index.php?entry/65-poku-poko-poyo-pet-mount-quest/"
+        }
+      ]
+    },
+    {
+      "slug": "ref-pointy-hat-poyo",
+      "name_en": "Pointy Hat Poyo",
+      "name_ja": "とんがり帽子のポヨ",
+      "aliases": "とんがり帽子のポヨ",
+      "description": "入門ペット\nステータス補正なし。",
+      "source_url": "https://www.xenrebirth.com/lexicon/index.php?entry/27-pets-mounts/",
+      "_catalogType": "pets",
+      "notes": "公式Lexiconの掲載内容を整理（2026年9月22日確認）。日本語名は本サイトの参考訳です。",
+      "acquisition": "Poku / Poko / Poyoのペット・騎乗クエスト。",
+      "related_entity": "Brynhilld / EsseneのPet MerchantでLv25クエスト「Tame a Monster」を受注。帽子付きは隣のPet NPCのLv60クエスト「Let’s Put a Hat on the Pet」。どちらもYellow Watermelonが必要ですが、このページに個数の記載はありません。",
+      "image_url": "https://www.xenrebirth.com/index.php?attachment/2004-pointy-hat-poyo-png/",
+      "_section": "入門ペット",
+      "_links": [
+        {
+          "label": "Poku, Poko, Poyo Pet & Mount Quest",
+          "url": "https://www.xenrebirth.com/lexicon/index.php?entry/65-poku-poko-poyo-pet-mount-quest/"
+        }
+      ]
+    },
+    {
+      "slug": "ref-bow-wow",
+      "name_en": "Bow Wow",
+      "name_ja": "バウワウ",
+      "aliases": "バウワウ",
+      "description": "Jarikaのペット\n強化によって効果が変わります。公式のSkill Pets Enhancementを参照。",
+      "source_url": "https://www.xenrebirth.com/lexicon/index.php?entry/27-pets-mounts/",
+      "_catalogType": "pets",
+      "notes": "公式Lexiconの掲載内容を整理（2026年9月22日確認）。日本語名は本サイトの参考訳です。",
+      "acquisition": "Jarikaのペットクエスト。",
+      "related_entity": "Brynhilld TrisectsのJarikaから連続クエストを開始。完了時の卵から10種のいずれかがランダムに生まれます。召喚にはLv35以上が必要。スキル付与または基本騎乗ペットへの変更が可能です。",
+      "image_url": "https://www.xenrebirth.com/index.php?attachment/1995-bow-wow-png/",
+      "_section": "Jarikaのペット",
+      "_links": [
+        {
+          "label": "Skill Pets Enhancement",
+          "url": "https://www.xenrebirth.com/lexicon/index.php?entry/51-alchemist-blacksmith-enhancement-guide/#3.2-Skill-Pets"
+        }
+      ],
+      "required_level": 35
+    },
+    {
+      "slug": "ref-fairy",
+      "name_en": "Fairy",
+      "name_ja": "フェアリー",
+      "aliases": "フェアリー",
+      "description": "Jarikaのペット\n強化によって効果が変わります。公式のSkill Pets Enhancementを参照。",
+      "source_url": "https://www.xenrebirth.com/lexicon/index.php?entry/27-pets-mounts/",
+      "_catalogType": "pets",
+      "notes": "公式Lexiconの掲載内容を整理（2026年9月22日確認）。日本語名は本サイトの参考訳です。",
+      "acquisition": "Jarikaのペットクエスト。",
+      "related_entity": "Brynhilld TrisectsのJarikaから連続クエストを開始。完了時の卵から10種のいずれかがランダムに生まれます。召喚にはLv35以上が必要。スキル付与または基本騎乗ペットへの変更が可能です。",
+      "image_url": "https://www.xenrebirth.com/index.php?attachment/1996-fairy-png/",
+      "_section": "Jarikaのペット",
+      "_links": [
+        {
+          "label": "Skill Pets Enhancement",
+          "url": "https://www.xenrebirth.com/lexicon/index.php?entry/51-alchemist-blacksmith-enhancement-guide/#3.2-Skill-Pets"
+        }
+      ],
+      "required_level": 35
+    },
+    {
+      "slug": "ref-fatty",
+      "name_en": "Fatty",
+      "name_ja": "ファッティ",
+      "aliases": "ファッティ",
+      "description": "Jarikaのペット\n強化によって効果が変わります。公式のSkill Pets Enhancementを参照。",
+      "source_url": "https://www.xenrebirth.com/lexicon/index.php?entry/27-pets-mounts/",
+      "_catalogType": "pets",
+      "notes": "公式Lexiconの掲載内容を整理（2026年9月22日確認）。日本語名は本サイトの参考訳です。",
+      "acquisition": "Jarikaのペットクエスト。",
+      "related_entity": "Brynhilld TrisectsのJarikaから連続クエストを開始。完了時の卵から10種のいずれかがランダムに生まれます。召喚にはLv35以上が必要。スキル付与または基本騎乗ペットへの変更が可能です。",
+      "image_url": "https://www.xenrebirth.com/index.php?attachment/2176-fatty-png/",
+      "_section": "Jarikaのペット",
+      "_links": [
+        {
+          "label": "Skill Pets Enhancement",
+          "url": "https://www.xenrebirth.com/lexicon/index.php?entry/51-alchemist-blacksmith-enhancement-guide/#3.2-Skill-Pets"
+        }
+      ],
+      "required_level": 35
+    },
+    {
+      "slug": "ref-elephant",
+      "name_en": "Elephant",
+      "name_ja": "エレファント",
+      "aliases": "エレファント",
+      "description": "Jarikaのペット\n強化によって効果が変わります。公式のSkill Pets Enhancementを参照。",
+      "source_url": "https://www.xenrebirth.com/lexicon/index.php?entry/27-pets-mounts/",
+      "_catalogType": "pets",
+      "notes": "公式Lexiconの掲載内容を整理（2026年9月22日確認）。日本語名は本サイトの参考訳です。",
+      "acquisition": "Jarikaのペットクエスト。",
+      "related_entity": "Brynhilld TrisectsのJarikaから連続クエストを開始。完了時の卵から10種のいずれかがランダムに生まれます。召喚にはLv35以上が必要。スキル付与または基本騎乗ペットへの変更が可能です。",
+      "image_url": "https://www.xenrebirth.com/index.php?attachment/2170-elephant-png/",
+      "_section": "Jarikaのペット",
+      "_links": [
+        {
+          "label": "Skill Pets Enhancement",
+          "url": "https://www.xenrebirth.com/lexicon/index.php?entry/51-alchemist-blacksmith-enhancement-guide/#3.2-Skill-Pets"
+        }
+      ],
+      "required_level": 35
+    },
+    {
+      "slug": "ref-hippocamus",
+      "name_en": "Hippocamus",
+      "name_ja": "ヒポカマス",
+      "aliases": "ヒポカマス",
+      "description": "Jarikaのペット\n強化によって効果が変わります。公式のSkill Pets Enhancementを参照。",
+      "source_url": "https://www.xenrebirth.com/lexicon/index.php?entry/27-pets-mounts/",
+      "_catalogType": "pets",
+      "notes": "公式Lexiconの掲載内容を整理（2026年9月22日確認）。日本語名は本サイトの参考訳です。",
+      "acquisition": "Jarikaのペットクエスト。",
+      "related_entity": "Brynhilld TrisectsのJarikaから連続クエストを開始。完了時の卵から10種のいずれかがランダムに生まれます。召喚にはLv35以上が必要。スキル付与または基本騎乗ペットへの変更が可能です。",
+      "image_url": "https://www.xenrebirth.com/index.php?attachment/2171-hippocampus-png/",
+      "_section": "Jarikaのペット",
+      "_links": [
+        {
+          "label": "Skill Pets Enhancement",
+          "url": "https://www.xenrebirth.com/lexicon/index.php?entry/51-alchemist-blacksmith-enhancement-guide/#3.2-Skill-Pets"
+        }
+      ],
+      "required_level": 35
+    },
+    {
+      "slug": "ref-monkey",
+      "name_en": "Monkey",
+      "name_ja": "モンキー",
+      "aliases": "モンキー",
+      "description": "Jarikaのペット\n強化によって効果が変わります。公式のSkill Pets Enhancementを参照。",
+      "source_url": "https://www.xenrebirth.com/lexicon/index.php?entry/27-pets-mounts/",
+      "_catalogType": "pets",
+      "notes": "公式Lexiconの掲載内容を整理（2026年9月22日確認）。日本語名は本サイトの参考訳です。",
+      "acquisition": "Jarikaのペットクエスト。",
+      "related_entity": "Brynhilld TrisectsのJarikaから連続クエストを開始。完了時の卵から10種のいずれかがランダムに生まれます。召喚にはLv35以上が必要。スキル付与または基本騎乗ペットへの変更が可能です。",
+      "image_url": "https://www.xenrebirth.com/index.php?attachment/1998-monkey-png/",
+      "_section": "Jarikaのペット",
+      "_links": [
+        {
+          "label": "Skill Pets Enhancement",
+          "url": "https://www.xenrebirth.com/lexicon/index.php?entry/51-alchemist-blacksmith-enhancement-guide/#3.2-Skill-Pets"
+        }
+      ],
+      "required_level": 35
+    },
+    {
+      "slug": "ref-parrot",
+      "name_en": "Parrot",
+      "name_ja": "パロット",
+      "aliases": "パロット",
+      "description": "Jarikaのペット\n強化によって効果が変わります。公式のSkill Pets Enhancementを参照。",
+      "source_url": "https://www.xenrebirth.com/lexicon/index.php?entry/27-pets-mounts/",
+      "_catalogType": "pets",
+      "notes": "公式Lexiconの掲載内容を整理（2026年9月22日確認）。日本語名は本サイトの参考訳です。",
+      "acquisition": "Jarikaのペットクエスト。",
+      "related_entity": "Brynhilld TrisectsのJarikaから連続クエストを開始。完了時の卵から10種のいずれかがランダムに生まれます。召喚にはLv35以上が必要。スキル付与または基本騎乗ペットへの変更が可能です。",
+      "image_url": "https://www.xenrebirth.com/index.php?attachment/2000-parrot-png/",
+      "_section": "Jarikaのペット",
+      "_links": [
+        {
+          "label": "Skill Pets Enhancement",
+          "url": "https://www.xenrebirth.com/lexicon/index.php?entry/51-alchemist-blacksmith-enhancement-guide/#3.2-Skill-Pets"
+        }
+      ],
+      "required_level": 35
+    },
+    {
+      "slug": "ref-poodle",
+      "name_en": "Poodle",
+      "name_ja": "プードル",
+      "aliases": "プードル",
+      "description": "Jarikaのペット\n強化によって効果が変わります。公式のSkill Pets Enhancementを参照。",
+      "source_url": "https://www.xenrebirth.com/lexicon/index.php?entry/27-pets-mounts/",
+      "_catalogType": "pets",
+      "notes": "公式Lexiconの掲載内容を整理（2026年9月22日確認）。日本語名は本サイトの参考訳です。",
+      "acquisition": "Jarikaのペットクエスト。",
+      "related_entity": "Brynhilld TrisectsのJarikaから連続クエストを開始。完了時の卵から10種のいずれかがランダムに生まれます。召喚にはLv35以上が必要。スキル付与または基本騎乗ペットへの変更が可能です。",
+      "image_url": "https://www.xenrebirth.com/index.php?attachment/2005-poodle-png/",
+      "_section": "Jarikaのペット",
+      "_links": [
+        {
+          "label": "Skill Pets Enhancement",
+          "url": "https://www.xenrebirth.com/lexicon/index.php?entry/51-alchemist-blacksmith-enhancement-guide/#3.2-Skill-Pets"
+        }
+      ],
+      "required_level": 35
+    },
+    {
+      "slug": "ref-white-cat",
+      "name_en": "White Cat",
+      "name_ja": "白猫",
+      "aliases": "白猫",
+      "description": "Jarikaのペット\n強化によって効果が変わります。公式のSkill Pets Enhancementを参照。",
+      "source_url": "https://www.xenrebirth.com/lexicon/index.php?entry/27-pets-mounts/",
+      "_catalogType": "pets",
+      "notes": "公式Lexiconの掲載内容を整理（2026年9月22日確認）。日本語名は本サイトの参考訳です。",
+      "acquisition": "Jarikaのペットクエスト。",
+      "related_entity": "Brynhilld TrisectsのJarikaから連続クエストを開始。完了時の卵から10種のいずれかがランダムに生まれます。召喚にはLv35以上が必要。スキル付与または基本騎乗ペットへの変更が可能です。",
+      "image_url": "https://www.xenrebirth.com/index.php?attachment/2007-white-cat-png/",
+      "_section": "Jarikaのペット",
+      "_links": [
+        {
+          "label": "Skill Pets Enhancement",
+          "url": "https://www.xenrebirth.com/lexicon/index.php?entry/51-alchemist-blacksmith-enhancement-guide/#3.2-Skill-Pets"
+        }
+      ],
+      "required_level": 35
+    },
+    {
+      "slug": "ref-yellow-cat",
+      "name_en": "Yellow Cat",
+      "name_ja": "黄猫",
+      "aliases": "黄猫",
+      "description": "Jarikaのペット\n強化によって効果が変わります。公式のSkill Pets Enhancementを参照。",
+      "source_url": "https://www.xenrebirth.com/lexicon/index.php?entry/27-pets-mounts/",
+      "_catalogType": "pets",
+      "notes": "公式Lexiconの掲載内容を整理（2026年9月22日確認）。日本語名は本サイトの参考訳です。",
+      "acquisition": "Jarikaのペットクエスト。",
+      "related_entity": "Brynhilld TrisectsのJarikaから連続クエストを開始。完了時の卵から10種のいずれかがランダムに生まれます。召喚にはLv35以上が必要。スキル付与または基本騎乗ペットへの変更が可能です。",
+      "image_url": "https://www.xenrebirth.com/index.php?attachment/2008-yellow-cat-png/",
+      "_section": "Jarikaのペット",
+      "_links": [
+        {
+          "label": "Skill Pets Enhancement",
+          "url": "https://www.xenrebirth.com/lexicon/index.php?entry/51-alchemist-blacksmith-enhancement-guide/#3.2-Skill-Pets"
+        }
+      ],
+      "required_level": 35
+    },
+    {
+      "slug": "ref-devi",
+      "name_en": "Devi",
+      "name_ja": "デヴィ",
+      "aliases": "デヴィ",
+      "description": "Shenzhenのペット\nHide：30秒間姿を隠します。移動速度は大きく低下。ローグのInvisibleに似たスキル。",
+      "source_url": "https://www.xenrebirth.com/lexicon/index.php?entry/27-pets-mounts/",
+      "_catalogType": "pets",
+      "notes": "公式Lexiconの掲載内容を整理（2026年9月22日確認）。日本語名は本サイトの参考訳です。",
+      "acquisition": "Shenzhenの「A New Companion」連続クエスト（開始Lv125以上）。",
+      "related_entity": "Gefie CampのMonster Researcherから開始。開始Lv125以上、スキル使用Lv130以上。1キャラクターにつき1回。3種のスキルは3分のクールタイムを共有し、同時使用はできません。スキル取得後の追加強化は不要です。",
+      "image_url": "https://www.xenrebirth.com/index.php?attachment/9272-devi-png/",
+      "_section": "Shenzhenのペット",
+      "_links": [
+        {
+          "label": "A New Companion Questline (Shenzhen Quest 125+)",
+          "url": "https://www.xenrebirth.com/lexicon/index.php?entry/133-a-new-companion-questline-shenzhen-quest-125/"
+        }
+      ],
+      "required_level": 130
+    },
+    {
+      "slug": "ref-foogy",
+      "name_en": "Foogy",
+      "name_ja": "フォーギー",
+      "aliases": "フォーギー",
+      "description": "Shenzhenのペット\nDisrupt：単体の敵の注意を自分に向けます。ナイトのAttractionに似たスキル。",
+      "source_url": "https://www.xenrebirth.com/lexicon/index.php?entry/27-pets-mounts/",
+      "_catalogType": "pets",
+      "notes": "公式Lexiconの掲載内容を整理（2026年9月22日確認）。日本語名は本サイトの参考訳です。",
+      "acquisition": "Shenzhenの「A New Companion」連続クエスト（開始Lv125以上）。",
+      "related_entity": "Gefie CampのMonster Researcherから開始。開始Lv125以上、スキル使用Lv130以上。1キャラクターにつき1回。3種のスキルは3分のクールタイムを共有し、同時使用はできません。スキル取得後の追加強化は不要です。",
+      "image_url": "https://www.xenrebirth.com/index.php?attachment/9270-foogy-png/",
+      "_section": "Shenzhenのペット",
+      "_links": [
+        {
+          "label": "A New Companion Questline (Shenzhen Quest 125+)",
+          "url": "https://www.xenrebirth.com/lexicon/index.php?entry/133-a-new-companion-questline-shenzhen-quest-125/"
+        }
+      ],
+      "required_level": 130
+    },
+    {
+      "slug": "ref-impulse",
+      "name_en": "Impulse",
+      "name_ja": "インパルス",
+      "aliases": "インパルス",
+      "description": "Shenzhenのペット\nVoltage：単体の敵を3秒間スタンさせます。",
+      "source_url": "https://www.xenrebirth.com/lexicon/index.php?entry/27-pets-mounts/",
+      "_catalogType": "pets",
+      "notes": "公式Lexiconの掲載内容を整理（2026年9月22日確認）。日本語名は本サイトの参考訳です。",
+      "acquisition": "Shenzhenの「A New Companion」連続クエスト（開始Lv125以上）。",
+      "related_entity": "Gefie CampのMonster Researcherから開始。開始Lv125以上、スキル使用Lv130以上。1キャラクターにつき1回。3種のスキルは3分のクールタイムを共有し、同時使用はできません。スキル取得後の追加強化は不要です。",
+      "image_url": "https://www.xenrebirth.com/index.php?attachment/9271-impulse-png/",
+      "_section": "Shenzhenのペット",
+      "_links": [
+        {
+          "label": "A New Companion Questline (Shenzhen Quest 125+)",
+          "url": "https://www.xenrebirth.com/lexicon/index.php?entry/133-a-new-companion-questline-shenzhen-quest-125/"
+        }
+      ],
+      "required_level": 130
+    },
+    {
+      "slug": "ref-choco-poko",
+      "name_en": "Choco Poko",
+      "name_ja": "チョコポコ",
+      "aliases": "チョコポコ",
+      "description": "特殊ペット\nステータス補正なし。",
+      "source_url": "https://www.xenrebirth.com/lexicon/index.php?entry/27-pets-mounts/",
+      "_catalogType": "pets",
+      "notes": "公式Lexiconの掲載内容を整理（2026年9月22日確認）。日本語名は本サイトの参考訳です。",
+      "acquisition": "Vote Ticket（投票チケット）交換。",
+      "related_entity": "特殊な方法で入手するペット。公式本文では取引不可・スキル付与不可・基本騎乗ペットへの変更不可とされています。",
+      "image_url": "https://www.xenrebirth.com/index.php?attachment/5028-choco-poko-png/",
+      "_section": "特殊ペット",
+      "_links": [
+        {
+          "label": "Vote Ticket Exchange",
+          "url": "https://www.xenrebirth.com/lexicon/index.php?entry/116-vote-ticket-exchange/"
+        }
+      ]
+    },
+    {
+      "slug": "ref-heartbear",
+      "name_en": "Heartbear",
+      "name_ja": "ハートベア",
+      "aliases": "ハートベア",
+      "description": "特殊ペット\nステータス補正なし。\n参照ページでは未実装。",
+      "source_url": "https://www.xenrebirth.com/lexicon/index.php?entry/27-pets-mounts/",
+      "_catalogType": "pets",
+      "notes": "公式Lexiconの掲載内容を整理（2026年9月22日確認）。日本語名は本サイトの参考訳です。",
+      "acquisition": "参照ページでは未実装。",
+      "related_entity": "特殊な方法で入手するペット。公式本文では取引不可・スキル付与不可・基本騎乗ペットへの変更不可とされています。",
+      "image_url": "https://www.xenrebirth.com/index.php?attachment/10165-heartbear-png/",
+      "_section": "特殊ペット",
+      "_links": []
+    },
+    {
+      "slug": "ref-leprechaun",
+      "name_en": "Leprechaun",
+      "name_ja": "レプラコーン",
+      "aliases": "レプラコーン",
+      "description": "特殊ペット\n最大HP: +100",
+      "source_url": "https://www.xenrebirth.com/lexicon/index.php?entry/27-pets-mounts/",
+      "_catalogType": "pets",
+      "notes": "公式Lexiconの掲載内容を整理（2026年9月22日確認）。日本語名は本サイトの参考訳です。",
+      "acquisition": "Luck of the Irish Lucky Ball。季節イベントのダンジョン・報酬を参照。",
+      "related_entity": "特殊な方法で入手するペット。公式本文では取引不可・スキル付与不可・基本騎乗ペットへの変更不可とされています。",
+      "image_url": "https://www.xenrebirth.com/index.php?attachment/1997-leprechaun-png/",
+      "_section": "特殊ペット",
+      "_links": [
+        {
+          "label": "Dungeon Locations - Seasonal Events | Rewards",
+          "url": "https://www.xenrebirth.com/lexicon/index.php?entry/22-dungeon-locations-seasonal-events-rewards/"
+        }
+      ]
+    },
+    {
+      "slug": "ref-moonbear",
+      "name_en": "Moonbear",
+      "name_ja": "ムーンベア",
+      "aliases": "ムーンベア",
+      "description": "特殊ペット\nステータス補正なし。",
+      "source_url": "https://www.xenrebirth.com/lexicon/index.php?entry/27-pets-mounts/",
+      "_catalogType": "pets",
+      "notes": "公式Lexiconの掲載内容を整理（2026年9月22日確認）。日本語名は本サイトの参考訳です。",
+      "acquisition": "トークン交換のPet Reward Chain。",
+      "related_entity": "特殊な方法で入手するペット。公式本文では取引不可・スキル付与不可・基本騎乗ペットへの変更不可とされています。",
+      "image_url": "https://www.xenrebirth.com/index.php?attachment/1999-moonbear-png/",
+      "_section": "特殊ペット",
+      "_links": [
+        {
+          "label": "Token Exchange - Pet Reward Chain",
+          "url": "https://www.xenrebirth.com/lexicon/index.php?entry/33-token-exchange-pet-reward-chain/"
+        }
+      ]
+    },
+    {
+      "slug": "ref-reindeer",
+      "name_en": "Reindeer",
+      "name_ja": "トナカイ",
+      "aliases": "トナカイ",
+      "description": "特殊ペット\n最大重量: +100-800",
+      "source_url": "https://www.xenrebirth.com/lexicon/index.php?entry/27-pets-mounts/",
+      "_catalogType": "pets",
+      "notes": "公式Lexiconの掲載内容を整理（2026年9月22日確認）。日本語名は本サイトの参考訳です。",
+      "acquisition": "季節イベントのダンジョン・報酬。Lv5まで強化可能との個別記載あり。",
+      "related_entity": "特殊な方法で入手するペット。公式本文では取引不可・スキル付与不可・基本騎乗ペットへの変更不可とされています。",
+      "image_url": "https://www.xenrebirth.com/index.php?attachment/2006-reindeer-png/",
+      "_section": "特殊ペット",
+      "_links": [
+        {
+          "label": "Dungeon Locations - Seasonal Events | Rewards",
+          "url": "https://www.xenrebirth.com/lexicon/index.php?entry/22-dungeon-locations-seasonal-events-rewards/"
+        }
+      ]
+    },
+    {
+      "slug": "ref-star-bear",
+      "name_en": "Star Bear",
+      "name_ja": "スターベア",
+      "aliases": "スターベア",
+      "description": "特殊ペット\nステータス補正なし。\n参照ページでは未実装。",
+      "source_url": "https://www.xenrebirth.com/lexicon/index.php?entry/27-pets-mounts/",
+      "_catalogType": "pets",
+      "notes": "公式Lexiconの掲載内容を整理（2026年9月22日確認）。日本語名は本サイトの参考訳です。",
+      "acquisition": "参照ページでは未実装。",
+      "related_entity": "特殊な方法で入手するペット。公式本文では取引不可・スキル付与不可・基本騎乗ペットへの変更不可とされています。",
+      "image_url": "https://www.xenrebirth.com/index.php?attachment/10171-star-bear-png/",
+      "_section": "特殊ペット",
+      "_links": []
+    },
+    {
+      "slug": "ref-poku-mount",
+      "name_en": "Poku Mount",
+      "name_ja": "ポク（騎乗）",
+      "aliases": "ポク（騎乗）",
+      "description": "入門騎乗ペット\n攻撃力: +10\n魔法攻撃力 +10\n移動速度: +2",
+      "source_url": "https://www.xenrebirth.com/lexicon/index.php?entry/27-pets-mounts/",
+      "_catalogType": "pets",
+      "notes": "公式Lexiconの掲載内容を整理（2026年9月22日確認）。日本語名は本サイトの参考訳です。",
+      "acquisition": "Poku / Poko / Poyoのペット・騎乗クエスト。",
+      "related_entity": "通常のPoku / Poko / Poyoを騎乗化。Brynhilld / EsseneのPet NPCで確認できます。追加ステータスの強化はできません。",
+      "image_url": "https://www.xenrebirth.com/index.php?attachment/1962-mount-poku-png/",
+      "_section": "入門騎乗ペット",
+      "_links": [
+        {
+          "label": "Poku, Poko, Poyo Pet & Mount Quest",
+          "url": "https://www.xenrebirth.com/lexicon/index.php?entry/65-poku-poko-poyo-pet-mount-quest/"
+        }
+      ]
+    },
+    {
+      "slug": "ref-poko-mount",
+      "name_en": "Poko Mount",
+      "name_ja": "ポコ（騎乗）",
+      "aliases": "ポコ（騎乗）",
+      "description": "入門騎乗ペット\n攻撃力: +10\n魔法攻撃力 +10\n移動速度: +2",
+      "source_url": "https://www.xenrebirth.com/lexicon/index.php?entry/27-pets-mounts/",
+      "_catalogType": "pets",
+      "notes": "公式Lexiconの掲載内容を整理（2026年9月22日確認）。日本語名は本サイトの参考訳です。",
+      "acquisition": "Poku / Poko / Poyoのペット・騎乗クエスト。",
+      "related_entity": "通常のPoku / Poko / Poyoを騎乗化。Brynhilld / EsseneのPet NPCで確認できます。追加ステータスの強化はできません。",
+      "image_url": "https://www.xenrebirth.com/index.php?attachment/1987-poko-mount-png/",
+      "_section": "入門騎乗ペット",
+      "_links": [
+        {
+          "label": "Poku, Poko, Poyo Pet & Mount Quest",
+          "url": "https://www.xenrebirth.com/lexicon/index.php?entry/65-poku-poko-poyo-pet-mount-quest/"
+        }
+      ]
+    },
+    {
+      "slug": "ref-poyo-mount",
+      "name_en": "Poyo Mount",
+      "name_ja": "ポヨ（騎乗）",
+      "aliases": "ポヨ（騎乗）",
+      "description": "入門騎乗ペット\n攻撃力: +10\n魔法攻撃力 +10\n移動速度: +2",
+      "source_url": "https://www.xenrebirth.com/lexicon/index.php?entry/27-pets-mounts/",
+      "_catalogType": "pets",
+      "notes": "公式Lexiconの掲載内容を整理（2026年9月22日確認）。日本語名は本サイトの参考訳です。",
+      "acquisition": "Poku / Poko / Poyoのペット・騎乗クエスト。",
+      "related_entity": "通常のPoku / Poko / Poyoを騎乗化。Brynhilld / EsseneのPet NPCで確認できます。追加ステータスの強化はできません。",
+      "image_url": "https://www.xenrebirth.com/index.php?attachment/1965-poyo-mount-png/",
+      "_section": "入門騎乗ペット",
+      "_links": [
+        {
+          "label": "Poku, Poko, Poyo Pet & Mount Quest",
+          "url": "https://www.xenrebirth.com/lexicon/index.php?entry/65-poku-poko-poyo-pet-mount-quest/"
+        }
+      ]
+    },
+    {
+      "slug": "ref-alvin",
+      "name_en": "Alvin",
+      "name_ja": "アルヴィン",
+      "aliases": "アルヴィン",
+      "description": "基本騎乗ペット\nMEN: +3\nWIS: +3\n移動速度: +1",
+      "source_url": "https://www.xenrebirth.com/lexicon/index.php?entry/27-pets-mounts/",
+      "_catalogType": "pets",
+      "notes": "公式Lexiconの掲載内容を整理（2026年9月22日確認）。日本語名は本サイトの参考訳です。",
+      "acquisition": "ペットの騎乗化。公式のMounts Enhancementを参照。",
+      "related_entity": "Jarikaのクエストで得たペットから騎乗化できます。掲載された基礎ステータスに加え、強化で追加効果を付けられます。",
+      "image_url": "https://www.xenrebirth.com/index.php?attachment/2168-alvin-png/",
+      "_section": "基本騎乗ペット",
+      "_links": [
+        {
+          "label": "Mounts Enhancement",
+          "url": "https://www.xenrebirth.com/lexicon/index.php?entry/51-alchemist-blacksmith-enhancement-guide/#3.1-Mounts"
+        }
+      ]
+    },
+    {
+      "slug": "ref-bernard",
+      "name_en": "Bernard",
+      "name_ja": "バーナード",
+      "aliases": "バーナード",
+      "description": "基本騎乗ペット\nINT: +3\nAGI: +3\n移動速度: +1",
+      "source_url": "https://www.xenrebirth.com/lexicon/index.php?entry/27-pets-mounts/",
+      "_catalogType": "pets",
+      "notes": "公式Lexiconの掲載内容を整理（2026年9月22日確認）。日本語名は本サイトの参考訳です。",
+      "acquisition": "ペットの騎乗化。公式のMounts Enhancementを参照。",
+      "related_entity": "Jarikaのクエストで得たペットから騎乗化できます。掲載された基礎ステータスに加え、強化で追加効果を付けられます。",
+      "image_url": "https://www.xenrebirth.com/index.php?attachment/1994-bernard-png/",
+      "_section": "基本騎乗ペット",
+      "_links": [
+        {
+          "label": "Mounts Enhancement",
+          "url": "https://www.xenrebirth.com/lexicon/index.php?entry/51-alchemist-blacksmith-enhancement-guide/#3.1-Mounts"
+        }
+      ]
+    },
+    {
+      "slug": "ref-dino",
+      "name_en": "Dino",
+      "name_ja": "ディノ",
+      "aliases": "ディノ",
+      "description": "基本騎乗ペット\nINT: +3\nAGI: +3\n移動速度: +1",
+      "source_url": "https://www.xenrebirth.com/lexicon/index.php?entry/27-pets-mounts/",
+      "_catalogType": "pets",
+      "notes": "公式Lexiconの掲載内容を整理（2026年9月22日確認）。日本語名は本サイトの参考訳です。",
+      "acquisition": "ペットの騎乗化。公式のMounts Enhancementを参照。",
+      "related_entity": "Jarikaのクエストで得たペットから騎乗化できます。掲載された基礎ステータスに加え、強化で追加効果を付けられます。",
+      "image_url": "https://www.xenrebirth.com/index.php?attachment/2169-dino-png/",
+      "_section": "基本騎乗ペット",
+      "_links": [
+        {
+          "label": "Mounts Enhancement",
+          "url": "https://www.xenrebirth.com/lexicon/index.php?entry/51-alchemist-blacksmith-enhancement-guide/#3.1-Mounts"
+        }
+      ]
+    },
+    {
+      "slug": "ref-felix",
+      "name_en": "Felix",
+      "name_ja": "フェリックス",
+      "aliases": "フェリックス",
+      "description": "基本騎乗ペット\nPOW: +3\nAGI: +3\n移動速度: +1",
+      "source_url": "https://www.xenrebirth.com/lexicon/index.php?entry/27-pets-mounts/",
+      "_catalogType": "pets",
+      "notes": "公式Lexiconの掲載内容を整理（2026年9月22日確認）。日本語名は本サイトの参考訳です。",
+      "acquisition": "ペットの騎乗化。公式のMounts Enhancementを参照。",
+      "related_entity": "Jarikaのクエストで得たペットから騎乗化できます。掲載された基礎ステータスに加え、強化で追加効果を付けられます。",
+      "image_url": "https://www.xenrebirth.com/index.php?attachment/1959-felix-png/",
+      "_section": "基本騎乗ペット",
+      "_links": [
+        {
+          "label": "Mounts Enhancement",
+          "url": "https://www.xenrebirth.com/lexicon/index.php?entry/51-alchemist-blacksmith-enhancement-guide/#3.1-Mounts"
+        }
+      ]
+    },
+    {
+      "slug": "ref-hippo",
+      "name_en": "Hippo",
+      "name_ja": "ヒッポ",
+      "aliases": "ヒッポ",
+      "description": "基本騎乗ペット\nWIS: +3\nINT: +3\n移動速度: +1",
+      "source_url": "https://www.xenrebirth.com/lexicon/index.php?entry/27-pets-mounts/",
+      "_catalogType": "pets",
+      "notes": "公式Lexiconの掲載内容を整理（2026年9月22日確認）。日本語名は本サイトの参考訳です。",
+      "acquisition": "ペットの騎乗化。公式のMounts Enhancementを参照。",
+      "related_entity": "Jarikaのクエストで得たペットから騎乗化できます。掲載された基礎ステータスに加え、強化で追加効果を付けられます。",
+      "image_url": "https://www.xenrebirth.com/index.php?attachment/1968-hippo-png/",
+      "_section": "基本騎乗ペット",
+      "_links": [
+        {
+          "label": "Mounts Enhancement",
+          "url": "https://www.xenrebirth.com/lexicon/index.php?entry/51-alchemist-blacksmith-enhancement-guide/#3.1-Mounts"
+        }
+      ]
+    },
+    {
+      "slug": "ref-lion",
+      "name_en": "Lion",
+      "name_ja": "ライオン",
+      "aliases": "ライオン",
+      "description": "基本騎乗ペット\nPOW: +3\nMEN: +3\n移動速度: +1",
+      "source_url": "https://www.xenrebirth.com/lexicon/index.php?entry/27-pets-mounts/",
+      "_catalogType": "pets",
+      "notes": "公式Lexiconの掲載内容を整理（2026年9月22日確認）。日本語名は本サイトの参考訳です。",
+      "acquisition": "ペットの騎乗化。公式のMounts Enhancementを参照。",
+      "related_entity": "Jarikaのクエストで得たペットから騎乗化できます。掲載された基礎ステータスに加え、強化で追加効果を付けられます。",
+      "image_url": "https://www.xenrebirth.com/index.php?attachment/1993-lion-png/",
+      "_section": "基本騎乗ペット",
+      "_links": [
+        {
+          "label": "Mounts Enhancement",
+          "url": "https://www.xenrebirth.com/lexicon/index.php?entry/51-alchemist-blacksmith-enhancement-guide/#3.1-Mounts"
+        }
+      ]
+    },
+    {
+      "slug": "ref-piggy",
+      "name_en": "Piggy",
+      "name_ja": "ピギー",
+      "aliases": "ピギー",
+      "description": "基本騎乗ペット\nINT: +3\nAGI: +3\n移動速度: +1",
+      "source_url": "https://www.xenrebirth.com/lexicon/index.php?entry/27-pets-mounts/",
+      "_catalogType": "pets",
+      "notes": "公式Lexiconの掲載内容を整理（2026年9月22日確認）。日本語名は本サイトの参考訳です。",
+      "acquisition": "ペットの騎乗化。公式のMounts Enhancementを参照。",
+      "related_entity": "Jarikaのクエストで得たペットから騎乗化できます。掲載された基礎ステータスに加え、強化で追加効果を付けられます。",
+      "image_url": "https://www.xenrebirth.com/index.php?attachment/2001-piggy-png/",
+      "_section": "基本騎乗ペット",
+      "_links": [
+        {
+          "label": "Mounts Enhancement",
+          "url": "https://www.xenrebirth.com/lexicon/index.php?entry/51-alchemist-blacksmith-enhancement-guide/#3.1-Mounts"
+        }
+      ]
+    },
+    {
+      "slug": "ref-pony",
+      "name_en": "Pony",
+      "name_ja": "ポニー",
+      "aliases": "ポニー",
+      "description": "基本騎乗ペット\nPOW: +3\nAGI: +3\n移動速度: +1",
+      "source_url": "https://www.xenrebirth.com/lexicon/index.php?entry/27-pets-mounts/",
+      "_catalogType": "pets",
+      "notes": "公式Lexiconの掲載内容を整理（2026年9月22日確認）。日本語名は本サイトの参考訳です。",
+      "acquisition": "ペットの騎乗化。公式のMounts Enhancementを参照。",
+      "related_entity": "Jarikaのクエストで得たペットから騎乗化できます。掲載された基礎ステータスに加え、強化で追加効果を付けられます。",
+      "image_url": "https://www.xenrebirth.com/index.php?attachment/1964-pony-png/",
+      "_section": "基本騎乗ペット",
+      "_links": [
+        {
+          "label": "Mounts Enhancement",
+          "url": "https://www.xenrebirth.com/lexicon/index.php?entry/51-alchemist-blacksmith-enhancement-guide/#3.1-Mounts"
+        }
+      ]
+    },
+    {
+      "slug": "ref-teddy",
+      "name_en": "Teddy",
+      "name_ja": "テディ",
+      "aliases": "テディ",
+      "description": "基本騎乗ペット\nWIS: +3\nINT: +3\n移動速度: +1",
+      "source_url": "https://www.xenrebirth.com/lexicon/index.php?entry/27-pets-mounts/",
+      "_catalogType": "pets",
+      "notes": "公式Lexiconの掲載内容を整理（2026年9月22日確認）。日本語名は本サイトの参考訳です。",
+      "acquisition": "ペットの騎乗化。公式のMounts Enhancementを参照。",
+      "related_entity": "Jarikaのクエストで得たペットから騎乗化できます。掲載された基礎ステータスに加え、強化で追加効果を付けられます。",
+      "image_url": "https://www.xenrebirth.com/index.php?attachment/2175-teddy-png/",
+      "_section": "基本騎乗ペット",
+      "_links": [
+        {
+          "label": "Mounts Enhancement",
+          "url": "https://www.xenrebirth.com/lexicon/index.php?entry/51-alchemist-blacksmith-enhancement-guide/#3.1-Mounts"
+        }
+      ]
+    },
+    {
+      "slug": "ref-tiger",
+      "name_en": "Tiger",
+      "name_ja": "タイガー",
+      "aliases": "タイガー",
+      "description": "基本騎乗ペット\nPOW: +3\nAGI: +3\n移動速度: +1",
+      "source_url": "https://www.xenrebirth.com/lexicon/index.php?entry/27-pets-mounts/",
+      "_catalogType": "pets",
+      "notes": "公式Lexiconの掲載内容を整理（2026年9月22日確認）。日本語名は本サイトの参考訳です。",
+      "acquisition": "ペットの騎乗化。公式のMounts Enhancementを参照。",
+      "related_entity": "Jarikaのクエストで得たペットから騎乗化できます。掲載された基礎ステータスに加え、強化で追加効果を付けられます。",
+      "image_url": "https://www.xenrebirth.com/index.php?attachment/1966-tiger-png/",
+      "_section": "基本騎乗ペット",
+      "_links": [
+        {
+          "label": "Mounts Enhancement",
+          "url": "https://www.xenrebirth.com/lexicon/index.php?entry/51-alchemist-blacksmith-enhancement-guide/#3.1-Mounts"
+        }
+      ]
+    },
+    {
+      "slug": "ref-afriphant",
+      "name_en": "Afriphant",
+      "name_ja": "アフリファント",
+      "aliases": "アフリファント",
+      "description": "上位騎乗ペット\nINT: +10\nスキルクリティカル: +3\n移動速度: +2",
+      "source_url": "https://www.xenrebirth.com/lexicon/index.php?entry/27-pets-mounts/",
+      "_catalogType": "pets",
+      "notes": "公式Lexiconの掲載内容を整理（2026年9月22日確認）。日本語名は本サイトの参考訳です。",
+      "acquisition": "Tramis Mansionのトークン交換。",
+      "related_entity": "トークン交換や高レベルクエストなどで入手。強化による追加効果は固定値ではなく割合型です。%DEFが付いた場合のみ所定の使用レベル条件があるとの記載があります。具体的な条件は公式のMounts Enhancementを確認してください。",
+      "image_url": "https://www.xenrebirth.com/index.php?attachment/1955-afriphant-png/",
+      "_section": "上位騎乗ペット",
+      "_links": [
+        {
+          "label": "Token Exchange - Tramis Mansion",
+          "url": "https://www.xenrebirth.com/lexicon/index.php?entry/19-token-exchange-tramis-mansion/"
+        }
+      ]
+    },
+    {
+      "slug": "ref-ark-golem",
+      "name_en": "Ark Golem",
+      "name_ja": "アークゴーレム",
+      "aliases": "アークゴーレム",
+      "description": "上位騎乗ペット\n最大HP: +150\n最大MP: +30\n最大重量: +300\n移動速度: +3",
+      "source_url": "https://www.xenrebirth.com/lexicon/index.php?entry/27-pets-mounts/",
+      "_catalogType": "pets",
+      "notes": "公式Lexiconの掲載内容を整理（2026年9月22日確認）。日本語名は本サイトの参考訳です。",
+      "acquisition": "Tramis Mansionのトークン交換。",
+      "related_entity": "トークン交換や高レベルクエストなどで入手。強化による追加効果は固定値ではなく割合型です。%DEFが付いた場合のみ所定の使用レベル条件があるとの記載があります。具体的な条件は公式のMounts Enhancementを確認してください。",
+      "image_url": "https://www.xenrebirth.com/index.php?attachment/1956-ark-golem-png/",
+      "_section": "上位騎乗ペット",
+      "_links": [
+        {
+          "label": "Token Exchange - Tramis Mansion",
+          "url": "https://www.xenrebirth.com/lexicon/index.php?entry/19-token-exchange-tramis-mansion/"
+        }
+      ]
+    },
+    {
+      "slug": "ref-basilisk",
+      "name_en": "Basilisk",
+      "name_ja": "バジリスク",
+      "aliases": "バジリスク",
+      "description": "上位騎乗ペット\nSTA: +10\nMEN: +5\n最大重量: +100\nスキルクリティカル: +3\n移動速度: +2",
+      "source_url": "https://www.xenrebirth.com/lexicon/index.php?entry/27-pets-mounts/",
+      "_catalogType": "pets",
+      "notes": "公式Lexiconの掲載内容を整理（2026年9月22日確認）。日本語名は本サイトの参考訳です。",
+      "acquisition": "Tramis Mansionのトークン交換。",
+      "related_entity": "トークン交換や高レベルクエストなどで入手。強化による追加効果は固定値ではなく割合型です。%DEFが付いた場合のみ所定の使用レベル条件があるとの記載があります。具体的な条件は公式のMounts Enhancementを確認してください。",
+      "image_url": "https://www.xenrebirth.com/index.php?attachment/10154-basilisk-png/",
+      "_section": "上位騎乗ペット",
+      "_links": [
+        {
+          "label": "Token Exchange - Tramis Mansion",
+          "url": "https://www.xenrebirth.com/lexicon/index.php?entry/19-token-exchange-tramis-mansion/"
+        }
+      ]
+    },
+    {
+      "slug": "ref-bull",
+      "name_en": "Bull",
+      "name_ja": "ブル",
+      "aliases": "ブル",
+      "description": "上位騎乗ペット\n最大HP: +100\n最大MP: +30\n移動速度: +2",
+      "source_url": "https://www.xenrebirth.com/lexicon/index.php?entry/27-pets-mounts/",
+      "_catalogType": "pets",
+      "notes": "公式Lexiconの掲載内容を整理（2026年9月22日確認）。日本語名は本サイトの参考訳です。",
+      "acquisition": "Tramis Mansionのトークン交換。",
+      "related_entity": "トークン交換や高レベルクエストなどで入手。強化による追加効果は固定値ではなく割合型です。%DEFが付いた場合のみ所定の使用レベル条件があるとの記載があります。具体的な条件は公式のMounts Enhancementを確認してください。",
+      "image_url": "https://www.xenrebirth.com/index.php?attachment/2065-bull-png/",
+      "_section": "上位騎乗ペット",
+      "_links": [
+        {
+          "label": "Token Exchange - Tramis Mansion",
+          "url": "https://www.xenrebirth.com/lexicon/index.php?entry/19-token-exchange-tramis-mansion/"
+        }
+      ]
+    },
+    {
+      "slug": "ref-camel",
+      "name_en": "Camel",
+      "name_ja": "キャメル",
+      "aliases": "キャメル",
+      "description": "上位騎乗ペット\nMEN: +10\n最大重量: +200\n移動速度: +2",
+      "source_url": "https://www.xenrebirth.com/lexicon/index.php?entry/27-pets-mounts/",
+      "_catalogType": "pets",
+      "notes": "公式Lexiconの掲載内容を整理（2026年9月22日確認）。日本語名は本サイトの参考訳です。",
+      "acquisition": "Tramis Mansionのトークン交換。",
+      "related_entity": "トークン交換や高レベルクエストなどで入手。強化による追加効果は固定値ではなく割合型です。%DEFが付いた場合のみ所定の使用レベル条件があるとの記載があります。具体的な条件は公式のMounts Enhancementを確認してください。",
+      "image_url": "https://www.xenrebirth.com/index.php?attachment/2066-camel-png/",
+      "_section": "上位騎乗ペット",
+      "_links": [
+        {
+          "label": "Token Exchange - Tramis Mansion",
+          "url": "https://www.xenrebirth.com/lexicon/index.php?entry/19-token-exchange-tramis-mansion/"
+        }
+      ]
+    },
+    {
+      "slug": "ref-dragon",
+      "name_en": "Dragon",
+      "name_ja": "ドラゴン",
+      "aliases": "ドラゴン",
+      "description": "上位騎乗ペット\nINT: +15\n最大重量: +300\n移動速度: +3",
+      "source_url": "https://www.xenrebirth.com/lexicon/index.php?entry/27-pets-mounts/",
+      "_catalogType": "pets",
+      "notes": "公式Lexiconの掲載内容を整理（2026年9月22日確認）。日本語名は本サイトの参考訳です。",
+      "acquisition": "Amorica CaveのLv125以上「Restoring Balance」クエストのDragon Lucky Ball、または洞窟内のNainにObsidian Token ×500を渡す。",
+      "related_entity": "トークン交換や高レベルクエストなどで入手。強化による追加効果は固定値ではなく割合型です。%DEFが付いた場合のみ所定の使用レベル条件があるとの記載があります。具体的な条件は公式のMounts Enhancementを確認してください。",
+      "image_url": "https://www.xenrebirth.com/index.php?attachment/6137-dragon-png/",
+      "_section": "上位騎乗ペット",
+      "_links": []
+    },
+    {
+      "slug": "ref-fawn",
+      "name_en": "Fawn",
+      "name_ja": "フォーン",
+      "aliases": "フォーン",
+      "description": "上位騎乗ペット\nAGI: +10\n回避成功率: +3\n移動速度: +2",
+      "source_url": "https://www.xenrebirth.com/lexicon/index.php?entry/27-pets-mounts/",
+      "_catalogType": "pets",
+      "notes": "公式Lexiconの掲載内容を整理（2026年9月22日確認）。日本語名は本サイトの参考訳です。",
+      "acquisition": "Tramis Mansionのトークン交換。",
+      "related_entity": "トークン交換や高レベルクエストなどで入手。強化による追加効果は固定値ではなく割合型です。%DEFが付いた場合のみ所定の使用レベル条件があるとの記載があります。具体的な条件は公式のMounts Enhancementを確認してください。",
+      "image_url": "https://www.xenrebirth.com/index.php?attachment/1958-fawn-png/",
+      "_section": "上位騎乗ペット",
+      "_links": [
+        {
+          "label": "Token Exchange - Tramis Mansion",
+          "url": "https://www.xenrebirth.com/lexicon/index.php?entry/19-token-exchange-tramis-mansion/"
+        }
+      ]
+    },
+    {
+      "slug": "ref-golem",
+      "name_en": "Golem",
+      "name_ja": "ゴーレム",
+      "aliases": "ゴーレム",
+      "description": "上位騎乗ペット\nPOW: +10\nINT: +10\nSTA: +10\nMEN: +5\n最大重量: +1000\n移動速度: +2\nスキルクリティカル: +3",
+      "source_url": "https://www.xenrebirth.com/lexicon/index.php?entry/27-pets-mounts/",
+      "_catalogType": "pets",
+      "notes": "公式Lexiconの掲載内容を整理（2026年9月22日確認）。日本語名は本サイトの参考訳です。",
+      "acquisition": "Red MinesのLv150以上クエストのGolem Lucky Ballからランダム入手。",
+      "related_entity": "トークン交換や高レベルクエストなどで入手。強化による追加効果は固定値ではなく割合型です。%DEFが付いた場合のみ所定の使用レベル条件があるとの記載があります。具体的な条件は公式のMounts Enhancementを確認してください。",
+      "image_url": "https://www.xenrebirth.com/index.php?attachment/10163-golem-png/",
+      "_section": "上位騎乗ペット",
+      "_links": []
+    },
+    {
+      "slug": "ref-gryphon",
+      "name_en": "Gryphon",
+      "name_ja": "グリフォン",
+      "aliases": "グリフォン",
+      "description": "上位騎乗ペット\nPOW: +15\nINT: +15\n最大HP: +50\n移動速度: +3",
+      "source_url": "https://www.xenrebirth.com/lexicon/index.php?entry/27-pets-mounts/",
+      "_catalogType": "pets",
+      "notes": "公式Lexiconの掲載内容を整理（2026年9月22日確認）。日本語名は本サイトの参考訳です。",
+      "acquisition": "トークン交換のPet Reward Chain。",
+      "related_entity": "トークン交換や高レベルクエストなどで入手。強化による追加効果は固定値ではなく割合型です。%DEFが付いた場合のみ所定の使用レベル条件があるとの記載があります。具体的な条件は公式のMounts Enhancementを確認してください。",
+      "image_url": "https://www.xenrebirth.com/index.php?attachment/1986-gryphon-png/",
+      "_section": "上位騎乗ペット",
+      "_links": [
+        {
+          "label": "Token Exchange - Pet Reward Chain",
+          "url": "https://www.xenrebirth.com/lexicon/index.php?entry/33-token-exchange-pet-reward-chain/"
+        }
+      ]
+    },
+    {
+      "slug": "ref-husky",
+      "name_en": "Husky",
+      "name_ja": "ハスキー",
+      "aliases": "ハスキー",
+      "description": "上位騎乗ペット\nPOW: +10\nスキルクリティカル: +3\n移動速度: +2",
+      "source_url": "https://www.xenrebirth.com/lexicon/index.php?entry/27-pets-mounts/",
+      "_catalogType": "pets",
+      "notes": "公式Lexiconの掲載内容を整理（2026年9月22日確認）。日本語名は本サイトの参考訳です。",
+      "acquisition": "Tramis Mansionのトークン交換。",
+      "related_entity": "トークン交換や高レベルクエストなどで入手。強化による追加効果は固定値ではなく割合型です。%DEFが付いた場合のみ所定の使用レベル条件があるとの記載があります。具体的な条件は公式のMounts Enhancementを確認してください。",
+      "image_url": "https://www.xenrebirth.com/index.php?attachment/6138-husky-png/",
+      "_section": "上位騎乗ペット",
+      "_links": [
+        {
+          "label": "Token Exchange - Tramis Mansion",
+          "url": "https://www.xenrebirth.com/lexicon/index.php?entry/19-token-exchange-tramis-mansion/"
+        }
+      ]
+    },
+    {
+      "slug": "ref-ifrixion",
+      "name_en": "Ifrixion",
+      "name_ja": "イフリクシオン",
+      "aliases": "イフリクシオン",
+      "description": "上位騎乗ペット\nAGI: +15\n回避成功率: +5\n移動速度: +3",
+      "source_url": "https://www.xenrebirth.com/lexicon/index.php?entry/27-pets-mounts/",
+      "_catalogType": "pets",
+      "notes": "公式Lexiconの掲載内容を整理（2026年9月22日確認）。日本語名は本サイトの参考訳です。",
+      "acquisition": "Tramis Mansionのトークン交換。",
+      "related_entity": "トークン交換や高レベルクエストなどで入手。強化による追加効果は固定値ではなく割合型です。%DEFが付いた場合のみ所定の使用レベル条件があるとの記載があります。具体的な条件は公式のMounts Enhancementを確認してください。",
+      "image_url": "https://www.xenrebirth.com/index.php?attachment/1961-ifrixion-png/",
+      "_section": "上位騎乗ペット",
+      "_links": [
+        {
+          "label": "Token Exchange - Tramis Mansion",
+          "url": "https://www.xenrebirth.com/lexicon/index.php?entry/19-token-exchange-tramis-mansion/"
+        }
+      ]
+    },
+    {
+      "slug": "ref-kungfu-lion",
+      "name_en": "KungFu Lion",
+      "name_ja": "カンフーライオン",
+      "aliases": "カンフーライオン",
+      "description": "上位騎乗ペット\nPOW: +15\n最大HP: +50\n移動速度: +3",
+      "source_url": "https://www.xenrebirth.com/lexicon/index.php?entry/27-pets-mounts/",
+      "_catalogType": "pets",
+      "notes": "公式Lexiconの掲載内容を整理（2026年9月22日確認）。日本語名は本サイトの参考訳です。",
+      "acquisition": "Tramis Mansionのトークン交換。",
+      "related_entity": "トークン交換や高レベルクエストなどで入手。強化による追加効果は固定値ではなく割合型です。%DEFが付いた場合のみ所定の使用レベル条件があるとの記載があります。具体的な条件は公式のMounts Enhancementを確認してください。",
+      "image_url": "https://www.xenrebirth.com/index.php?attachment/2181-kungfu-lion-png/",
+      "_section": "上位騎乗ペット",
+      "_links": [
+        {
+          "label": "Token Exchange - Tramis Mansion",
+          "url": "https://www.xenrebirth.com/lexicon/index.php?entry/19-token-exchange-tramis-mansion/"
+        }
+      ]
+    },
+    {
+      "slug": "ref-panda",
+      "name_en": "Panda",
+      "name_ja": "パンダ",
+      "aliases": "パンダ",
+      "description": "上位騎乗ペット\nPOW: +10\n回避成功率: +3\n移動速度: +2",
+      "source_url": "https://www.xenrebirth.com/lexicon/index.php?entry/27-pets-mounts/",
+      "_catalogType": "pets",
+      "notes": "公式Lexiconの掲載内容を整理（2026年9月22日確認）。日本語名は本サイトの参考訳です。",
+      "acquisition": "トークン交換のPet Reward Chain。",
+      "related_entity": "トークン交換や高レベルクエストなどで入手。強化による追加効果は固定値ではなく割合型です。%DEFが付いた場合のみ所定の使用レベル条件があるとの記載があります。具体的な条件は公式のMounts Enhancementを確認してください。",
+      "image_url": "https://www.xenrebirth.com/index.php?attachment/1963-panda-png/",
+      "_section": "上位騎乗ペット",
+      "_links": [
+        {
+          "label": "Token Exchange - Pet Reward Chain",
+          "url": "https://www.xenrebirth.com/lexicon/index.php?entry/33-token-exchange-pet-reward-chain/"
+        }
+      ]
+    },
+    {
+      "slug": "ref-spiritz",
+      "name_en": "Spiritz",
+      "name_ja": "スピリッツ",
+      "aliases": "スピリッツ",
+      "description": "上位騎乗ペット\nINT: +15\nスキルクリティカル: +5\n移動速度: +3",
+      "source_url": "https://www.xenrebirth.com/lexicon/index.php?entry/27-pets-mounts/",
+      "_catalogType": "pets",
+      "notes": "公式Lexiconの掲載内容を整理（2026年9月22日確認）。日本語名は本サイトの参考訳です。",
+      "acquisition": "Tramis Mansionのトークン交換。",
+      "related_entity": "トークン交換や高レベルクエストなどで入手。強化による追加効果は固定値ではなく割合型です。%DEFが付いた場合のみ所定の使用レベル条件があるとの記載があります。具体的な条件は公式のMounts Enhancementを確認してください。",
+      "image_url": "https://www.xenrebirth.com/index.php?attachment/2182-spiritz-png/",
+      "_section": "上位騎乗ペット",
+      "_links": [
+        {
+          "label": "Token Exchange - Tramis Mansion",
+          "url": "https://www.xenrebirth.com/lexicon/index.php?entry/19-token-exchange-tramis-mansion/"
+        }
+      ]
+    },
+    {
+      "slug": "ref-spiritz-r",
+      "name_en": "Spiritz R",
+      "name_ja": "スピリッツR",
+      "aliases": "スピリッツR",
+      "description": "上位騎乗ペット\nPOW: +10\nMEN: +10\n移動速度: +3",
+      "source_url": "https://www.xenrebirth.com/lexicon/index.php?entry/27-pets-mounts/",
+      "_catalogType": "pets",
+      "notes": "公式Lexiconの掲載内容を整理（2026年9月22日確認）。日本語名は本サイトの参考訳です。",
+      "acquisition": "Tramis Mansionのトークン交換。",
+      "related_entity": "トークン交換や高レベルクエストなどで入手。強化による追加効果は固定値ではなく割合型です。%DEFが付いた場合のみ所定の使用レベル条件があるとの記載があります。具体的な条件は公式のMounts Enhancementを確認してください。",
+      "image_url": "https://www.xenrebirth.com/index.php?attachment/6136-spiritz-r-png/",
+      "_section": "上位騎乗ペット",
+      "_links": [
+        {
+          "label": "Token Exchange - Tramis Mansion",
+          "url": "https://www.xenrebirth.com/lexicon/index.php?entry/19-token-exchange-tramis-mansion/"
+        }
+      ]
+    },
+    {
+      "slug": "ref-white-tiger",
+      "name_en": "White Tiger",
+      "name_ja": "ホワイトタイガー",
+      "aliases": "ホワイトタイガー",
+      "description": "上位騎乗ペット\nPOW: +10\nAGI: +10\n移動速度: +3",
+      "source_url": "https://www.xenrebirth.com/lexicon/index.php?entry/27-pets-mounts/",
+      "_catalogType": "pets",
+      "notes": "公式Lexiconの掲載内容を整理（2026年9月22日確認）。日本語名は本サイトの参考訳です。",
+      "acquisition": "Ice MazeのLv120以上「Preserving Balance」クエストのWhite Tiger Lucky Ball、またはIce Maze外のKainにObsidian Token ×500を渡す。",
+      "related_entity": "トークン交換や高レベルクエストなどで入手。強化による追加効果は固定値ではなく割合型です。%DEFが付いた場合のみ所定の使用レベル条件があるとの記載があります。具体的な条件は公式のMounts Enhancementを確認してください。",
+      "image_url": "https://www.xenrebirth.com/index.php?attachment/1969-white-tiger-png/",
+      "_section": "上位騎乗ペット",
+      "_links": []
+    },
+    {
+      "slug": "ref-orange-broom",
+      "name_en": "Orange Broom",
+      "name_ja": "オレンジのほうき",
+      "aliases": "オレンジのほうき",
+      "description": "特殊騎乗ペット\n最大HP: +25\n最大MP: +25\n最大重量: +100\n移動速度: +2",
+      "source_url": "https://www.xenrebirth.com/lexicon/index.php?entry/27-pets-mounts/",
+      "_catalogType": "pets",
+      "notes": "公式Lexiconの掲載内容を整理（2026年9月22日確認）。日本語名は本サイトの参考訳です。",
+      "acquisition": "Tramis Mansionのトークン交換。",
+      "related_entity": "特殊な方法で入手する騎乗ペット。追加ステータスの強化はできません。",
+      "image_url": "https://www.xenrebirth.com/index.php?attachment/1973-orange-broom-png/",
+      "_section": "特殊騎乗ペット",
+      "_links": [
+        {
+          "label": "Token Exchange - Tramis Mansion",
+          "url": "https://www.xenrebirth.com/lexicon/index.php?entry/19-token-exchange-tramis-mansion/"
+        }
+      ]
+    },
+    {
+      "slug": "ref-poyo-peddler",
+      "name_en": "Poyo Peddler",
+      "name_ja": "ポヨペドラー",
+      "aliases": "ポヨペドラー",
+      "description": "特殊騎乗ペット\nAGI: +1\n最大HP: +25\n最大MP: +25\n移動速度: +2",
+      "source_url": "https://www.xenrebirth.com/lexicon/index.php?entry/27-pets-mounts/",
+      "_catalogType": "pets",
+      "notes": "公式Lexiconの掲載内容を整理（2026年9月22日確認）。日本語名は本サイトの参考訳です。",
+      "acquisition": "トークン交換のPet Reward Chain。",
+      "related_entity": "特殊な方法で入手する騎乗ペット。追加ステータスの強化はできません。",
+      "image_url": "https://www.xenrebirth.com/index.php?attachment/1974-poyo-peddler-png/",
+      "_section": "特殊騎乗ペット",
+      "_links": [
+        {
+          "label": "Token Exchange - Pet Reward Chain",
+          "url": "https://www.xenrebirth.com/lexicon/index.php?entry/33-token-exchange-pet-reward-chain/"
+        }
+      ]
+    },
+    {
+      "slug": "ref-rudolph",
+      "name_en": "Rudolph",
+      "name_ja": "ルドルフ",
+      "aliases": "ルドルフ",
+      "description": "特殊騎乗ペット\n最大HP: +50\n最大MP: +25\n最大重量: +100\n移動速度: +2",
+      "source_url": "https://www.xenrebirth.com/lexicon/index.php?entry/27-pets-mounts/",
+      "_catalogType": "pets",
+      "notes": "公式Lexiconの掲載内容を整理（2026年9月22日確認）。日本語名は本サイトの参考訳です。",
+      "acquisition": "Santa NPCのX-Mas Lottery（Mystic Snowflake）。",
+      "related_entity": "特殊な方法で入手する騎乗ペット。追加ステータスの強化はできません。",
+      "image_url": "https://www.xenrebirth.com/index.php?attachment/6738-rudolph-png/",
+      "_section": "特殊騎乗ペット",
+      "_links": []
+    },
+    {
+      "slug": "ref-snowman",
+      "name_en": "Snowman",
+      "name_ja": "スノーマン",
+      "aliases": "スノーマン",
+      "description": "特殊騎乗ペット\n最大HP: +50\n最大MP: +25\n最大重量: +100\n移動速度: +2",
+      "source_url": "https://www.xenrebirth.com/lexicon/index.php?entry/27-pets-mounts/",
+      "_catalogType": "pets",
+      "notes": "公式Lexiconの掲載内容を整理（2026年9月22日確認）。日本語名は本サイトの参考訳です。",
+      "acquisition": "Santa NPCのX-Mas Lottery（Mystic Snowflake）。",
+      "related_entity": "特殊な方法で入手する騎乗ペット。追加ステータスの強化はできません。",
+      "image_url": "https://www.xenrebirth.com/index.php?attachment/6737-snowman-png/",
+      "_section": "特殊騎乗ペット",
+      "_links": []
+    },
+    {
+      "slug": "ref-toy-car",
+      "name_en": "Toy Car",
+      "name_ja": "トイカー",
+      "aliases": "トイカー",
+      "description": "特殊騎乗ペット\nPOW: +5\nMEN: +2\n最大重量: +100\n移動速度: +2",
+      "source_url": "https://www.xenrebirth.com/lexicon/index.php?entry/27-pets-mounts/",
+      "_catalogType": "pets",
+      "notes": "公式Lexiconの掲載内容を整理（2026年9月22日確認）。日本語名は本サイトの参考訳です。",
+      "acquisition": "Vote Ticket（投票チケット）交換。",
+      "related_entity": "特殊な方法で入手する騎乗ペット。追加ステータスの強化はできません。",
+      "image_url": "https://www.xenrebirth.com/index.php?attachment/4402-toy-car-png/",
+      "_section": "特殊騎乗ペット",
+      "_links": [
+        {
+          "label": "Vote Ticket Exchange",
+          "url": "https://www.xenrebirth.com/lexicon/index.php?entry/116-vote-ticket-exchange/"
+        }
+      ]
+    },
+    {
+      "slug": "ref-toy-mouse",
+      "name_en": "Toy Mouse",
+      "name_ja": "トイマウス",
+      "aliases": "トイマウス",
+      "description": "特殊騎乗ペット\n最大重量: +100\n移動速度: +2",
+      "source_url": "https://www.xenrebirth.com/lexicon/index.php?entry/27-pets-mounts/",
+      "_catalogType": "pets",
+      "notes": "公式Lexiconの掲載内容を整理（2026年9月22日確認）。日本語名は本サイトの参考訳です。",
+      "acquisition": "クローズドベータの報酬。",
+      "related_entity": "特殊な方法で入手する騎乗ペット。追加ステータスの強化はできません。",
+      "image_url": "https://www.xenrebirth.com/index.php?attachment/10178-toy-mouse-png/",
+      "_section": "特殊騎乗ペット",
+      "_links": []
+    },
+    {
+      "slug": "ref-white-broom",
+      "name_en": "White Broom",
+      "name_ja": "白いほうき",
+      "aliases": "白いほうき",
+      "description": "特殊騎乗ペット\n最大HP: +25\n最大MP: +25\n最大重量: +200\n移動速度: +2",
+      "source_url": "https://www.xenrebirth.com/lexicon/index.php?entry/27-pets-mounts/",
+      "_catalogType": "pets",
+      "notes": "公式Lexiconの掲載内容を整理（2026年9月22日確認）。日本語名は本サイトの参考訳です。",
+      "acquisition": "トークン交換のPet Reward Chain。",
+      "related_entity": "特殊な方法で入手する騎乗ペット。追加ステータスの強化はできません。",
+      "image_url": "https://www.xenrebirth.com/index.php?attachment/1975-white-broom-png/",
+      "_section": "特殊騎乗ペット",
+      "_links": [
+        {
+          "label": "Token Exchange - Pet Reward Chain",
+          "url": "https://www.xenrebirth.com/lexicon/index.php?entry/33-token-exchange-pet-reward-chain/"
+        }
+      ]
+    },
+    {
+      "slug": "ref-wooden-horse",
+      "name_en": "Wooden Horse",
+      "name_ja": "木馬",
+      "aliases": "木馬",
+      "description": "特殊騎乗ペット\nPOW: +5\nMEN: +5\n最大重量: +100\n移動速度: +2",
+      "source_url": "https://www.xenrebirth.com/lexicon/index.php?entry/27-pets-mounts/",
+      "_catalogType": "pets",
+      "notes": "公式Lexiconの掲載内容を整理（2026年9月22日確認）。日本語名は本サイトの参考訳です。",
+      "acquisition": "Tramis Mansionのトークン交換。",
+      "related_entity": "特殊な方法で入手する騎乗ペット。追加ステータスの強化はできません。",
+      "image_url": "https://www.xenrebirth.com/index.php?attachment/10173-wooden-horse-png/",
+      "_section": "特殊騎乗ペット",
+      "_links": [
+        {
+          "label": "Token Exchange - Tramis Mansion",
+          "url": "https://www.xenrebirth.com/lexicon/index.php?entry/19-token-exchange-tramis-mansion/"
+        }
+      ]
+    },
+    {
+      "slug": "ref-basilistia",
+      "name_en": "Basilistia",
+      "name_ja": "バジリスティア",
+      "aliases": "バジリスティア",
+      "description": "未実装として掲載された騎乗ペット\n公式表に数値の記載なし。",
+      "source_url": "https://www.xenrebirth.com/lexicon/index.php?entry/27-pets-mounts/",
+      "_catalogType": "pets",
+      "notes": "公式Lexiconの掲載内容を整理（2026年9月22日確認）。日本語名は本サイトの参考訳です。 参照ページでは未実装として掲載。GMによる展示やデータリセット前のテスト配布を含みます。記載ステータスは将来変更される可能性があり、現在の入手可否を保証する情報ではありません。",
+      "acquisition": "参照ページでは未実装。入手方法の案内はありません。",
+      "related_entity": "参照ページでは未実装として掲載。GMによる展示やデータリセット前のテスト配布を含みます。記載ステータスは将来変更される可能性があり、現在の入手可否を保証する情報ではありません。",
+      "image_url": "https://www.xenrebirth.com/index.php?attachment/10174-basilistia-png/",
+      "_section": "未実装として掲載された騎乗ペット",
+      "_links": []
+    },
+    {
+      "slug": "ref-bicorn",
+      "name_en": "Bicorn",
+      "name_ja": "バイコーン",
+      "aliases": "バイコーン",
+      "description": "未実装として掲載された騎乗ペット\n公式表に数値の記載なし。",
+      "source_url": "https://www.xenrebirth.com/lexicon/index.php?entry/27-pets-mounts/",
+      "_catalogType": "pets",
+      "notes": "公式Lexiconの掲載内容を整理（2026年9月22日確認）。日本語名は本サイトの参考訳です。 参照ページでは未実装として掲載。GMによる展示やデータリセット前のテスト配布を含みます。記載ステータスは将来変更される可能性があり、現在の入手可否を保証する情報ではありません。",
+      "acquisition": "参照ページでは未実装。入手方法の案内はありません。",
+      "related_entity": "参照ページでは未実装として掲載。GMによる展示やデータリセット前のテスト配布を含みます。記載ステータスは将来変更される可能性があり、現在の入手可否を保証する情報ではありません。",
+      "image_url": "https://www.xenrebirth.com/index.php?attachment/10155-bicorn-png/",
+      "_section": "未実装として掲載された騎乗ペット",
+      "_links": []
+    },
+    {
+      "slug": "ref-black-broom",
+      "name_en": "Black Broom",
+      "name_ja": "黒いほうき",
+      "aliases": "黒いほうき",
+      "description": "未実装として掲載された騎乗ペット\n公式表に数値の記載なし。",
+      "source_url": "https://www.xenrebirth.com/lexicon/index.php?entry/27-pets-mounts/",
+      "_catalogType": "pets",
+      "notes": "公式Lexiconの掲載内容を整理（2026年9月22日確認）。日本語名は本サイトの参考訳です。 参照ページでは未実装として掲載。GMによる展示やデータリセット前のテスト配布を含みます。記載ステータスは将来変更される可能性があり、現在の入手可否を保証する情報ではありません。",
+      "acquisition": "参照ページでは未実装。入手方法の案内はありません。",
+      "related_entity": "参照ページでは未実装として掲載。GMによる展示やデータリセット前のテスト配布を含みます。記載ステータスは将来変更される可能性があり、現在の入手可否を保証する情報ではありません。",
+      "image_url": "https://www.xenrebirth.com/index.php?attachment/10156-black-broom-png/",
+      "_section": "未実装として掲載された騎乗ペット",
+      "_links": []
+    },
+    {
+      "slug": "ref-black-unicorn",
+      "name_en": "Black Unicorn",
+      "name_ja": "ブラックユニコーン",
+      "aliases": "ブラックユニコーン",
+      "description": "未実装として掲載された騎乗ペット\nPOW +10| INT +10| AGI +5| HP +50| MP +100| Dodge +3| WT +300| Mov + 3|",
+      "source_url": "https://www.xenrebirth.com/lexicon/index.php?entry/27-pets-mounts/",
+      "_catalogType": "pets",
+      "notes": "公式Lexiconの掲載内容を整理（2026年9月22日確認）。日本語名は本サイトの参考訳です。 参照ページでは未実装として掲載。GMによる展示やデータリセット前のテスト配布を含みます。記載ステータスは将来変更される可能性があり、現在の入手可否を保証する情報ではありません。",
+      "acquisition": "参照ページでは未実装。入手方法の案内はありません。",
+      "related_entity": "参照ページでは未実装として掲載。GMによる展示やデータリセット前のテスト配布を含みます。記載ステータスは将来変更される可能性があり、現在の入手可否を保証する情報ではありません。",
+      "image_url": "https://www.xenrebirth.com/index.php?attachment/2509-black-unicorn-png/",
+      "_section": "未実装として掲載された騎乗ペット",
+      "_links": []
+    },
+    {
+      "slug": "ref-blue-broom",
+      "name_en": "Blue Broom",
+      "name_ja": "青いほうき",
+      "aliases": "青いほうき",
+      "description": "未実装として掲載された騎乗ペット\nステータス補正なし。",
+      "source_url": "https://www.xenrebirth.com/lexicon/index.php?entry/27-pets-mounts/",
+      "_catalogType": "pets",
+      "notes": "公式Lexiconの掲載内容を整理（2026年9月22日確認）。日本語名は本サイトの参考訳です。 参照ページでは未実装として掲載。GMによる展示やデータリセット前のテスト配布を含みます。記載ステータスは将来変更される可能性があり、現在の入手可否を保証する情報ではありません。",
+      "acquisition": "参照ページでは未実装。入手方法の案内はありません。",
+      "related_entity": "参照ページでは未実装として掲載。GMによる展示やデータリセット前のテスト配布を含みます。記載ステータスは将来変更される可能性があり、現在の入手可否を保証する情報ではありません。",
+      "image_url": "https://www.xenrebirth.com/index.php?attachment/10157-blue-broom-png/",
+      "_section": "未実装として掲載された騎乗ペット",
+      "_links": []
+    },
+    {
+      "slug": "ref-brown-broom",
+      "name_en": "Brown Broom",
+      "name_ja": "茶色のほうき",
+      "aliases": "茶色のほうき",
+      "description": "未実装として掲載された騎乗ペット\nステータス補正なし。",
+      "source_url": "https://www.xenrebirth.com/lexicon/index.php?entry/27-pets-mounts/",
+      "_catalogType": "pets",
+      "notes": "公式Lexiconの掲載内容を整理（2026年9月22日確認）。日本語名は本サイトの参考訳です。 参照ページでは未実装として掲載。GMによる展示やデータリセット前のテスト配布を含みます。記載ステータスは将来変更される可能性があり、現在の入手可否を保証する情報ではありません。",
+      "acquisition": "参照ページでは未実装。入手方法の案内はありません。",
+      "related_entity": "参照ページでは未実装として掲載。GMによる展示やデータリセット前のテスト配布を含みます。記載ステータスは将来変更される可能性があり、現在の入手可否を保証する情報ではありません。",
+      "image_url": "https://www.xenrebirth.com/index.php?attachment/10158-brown-broom-png/",
+      "_section": "未実装として掲載された騎乗ペット",
+      "_links": []
+    },
+    {
+      "slug": "ref-duck",
+      "name_en": "Duck",
+      "name_ja": "ダック",
+      "aliases": "ダック",
+      "description": "未実装として掲載された騎乗ペット\n公式表に数値の記載なし。",
+      "source_url": "https://www.xenrebirth.com/lexicon/index.php?entry/27-pets-mounts/",
+      "_catalogType": "pets",
+      "notes": "公式Lexiconの掲載内容を整理（2026年9月22日確認）。日本語名は本サイトの参考訳です。 参照ページでは未実装として掲載。GMによる展示やデータリセット前のテスト配布を含みます。記載ステータスは将来変更される可能性があり、現在の入手可否を保証する情報ではありません。",
+      "acquisition": "参照ページでは未実装。入手方法の案内はありません。",
+      "related_entity": "参照ページでは未実装として掲載。GMによる展示やデータリセット前のテスト配布を含みます。記載ステータスは将来変更される可能性があり、現在の入手可否を保証する情報ではありません。",
+      "image_url": "https://www.xenrebirth.com/index.php?attachment/10177-duck-png/",
+      "_section": "未実装として掲載された騎乗ペット",
+      "_links": []
+    },
+    {
+      "slug": "ref-fire-dragon",
+      "name_en": "Fire Dragon",
+      "name_ja": "ファイアドラゴン",
+      "aliases": "ファイアドラゴン",
+      "description": "未実装として掲載された騎乗ペット\nPOW: +5\nMEN: +5\n最大重量: +100\n移動速度: +2",
+      "source_url": "https://www.xenrebirth.com/lexicon/index.php?entry/27-pets-mounts/",
+      "_catalogType": "pets",
+      "notes": "公式Lexiconの掲載内容を整理（2026年9月22日確認）。日本語名は本サイトの参考訳です。 参照ページでは未実装として掲載。GMによる展示やデータリセット前のテスト配布を含みます。記載ステータスは将来変更される可能性があり、現在の入手可否を保証する情報ではありません。",
+      "acquisition": "参照ページでは未実装。入手方法の案内はありません。",
+      "related_entity": "参照ページでは未実装として掲載。GMによる展示やデータリセット前のテスト配布を含みます。記載ステータスは将来変更される可能性があり、現在の入手可否を保証する情報ではありません。",
+      "image_url": "https://www.xenrebirth.com/index.php?attachment/10159-fire-dragon-png/",
+      "_section": "未実装として掲載された騎乗ペット",
+      "_links": []
+    },
+    {
+      "slug": "ref-fox",
+      "name_en": "Fox",
+      "name_ja": "フォックス",
+      "aliases": "フォックス",
+      "description": "未実装として掲載された騎乗ペット\nPOW: +5\nMEN: +5\n最大重量: +100\n移動速度: +2",
+      "source_url": "https://www.xenrebirth.com/lexicon/index.php?entry/27-pets-mounts/",
+      "_catalogType": "pets",
+      "notes": "公式Lexiconの掲載内容を整理（2026年9月22日確認）。日本語名は本サイトの参考訳です。 参照ページでは未実装として掲載。GMによる展示やデータリセット前のテスト配布を含みます。記載ステータスは将来変更される可能性があり、現在の入手可否を保証する情報ではありません。",
+      "acquisition": "参照ページでは未実装。入手方法の案内はありません。",
+      "related_entity": "参照ページでは未実装として掲載。GMによる展示やデータリセット前のテスト配布を含みます。記載ステータスは将来変更される可能性があり、現在の入手可否を保証する情報ではありません。",
+      "image_url": "https://www.xenrebirth.com/index.php?attachment/10160-fox-png/",
+      "_section": "未実装として掲載された騎乗ペット",
+      "_links": []
+    },
+    {
+      "slug": "ref-gargoyle",
+      "name_en": "Gargoyle",
+      "name_ja": "ガーゴイル",
+      "aliases": "ガーゴイル",
+      "description": "未実装として掲載された騎乗ペット\n公式表に数値の記載なし。",
+      "source_url": "https://www.xenrebirth.com/lexicon/index.php?entry/27-pets-mounts/",
+      "_catalogType": "pets",
+      "notes": "公式Lexiconの掲載内容を整理（2026年9月22日確認）。日本語名は本サイトの参考訳です。 参照ページでは未実装として掲載。GMによる展示やデータリセット前のテスト配布を含みます。記載ステータスは将来変更される可能性があり、現在の入手可否を保証する情報ではありません。",
+      "acquisition": "参照ページでは未実装。入手方法の案内はありません。",
+      "related_entity": "参照ページでは未実装として掲載。GMによる展示やデータリセット前のテスト配布を含みます。記載ステータスは将来変更される可能性があり、現在の入手可否を保証する情報ではありません。",
+      "image_url": "https://www.xenrebirth.com/index.php?attachment/10161-gargoyle-png/",
+      "_section": "未実装として掲載された騎乗ペット",
+      "_links": []
+    },
+    {
+      "slug": "ref-gold-unicorn",
+      "name_en": "Gold Unicorn",
+      "name_ja": "ゴールドユニコーン",
+      "aliases": "ゴールドユニコーン",
+      "description": "未実装として掲載された騎乗ペット\n公式表に数値の記載なし。",
+      "source_url": "https://www.xenrebirth.com/lexicon/index.php?entry/27-pets-mounts/",
+      "_catalogType": "pets",
+      "notes": "公式Lexiconの掲載内容を整理（2026年9月22日確認）。日本語名は本サイトの参考訳です。 参照ページでは未実装として掲載。GMによる展示やデータリセット前のテスト配布を含みます。記載ステータスは将来変更される可能性があり、現在の入手可否を保証する情報ではありません。",
+      "acquisition": "参照ページでは未実装。入手方法の案内はありません。",
+      "related_entity": "参照ページでは未実装として掲載。GMによる展示やデータリセット前のテスト配布を含みます。記載ステータスは将来変更される可能性があり、現在の入手可否を保証する情報ではありません。",
+      "image_url": "https://www.xenrebirth.com/index.php?attachment/10162-gold-unicorn-png/",
+      "_section": "未実装として掲載された騎乗ペット",
+      "_links": []
+    },
+    {
+      "slug": "ref-griffin",
+      "name_en": "Griffin",
+      "name_ja": "グリフィン",
+      "aliases": "グリフィン",
+      "description": "未実装として掲載された騎乗ペット\n公式表に数値の記載なし。",
+      "source_url": "https://www.xenrebirth.com/lexicon/index.php?entry/27-pets-mounts/",
+      "_catalogType": "pets",
+      "notes": "公式Lexiconの掲載内容を整理（2026年9月22日確認）。日本語名は本サイトの参考訳です。 参照ページでは未実装として掲載。GMによる展示やデータリセット前のテスト配布を含みます。記載ステータスは将来変更される可能性があり、現在の入手可否を保証する情報ではありません。",
+      "acquisition": "参照ページでは未実装。入手方法の案内はありません。",
+      "related_entity": "参照ページでは未実装として掲載。GMによる展示やデータリセット前のテスト配布を含みます。記載ステータスは将来変更される可能性があり、現在の入手可否を保証する情報ではありません。",
+      "image_url": "https://www.xenrebirth.com/index.php?attachment/10164-griffin-png/",
+      "_section": "未実装として掲載された騎乗ペット",
+      "_links": []
+    },
+    {
+      "slug": "ref-kerberos",
+      "name_en": "Kerberos",
+      "name_ja": "ケルベロス",
+      "aliases": "ケルベロス",
+      "description": "未実装として掲載された騎乗ペット\nPOW: +5\nMEN: +5\n最大重量: +100\n移動速度: +2",
+      "source_url": "https://www.xenrebirth.com/lexicon/index.php?entry/27-pets-mounts/",
+      "_catalogType": "pets",
+      "notes": "公式Lexiconの掲載内容を整理（2026年9月22日確認）。日本語名は本サイトの参考訳です。 参照ページでは未実装として掲載。GMによる展示やデータリセット前のテスト配布を含みます。記載ステータスは将来変更される可能性があり、現在の入手可否を保証する情報ではありません。",
+      "acquisition": "参照ページでは未実装。入手方法の案内はありません。",
+      "related_entity": "参照ページでは未実装として掲載。GMによる展示やデータリセット前のテスト配布を含みます。記載ステータスは将来変更される可能性があり、現在の入手可否を保証する情報ではありません。",
+      "image_url": "https://www.xenrebirth.com/index.php?attachment/10166-kerberos-png/",
+      "_section": "未実装として掲載された騎乗ペット",
+      "_links": []
+    },
+    {
+      "slug": "ref-kungfu-lion-g",
+      "name_en": "KungFu Lion G",
+      "name_ja": "カンフーライオンG",
+      "aliases": "カンフーライオンG",
+      "description": "未実装として掲載された騎乗ペット\n公式表に数値の記載なし。",
+      "source_url": "https://www.xenrebirth.com/lexicon/index.php?entry/27-pets-mounts/",
+      "_catalogType": "pets",
+      "notes": "公式Lexiconの掲載内容を整理（2026年9月22日確認）。日本語名は本サイトの参考訳です。 参照ページでは未実装として掲載。GMによる展示やデータリセット前のテスト配布を含みます。記載ステータスは将来変更される可能性があり、現在の入手可否を保証する情報ではありません。",
+      "acquisition": "参照ページでは未実装。入手方法の案内はありません。",
+      "related_entity": "参照ページでは未実装として掲載。GMによる展示やデータリセット前のテスト配布を含みます。記載ステータスは将来変更される可能性があり、現在の入手可否を保証する情報ではありません。",
+      "image_url": "https://www.xenrebirth.com/index.php?attachment/10167-kungfu-lion-g-png/",
+      "_section": "未実装として掲載された騎乗ペット",
+      "_links": []
+    },
+    {
+      "slug": "ref-pegasus",
+      "name_en": "Pegasus",
+      "name_ja": "ペガサス",
+      "aliases": "ペガサス",
+      "description": "未実装として掲載された騎乗ペット\n公式表に数値の記載なし。",
+      "source_url": "https://www.xenrebirth.com/lexicon/index.php?entry/27-pets-mounts/",
+      "_catalogType": "pets",
+      "notes": "公式Lexiconの掲載内容を整理（2026年9月22日確認）。日本語名は本サイトの参考訳です。 参照ページでは未実装として掲載。GMによる展示やデータリセット前のテスト配布を含みます。記載ステータスは将来変更される可能性があり、現在の入手可否を保証する情報ではありません。",
+      "acquisition": "参照ページでは未実装。入手方法の案内はありません。",
+      "related_entity": "参照ページでは未実装として掲載。GMによる展示やデータリセット前のテスト配布を含みます。記載ステータスは将来変更される可能性があり、現在の入手可否を保証する情報ではありません。",
+      "image_url": "https://www.xenrebirth.com/index.php?attachment/10168-pegasus-png/",
+      "_section": "未実装として掲載された騎乗ペット",
+      "_links": []
+    },
+    {
+      "slug": "ref-pink-pegasus",
+      "name_en": "Pink Pegasus",
+      "name_ja": "ピンクペガサス",
+      "aliases": "ピンクペガサス",
+      "description": "未実装として掲載された騎乗ペット\n公式表に数値の記載なし。",
+      "source_url": "https://www.xenrebirth.com/lexicon/index.php?entry/27-pets-mounts/",
+      "_catalogType": "pets",
+      "notes": "公式Lexiconの掲載内容を整理（2026年9月22日確認）。日本語名は本サイトの参考訳です。 参照ページでは未実装として掲載。GMによる展示やデータリセット前のテスト配布を含みます。記載ステータスは将来変更される可能性があり、現在の入手可否を保証する情報ではありません。",
+      "acquisition": "参照ページでは未実装。入手方法の案内はありません。",
+      "related_entity": "参照ページでは未実装として掲載。GMによる展示やデータリセット前のテスト配布を含みます。記載ステータスは将来変更される可能性があり、現在の入手可否を保証する情報ではありません。",
+      "image_url": "https://www.xenrebirth.com/index.php?attachment/10169-pink-pegasus-png/",
+      "_section": "未実装として掲載された騎乗ペット",
+      "_links": []
+    },
+    {
+      "slug": "ref-purple-dragon",
+      "name_en": "Purple Dragon",
+      "name_ja": "パープルドラゴン",
+      "aliases": "パープルドラゴン",
+      "description": "未実装として掲載された騎乗ペット\n公式表に数値の記載なし。",
+      "source_url": "https://www.xenrebirth.com/lexicon/index.php?entry/27-pets-mounts/",
+      "_catalogType": "pets",
+      "notes": "公式Lexiconの掲載内容を整理（2026年9月22日確認）。日本語名は本サイトの参考訳です。 参照ページでは未実装として掲載。GMによる展示やデータリセット前のテスト配布を含みます。記載ステータスは将来変更される可能性があり、現在の入手可否を保証する情報ではありません。",
+      "acquisition": "参照ページでは未実装。入手方法の案内はありません。",
+      "related_entity": "参照ページでは未実装として掲載。GMによる展示やデータリセット前のテスト配布を含みます。記載ステータスは将来変更される可能性があり、現在の入手可否を保証する情報ではありません。",
+      "image_url": "https://www.xenrebirth.com/index.php?attachment/10170-purple-dragon-png/",
+      "_section": "未実装として掲載された騎乗ペット",
+      "_links": []
+    },
+    {
+      "slug": "ref-rurara-rider",
+      "name_en": "Rurara Rider",
+      "name_ja": "ルララライダー",
+      "aliases": "ルララライダー",
+      "description": "未実装として掲載された騎乗ペット\nINT: +2\nAGI: +1\nWIS: +3\n最大HP: +75\n最大MP: +75\n移動速度: +5",
+      "source_url": "https://www.xenrebirth.com/lexicon/index.php?entry/27-pets-mounts/",
+      "_catalogType": "pets",
+      "notes": "公式Lexiconの掲載内容を整理（2026年9月22日確認）。日本語名は本サイトの参考訳です。 参照ページでは未実装として掲載。GMによる展示やデータリセット前のテスト配布を含みます。記載ステータスは将来変更される可能性があり、現在の入手可否を保証する情報ではありません。",
+      "acquisition": "参照ページでは未実装。入手方法の案内はありません。",
+      "related_entity": "参照ページでは未実装として掲載。GMによる展示やデータリセット前のテスト配布を含みます。記載ステータスは将来変更される可能性があり、現在の入手可否を保証する情報ではありません。",
+      "image_url": null,
+      "_section": "未実装として掲載された騎乗ペット",
+      "_links": []
+    },
+    {
+      "slug": "ref-unicorn",
+      "name_en": "Unicorn",
+      "name_ja": "ユニコーン",
+      "aliases": "ユニコーン",
+      "description": "未実装として掲載された騎乗ペット\n公式表に数値の記載なし。",
+      "source_url": "https://www.xenrebirth.com/lexicon/index.php?entry/27-pets-mounts/",
+      "_catalogType": "pets",
+      "notes": "公式Lexiconの掲載内容を整理（2026年9月22日確認）。日本語名は本サイトの参考訳です。 参照ページでは未実装として掲載。GMによる展示やデータリセット前のテスト配布を含みます。記載ステータスは将来変更される可能性があり、現在の入手可否を保証する情報ではありません。",
+      "acquisition": "参照ページでは未実装。入手方法の案内はありません。",
+      "related_entity": "参照ページでは未実装として掲載。GMによる展示やデータリセット前のテスト配布を含みます。記載ステータスは将来変更される可能性があり、現在の入手可否を保証する情報ではありません。",
+      "image_url": "https://www.xenrebirth.com/index.php?attachment/10172-unicorn-png/",
+      "_section": "未実装として掲載された騎乗ペット",
+      "_links": []
+    },
+    {
+      "slug": "ref-wyvern",
+      "name_en": "Wyvern",
+      "name_ja": "ワイバーン",
+      "aliases": "ワイバーン",
+      "description": "未実装として掲載された騎乗ペット\nINT: +5\nスキルクリティカル: +5\n最大重量: +100\n移動速度: +2",
+      "source_url": "https://www.xenrebirth.com/lexicon/index.php?entry/27-pets-mounts/",
+      "_catalogType": "pets",
+      "notes": "公式Lexiconの掲載内容を整理（2026年9月22日確認）。日本語名は本サイトの参考訳です。 参照ページでは未実装として掲載。GMによる展示やデータリセット前のテスト配布を含みます。記載ステータスは将来変更される可能性があり、現在の入手可否を保証する情報ではありません。",
+      "acquisition": "参照ページでは未実装。入手方法の案内はありません。",
+      "related_entity": "参照ページでは未実装として掲載。GMによる展示やデータリセット前のテスト配布を含みます。記載ステータスは将来変更される可能性があり、現在の入手可否を保証する情報ではありません。",
+      "image_url": "https://www.xenrebirth.com/index.php?attachment/1967-wyvern-png/",
+      "_section": "未実装として掲載された騎乗ペット",
+      "_links": []
+    },
+    {
+      "slug": "ref-yellow-broom",
+      "name_en": "Yellow Broom",
+      "name_ja": "黄色いほうき",
+      "aliases": "黄色いほうき",
+      "description": "未実装として掲載された騎乗ペット\nステータス補正なし。",
+      "source_url": "https://www.xenrebirth.com/lexicon/index.php?entry/27-pets-mounts/",
+      "_catalogType": "pets",
+      "notes": "公式Lexiconの掲載内容を整理（2026年9月22日確認）。日本語名は本サイトの参考訳です。 参照ページでは未実装として掲載。GMによる展示やデータリセット前のテスト配布を含みます。記載ステータスは将来変更される可能性があり、現在の入手可否を保証する情報ではありません。",
+      "acquisition": "参照ページでは未実装。入手方法の案内はありません。",
+      "related_entity": "参照ページでは未実装として掲載。GMによる展示やデータリセット前のテスト配布を含みます。記載ステータスは将来変更される可能性があり、現在の入手可否を保証する情報ではありません。",
+      "image_url": "https://www.xenrebirth.com/index.php?attachment/10175-yellow-broom-png/",
+      "_section": "未実装として掲載された騎乗ペット",
+      "_links": []
+    },
+    {
+      "slug": "ref-pets-and-mounts-guide",
+      "name_en": "Pets and Mounts Guide",
+      "name_ja": "ペット・騎乗ペットの選び方",
+      "aliases": "ペット・騎乗ペットの選び方",
+      "description": "非騎乗ペット25種、騎乗ペット37種、未実装として掲載された騎乗ペット21種を掲載。下の分類から各ペットの画像・効果・入手先を開けます。",
+      "source_url": "https://www.xenrebirth.com/lexicon/index.php?entry/27-pets-mounts/",
+      "_catalogType": "pets",
+      "notes": "公式ページは編集中。掲載状況は参照ページの記載に基づきます。日本語名は参考訳です。上位騎乗の割合効果の例：基礎HP540でLv3のHP型Dragon（+15%）なら+81。基本騎乗のLv3 HP Tigerは固定+90。",
+      "_blocks": [
+        {
+          "heading": "入門ペット",
+          "text": "Brynhilld / EsseneのPet MerchantでLv25クエスト「Tame a Monster」を受注。帽子付きは隣のPet NPCのLv60クエスト「Let’s Put a Hat on the Pet」。どちらもYellow Watermelonが必要ですが、このページに個数の記載はありません。",
+          "links": [
+            {
+              "label": "ポク / Poku",
+              "url": "glossary.html#poku"
+            },
+            {
+              "label": "ポコ / Poko",
+              "url": "glossary.html#poko"
+            },
+            {
+              "label": "ポヨ / Poyo",
+              "url": "glossary.html#poyo"
+            },
+            {
+              "label": "とんがり帽子のポク / Pointy Hat Poku",
+              "url": "glossary.html#ref-pointy-hat-poku"
+            },
+            {
+              "label": "とんがり帽子のポコ / Pointy Hat Poko",
+              "url": "glossary.html#ref-pointy-hat-poko"
+            },
+            {
+              "label": "とんがり帽子のポヨ / Pointy Hat Poyo",
+              "url": "glossary.html#ref-pointy-hat-poyo"
+            }
+          ]
+        },
+        {
+          "heading": "Jarikaのペット",
+          "text": "Brynhilld TrisectsのJarikaから連続クエストを開始。完了時の卵から10種のいずれかがランダムに生まれます。召喚にはLv35以上が必要。スキル付与または基本騎乗ペットへの変更が可能です。",
+          "links": [
+            {
+              "label": "バウワウ / Bow Wow",
+              "url": "glossary.html#ref-bow-wow"
+            },
+            {
+              "label": "フェアリー / Fairy",
+              "url": "glossary.html#ref-fairy"
+            },
+            {
+              "label": "ファッティ / Fatty",
+              "url": "glossary.html#ref-fatty"
+            },
+            {
+              "label": "エレファント / Elephant",
+              "url": "glossary.html#ref-elephant"
+            },
+            {
+              "label": "ヒポカマス / Hippocamus",
+              "url": "glossary.html#ref-hippocamus"
+            },
+            {
+              "label": "モンキー / Monkey",
+              "url": "glossary.html#ref-monkey"
+            },
+            {
+              "label": "パロット / Parrot",
+              "url": "glossary.html#ref-parrot"
+            },
+            {
+              "label": "プードル / Poodle",
+              "url": "glossary.html#ref-poodle"
+            },
+            {
+              "label": "白猫 / White Cat",
+              "url": "glossary.html#ref-white-cat"
+            },
+            {
+              "label": "黄猫 / Yellow Cat",
+              "url": "glossary.html#ref-yellow-cat"
+            }
+          ]
+        },
+        {
+          "heading": "Shenzhenのペット",
+          "text": "Gefie CampのMonster Researcherから開始。開始Lv125以上、スキル使用Lv130以上。1キャラクターにつき1回。3種のスキルは3分のクールタイムを共有し、同時使用はできません。スキル取得後の追加強化は不要です。",
+          "links": [
+            {
+              "label": "デヴィ / Devi",
+              "url": "glossary.html#ref-devi"
+            },
+            {
+              "label": "フォーギー / Foogy",
+              "url": "glossary.html#ref-foogy"
+            },
+            {
+              "label": "インパルス / Impulse",
+              "url": "glossary.html#ref-impulse"
+            }
+          ]
+        },
+        {
+          "heading": "特殊ペット",
+          "text": "特殊な方法で入手するペット。公式本文では取引不可・スキル付与不可・基本騎乗ペットへの変更不可とされています。",
+          "links": [
+            {
+              "label": "チョコポコ / Choco Poko",
+              "url": "glossary.html#ref-choco-poko"
+            },
+            {
+              "label": "ハートベア / Heartbear",
+              "url": "glossary.html#ref-heartbear"
+            },
+            {
+              "label": "レプラコーン / Leprechaun",
+              "url": "glossary.html#ref-leprechaun"
+            },
+            {
+              "label": "ムーンベア / Moonbear",
+              "url": "glossary.html#ref-moonbear"
+            },
+            {
+              "label": "トナカイ / Reindeer",
+              "url": "glossary.html#ref-reindeer"
+            },
+            {
+              "label": "スターベア / Star Bear",
+              "url": "glossary.html#ref-star-bear"
+            }
+          ]
+        },
+        {
+          "heading": "入門騎乗ペット",
+          "text": "通常のPoku / Poko / Poyoを騎乗化。Brynhilld / EsseneのPet NPCで確認できます。追加ステータスの強化はできません。",
+          "links": [
+            {
+              "label": "ポク（騎乗） / Poku Mount",
+              "url": "glossary.html#ref-poku-mount"
+            },
+            {
+              "label": "ポコ（騎乗） / Poko Mount",
+              "url": "glossary.html#ref-poko-mount"
+            },
+            {
+              "label": "ポヨ（騎乗） / Poyo Mount",
+              "url": "glossary.html#ref-poyo-mount"
+            }
+          ]
+        },
+        {
+          "heading": "基本騎乗ペット",
+          "text": "Jarikaのクエストで得たペットから騎乗化できます。掲載された基礎ステータスに加え、強化で追加効果を付けられます。",
+          "links": [
+            {
+              "label": "アルヴィン / Alvin",
+              "url": "glossary.html#ref-alvin"
+            },
+            {
+              "label": "バーナード / Bernard",
+              "url": "glossary.html#ref-bernard"
+            },
+            {
+              "label": "ディノ / Dino",
+              "url": "glossary.html#ref-dino"
+            },
+            {
+              "label": "フェリックス / Felix",
+              "url": "glossary.html#ref-felix"
+            },
+            {
+              "label": "ヒッポ / Hippo",
+              "url": "glossary.html#ref-hippo"
+            },
+            {
+              "label": "ライオン / Lion",
+              "url": "glossary.html#ref-lion"
+            },
+            {
+              "label": "ピギー / Piggy",
+              "url": "glossary.html#ref-piggy"
+            },
+            {
+              "label": "ポニー / Pony",
+              "url": "glossary.html#ref-pony"
+            },
+            {
+              "label": "テディ / Teddy",
+              "url": "glossary.html#ref-teddy"
+            },
+            {
+              "label": "タイガー / Tiger",
+              "url": "glossary.html#ref-tiger"
+            }
+          ]
+        },
+        {
+          "heading": "上位騎乗ペット",
+          "text": "トークン交換や高レベルクエストなどで入手。強化による追加効果は固定値ではなく割合型です。%DEFが付いた場合のみ所定の使用レベル条件があるとの記載があります。具体的な条件は公式のMounts Enhancementを確認してください。",
+          "links": [
+            {
+              "label": "アフリファント / Afriphant",
+              "url": "glossary.html#ref-afriphant"
+            },
+            {
+              "label": "アークゴーレム / Ark Golem",
+              "url": "glossary.html#ref-ark-golem"
+            },
+            {
+              "label": "バジリスク / Basilisk",
+              "url": "glossary.html#ref-basilisk"
+            },
+            {
+              "label": "ブル / Bull",
+              "url": "glossary.html#ref-bull"
+            },
+            {
+              "label": "キャメル / Camel",
+              "url": "glossary.html#ref-camel"
+            },
+            {
+              "label": "ドラゴン / Dragon",
+              "url": "glossary.html#ref-dragon"
+            },
+            {
+              "label": "フォーン / Fawn",
+              "url": "glossary.html#ref-fawn"
+            },
+            {
+              "label": "ゴーレム / Golem",
+              "url": "glossary.html#ref-golem"
+            },
+            {
+              "label": "グリフォン / Gryphon",
+              "url": "glossary.html#ref-gryphon"
+            },
+            {
+              "label": "ハスキー / Husky",
+              "url": "glossary.html#ref-husky"
+            },
+            {
+              "label": "イフリクシオン / Ifrixion",
+              "url": "glossary.html#ref-ifrixion"
+            },
+            {
+              "label": "カンフーライオン / KungFu Lion",
+              "url": "glossary.html#ref-kungfu-lion"
+            },
+            {
+              "label": "パンダ / Panda",
+              "url": "glossary.html#ref-panda"
+            },
+            {
+              "label": "スピリッツ / Spiritz",
+              "url": "glossary.html#ref-spiritz"
+            },
+            {
+              "label": "スピリッツR / Spiritz R",
+              "url": "glossary.html#ref-spiritz-r"
+            },
+            {
+              "label": "ホワイトタイガー / White Tiger",
+              "url": "glossary.html#ref-white-tiger"
+            }
+          ]
+        },
+        {
+          "heading": "特殊騎乗ペット",
+          "text": "特殊な方法で入手する騎乗ペット。追加ステータスの強化はできません。",
+          "links": [
+            {
+              "label": "オレンジのほうき / Orange Broom",
+              "url": "glossary.html#ref-orange-broom"
+            },
+            {
+              "label": "ポヨペドラー / Poyo Peddler",
+              "url": "glossary.html#ref-poyo-peddler"
+            },
+            {
+              "label": "ルドルフ / Rudolph",
+              "url": "glossary.html#ref-rudolph"
+            },
+            {
+              "label": "スノーマン / Snowman",
+              "url": "glossary.html#ref-snowman"
+            },
+            {
+              "label": "トイカー / Toy Car",
+              "url": "glossary.html#ref-toy-car"
+            },
+            {
+              "label": "トイマウス / Toy Mouse",
+              "url": "glossary.html#ref-toy-mouse"
+            },
+            {
+              "label": "白いほうき / White Broom",
+              "url": "glossary.html#ref-white-broom"
+            },
+            {
+              "label": "木馬 / Wooden Horse",
+              "url": "glossary.html#ref-wooden-horse"
+            }
+          ]
+        },
+        {
+          "heading": "未実装として掲載された騎乗ペット",
+          "text": "参照ページでは未実装として掲載。GMによる展示やデータリセット前のテスト配布を含みます。記載ステータスは将来変更される可能性があり、現在の入手可否を保証する情報ではありません。",
+          "links": [
+            {
+              "label": "バジリスティア / Basilistia",
+              "url": "glossary.html#ref-basilistia"
+            },
+            {
+              "label": "バイコーン / Bicorn",
+              "url": "glossary.html#ref-bicorn"
+            },
+            {
+              "label": "黒いほうき / Black Broom",
+              "url": "glossary.html#ref-black-broom"
+            },
+            {
+              "label": "ブラックユニコーン / Black Unicorn",
+              "url": "glossary.html#ref-black-unicorn"
+            },
+            {
+              "label": "青いほうき / Blue Broom",
+              "url": "glossary.html#ref-blue-broom"
+            },
+            {
+              "label": "茶色のほうき / Brown Broom",
+              "url": "glossary.html#ref-brown-broom"
+            },
+            {
+              "label": "ダック / Duck",
+              "url": "glossary.html#ref-duck"
+            },
+            {
+              "label": "ファイアドラゴン / Fire Dragon",
+              "url": "glossary.html#ref-fire-dragon"
+            },
+            {
+              "label": "フォックス / Fox",
+              "url": "glossary.html#ref-fox"
+            },
+            {
+              "label": "ガーゴイル / Gargoyle",
+              "url": "glossary.html#ref-gargoyle"
+            },
+            {
+              "label": "ゴールドユニコーン / Gold Unicorn",
+              "url": "glossary.html#ref-gold-unicorn"
+            },
+            {
+              "label": "グリフィン / Griffin",
+              "url": "glossary.html#ref-griffin"
+            },
+            {
+              "label": "ケルベロス / Kerberos",
+              "url": "glossary.html#ref-kerberos"
+            },
+            {
+              "label": "カンフーライオンG / KungFu Lion G",
+              "url": "glossary.html#ref-kungfu-lion-g"
+            },
+            {
+              "label": "ペガサス / Pegasus",
+              "url": "glossary.html#ref-pegasus"
+            },
+            {
+              "label": "ピンクペガサス / Pink Pegasus",
+              "url": "glossary.html#ref-pink-pegasus"
+            },
+            {
+              "label": "パープルドラゴン / Purple Dragon",
+              "url": "glossary.html#ref-purple-dragon"
+            },
+            {
+              "label": "ルララライダー / Rurara Rider",
+              "url": "glossary.html#ref-rurara-rider"
+            },
+            {
+              "label": "ユニコーン / Unicorn",
+              "url": "glossary.html#ref-unicorn"
+            },
+            {
+              "label": "ワイバーン / Wyvern",
+              "url": "glossary.html#ref-wyvern"
+            },
+            {
+              "label": "黄色いほうき / Yellow Broom",
+              "url": "glossary.html#ref-yellow-broom"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "slug": "ref-power-pearl",
+      "name_en": "Power Pearl",
+      "name_ja": "パワーパール",
+      "aliases": "パワーパール",
+      "description": "アクセサリー（重量2）。対応能力：POW。基本の加算値は公式作成欄に記載がありません。",
+      "source_url": "https://www.xenrebirth.com/lexicon/index.php?entry/23-item-crafting-guide/",
+      "_catalogType": "crafting",
+      "notes": "公式Lexiconの掲載内容を整理（2026年9月22日確認）。日本語名は本サイトの参考訳です。",
+      "required_level": 35,
+      "acquisition": "Silkion ×1\nSirus Star ×1\nOvermaross ×1\n作成費用：150,000 Kron\nMeridian R ×1：30% / ×2：35% / ×3：40%\n未使用時の作成成功率は作成欄に記載なし。",
+      "related_entity": "Brynhilld：Ore RefineryのAlchemist\nEssene：Magic RefineryのAlchemist",
+      "image_url": "https://www.xenrebirth.com/index.php?attachment/3633-pearl-pow-png/",
+      "_section": "パール作成"
+    },
+    {
+      "slug": "ref-intelligence-pearl",
+      "name_en": "Intelligence Pearl",
+      "name_ja": "インテリジェンスパール",
+      "aliases": "インテリジェンスパール",
+      "description": "アクセサリー（重量2）。対応能力：INT。基本の加算値は公式作成欄に記載がありません。",
+      "source_url": "https://www.xenrebirth.com/lexicon/index.php?entry/23-item-crafting-guide/",
+      "_catalogType": "crafting",
+      "notes": "公式Lexiconの掲載内容を整理（2026年9月22日確認）。日本語名は本サイトの参考訳です。",
+      "required_level": 35,
+      "acquisition": "Silkion ×1\nSirus Star ×1\nOvermaross ×1\n作成費用：150,000 Kron\nMeridian R ×1：30% / ×2：35% / ×3：40%\n未使用時の作成成功率は作成欄に記載なし。",
+      "related_entity": "Brynhilld：Ore RefineryのAlchemist\nEssene：Magic RefineryのAlchemist",
+      "image_url": "https://www.xenrebirth.com/index.php?attachment/3631-pearl-int-png/",
+      "_section": "パール作成"
+    },
+    {
+      "slug": "ref-agility-pearl",
+      "name_en": "Agility Pearl",
+      "name_ja": "アジリティパール",
+      "aliases": "アジリティパール",
+      "description": "アクセサリー（重量2）。対応能力：AGI。基本の加算値は公式作成欄に記載がありません。",
+      "source_url": "https://www.xenrebirth.com/lexicon/index.php?entry/23-item-crafting-guide/",
+      "_catalogType": "crafting",
+      "notes": "公式Lexiconの掲載内容を整理（2026年9月22日確認）。日本語名は本サイトの参考訳です。",
+      "required_level": 35,
+      "acquisition": "Silkion ×1\nSirus Star ×1\nOvermaross ×1\n作成費用：150,000 Kron\nMeridian R ×1：30% / ×2：35% / ×3：40%\n未使用時の作成成功率は作成欄に記載なし。",
+      "related_entity": "Brynhilld：Ore RefineryのAlchemist\nEssene：Magic RefineryのAlchemist",
+      "image_url": "https://www.xenrebirth.com/index.php?attachment/3630-pearl-agi-png/",
+      "_section": "パール作成"
+    },
+    {
+      "slug": "ref-focus-pearl",
+      "name_en": "Focus Pearl",
+      "name_ja": "フォーカスパール",
+      "aliases": "フォーカスパール",
+      "description": "アクセサリー（重量2）。対応能力：MEN。基本の加算値は公式作成欄に記載がありません。",
+      "source_url": "https://www.xenrebirth.com/lexicon/index.php?entry/23-item-crafting-guide/",
+      "_catalogType": "crafting",
+      "notes": "公式Lexiconの掲載内容を整理（2026年9月22日確認）。日本語名は本サイトの参考訳です。",
+      "required_level": 35,
+      "acquisition": "Silkion ×1\nSirus Star ×1\nOvermaross ×1\n作成費用：150,000 Kron\nMeridian R ×1：30% / ×2：35% / ×3：40%\n未使用時の作成成功率は作成欄に記載なし。",
+      "related_entity": "Brynhilld：Ore RefineryのAlchemist\nEssene：Magic RefineryのAlchemist",
+      "image_url": "https://www.xenrebirth.com/index.php?attachment/3632-pearl-men-png/",
+      "_section": "パール作成"
+    },
+    {
+      "slug": "ref-wisdom-pearl",
+      "name_en": "Wisdom Pearl",
+      "name_ja": "ウィズダムパール",
+      "aliases": "ウィズダムパール",
+      "description": "アクセサリー（重量2）。対応能力：WIS。基本の加算値は公式作成欄に記載がありません。",
+      "source_url": "https://www.xenrebirth.com/lexicon/index.php?entry/23-item-crafting-guide/",
+      "_catalogType": "crafting",
+      "notes": "公式Lexiconの掲載内容を整理（2026年9月22日確認）。日本語名は本サイトの参考訳です。",
+      "required_level": 35,
+      "acquisition": "Silkion ×1\nSirus Star ×1\nOvermaross ×1\n作成費用：150,000 Kron\nMeridian R ×1：30% / ×2：35% / ×3：40%\n未使用時の作成成功率は作成欄に記載なし。",
+      "related_entity": "Brynhilld：Ore RefineryのAlchemist\nEssene：Magic RefineryのAlchemist",
+      "image_url": "https://www.xenrebirth.com/index.php?attachment/3723-wisdom-pearl-png/",
+      "_section": "パール作成"
+    },
+    {
+      "slug": "ref-strength-pearl",
+      "name_en": "Strength Pearl",
+      "name_ja": "ストレングスパール",
+      "aliases": "ストレングスパール",
+      "description": "アクセサリー（重量2）。対応能力：STA。基本の加算値は公式作成欄に記載がありません。",
+      "source_url": "https://www.xenrebirth.com/lexicon/index.php?entry/23-item-crafting-guide/",
+      "_catalogType": "crafting",
+      "notes": "公式Lexiconの掲載内容を整理（2026年9月22日確認）。日本語名は本サイトの参考訳です。",
+      "required_level": 35,
+      "acquisition": "Silkion ×1\nSirus Star ×1\nOvermaross ×1\n作成費用：150,000 Kron\nMeridian R ×1：30% / ×2：35% / ×3：40%\n未使用時の作成成功率は作成欄に記載なし。",
+      "related_entity": "Brynhilld：Ore RefineryのAlchemist\nEssene：Magic RefineryのAlchemist",
+      "image_url": "https://www.xenrebirth.com/index.php?attachment/3634-pearl-sta-png/",
+      "_section": "パール作成"
+    },
+    {
+      "slug": "ref-wings-of-jureah-white",
+      "name_en": "Wings of Jureah (White)",
+      "name_ja": "ジュレアの翼（白）",
+      "aliases": "ジュレアの翼（白）",
+      "description": "背中装備（重量20）。能力種別：POW / STA / AGI / INT / MEN / WIS。",
+      "source_url": "https://www.xenrebirth.com/lexicon/index.php?entry/23-item-crafting-guide/",
+      "_catalogType": "crafting",
+      "notes": "作成表には再強化（re-enhancement）の材料として各3個の記載もあります。一方、強化節には各1個と記載されており、公式内で一致していません。実行前にNPC画面で必要個数を確認してください。",
+      "required_level": 85,
+      "acquisition": "Silkion ×1\nSirus Star ×1\nEquisible ×1\n作成費用：250,000 Kron\n基本成功率：5%\nMeridian R ×1：10% / ×2：15% / ×3：20%",
+      "related_entity": "Brynhilld：Ore RefineryのAlchemist\nEssene：Magic RefineryのAlchemist",
+      "image_url": "https://www.xenrebirth.com/index.php?attachment/3635-wings-jureah-png/",
+      "_section": "翼の作成"
+    },
+    {
+      "slug": "ref-wings-of-plutan-black",
+      "name_en": "Wings of Plutan (Black)",
+      "name_ja": "プルタンの翼（黒）",
+      "aliases": "プルタンの翼（黒）",
+      "description": "背中装備（重量20）。能力種別：POW / STA / AGI / INT / MEN / WIS。",
+      "source_url": "https://www.xenrebirth.com/lexicon/index.php?entry/23-item-crafting-guide/",
+      "_catalogType": "crafting",
+      "notes": "作成表には再強化（re-enhancement）の材料として各3個の記載もあります。一方、強化節には各1個と記載されており、公式内で一致していません。実行前にNPC画面で必要個数を確認してください。",
+      "required_level": 85,
+      "acquisition": "Silkion ×1\nSirus Star ×1\nEquisible ×1\n作成費用：250,000 Kron\n基本成功率：5%\nMeridian R ×1：10% / ×2：15% / ×3：20%",
+      "related_entity": "Brynhilld：Ore RefineryのAlchemist\nEssene：Magic RefineryのAlchemist",
+      "image_url": "https://www.xenrebirth.com/index.php?attachment/3636-wings-plutan-png/",
+      "_section": "翼の作成"
+    },
+    {
+      "slug": "ref-pearl-enhancement",
+      "name_en": "Pearl Enhancement",
+      "name_ja": "パール強化",
+      "aliases": "パール強化",
+      "description": "強化時のランダムな能力レベルはLv1〜Lv5と記載。追加効果表はLv4までの掲載で、Lv5の値は不明です。",
+      "source_url": "https://www.xenrebirth.com/lexicon/index.php?entry/23-item-crafting-guide/",
+      "_catalogType": "crafting",
+      "notes": "公式Lexiconの掲載内容を整理（2026年9月22日確認）。日本語名は本サイトの参考訳です。",
+      "required_level": 35,
+      "acquisition": "Silkion ×1\nSirus Star ×1\nOvermaross ×1\n強化費用：50,000 Kron\n基本成功率：25%\nMeridian R ×1：30% / ×2：35% / ×3：40%",
+      "related_entity": "Brynhilld：Ore RefineryのAlchemist\nEssene：Magic RefineryのAlchemist",
+      "_section": "強化",
+      "_table": {
+        "headers": [
+          "追加効果",
+          "Lv1",
+          "Lv2",
+          "Lv3",
+          "Lv4"
+        ],
+        "rows": [
+          [
+            "防御力",
+            "+1",
+            "+2",
+            "+3",
+            "+4"
+          ],
+          [
+            "最大HP",
+            "+20",
+            "+40",
+            "+60",
+            "+80"
+          ],
+          [
+            "HP回復量",
+            "+4",
+            "+8",
+            "+12",
+            "+16"
+          ],
+          [
+            "最大MP",
+            "+10",
+            "+20",
+            "+30",
+            "+40"
+          ]
+        ]
+      }
+    },
+    {
+      "slug": "ref-wings-of-goddess-enhancement",
+      "name_en": "Wings of Goddess Enhancement",
+      "name_ja": "女神の翼の強化",
+      "aliases": "女神の翼の強化",
+      "description": "対象：Wings of Jureah / Wings of Plutan。公式強化節では基礎能力+1、最大強化+5と記載されています。",
+      "source_url": "https://www.xenrebirth.com/lexicon/index.php?entry/23-item-crafting-guide/",
+      "_catalogType": "crafting",
+      "notes": "作成表の再強化欄は材料各3個、強化節は各1個で記述が異なります。下の表は公式の効果表に記載された値の要約で、各強化段階の増分を示す表ではありません。能力名とPOW/INT等の対応にも不一致があるため、組合せの詳細は公式原表とゲーム内表示を確認してください。",
+      "required_level": 85,
+      "acquisition": "Silkion ×1\nSirus Star ×1\nEquisible ×1\n強化費用：100,000 Kron\n基本成功率：5%\nMeridian R ×1：10% / ×2：15% / ×3：20%",
+      "related_entity": "Brynhilld：Ore RefineryのAlchemist\nEssene：Magic RefineryのAlchemist",
+      "_section": "強化",
+      "_table": {
+        "headers": [
+          "追加効果の種類",
+          "公式効果表の掲載値"
+        ],
+        "rows": [
+          [
+            "攻撃力",
+            "+24"
+          ],
+          [
+            "防御力",
+            "+12"
+          ],
+          [
+            "最大HP",
+            "+150"
+          ],
+          [
+            "最大MP",
+            "+100"
+          ],
+          [
+            "最大重量",
+            "+130"
+          ],
+          [
+            "HP回復量",
+            "+15"
+          ],
+          [
+            "MP回復量",
+            "+10"
+          ],
+          [
+            "移動速度",
+            "全行に+1の記載"
+          ]
+        ]
+      }
+    },
+    {
+      "slug": "ref-item-crafting-guide",
+      "name_en": "Item Crafting Guide",
+      "name_ja": "アイテム作成・強化ガイド",
+      "aliases": "アイテム作成・強化ガイド",
+      "description": "作成と強化では費用が異なります。目的の項目を開き、必要Lv・材料・Kron・成功率を確認してからAlchemistへ向かってください。",
+      "source_url": "https://www.xenrebirth.com/lexicon/index.php?entry/23-item-crafting-guide/",
+      "_catalogType": "crafting",
+      "notes": "公式ページは編集中。パールの加算値に未記入欄があり、翼の再強化材料数や一部ステータスの対応にも不一致があります。記載のない数値は補完していません。",
+      "related_entity": "Brynhilld：Ore RefineryのAlchemist\nEssene：Magic RefineryのAlchemist",
+      "_blocks": [
+        {
+          "heading": "作成・強化するアイテムを選ぶ",
+          "links": [
+            {
+              "label": "パワーパール / Power Pearl",
+              "url": "glossary.html#ref-power-pearl"
+            },
+            {
+              "label": "インテリジェンスパール / Intelligence Pearl",
+              "url": "glossary.html#ref-intelligence-pearl"
+            },
+            {
+              "label": "アジリティパール / Agility Pearl",
+              "url": "glossary.html#ref-agility-pearl"
+            },
+            {
+              "label": "フォーカスパール / Focus Pearl",
+              "url": "glossary.html#ref-focus-pearl"
+            },
+            {
+              "label": "ウィズダムパール / Wisdom Pearl",
+              "url": "glossary.html#ref-wisdom-pearl"
+            },
+            {
+              "label": "ストレングスパール / Strength Pearl",
+              "url": "glossary.html#ref-strength-pearl"
+            },
+            {
+              "label": "ジュレアの翼（白） / Wings of Jureah (White)",
+              "url": "glossary.html#ref-wings-of-jureah-white"
+            },
+            {
+              "label": "プルタンの翼（黒） / Wings of Plutan (Black)",
+              "url": "glossary.html#ref-wings-of-plutan-black"
+            },
+            {
+              "label": "パール強化 / Pearl Enhancement",
+              "url": "glossary.html#ref-pearl-enhancement"
+            },
+            {
+              "label": "女神の翼の強化 / Wings of Goddess Enhancement",
+              "url": "glossary.html#ref-wings-of-goddess-enhancement"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

@@ -84,7 +84,19 @@
     throw Error('too many records');
   }
   const jobs=[
-    ['用語集','glossary',async()=> (await rows('glossary_terms','id,slug,name_en,name_ja,aliases,description,drop_location,acquisition,related_entity,notes,required_level')).map(t=>record('term:'+t.slug,title(t),text(t,['aliases','description','drop_location','acquisition','related_entity','notes','required_level']),'glossary.html#'+encodeURIComponent(t.slug),'glossary','用語集'))],
+    ['用語集','glossary',async()=> {
+      const [shared, reference] = await Promise.allSettled([
+        rows('glossary_terms','id,slug,name_en,name_ja,aliases,description,drop_location,acquisition,related_entity,notes,required_level'),
+        fetch('assets/reference-catalog.json?v=20260922').then(r=>{if(!r.ok)throw Error('reference');return r.json();})
+      ]);
+      if(shared.status==='rejected') failed.push('用語集の共同編集');
+      if(reference.status==='rejected') failed.push('作成・ペット資料');
+      const list=shared.status==='fulfilled'?shared.value:[];
+      for(const t of reference.status==='fulfilled'?reference.value.terms:[]) {
+        if(!list.some(x=>x.slug===t.slug)) list.push(t);
+      }
+      return list.map(t=>record('term:'+t.slug,title(t),text(t,['aliases','description','drop_location','acquisition','related_entity','notes','required_level']),'glossary.html#'+encodeURIComponent(t.slug),'glossary','用語集'));
+    }],
     ['ラッキーボール','lucky',async()=>{
       const [groups,items]=await Promise.all([rows('lucky_ball_groups','id,slug,name_en,name_ja,description'),rows('lucky_ball_items','id,group_id,name_en,name_ja,stats,stats_en,description')]);
       const found=[];

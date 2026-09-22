@@ -23,6 +23,7 @@
   let luckyBallReady = false;
   let luckyBallError = "";
   let usingSharedData = false;
+  let referenceCatalog = null;
   let editingTerm = null;
   let modalOpener = null;
   let previewUrl = null;
@@ -180,7 +181,7 @@
     const panel = $("glossary-major-index");
     if (!panel) return;
     const fixed = [["", "すべて"], ["class", "クラス"], ["item", "アイテム"],
-      ["lucky", "ラッキーボール"], ["world", "世界地図"], ["quest", "クエスト"], ["dungeon", "ダンジョン・ボス"]];
+      ["lucky", "ラッキーボール"], ["crafting", "アイテム作成"], ["pets", "ペット・騎乗ペット"], ["world", "世界地図"], ["quest", "クエスト"], ["dungeon", "ダンジョン・ボス"]];
     const fixedNames = new Set(fixed.map(x => x[1]));
     const buttons = [...fixed, ...categories.filter(c => !fixedNames.has(c.name)).map(c => [`category:${c.id}`, c.name])];
     panel.innerHTML = buttons.map(([id, name]) => `<button type="button" data-major="${esc(id)}" class="${filters.major === id ? "is-active" : ""}" aria-pressed="${filters.major === id}">${esc(name)}</button>`).join("") +
@@ -193,7 +194,7 @@
       if (!button) return;
       filters.major = button.dataset.major || "";
       categorySelect.value = "";
-      if (filters.major === "lucky") {
+      if (["lucky", "crafting", "pets"].includes(filters.major)) {
         query.value = ""; filters.index = "";
         document.querySelectorAll("[data-index]").forEach(b => b.classList.toggle("is-active", b.dataset.index === ""));
       }
@@ -222,7 +223,7 @@
       const category = getCategoryName(term);
       const searchText = normalize([
         term.name_en, term.name_ja, term.aliases, category, term.description,
-        term.drop_location, term.acquisition, term.related_entity, term.notes,
+        term.drop_location, term.acquisition, term.related_entity, term.notes, term._section,
         isLuckyBallHub(term) ? luckyBallGroups.map(g => [g.name_en, g.name_ja,
           ...luckyBallItems.filter(i => String(i.group_id) === String(g.id)).map(i =>
             [i.name_en, i.name_ja, i.stats, i.stats_en, i.description].join(" "))].join(" ")).join(" ") : ""
@@ -230,7 +231,9 @@
 
       if (!words.every(word => searchText.includes(word))) return false;
       if (categorySelect.value && category !== categorySelect.value && !(categorySelect.value === "ラッキーボール" && isLuckyBallHub(term))) return false;
-      if (filters.major === "lucky") {
+      if (["crafting", "pets"].includes(filters.major)) {
+        if (term._catalogType !== filters.major) return false;
+      } else if (filters.major === "lucky") {
         if (!isLuckyBallHub(term) && category !== "ラッキーボール") return false;
       } else if (filters.major.startsWith("category:")) {
         if (String(term.category_id) !== filters.major.slice(9)) return false;
@@ -362,6 +365,7 @@
             <div class="glossary-summary-bottom">
               <span class="glossary-category-badge">${esc(category || "未分類")}</span>
               ${alias}
+              ${term._section ? `<span class="glossary-category-badge">${esc(term._section)}</span>` : ""}
               ${isLuckyBallHub(term) ? '<span class="lucky-ball-hub-badge">獲得アイテム一覧</span>' : ""}
             </div>
           </div>
@@ -372,6 +376,7 @@
           <p class="glossary-description">${esc(term.description || "").replace(/\n/g, "<br>")}</p>
           ${details ? `<div class="glossary-detail-list">${details}</div>` : ""}
           ${luckyCatalog}
+          ${referenceHtml(term)}
           <div class="glossary-links">
             ${guide ? `<a href="${esc(guide)}">関連ガイド</a>` : ""}
             ${source ? `<a href="${esc(source)}" target="_blank" rel="noopener noreferrer">公式の出典 ↗</a>` : ""}
@@ -393,8 +398,10 @@
       return;
     }
 
+    const overview = ["crafting", "pets"].includes(filters.major) ? rows.find(t => t.slug === (filters.major === "crafting" ? "ref-item-crafting-guide" : "ref-pets-and-mounts-guide")) : null;
     const groups = new Map();
     for (const term of rows) {
+      if (term === overview) continue;
       const key = filters.index.startsWith("ja:") ? (japaneseInitial(term) || "#") : displayInitial(term);
       if (!groups.has(key)) groups.set(key, []);
       groups.get(key).push(term);
@@ -410,7 +417,7 @@
       return ai - bi;
     });
 
-    resultsEl.innerHTML = sortedGroups.map(([key, items]) => `
+    resultsEl.innerHTML = (overview ? termHtml(overview) : "") + sortedGroups.map(([key, items]) => `
       <section class="glossary-letter-section">
         <h2>${esc(key)}</h2>
         <div class="glossary-compact-list">${items.map(termHtml).join("")}</div>
@@ -418,6 +425,7 @@
     `).join("");
 
     bindEditButtons();
+    if (overview) resultsEl.querySelector(".glossary-entry > details")?.setAttribute("open", "");
     if (filters.major === "lucky") resultsEl.querySelector(".glossary-entry-lucky-ball > details")?.setAttribute("open", "");
     openHashTarget();
   }
@@ -472,6 +480,31 @@
     }
   }
 
+  async function loadReferenceCatalog() {
+    try {
+      if (!referenceCatalog) {
+        const response = await fetch("assets/reference-catalog.json?v=20260922");
+        if (!response.ok) throw new Error("Reference catalogue unavailable");
+        referenceCatalog = (await response.json()).terms;
+      }
+      for (const source of referenceCatalog) {
+        const existing = terms.find(t => t.slug === source.slug || normalize(t.name_en) === normalize(source.name_en));
+        if (existing) {
+          for (const key of ["_catalogType", "_section", "_blocks", "_table", "_links"]) existing[key] = source[key];
+        } else {
+          const category = categories.find(c => c.name === (source._catalogType === "pets" ? "ペット" : "アイテム"));
+          terms.push({...source, id:"catalog-" + source.slug, category_id:category?.id || "catalog-items", _catalogSeed:true});
+        }
+      }
+    } catch (error) { console.error(error); }
+  }
+  function referenceHtml(term) {
+    const links = rows => (rows || []).filter(x => safeUrl(x.url)).map(x => `<a href="${esc(safeUrl(x.url))}">${esc(x.label)}</a>`).join("");
+    const blocks = (term._blocks || []).map(b => `<section class="reference-block"><h3>${esc(b.heading)}</h3>${b.text ? `<p>${esc(b.text).replace(/\n/g,"<br>")}</p>` : ""}<div class="reference-links">${links(b.links)}</div></section>`).join("");
+    const table = term._table ? `<div class="reference-table-wrap"><table><caption>公式掲載値の整理</caption><thead><tr>${term._table.headers.map(h=>`<th scope="col">${esc(h)}</th>`).join("")}</tr></thead><tbody>${term._table.rows.map(row=>`<tr>${row.map((v,i)=>i===0?`<th scope="row">${esc(v)}</th>`:`<td>${esc(v)}</td>`).join("")}</tr>`).join("")}</tbody></table></div>` : "";
+    return blocks + table + (term._links?.length ? `<div class="reference-block"><h3>公式の関連手順</h3><div class="reference-links">${links(term._links)}</div></div>` : "");
+  }
+
   async function loadShared() {
     if (!configured()) {
       if (syncStatus) syncStatus.textContent = "共同編集の接続設定がありません。";
@@ -492,7 +525,7 @@
       categories = await cRes.json();
       terms = await tRes.json();
       usingSharedData = true;
-      await loadLuckyBallData();
+      await Promise.all([loadLuckyBallData(), loadReferenceCatalog()]);
       categoryOptions();
       renderTerms();
       if (syncStatus) syncStatus.textContent = `共同編集に接続済み：${terms.length}件・${categories.length}分類（公式カタログを含む）`;
