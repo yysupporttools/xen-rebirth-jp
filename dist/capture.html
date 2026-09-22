@@ -13,7 +13,7 @@
   <script defer src="assets/glossary-config.js"></script>
   <script defer src="assets/vendor/supabase.js"></script>
   <script defer src="https://cdn.jsdelivr.net/npm/tesseract.js@5/dist/tesseract.min.js"></script>
-  <script defer src="assets/capture.js?v=17"></script>
+  <script defer src="assets/capture.js?v=18"></script>
   <script defer src="assets/saved-items.js?v=1"></script>
 </head>
 <body>
@@ -180,7 +180,7 @@
       <div><p class="eyebrow">MAP DATABASE</p><h2>4. 自動収集したマップ・NPC位置</h2></div>
       <span id="map-db-count">0 NPC</span>
     </div>
-    <p class="note">ゲーム中に右上の拡大マップを開くと、サイズが場所ごとに違っても右上領域からマップ枠全体を探して保存し、マップ名とNPC名・位置を蓄積します。小さな一部分だけをマップとして保存しないよう補正を入れています。</p>
+    <p class="note">ゲーム中に右上の拡大マップを開くと、マップ枠全体を探して保存し、マップ名とNPC名・位置を蓄積します。マップ名がNPC名と重なって読みにくい場合は、登録済みNPCの名前と配置パターンから現在マップを補完します。</p>
     <div class="map-db-toolbar">
       <select id="map-db-select" aria-label="マップ選択"><option value="">マップを選択</option></select>
     </div>
