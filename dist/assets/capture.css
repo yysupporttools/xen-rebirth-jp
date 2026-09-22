@@ -493,3 +493,22 @@
     max-height:116px;
   }
 }
+
+
+/* Force the collapsed NPC list to fully close. */
+.npc-index.is-collapsed{
+  display:none !important;
+  max-height:0 !important;
+  margin:0 !important;
+  padding:0 !important;
+  overflow:hidden !important;
+}
+.npc-index.is-collapsed:after{
+  display:none !important;
+}
+.npc-index.is-expanded{
+  display:flex !important;
+  max-height:none !important;
+  overflow:visible !important;
+  margin:12px 0 18px !important;
+}
