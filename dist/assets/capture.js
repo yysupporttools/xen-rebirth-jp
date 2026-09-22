@@ -399,9 +399,9 @@
     return Number(region.width)>20&&Number(region.height)>20;
   }
 
-  async function cropMapBlob(region){
-    if(!imageBlob||!validMapRegion(region)) return null;
-    const bitmap=await createImageBitmap(imageBlob);
+  async function cropBlobNormalized(blob,region,quality){
+    if(!blob||!validMapRegion(region)) return null;
+    const bitmap=await createImageBitmap(blob);
     const x=Math.max(0,Math.round(bitmap.width*(Number(region.x)||0)/1000));
     const y=Math.max(0,Math.round(bitmap.height*(Number(region.y)||0)/1000));
     const w=Math.max(1,Math.min(bitmap.width-x,Math.round(bitmap.width*(Number(region.width)||0)/1000)));
@@ -411,7 +411,102 @@
     canvas.height=h;
     canvas.getContext("2d").drawImage(bitmap,x,y,w,h,0,0,w,h);
     if(bitmap.close) bitmap.close();
-    return await new Promise(function(resolve){canvas.toBlob(resolve,"image/webp",0.86);});
+    return await new Promise(function(resolve){canvas.toBlob(resolve,"image/webp",quality||0.86);});
+  }
+
+  async function cropMapBlob(region){
+    return await cropBlobNormalized(imageBlob,region,0.86);
+  }
+
+  async function makeMapCandidateBlob(){
+    if(!imageBlob) return null;
+    return await cropBlobNormalized(imageBlob,{x:470,y:0,width:530,height:600},0.84);
+  }
+
+  async function analyzeMapCandidate(){
+    const blob=await makeMapCandidateBlob();
+    if(!blob) return null;
+    const hash=await blobHash(blob);
+    const dataUrl=await blobToDataUrl(blob);
+    const response=await fetch(cfg.SUPABASE_URL+"/functions/v1/analyze-game-map",{
+      method:"POST",
+      headers:{
+        "Content-Type":"application/json",
+        "apikey":cfg.SUPABASE_ANON_KEY,
+        "x-xen-client":"capture-v1"
+      },
+      body:JSON.stringify({image:dataUrl,image_hash:hash})
+    });
+    let data={};
+    try{data=await response.json();}catch(_){}
+    if(!response.ok) throw new Error(data.error||("マップ解析に失敗しました（HTTP "+response.status+"）"));
+    return {data:data,blob:blob,hash:hash};
+  }
+
+  async function saveDedicatedMapAnalysis(pack){
+    if(!pack||!pack.data||!pack.data.map_visible) return false;
+    const result=pack.data;
+    const mapName=String(result.map_name||"").trim();
+    const confidence=Number(result.confidence||0);
+    const npcs=Array.isArray(result.npcs)?result.npcs.filter(function(n){
+      return n&&String(n.name||"").trim()&&Number(n.confidence||0)>=70;
+    }):[];
+    if(!mapName||confidence<70) return false;
+
+    let mapImageUrl="";
+    const existing=gameMaps.find(function(m){return normText(m.map_name)===normText(mapName);});
+    if(existing&&existing.map_image_url){
+      mapImageUrl=existing.map_image_url;
+    }else if(validMapRegion(result.panel_region)){
+      const panel=await cropBlobNormalized(pack.blob,result.panel_region,0.88);
+      if(panel){
+        const safe=mapName.toLowerCase().replace(/[^a-z0-9]+/g,"-").replace(/^-+|-+$/g,"")||"map";
+        const path=safe+"/"+Date.now()+"-"+pack.hash+".webp";
+        const up=await db.storage.from("map-images").upload(path,panel,{contentType:"image/webp",upsert:false});
+        if(!up.error) mapImageUrl=db.storage.from("map-images").getPublicUrl(path).data.publicUrl||"";
+      }
+    }
+
+    const res=await db.rpc("map_analysis_save",{
+      p_map_name:mapName,
+      p_npcs:npcs,
+      p_image_hash:pack.hash,
+      p_map_image_url:mapImageUrl,
+      p_confidence:confidence,
+      p_contributor_id:contributorId
+    });
+    if(res.error) throw new Error("マップ情報の保存に失敗しました："+res.error.message);
+    const info=res.data||{};
+    setStatus("map-collect-status",mapName+" を保存：NPC "+npcs.length+"件 / 新規観測 "+(info.new_sightings||0)+"件");
+    await loadMapData();
+    return true;
+  }
+
+  async function autoSaveNpcPortrait(result){
+    if(!result||result.screen_type!=="npc_dialog") return false;
+    const npc=String(result.npc_name||"").trim();
+    const map=String(result.map_name||"").trim();
+    const region=result.npc_portrait_region;
+    if(!npc||!validMapRegion(region)||!imageBlob) return false;
+    if(findNpcProfile(npc,map)) return false;
+
+    const portrait=await cropBlobNormalized(imageBlob,region,0.9);
+    if(!portrait) return false;
+    const safe=npc.toLowerCase().replace(/[^a-z0-9]+/g,"-").replace(/^-+|-+$/g,"")||"npc";
+    const path=safe+"/"+Date.now()+"-"+crypto.randomUUID()+".webp";
+    const up=await db.storage.from("npc-images").upload(path,portrait,{contentType:"image/webp",upsert:false});
+    if(up.error) return false;
+    const url=db.storage.from("npc-images").getPublicUrl(path).data.publicUrl||"";
+    const saved=await db.rpc("npc_profile_save_image",{
+      p_npc_name:npc,
+      p_map_name:map,
+      p_image_url:url,
+      p_contributor_id:contributorId
+    });
+    if(saved.error) return false;
+    await loadNpcProfiles();
+    setStatus("npc-image-status",npc+" のNPC画像を自動登録しました。");
+    return true;
   }
 
   async function uploadMapImage(mapName,region,imageHash){
@@ -495,10 +590,25 @@
       try{data=await response.json();}catch(_){}
       if(!response.ok) throw new Error(data.error||("AI解析に失敗しました（HTTP "+response.status+"）"));
       await applyAiResult(data);
-      if(data.screen_type==="expanded_map"){
-        await saveMapAnalysis(data,imageHash);
-      }else{
+
+      if(data.screen_type==="npc_dialog"){
         await autoSaveAiResult(data,imageHash);
+        await autoSaveNpcPortrait(data);
+      }else if(data.screen_type==="quest_window"||data.screen_type==="reward_window"){
+        await autoSaveAiResult(data,imageHash);
+      }
+
+      let dedicatedMapSaved=false;
+      if(data.screen_type==="expanded_map"||data.screen_type==="other"){
+        try{
+          const mapPack=await analyzeMapCandidate();
+          dedicatedMapSaved=await saveDedicatedMapAnalysis(mapPack);
+        }catch(mapErr){
+          setStatus("map-collect-status",mapErr&&mapErr.message?mapErr.message:String(mapErr));
+        }
+      }
+      if(data.screen_type==="expanded_map"&&!dedicatedMapSaved){
+        await saveMapAnalysis(data,imageHash);
       }
     }catch(err){
       setStatus("capture-status",err&&err.message?err.message:String(err));
