@@ -6,6 +6,7 @@
   const esc=function(v){return String(v==null?"":v).replace(/[&<>"']/g,function(c){return {"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c];});};
 
   let stream=null;
+  let captureSourceVideo=null;
   let imageBlob=null;
   let imageSourceType="manual";
   let previewUrl="";
@@ -50,11 +51,55 @@
   })();
 
   function setStatus(id,msg){$(id).textContent=msg||"";}
+  function syncMiniCaptureStatus(){
+    const sharing=!!stream;
+    const shareEl=$("capture-mini-share");
+    const autoEl=$("capture-mini-auto");
+    const nowBtn=$("capture-mini-now");
+    if(shareEl){
+      shareEl.dataset.state=sharing?"on":"off";
+      shareEl.textContent=sharing?"画面共有：ON":"画面共有：OFF";
+    }
+    if(autoEl){
+      autoEl.dataset.state=autoEnabled?"on":"off";
+      autoEl.textContent=autoEnabled?"自動解析：ON":"自動解析：OFF";
+    }
+    if(nowBtn) nowBtn.disabled=!sharing;
+  }
   function setAutoStatus(state,msg){
     const el=$("auto-status");
-    if(!el) return;
-    el.dataset.state=state;
-    el.textContent=msg;
+    if(el){
+      el.dataset.state=state;
+      el.textContent=msg;
+    }
+    syncMiniCaptureStatus();
+  }
+
+  function ensureCaptureSourceVideo(){
+    if(captureSourceVideo) return captureSourceVideo;
+    const v=document.createElement("video");
+    v.id="capture-source-video";
+    v.autoplay=true;
+    v.muted=true;
+    v.playsInline=true;
+    v.setAttribute("aria-hidden","true");
+    v.style.position="fixed";
+    v.style.right="0";
+    v.style.bottom="0";
+    v.style.width="2px";
+    v.style.height="2px";
+    v.style.opacity="0.001";
+    v.style.pointerEvents="none";
+    v.style.zIndex="-1";
+    document.body.appendChild(v);
+    captureSourceVideo=v;
+    return v;
+  }
+
+  function getCaptureVideo(){
+    const hidden=ensureCaptureSourceVideo();
+    if(hidden&&hidden.videoWidth&&hidden.readyState>=2) return hidden;
+    return $("screen-video");
   }
   function setImage(blob,type,silent){
     imageBlob=blob;
@@ -71,8 +116,12 @@
 
   async function startScreen(){
     try{
-      stream=await navigator.mediaDevices.getDisplayMedia({video:{frameRate:{ideal:5,max:15}},audio:false});
-      $("screen-video").srcObject=stream;
+      stream=await navigator.mediaDevices.getDisplayMedia({video:{frameRate:{ideal:8,max:15}},audio:false});
+      const visible=$("screen-video");
+      const source=ensureCaptureSourceVideo();
+      visible.srcObject=stream;
+      source.srcObject=stream;
+      try{await Promise.all([visible.play(),source.play()]);}catch(_){}
       $("screen-shot").disabled=false;
       $("screen-stop").disabled=false;
       $("screen-start").disabled=true;
@@ -80,7 +129,8 @@
       setAutoStatus("off","OFF");
       const track=stream.getVideoTracks()[0];
       if(track) track.addEventListener("ended",stopScreen);
-      setStatus("capture-status","共有中です。NPC会話やクエスト画面を表示して「現在の画面をキャプチャ」を押してください。");
+      setStatus("capture-status","共有中です。ページ内で3.登録済み情報を見ている間も、裏側の専用映像から読み取りを継続します。");
+      syncMiniCaptureStatus();
     }catch(err){
       setStatus("capture-status",err.name==="NotAllowedError"?"画面共有はキャンセルされました。":"画面共有を開始できませんでした："+err.message);
     }
@@ -91,16 +141,18 @@
     if(stream) stream.getTracks().forEach(function(t){t.stop();});
     stream=null;
     $("screen-video").srcObject=null;
+    if(captureSourceVideo) captureSourceVideo.srcObject=null;
     $("screen-shot").disabled=true;
     $("screen-stop").disabled=true;
     $("screen-start").disabled=false;
     $("auto-mode").disabled=true;
     $("auto-mode").checked=false;
     setAutoStatus("off","OFF");
+    syncMiniCaptureStatus();
   }
 
   async function captureFrame(silent){
-    const video=$("screen-video");
+    const video=getCaptureVideo();
     if(!video.videoWidth){if(!silent)setStatus("capture-status","共有画面がまだ準備できていません。");return null;}
     const maxWidth=1600;
     const scale=Math.min(1,maxWidth/video.videoWidth);
@@ -114,7 +166,7 @@
   }
 
   function monitorSample(){
-    const video=$("screen-video");
+    const video=getCaptureVideo();
     if(!stream||!video.videoWidth||video.readyState<2) return null;
     const w=128,h=72;
     const canvas=document.createElement("canvas");
@@ -157,6 +209,7 @@
     autoPending=null;
     autoPendingAt=0;
     if(resetToggle&&$("auto-mode")) $("auto-mode").checked=false;
+    syncMiniCaptureStatus();
   }
 
   async function startAutoMonitor(){
@@ -167,6 +220,7 @@
       return;
     }
     autoEnabled=true;
+    syncMiniCaptureStatus();
     autoBaseline=monitorSample();
     autoPending=null;
     autoPendingAt=0;
@@ -372,7 +426,7 @@
   }
 
   function npcSignatureFromVideo(){
-    const video=$("screen-video");
+    const video=getCaptureVideo();
     if(!stream||!video.videoWidth||video.readyState<2) return "";
     return npcSignatureFromSource(video,video.videoWidth,video.videoHeight);
   }
@@ -1347,7 +1401,13 @@
     }
   }
 
-  $("map-db-select").addEventListener("change",renderMapDatabase);
+  $("capture-mini-now").addEventListener("click",function(){runOpenAiAnalysis("manual");});
+  $("capture-mini-top").addEventListener("click",function(){
+    $("main").scrollIntoView({behavior:"smooth",block:"start"});
+  });
+  syncMiniCaptureStatus();
+
+    $("map-db-select").addEventListener("change",renderMapDatabase);
   $("map-database").addEventListener("click",function(e){
     const target=e.target.closest("[data-map-npc]");
     if(!target) return;
