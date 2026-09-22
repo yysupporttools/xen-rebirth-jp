@@ -1,0 +1,56 @@
+name: Xen Rebirth class equipment sync
+
+on:
+  workflow_dispatch:
+    inputs:
+      class_key:
+        description: "同期する職業（all / knight / mage / archer / cleric / rogue / templar / xenian）"
+        required: true
+        default: "all"
+        type: choice
+        options:
+          - all
+          - knight
+          - mage
+          - archer
+          - cleric
+          - rogue
+          - templar
+          - xenian
+      translate:
+        description: "新規装備名をOpenAIで日本語化する"
+        required: true
+        default: true
+        type: boolean
+
+permissions:
+  contents: read
+
+jobs:
+  sync-class-equipment:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    env:
+      SUPABASE_URL: https://dzxxjtmpcfsmvdgkcwvn.supabase.co
+      SUPABASE_SERVICE_ROLE_KEY: ${{ secrets.SUPABASE_SERVICE_ROLE_KEY }}
+      OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+      OPENAI_MODEL: gpt-5.6-luna
+      CLASS_KEY: ${{ inputs.class_key }}
+      TRANSLATE: ${{ inputs.translate }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Install parser
+        run: python -m pip install --disable-pip-version-check beautifulsoup4
+      - name: Sync official class equipment to Supabase
+        run: python scripts/sync-class-equipment.py
+      - name: Upload extraction snapshots
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: class-equipment-extraction
+          path: class-equipment-*.json
+          if-no-files-found: ignore
+          retention-days: 7
