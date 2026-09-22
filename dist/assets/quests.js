@@ -1300,6 +1300,19 @@
                     )}
                   </p>
 
+                  ${
+                    q.id === 'f5ccc8ae-d3d4-4a61-aef5-57909b2b1889' &&
+                    Number(s.step_number) === 43
+                      ? `
+                        <p class="quest-related-link">
+                          <a href="glossary.html#jarika-pet-hatch">
+                            ペット孵化Q&A・出現結果はこちら ↗
+                          </a>
+                        </p>
+                      `
+                      : ''
+                  }
+
 
                   ${imgHtml(s.id)}
 
