@@ -494,7 +494,7 @@
     lastFastNpcName=npc;
     lastFastNpcAt=Date.now();
     setStatus("capture-status","保存済みNPC「"+npc+"」を高速認識しました（AI解析なし・"+Math.round(match.distance*100)+"%差分）。");
-    setStatus("form-status","保存済み翻訳を即時表示中（API使用なし）");
+    setStatus("form-status",needsTranslation(root)?"未翻訳の項目を補完中（画像AI解析なし）":"保存済み翻訳を即時表示中（API使用なし）");
     return true;
   }
 
@@ -518,15 +518,146 @@
   }
 
   function choicesArray(value){
-    if(Array.isArray(value)) return value.map(function(x){return String(x||"").trim();}).filter(Boolean);
+    if(Array.isArray(value)) return value.map(function(x){return String(x||"").trim();});
     if(typeof value==="string"){
+      if(!value.trim()) return [];
       try{
         const parsed=JSON.parse(value);
-        if(Array.isArray(parsed)) return parsed.map(function(x){return String(x||"").trim();}).filter(Boolean);
+        if(Array.isArray(parsed)) return parsed.map(function(x){return String(x||"").trim();});
       }catch(_){}
-      return linesToArray(value);
+      return value.split(/\r?\n/).map(function(x){return x.trim();});
     }
     return [];
+  }
+
+  // Empty slots are intentional: choice indexes also identify dialogue transitions.
+  const TRANSLATION_CACHE_KEY="xen-validated-ja-v1";
+  const translationPending=new Map();
+  const translationFailures=new Map();
+  const recordRepairs=new Map();
+
+  function translationKey(value){
+    return String(value||"").normalize("NFKC").toLowerCase().replace(/[\s\p{P}\p{S}]/gu,"");
+  }
+
+  function validJapanese(en,ja){
+    const source=translationKey(en),target=translationKey(ja);
+    if(!target||!/[ぁ-んァ-ヶ一-龠]/.test(target)||source===target) return false;
+    // Reject an English echo with a tiny Japanese suffix/prefix as well.
+    const latin=target.replace(/[^a-z0-9]/g,"");
+    const original=source.replace(/[^a-z0-9]/g,"");
+    const japanese=(target.match(/[ぁ-んァ-ヶ一-龠]/g)||[]).length;
+    if(original&&latin&&japanese<target.length*0.3){
+      if(latin.includes(original)||original.includes(latin)) return false;
+      const a=new Set(latin.match(/.{1,2}/g)||[]);
+      const b=new Set(original.match(/.{1,2}/g)||[]);
+      let common=0;
+      a.forEach(function(x){if(b.has(x)) common++;});
+      if(2*common/(a.size+b.size)>=0.85) return false;
+    }
+    return true;
+  }
+
+  function readTranslationCache(){
+    try{
+      const rows=JSON.parse(localStorage.getItem(TRANSLATION_CACHE_KEY)||"[]");
+      return new Map(Array.isArray(rows)?rows.filter(function(r){
+        return Array.isArray(r)&&r.length===2&&validJapanese(r[0],r[1]);
+      }):[]);
+    }catch(_){return new Map();}
+  }
+
+  const translationCache=readTranslationCache();
+
+  function acceptedTranslation(en,ja){
+    if(validJapanese(en,ja)) return String(ja).trim();
+    const cached=translationCache.get(translationKey(en));
+    return validJapanese(en,cached)?cached:"";
+  }
+
+  function rememberTranslation(en,ja){
+    if(!validJapanese(en,ja)) return;
+    const key=translationKey(en);
+    translationCache.delete(key);
+    translationCache.set(key,String(ja).trim());
+    while(translationCache.size>500) translationCache.delete(translationCache.keys().next().value);
+    try{localStorage.setItem(TRANSLATION_CACHE_KEY,JSON.stringify(Array.from(translationCache)));}catch(_){}
+  }
+
+  function cleanTranslations(result){
+    const copy=Object.assign({},result);
+    copy.dialogue_text_en=String(result.dialogue_text_en??result.english_text??"");
+    copy.dialogue_text_ja=acceptedTranslation(copy.dialogue_text_en,result.dialogue_text_ja??result.japanese_text);
+    copy.choices_en=choicesArray(result.choices_en);
+    const ja=choicesArray(result.choices_ja);
+    copy.choices_ja=copy.choices_en.map(function(en,i){return en?acceptedTranslation(en,ja[i]):"";});
+    copy.japanese_text=[copy.dialogue_text_ja].concat(copy.choices_ja).filter(Boolean).join("\n");
+    return copy;
+  }
+
+  function needsTranslation(result){
+    const clean=cleanTranslations(result);
+    return !!(clean.dialogue_text_en.trim()&&!clean.dialogue_text_ja)||
+      clean.choices_en.some(function(en,i){return en&&!clean.choices_ja[i];});
+  }
+
+  async function translateMissingText(en,retry){
+    const cached=acceptedTranslation(en,"");
+    if(cached) return cached;
+    const key=translationKey(en);
+    if(!key) return "";
+    if(translationPending.has(key)) return translationPending.get(key);
+    if(!retry&&Date.now()-(translationFailures.get(key)||0)<60000) return "";
+    const pending=(async function(){
+      let translator;
+      try{
+        const api=window.Translator||(window.ai&&window.ai.translator);
+        if(!api||typeof api.create!=="function") return "";
+        translator=await api.create({sourceLanguage:"en",targetLanguage:"ja"});
+        const ja=await translator.translate(en);
+        if(!validJapanese(en,ja)) return "";
+        rememberTranslation(en,ja);
+        return String(ja).trim();
+      }catch(_){return "";}
+      finally{if(translator&&translator.destroy) translator.destroy();}
+    })();
+    translationPending.set(key,pending);
+    try{
+      const ja=await pending;
+      if(!ja) translationFailures.set(key,Date.now());
+      else translationFailures.delete(key);
+      return ja;
+    }finally{translationPending.delete(key);}
+  }
+
+  async function repairTranslations(result,retry){
+    const clean=cleanTranslations(result);
+    if(clean.dialogue_text_en.trim()&&!clean.dialogue_text_ja){
+      clean.dialogue_text_ja=await translateMissingText(clean.dialogue_text_en,retry);
+    }
+    for(let i=0;i<clean.choices_en.length;i++){
+      if(clean.choices_en[i]&&!clean.choices_ja[i]){
+        clean.choices_ja[i]=await translateMissingText(clean.choices_en[i],retry);
+      }
+      rememberTranslation(clean.choices_en[i],clean.choices_ja[i]);
+    }
+    rememberTranslation(clean.dialogue_text_en,clean.dialogue_text_ja);
+    clean.japanese_text=[clean.dialogue_text_ja].concat(clean.choices_ja).filter(Boolean).join("\n");
+    return clean;
+  }
+
+  function repairDisplayedRecord(record,cardKey){
+    if(!needsTranslation(record)||recordRepairs.has(record.id)) return;
+    const pending=repairTranslations(record).then(function(clean){
+      Object.assign(record,clean);
+      // Refresh only the same visible record; never navigate after an async repair.
+      document.querySelectorAll(".game-dialog-card").forEach(function(card){
+        if(card.dataset.recordId===record.id&&card.dataset.cardKey===cardKey){
+          card.outerHTML=renderDialogueCard(record,cardKey);
+        }
+      });
+    }).catch(function(){}).finally(function(){recordRepairs.delete(record.id);});
+    recordRepairs.set(record.id,pending);
   }
 
   function profileKey(name,map){
@@ -543,6 +674,7 @@
   }
 
   async function applyAiResult(result){
+    result=cleanTranslations(result);
     const f=$("capture-form").elements;
     if(result.screen_type==="expanded_map"){
       if(result.map_name) f.map_name.value=String(result.map_name);
@@ -565,7 +697,7 @@
     f.quest_name_ja.value=result.quest_name_ja||"";
 
     const dialogueEn=String(result.dialogue_text_en||result.english_text||"");
-    const dialogueJa=String(result.dialogue_text_ja||result.japanese_text||"");
+    const dialogueJa=String(result.dialogue_text_ja??result.japanese_text??"");
     const choicesEn=choicesArray(result.choices_en);
     const choicesJa=choicesArray(result.choices_ja);
     f.dialogue_text_en.value=dialogueEn;
@@ -603,6 +735,7 @@
   }
 
   async function autoSaveAiResult(result,imageHash){
+    result=cleanTranslations(result);
     const res=await db.rpc("game_knowledge_auto_save_v2",{
       p_map_name:String(result.map_name||""),
       p_npc_name:String(result.npc_name||""),
@@ -611,7 +744,7 @@
       p_english_text:String(result.english_text||""),
       p_japanese_text:String(result.japanese_text||""),
       p_dialogue_text_en:String(result.dialogue_text_en||result.english_text||""),
-      p_dialogue_text_ja:String(result.dialogue_text_ja||result.japanese_text||""),
+      p_dialogue_text_ja:String(result.dialogue_text_ja??result.japanese_text??""),
       p_choices_en:choicesArray(result.choices_en),
       p_choices_ja:choicesArray(result.choices_ja),
       p_required_level:result.required_level==null?null:Number(result.required_level),
@@ -630,7 +763,7 @@
     if(info.saved){
       activeRecordId=String(info.id||"");
       activeNpcName=String(result.npc_name||"").trim();
-      if(result._client_image_hash) rememberFastScreen(result._client_image_hash,activeRecordId,activeNpcName);
+      if(result._client_image_hash&&!needsTranslation(result)) rememberFastScreen(result._client_image_hash,activeRecordId,activeNpcName);
       setStatus("form-status",info.inserted?"AI解析結果を自動保存しました。現在の会話だけ表示します。":"同じ内容は登録済みのため更新のみ行いました。");
       await loadRecords(true);
       await rememberKnownNpcSignature(result);
@@ -882,7 +1015,7 @@
         activeNpcName=instant.npc_name||"";
         renderRecords();
         setStatus("capture-status","保存済みの翻訳を即時表示しました。AI解析は使用していません。");
-        setStatus("form-status","保存済みデータを表示中（API使用なし）");
+        setStatus("form-status",needsTranslation(instant)?"未翻訳の項目を補完中（画像AI解析なし）":"保存済みデータを表示中（API使用なし）");
         return;
       }
 
@@ -909,6 +1042,8 @@
         setStatus("capture-status","保存済みNPCを高速表示済みのため、古いAI解析結果の画面反映を省略しました。");
         return;
       }
+      data=await repairTranslations(data);
+      if(source==="auto"&&lastFastNpcAt>analysisStartedAt) return;
       await applyAiResult(data);
 
       if(data.screen_type==="npc_dialog"){
@@ -977,27 +1112,23 @@
   }
 
   async function translateEnglish(){
-    const text=$("dialogue-text-en").value.trim()||$("english-text").value.trim();
-    if(!text){setStatus("capture-status","先に英文を入力またはOCRで読み取ってください。");return;}
+    const f=$("capture-form").elements;
     $("translate-run").disabled=true;
     try{
-      let translated="";
-      if(window.Translator&&typeof window.Translator.create==="function"){
-        const translator=await window.Translator.create({sourceLanguage:"en",targetLanguage:"ja"});
-        translated=await translator.translate(text);
-        if(translator.destroy) translator.destroy();
-      }else if(window.ai&&window.ai.translator&&typeof window.ai.translator.create==="function"){
-        const translator=await window.ai.translator.create({sourceLanguage:"en",targetLanguage:"ja"});
-        translated=await translator.translate(text);
-      }else{
-        throw new Error("このブラウザは内蔵翻訳APIに対応していません。日本語訳欄へ手入力してください。");
-      }
-      $("dialogue-text-ja").value=translated||"";
-      $("japanese-text").value=translated||"";
-      setStatus("capture-status","会話内容を翻訳しました。ゲーム用語・固有名詞を確認してください。");
-    }catch(err){
-      setStatus("capture-status",err.message);
-    }finally{$("translate-run").disabled=false;}
+      const result=await repairTranslations({
+        dialogue_text_en:f.dialogue_text_en.value||f.english_text.value,
+        dialogue_text_ja:f.dialogue_text_ja.value,
+        choices_en:choicesArray(f.choices_en.value),
+        choices_ja:choicesArray(f.choices_ja.value)
+      },true);
+      f.dialogue_text_ja.value=result.dialogue_text_ja;
+      f.choices_ja.value=result.choices_ja.join("\n");
+      f.japanese_text.value=result.japanese_text;
+      setStatus("capture-status",needsTranslation(result)
+        ?"未翻訳の項目が残っています。対応ブラウザで再試行するか、日本語訳を入力してください。"
+        :"会話と選択肢の日本語訳を確認しました。ゲーム用語・固有名詞を確認してください。");
+    }catch(err){setStatus("capture-status",err.message);}
+    finally{$("translate-run").disabled=false;}
   }
 
   async function loadQuests(){
@@ -1101,9 +1232,15 @@
       const imageUrl=await uploadImage();
       const level=String(fd.get("required_level")||"").trim();
       const dialogEn=String(fd.get("dialogue_text_en")||"");
-      const dialogJa=String(fd.get("dialogue_text_ja")||"");
-      const choiceEn=linesToArray(fd.get("choices_en")||"");
-      const choiceJa=linesToArray(fd.get("choices_ja")||"");
+      const repaired=await repairTranslations({
+        dialogue_text_en:dialogEn,
+        dialogue_text_ja:String(fd.get("dialogue_text_ja")||""),
+        choices_en:choicesArray(fd.get("choices_en")||""),
+        choices_ja:choicesArray(fd.get("choices_ja")||"")
+      },true);
+      const dialogJa=repaired.dialogue_text_ja;
+      const choiceEn=repaired.choices_en;
+      const choiceJa=repaired.choices_ja;
       const fullEn=[dialogEn].concat(choiceEn).filter(Boolean).join("\n");
       const fullJa=[dialogJa].concat(choiceJa).filter(Boolean).join("\n");
       const args={
@@ -1226,10 +1363,12 @@
   function renderDialogueCard(r,cardKey){
     const quest=[r.quest_name_ja,r.quest_name_en].filter(Boolean).join(" / ");
     const profile=findNpcProfile(r.npc_name,r.map_name);
-    const dialogueEn=r.dialogue_text_en||r.english_text||"";
-    const dialogueJa=r.dialogue_text_ja||r.japanese_text||"";
+    const dialogueEn=String(r.dialogue_text_en??r.english_text??"");
+    const clean=cleanTranslations(r);
+    const dialogueJa=clean.dialogue_text_ja;
+    repairDisplayedRecord(r,cardKey);
     const choicesEn=choicesArray(r.choices_en);
-    const choicesJa=choicesArray(r.choices_ja);
+    const choicesJa=clean.choices_ja;
     const count=Math.max(choicesEn.length,choicesJa.length);
     const choiceRows=[];
     for(let i=0;i<count;i++){
@@ -1237,7 +1376,7 @@
       const inner=
         '<span class="game-choice-mark">✦</span><div>'+
         (choicesEn[i]?'<div class="choice-en">'+esc(choicesEn[i])+'</div>':"")+
-        (choicesJa[i]?'<div class="choice-ja">'+esc(choicesJa[i])+'</div>':"")+
+        (choicesJa[i]?'<div class="choice-ja">'+esc(choicesJa[i])+'</div>':'<div class="choice-ja">未翻訳</div>')+
         '</div>'+
         (transition?'<span class="choice-next">→</span>':"");
       choiceRows.push(
@@ -1274,7 +1413,7 @@
           '<section class="game-dialog-upper">'+
             '<div class="game-panel-label">会話内容 / DIALOGUE</div>'+
             '<div class="dialog-en">'+esc(dialogueEn||"会話内容未登録")+'</div>'+
-            (dialogueJa?'<div class="dialog-ja">'+esc(dialogueJa)+'</div>':"")+
+            (dialogueJa?'<div class="dialog-ja">'+esc(dialogueJa)+'</div>':(dialogueEn?'<div class="dialog-ja">未翻訳</div>':""))+
           '</section>'+
           '<section class="game-dialog-lower">'+
             '<div class="game-panel-label">選択項目 / CHOICES</div>'+
