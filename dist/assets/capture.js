@@ -443,22 +443,55 @@
     return {data:data,blob:blob,hash:hash};
   }
 
+  function canonicalMapRegion(region){
+    const r=region||{};
+    const rx=Number(r.x)||0;
+    const ry=Number(r.y)||0;
+    const rw=Number(r.width)||0;
+    const rh=Number(r.height)||0;
+    const looksLikeFullPanel=rw>=340&&rh>=430&&(rx+rw)>=820&&ry<=180;
+    if(!looksLikeFullPanel){
+      return {x:420,y:0,width:580,height:760};
+    }
+    const left=Math.max(0,Math.min(rx-25,430));
+    const bottom=Math.min(1000,Math.max(ry+rh+25,720));
+    return {x:left,y:0,width:1000-left,height:bottom};
+  }
+
+  function remapNpcToSavedRegion(npc,sourceRegion,savedRegion){
+    const sx=Number(sourceRegion&&sourceRegion.x)||0;
+    const sy=Number(sourceRegion&&sourceRegion.y)||0;
+    const sw=Number(sourceRegion&&sourceRegion.width)||1000;
+    const sh=Number(sourceRegion&&sourceRegion.height)||1000;
+    const absX=sx+sw*(Number(npc.x)||0)/1000;
+    const absY=sy+sh*(Number(npc.y)||0)/1000;
+    return {
+      name:String(npc.name||""),
+      x:Math.max(0,Math.min(1000,Math.round((absX-savedRegion.x)*1000/savedRegion.width))),
+      y:Math.max(0,Math.min(1000,Math.round((absY-savedRegion.y)*1000/savedRegion.height))),
+      confidence:Number(npc.confidence||0)
+    };
+  }
+
   async function saveDedicatedMapAnalysis(pack){
     if(!pack||!pack.data||!pack.data.map_visible) return false;
     const result=pack.data;
     const mapName=String(result.map_name||"").trim();
     const confidence=Number(result.confidence||0);
-    const npcs=Array.isArray(result.npcs)?result.npcs.filter(function(n){
+    const sourceRegion=validMapRegion(result.panel_region)?result.panel_region:{x:420,y:0,width:580,height:760};
+    const savedRegion=canonicalMapRegion(sourceRegion);
+    const rawNpcs=Array.isArray(result.npcs)?result.npcs.filter(function(n){
       return n&&String(n.name||"").trim()&&Number(n.confidence||0)>=70;
     }):[];
+    const npcs=rawNpcs.map(function(n){return remapNpcToSavedRegion(n,sourceRegion,savedRegion);});
     if(!mapName||confidence<70) return false;
 
     let mapImageUrl="";
     const existing=gameMaps.find(function(m){return normText(m.map_name)===normText(mapName);});
     if(existing&&existing.map_image_url){
       mapImageUrl=existing.map_image_url;
-    }else if(validMapRegion(result.panel_region)){
-      const panel=await cropBlobNormalized(pack.blob,result.panel_region,0.88);
+    }else{
+      const panel=await cropBlobNormalized(pack.blob,savedRegion,0.9);
       if(panel){
         const safe=mapName.toLowerCase().replace(/[^a-z0-9]+/g,"-").replace(/^-+|-+$/g,"")||"map";
         const path=safe+"/"+Date.now()+"-"+pack.hash+".webp";
@@ -477,20 +510,32 @@
     });
     if(res.error) throw new Error("マップ情報の保存に失敗しました："+res.error.message);
     const info=res.data||{};
-    setStatus("map-collect-status",mapName+" を保存：NPC "+npcs.length+"件 / 新規観測 "+(info.new_sightings||0)+"件");
+    setStatus("map-collect-status",mapName+" の拡大マップを保存：NPC "+npcs.length+"件 / 新規観測 "+(info.new_sightings||0)+"件");
     await loadMapData();
     return true;
+  }
+
+  function portraitFallbackRegion(result){
+    if(validMapRegion(result&&result.npc_portrait_region)) return result.npc_portrait_region;
+    const d=result&&result.dialog_window_region;
+    if(!validMapRegion(d)) return null;
+    return {
+      x:Number(d.x)||0,
+      y:(Number(d.y)||0)+(Number(d.height)||0)*0.07,
+      width:(Number(d.width)||0)*0.24,
+      height:(Number(d.height)||0)*0.58
+    };
   }
 
   async function autoSaveNpcPortrait(result){
     if(!result||result.screen_type!=="npc_dialog") return false;
     const npc=String(result.npc_name||"").trim();
     const map=String(result.map_name||"").trim();
-    const region=result.npc_portrait_region;
+    const region=portraitFallbackRegion(result);
     if(!npc||!validMapRegion(region)||!imageBlob) return false;
     if(findNpcProfile(npc,map)) return false;
 
-    const portrait=await cropBlobNormalized(imageBlob,region,0.9);
+    const portrait=await cropBlobNormalized(imageBlob,region,0.92);
     if(!portrait) return false;
     const safe=npc.toLowerCase().replace(/[^a-z0-9]+/g,"-").replace(/^-+|-+$/g,"")||"npc";
     const path=safe+"/"+Date.now()+"-"+crypto.randomUUID()+".webp";
