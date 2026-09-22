@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 "use strict";
 
-/* Xen Rebirth Event Sync Ver.10
+/* Xen Rebirth Event Sync Ver.10.1
    PRODUCTION WRITE / MANUAL WORKFLOW ONLY / NO DELETES
    Based on the verified Ver.9 parser and duplicate classifier.
 */
