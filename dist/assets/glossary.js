@@ -159,7 +159,12 @@
     const slug = String(term.slug || "");
     const slugMatch = slug.match(/^class-(knight|mage|archer|cleric|rogue|templar|xenian)$/);
     if (slugMatch) return slugMatch[1];
-    const values = [term.name_en, term.name_ja, term.aliases].map(normalize).join(" ");
+
+    // Legacy fallback: only an entry whose actual name is exactly the class name
+    // may become a class hub. Do not match partial names such as "Xenian Skill".
+    const values = [term.name_en, term.name_ja]
+      .map(normalize)
+      .filter(Boolean);
     const map = [
       ["knight", ["knight", "ナイト"]], ["mage", ["mage", "メイジ"]],
       ["archer", ["archer", "アーチャー"]], ["cleric", ["cleric", "クレリック"]],
