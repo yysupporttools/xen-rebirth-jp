@@ -13,7 +13,7 @@
   <script defer src="assets/glossary-config.js"></script>
   <script defer src="assets/vendor/supabase.js"></script>
   <script defer src="https://cdn.jsdelivr.net/npm/tesseract.js@5/dist/tesseract.min.js"></script>
-  <script defer src="assets/capture.js?v=16"></script>
+  <script defer src="assets/capture.js?v=17"></script>
   <script defer src="assets/saved-items.js?v=1"></script>
 </head>
 <body>
@@ -165,7 +165,7 @@
       <button id="capture-mini-top" type="button">1. 画面取り込みへ</button>
       <small>この欄を見ている間も、画面共有と自動解析は裏で継続します。</small>
     </div>
-    <p class="note">保存済みNPCを押すと、そのNPCで最初に保存された会話を「会話1」として表示します。遷移先が登録されている選択肢を押すと次の会話へ進み、「← 1つ前の会話へ」で戻れます。過去データは内部に残しますが、画面には現在の会話1件だけを表示します。 3.の表示中でも、1.の画面共有は専用の非表示映像から継続して読み取ります。</p>
+    <p class="note">保存済みNPCを押すと、そのNPCで最初に保存された会話を「会話1」として表示します。スクロールが必要な長文会話は複数回の読み取り内容を1つに統合し、次回から全文を表示します。遷移先が登録されている選択肢を押すと次の会話へ進み、「← 1つ前の会話へ」で戻れます。過去データは内部に残しますが、画面には現在の会話1件だけを表示します。 3.の表示中でも、1.の画面共有は専用の非表示映像から継続して読み取ります。</p>
     <div class="knowledge-toolbar">
       <input id="knowledge-search" type="search" placeholder="NPC名・マップ・クエスト名・本文から検索" aria-label="NPC・クエスト検索">
       <select id="map-filter" aria-label="マップ絞り込み"><option value="">すべてのマップ</option></select>
