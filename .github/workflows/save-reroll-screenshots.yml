@@ -1,0 +1,41 @@
+name: Save reroll screenshots locally
+on:
+  push:
+    paths:
+      - '.github/workflows/save-reroll-screenshots.yml'
+  workflow_dispatch:
+jobs:
+  save:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v4
+      - name: Download the two official screenshots supplied by the user
+        run: |
+          mkdir -p dist/assets/guides/master-of-fate
+          python - <<'PY'
+          import urllib.request, pathlib
+          files = [
+            ("https://www.xenrebirth.com/index.php?attachment/18376-xen-rebirth-miracle-researcher-npc-jpg/", "dist/assets/guides/master-of-fate/miracle-researcher.jpg"),
+            ("https://www.xenrebirth.com/index.php?attachment/18375-xen-rebirth-miracle-researcher-npc-two-jpg/", "dist/assets/guides/master-of-fate/miracle-researcher-menu.jpg"),
+          ]
+          for url, out in files:
+              req=urllib.request.Request(url,headers={"User-Agent":"Mozilla/5.0 XenRebirthJP/1.0","Referer":"https://www.xenrebirth.com/"})
+              with urllib.request.urlopen(req,timeout=30) as r:
+                  data=r.read()
+                  ct=r.headers.get("Content-Type","")
+              print(out, ct, len(data), data[:12])
+              if not (ct.startswith("image/") or data[:3] == b"\xff\xd8\xff" or data[:8] == b"\x89PNG\r\n\x1a\n"):
+                  raise SystemExit("Attachment did not return image bytes: "+url)
+              pathlib.Path(out).write_bytes(data)
+          PY
+          file dist/assets/guides/master-of-fate/*
+      - name: Commit screenshots
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add dist/assets/guides/master-of-fate/
+          git diff --cached --quiet && exit 0
+          git commit -m "Store Master of Fate screenshots locally"
+          git push
