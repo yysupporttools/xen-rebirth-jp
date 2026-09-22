@@ -13,7 +13,7 @@
   <script defer src="assets/glossary-config.js"></script>
   <script defer src="assets/vendor/supabase.js"></script>
   <script defer src="https://cdn.jsdelivr.net/npm/tesseract.js@5/dist/tesseract.min.js"></script>
-  <script defer src="assets/capture.js?v=10"></script>
+  <script defer src="assets/capture.js?v=11"></script>
   <script defer src="assets/saved-items.js?v=1"></script>
 </head>
 <body>
@@ -96,7 +96,7 @@
       <div class="npc-image-editor">
         <div>
           <strong>NPC画像</strong>
-          <p class="small">NPC名を入力後、キャラクター部分を切り抜いた画像を登録できます。同じNPCの検索結果に共通表示されます。</p>
+          <p class="small">NPC会話画面でキャラクター画像を認識できた場合は自動で切り抜いて登録します。必要な場合は手動で差し替えることもできます。</p>
           <div class="capture-controls">
             <label class="file-button">NPC画像を選択<input id="npc-image-file" type="file" accept="image/png,image/jpeg,image/webp"></label>
             <button id="npc-image-save" type="button" disabled>NPC画像を保存</button>
@@ -173,7 +173,7 @@
       <div><p class="eyebrow">MAP DATABASE</p><h2>4. 自動収集したマップ・NPC位置</h2></div>
       <span id="map-db-count">0 NPC</span>
     </div>
-    <p class="note">ゲーム中に拡大マップを開くと、マップ名と表示中のNPC名・位置を自動で蓄積します。複数回の観測結果から位置を平均化します。</p>
+    <p class="note">ゲーム中に右上の拡大マップを開くと、サイズが場所ごとに違っても右上領域からマップ枠を探し、マップ名と表示中のNPC名・位置を自動で蓄積します。複数回の観測結果から位置を平均化します。</p>
     <div class="map-db-toolbar">
       <select id="map-db-select" aria-label="マップ選択"><option value="">マップを選択</option></select>
     </div>
