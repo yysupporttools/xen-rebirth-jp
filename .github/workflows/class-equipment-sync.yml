@@ -51,6 +51,6 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: class-equipment-extraction
-          path: class-equipment-*.json
+          path: |\n            class-equipment-*.json\n            class-equipment-debug-*.json
           if-no-files-found: ignore
           retention-days: 7
