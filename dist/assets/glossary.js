@@ -712,7 +712,7 @@
       for (const source of referenceCatalog) {
         const existing = terms.find(t => t.slug === source.slug || normalize(t.name_en) === normalize(source.name_en));
         if (existing) {
-          for (const key of ["_catalogType", "_section", "_blocks", "_table", "_links"]) existing[key] = source[key];
+          for (const key of ["_catalogType", "_section", "_blocks", "_table", "_tables", "_links"]) existing[key] = source[key];
         } else {
           const category = categories.find(c => c.name === (source._catalogType === "pets" ? "ペット" : "アイテム"));
           terms.push({...source, id:"catalog-" + source.slug, category_id:category?.id || "catalog-items", _catalogSeed:true});
@@ -721,10 +721,12 @@
     } catch (error) { console.error(error); }
   }
   function referenceHtml(term) {
-    const links = rows => (rows || []).filter(x => safeUrl(x.url)).map(x => `<a href="${esc(safeUrl(x.url))}">${esc(x.label)}</a>`).join("");
+    const links = rows => (rows || []).filter(x => safeUrl(x.url)).map(x => `<a href="${esc(safeUrl(x.url))}" target="_blank" rel="noopener noreferrer">${esc(x.label)} ↗</a>`).join("");
     const blocks = (term._blocks || []).map(b => `<section class="reference-block"><h3>${esc(b.heading)}</h3>${b.text ? `<p>${esc(b.text).replace(/\n/g,"<br>")}</p>` : ""}<div class="reference-links">${links(b.links)}</div></section>`).join("");
-    const table = term._table ? `<div class="reference-table-wrap"><table><caption>公式掲載値の整理</caption><thead><tr>${term._table.headers.map(h=>`<th scope="col">${esc(h)}</th>`).join("")}</tr></thead><tbody>${term._table.rows.map(row=>`<tr>${row.map((v,i)=>i===0?`<th scope="row">${esc(v)}</th>`:`<td>${esc(v)}</td>`).join("")}</tr>`).join("")}</tbody></table></div>` : "";
-    return blocks + table + (term._links?.length ? `<div class="reference-block"><h3>公式の関連手順</h3><div class="reference-links">${links(term._links)}</div></div>` : "");
+    const makeTable = table => `<div class="reference-table-wrap"><table><caption>${esc(table.caption || "公式掲載値の整理")}</caption><thead><tr>${table.headers.map(h=>`<th scope="col">${esc(h)}</th>`).join("")}</tr></thead><tbody>${table.rows.map(row=>`<tr>${row.map((v,i)=>i===0?`<th scope="row">${esc(v)}</th>`:`<td>${esc(v)}</td>`).join("")}</tr>`).join("")}</tbody></table></div>`;
+    const table = term._table ? makeTable(term._table) : "";
+    const tables = (term._tables || []).map(makeTable).join("");
+    return blocks + table + tables + (term._links?.length ? `<div class="reference-block reference-source-block"><h3>公式の出典</h3><div class="reference-links">${links(term._links)}</div></div>` : "");
   }
 
   async function loadShared() {
