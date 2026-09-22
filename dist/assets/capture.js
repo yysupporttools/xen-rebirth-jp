@@ -15,6 +15,7 @@
   let activeNpcName="";
   const FAST_SCREEN_CACHE_KEY="xen-fast-screen-cache-v1";
   const KNOWN_NPC_SIGNATURES_KEY="xen-known-npc-signatures-v1";
+  const NPC_INDEX_EXPANDED_KEY="xen-npc-index-expanded-v1";
   let fastNpcTimer=null;
   let lastFastNpcName="";
   let lastFastNpcAt=0;
@@ -1682,9 +1683,11 @@
     const counts={};
     records.forEach(function(r){counts[r.npc_name]=(counts[r.npc_name]||0)+1;});
     const npcs=Object.keys(counts).sort(function(a,b){return a.localeCompare(b,"ja");});
-    $("npc-index").innerHTML=npcs.slice(0,80).map(function(n){
+    $("npc-index-count").textContent=npcs.length+" NPC";
+    $("npc-index").innerHTML=npcs.map(function(n){
       return '<button type="button" data-npc="'+esc(n)+'">'+esc(n)+' <small>('+counts[n]+')</small></button>';
     }).join("");
+    applyNpcIndexState();
     $("npc-index").querySelectorAll("[data-npc]").forEach(function(btn){
       btn.addEventListener("click",function(){
         activeNpcName=btn.dataset.npc||"";
@@ -1695,6 +1698,27 @@
         renderRecords();
       });
     });
+  }
+
+  function npcIndexExpanded(){
+    try{return localStorage.getItem(NPC_INDEX_EXPANDED_KEY)==="1";}catch(_){return false;}
+  }
+
+  function applyNpcIndexState(){
+    const index=$("npc-index");
+    const button=$("npc-index-toggle");
+    if(!index||!button) return;
+    const expanded=npcIndexExpanded();
+    index.classList.toggle("is-collapsed",!expanded);
+    index.classList.toggle("is-expanded",expanded);
+    button.setAttribute("aria-expanded",expanded?"true":"false");
+    button.textContent=expanded?"一覧を縮小 ▲":"一覧を開く ▼";
+  }
+
+  function toggleNpcIndex(){
+    const next=!npcIndexExpanded();
+    try{localStorage.setItem(NPC_INDEX_EXPANDED_KEY,next?"1":"0");}catch(_){}
+    applyNpcIndexState();
   }
 
   function renderRecords(){
@@ -1852,7 +1876,10 @@
   $("capture-form").addEventListener("submit",saveRecord);
   $("form-clear").addEventListener("click",clearForm);
   $("quest-link").addEventListener("change",changeQuest);
-  $("knowledge-search").addEventListener("input",function(){
+  $("npc-index-toggle").addEventListener("click",toggleNpcIndex);
+  applyNpcIndexState();
+
+    $("knowledge-search").addEventListener("input",function(){
     activeRecordId="";
     activeNpcName=this.value.trim();
     dialogueNavStacks.clear();
