@@ -7,13 +7,13 @@
   <meta name="description" content="Xen Rebirthのゲーム画面をブラウザでキャプチャし、NPC・マップ・クエストの英文と日本語訳を共有・検索できます。">
   <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='6' fill='%230d2630'/%3E%3Cpath d='M8 7L24 25M24 7L8 25' stroke='%23e5bd77' stroke-width='4'/%3E%3C/svg%3E">
   <link rel="stylesheet" href="assets/style.css">
-  <link rel="stylesheet" href="assets/capture.css?v=2">
+  <link rel="stylesheet" href="assets/capture.css?v=3">
   <link rel="stylesheet" href="assets/bgm-player.css?v=2">
   <link rel="stylesheet" href="assets/saved-items.css?v=1">
   <script defer src="assets/glossary-config.js"></script>
   <script defer src="assets/vendor/supabase.js"></script>
   <script defer src="https://cdn.jsdelivr.net/npm/tesseract.js@5/dist/tesseract.min.js"></script>
-  <script defer src="assets/capture.js?v=6"></script>
+  <script defer src="assets/capture.js?v=7"></script>
   <script defer src="assets/saved-items.js?v=1"></script>
 </head>
 <body>
@@ -91,6 +91,22 @@
         <label>NPC名<input name="npc_name" maxlength="150" required placeholder="例：Miracle Researcher"></label>
       </div>
 
+      <div class="npc-image-editor">
+        <div>
+          <strong>NPC画像</strong>
+          <p class="small">NPC名を入力後、キャラクター部分を切り抜いた画像を登録できます。同じNPCの検索結果に共通表示されます。</p>
+          <div class="capture-controls">
+            <label class="file-button">NPC画像を選択<input id="npc-image-file" type="file" accept="image/png,image/jpeg,image/webp"></label>
+            <button id="npc-image-save" type="button" disabled>NPC画像を保存</button>
+            <span id="npc-image-status" class="capture-status" role="status"></span>
+          </div>
+        </div>
+        <div class="npc-image-preview-wrap">
+          <div class="npc-image-empty" id="npc-image-empty">NPC画像<br>未登録</div>
+          <img id="npc-image-preview" alt="NPC画像プレビュー" hidden>
+        </div>
+      </div>
+
       <div class="two">
         <label>クエスト名（英語）<input name="quest_name_en" maxlength="200"></label>
         <label>クエスト名（日本語）<input name="quest_name_ja" maxlength="200"></label>
@@ -101,8 +117,23 @@
         <label>既存STEP<select name="quest_step_id" id="step-link" disabled><option value="">STEP指定なし</option></select></label>
       </div>
 
-      <label>ゲーム内英文<textarea name="english_text" id="english-text" rows="8" maxlength="12000" placeholder="NPC会話・クエスト説明など"></textarea></label>
-      <label>日本語訳<textarea name="japanese_text" id="japanese-text" rows="8" maxlength="12000" placeholder="英文の日本語訳"></textarea></label>
+      <input type="hidden" name="english_text" id="english-text">
+      <input type="hidden" name="japanese_text" id="japanese-text">
+
+      <div class="dialog-edit-grid">
+        <label>会話内容（英語・上の枠）
+          <textarea name="dialogue_text_en" id="dialogue-text-en" rows="6" maxlength="10000" placeholder="NPCが話している上側の文章"></textarea>
+        </label>
+        <label>会話内容（日本語訳）
+          <textarea name="dialogue_text_ja" id="dialogue-text-ja" rows="6" maxlength="10000" placeholder="上の会話内容の日本語訳"></textarea>
+        </label>
+        <label>選択項目（英語・下の枠）
+          <textarea name="choices_en" id="choices-en" rows="5" maxlength="6000" placeholder="1行に1つずつ入力&#10;Use Service&#10;Saving a location and using a scroll"></textarea>
+        </label>
+        <label>選択項目（日本語訳）
+          <textarea name="choices_ja" id="choices-ja" rows="5" maxlength="6000" placeholder="英語と同じ順番で1行に1つずつ入力"></textarea>
+        </label>
+      </div>
 
       <div class="three">
         <label>必要Lv<input name="required_level" type="number" min="0" max="999"></label>
@@ -125,6 +156,7 @@
 
   <section class="paper capture-section" id="npc-database">
     <div class="section-heading"><div><p class="eyebrow">NPC / QUEST DATABASE</p><h2>3. 登録済み情報を検索</h2></div><span id="record-count">0件</span></div>
+    <p class="note">ゲーム画面と同じ考え方で、上側を「会話内容」、下側を「選択項目」として分けて表示します。NPC画像が登録されている場合は左側に表示します。</p>
     <div class="knowledge-toolbar">
       <input id="knowledge-search" type="search" placeholder="NPC名・マップ・クエスト名・本文から検索" aria-label="NPC・クエスト検索">
       <select id="map-filter" aria-label="マップ絞り込み"><option value="">すべてのマップ</option></select>
