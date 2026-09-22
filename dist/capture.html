@@ -13,7 +13,7 @@
   <script defer src="assets/glossary-config.js"></script>
   <script defer src="assets/vendor/supabase.js"></script>
   <script defer src="https://cdn.jsdelivr.net/npm/tesseract.js@5/dist/tesseract.min.js"></script>
-  <script defer src="assets/capture.js?v=14"></script>
+  <script defer src="assets/capture.js?v=15"></script>
   <script defer src="assets/saved-items.js?v=1"></script>
 </head>
 <body>
@@ -78,7 +78,7 @@
       <span id="capture-status" class="capture-status" role="status"></span>
     </div>
     <div id="map-collect-status" class="capture-status map-collect-status" role="status"></div>
-    <p class="small">自動解析モードは、共有したXen Rebirth画面を監視し、新しい画面だけAI解析します。同一画面を以前解析済みの場合はブラウザ内キャッシュから即時表示し、APIを使用しません。</p>
+    <p class="small">自動解析モードは、共有したXen Rebirth画面を監視します。一度認識したNPCは画面の特徴を端末内に記憶し、次回から約1秒ごとにローカル照合して、目標5秒以内で保存済み翻訳を表示します。ローカル一致時はOpenAI APIを使用しません。</p>
     <p class="small">※ブラウザの安全制限により、Xen Rebirthが最前面でブラウザが非アクティブな間はALTキーを直接検知できません。自動解析モードはALTキーを使わず、共有映像の変化から判定します。</p>
   </section>
 
