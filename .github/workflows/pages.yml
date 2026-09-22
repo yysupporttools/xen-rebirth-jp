@@ -32,8 +32,8 @@ jobs:
           mkdir -p dist/assets/guides/master-of-fate
           base64 -d scripts/image-payloads/master-of-fate-20260922/miracle-researcher.b64 > dist/assets/guides/master-of-fate/miracle-researcher.webp
           cat scripts/image-payloads/master-of-fate-20260922/miracle-researcher-menu.part*.b64 | base64 -d > dist/assets/guides/master-of-fate/miracle-researcher-menu.webp
-          test -s dist/assets/guides/master-of-fate/miracle-researcher.webp
-          test -s dist/assets/guides/master-of-fate/miracle-researcher-menu.webp
+          echo "bcfa69742d23efb14d5260c8f50b4583f134629d926eee56b7a3174d051674f8  dist/assets/guides/master-of-fate/miracle-researcher.webp" | sha256sum -c -
+          echo "53d170ec18e3a9839f4e95cd59fe65e78a85ad3b591759fe4558466935cd1a3b  dist/assets/guides/master-of-fate/miracle-researcher-menu.webp" | sha256sum -c -
       - uses: actions/configure-pages@v5
       - uses: actions/upload-pages-artifact@v4
         with:
