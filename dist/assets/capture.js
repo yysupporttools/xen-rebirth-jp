@@ -1712,7 +1712,7 @@
     index.classList.toggle("is-collapsed",!expanded);
     index.classList.toggle("is-expanded",expanded);
     button.setAttribute("aria-expanded",expanded?"true":"false");
-    button.textContent=expanded?"一覧を縮小 ▲":"一覧を開く ▼";
+    button.textContent=expanded?"一覧を閉じる ▲":"一覧を開く ▼";
   }
 
   function toggleNpcIndex(){
