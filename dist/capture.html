@@ -13,7 +13,7 @@
   <script defer src="assets/glossary-config.js"></script>
   <script defer src="assets/vendor/supabase.js"></script>
   <script defer src="https://cdn.jsdelivr.net/npm/tesseract.js@5/dist/tesseract.min.js"></script>
-  <script defer src="assets/capture.js?v=5"></script>
+  <script defer src="assets/capture.js?v=6"></script>
   <script defer src="assets/saved-items.js?v=1"></script>
 </head>
 <body>
@@ -81,7 +81,9 @@
   </section>
 
   <section class="paper capture-section">
-    <div class="section-heading"><div><p class="eyebrow">REVIEW & SAVE</p><h2>2. 内容を確認して登録</h2></div><span>読み取り結果は修正できます</span></div>
+    <div class="section-heading"><div><p class="eyebrow">REVIEW & SAVE</p><h2>2. 解析結果を確認</h2></div><span>NPC会話は自動保存</span></div>
+
+    <p class="note">OpenAIがNPC会話・クエスト画面を高い信頼度で認識した場合、英文・日本語訳・NPC名などは自動でNPC・クエストDBへ保存されます。同じ内容は重複登録しません。必要な場合だけ下の欄を修正して手動登録してください。</p>
 
     <form id="capture-form" class="capture-form">
       <div class="two">
@@ -111,10 +113,10 @@
       <label>報酬<textarea name="rewards" rows="4" maxlength="4000"></textarea></label>
       <label>メモ<textarea name="notes" rows="4" maxlength="5000"></textarea></label>
 
-      <label class="capture-check"><input id="save-image" type="checkbox"> スクリーンショットも共有保存する（チャットや個人情報が映っていないことを確認してください）</label>
+      <label class="capture-check"><input id="save-image" type="checkbox"> 手動登録時にスクリーンショットも共有保存する（自動保存では画像本体は保存しません）</label>
 
       <div class="capture-actions">
-        <button class="primary" type="submit">NPC・クエストDBへ登録</button>
+        <button class="primary" type="submit">修正内容を手動登録</button>
         <button id="form-clear" type="button">入力をクリア</button>
         <span id="form-status" class="capture-status" role="status"></span>
       </div>
