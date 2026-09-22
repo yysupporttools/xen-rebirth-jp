@@ -2847,6 +2847,151 @@
           "url": "https://www.xenrebirth.com/lexicon/index.php?entry/161-reroll-master-of-fate/"
         }
       ]
+    },
+    {
+      "slug": "jarika-pet-hatch",
+      "name_en": "Jarika Pet Hatch",
+      "name_ja": "ペット孵化（Jarika Pet Hatch）",
+      "source_url": "https://www.xenrebirth.com/lexicon/index.php?entry/112-jarika-pet-hatch/",
+      "_catalogType": "pets",
+      "_section": "ペット孵化",
+      "_blocks": [
+        {
+          "heading": "概要・開始条件",
+          "text": "Lv35以上で開始できる長期ペットクエストです。Brynhild TrisectsにいるJarikaから開始し、Animal Encyclopediaを入手した後にMysterious Eggを受け取ります。以降はMysterious Eggをダブルクリックして会話し、素材集め・NPC訪問・討伐・散歩などを進めます。全体は45クエスト相当で、4時間クールダウンが合計42回あります。クールダウンだけでも約7日分になるため、長期進行を前提に準備しておくと楽です。最終的にMysterious Egg (Hatching)を入手します。"
+        },
+        {
+          "heading": "先に集めておきたい素材",
+          "text": "主な必要素材は、Butter 30、Aloe 20、Soul Stone Fragment 50、Leather 20、Watermelon 5、Wood 10、Apple 25、Grape 25、Firewood 50、Fairy Powder 20、Image Stone 10、Jureah's Pendant 1/4 ×1、Salt 15、White Paint 5、Jureah's Pendant 4/4 ×1以上、Cheese 30、Strawberry 30、Corn 30、Xen Stone ×1以上です。途中で500 Kronを使う買い物もあります。Jureah's Pendant 4/4やXen Stoneは精錬が失敗する可能性を考えて予備があると安心です。"
+        },
+        {
+          "heading": "進行 1〜7：Mysterious Egg入手〜Incubator作成",
+          "text": "1. Jarikaに話しかけ、EsseneのGuild Office Guideで受付。4時間後に再訪し、DianeへButter 30個を渡してAnimal Encyclopediaを入手。\n2. Jarikaへ戻り、4時間後に再度話しかけてMysterious Eggを受け取る。\n3. 卵に話しかけ、Aloe 20個を所持した状態で再度使用。4時間待つ。\n4. 卵を持ってDeath Valleyへ行き、その場で使用。4時間待つ。\n5. Wavin PlainsでPeanutを30体討伐し、卵を使用。4時間待つ。\n6. 卵を2回使用して動き方を教える。4時間待つ。\n7. EsseneのEnchanterへ行き、Soul Stone Fragment 50、Leather 20、Watermelon 5、Wood 10を渡してIncubatorを作成。4時間待つ。"
+        },
+        {
+          "heading": "進行 8〜14：体調管理・知識・食事",
+          "text": "8. CandyvaultのGreenへ殻の処理を依頼。4時間待つ。\n9. Summerhill StreetのGeneral Goods Merchantでクエスト用アイテムを500 Kronで購入し、卵を使用。4時間待つ。\n10. EsseneのAcolyte's GuildでMordineに相談し、Arcarinas SquareまたはEsseneのPet MerchantからCold Medicine (For Pets)を受け取り、卵に使用。4時間待つ。\n11. Berdana ForestでPigを30体討伐し、卵を使用。4時間待つ。\n12. Pet MerchantからPet Toyを受け取り、卵に使用。4時間待つ。\n13. Apple 25個とGrape 25個を所持して卵を使用。4時間待つ。\n14. Summerhill StreetのYozetteにIncubatorについて相談。4時間待つ。"
+        },
+        {
+          "heading": "進行 15〜21：Music Box作成〜Cracked Egg",
+          "text": "15. Baskerville Forestへ卵を連れて行き、その場で使用。4時間待つ。\n16. EsseneのCrazy Old Manに相談。Firewood 50、Fairy Powder 10、Image Stone 10、Jureah's Pendant 1/4 ×1を用意して渡し、その後Magician's ConveneのBetranからMusic Boxを受け取る。卵を使用して4時間待つ。\n17. 卵を3回使用して動き方を教える。4時間待つ。\n18. Summerhill StreetのGeneral Goods Merchantに相談後、CandyvaultのMerchantで500 Kronと引き換えにEmergency Medical Manualを入手し、卵を使用。4時間待つ。\n19. Luan BasinでStar Bearを30体討伐し、卵を使用。4時間待つ。\n20. CandyvaultのGreenへ再び殻の処理を依頼。4時間待つ。\n21. Brynhild Guild PlazaのRogue's GuildにいるRaymondへ相談し、卵を使用。4時間待つ。"
+        },
+        {
+          "heading": "進行 22〜28：Jarika再訪〜Incubator A",
+          "text": "22. Limus Basinへ卵を連れて行き、その場で使用。4時間待つ。\n23. Brynhild TrisectsのJarikaへ行きPet Toyを受け取り、卵に使用。4時間待つ。\n24. Fairy Powder 10、White Paint 5、Salt 15をEsseneのMagic RefineryにいるAlchemistへ渡してWhite Powderを入手し、卵に使用。\n25. Magic RefineryのEnchanterに相談後、Jureah's Pendant 4/4を用意してBlacksmithでIncubatorを精錬。成功するとIncubator Aになる。卵を使用して4時間待つ。\n26. Cheese 30個を所持して卵を使用。4時間待つ。\n27. Crazy Old Manに相談し、Guild Office 2階のGuild AgentからNotepadを受け取る。Crazy Old Manへ戻ってMusic Box Duoを受け取り、卵を使用。4時間待つ。\n28. 卵を2回使用して動き方を教える。4時間待つ。"
+        },
+        {
+          "heading": "進行 29〜35：戦闘・身だしなみ・散歩",
+          "text": "29. Harquil PlainsでFire Fairyを10体討伐し、卵を使用。4時間待つ。\n30. CandyvaultのGreenへ殻の処理を依頼。4時間待つ。\n31. Strawberry 30個をVader HotelのHotel Managerへ渡してRed Dyeを受け取り、卵に使用。4時間待つ。\n32. EsseneのGeneral StoreでBody Shampooを購入し、Brolly Basin中央付近の水場で卵を使用。位置がずれると反応しない場合があるため、水場の近くで試す。4時間待つ。\n33. Summerhill StreetのGeneral Goods MerchantからMonster Guideを購入し、卵を使用。4時間待つ。\n34. Corn 30個を所持して卵を使用。4時間待つ。\n35. Urail Valleyへ卵を連れて行き、その場で使用。4時間待つ。"
+        },
+        {
+          "heading": "進行 36〜42：Incubator B〜孵化直前",
+          "text": "36. EsseneのEnchanterに相談し、Xen Stoneを使ってBlacksmithでIncubatorを再精錬。成功するとIncubator Bになる。卵を使用して4時間待つ。\n37. Urail ValleyでSoul Ballを10体討伐し、卵を使用。4時間待つ。\n38. Summerhill StreetのGeneral Goods Merchantに香水について相談後、EsseneのMagician's ConveneにいるLeadmanからPerfumeを受け取り、卵に使用。4時間待つ。\n39. 卵を2回使用して動き方を教える。4時間待つ。\n40. CandyvaultのGreenへ殻の処理を依頼。4時間待つ。\n41. Summerhill StreetのGeneral Goods MerchantからGuide to the Continentsを購入し、卵を使用。4時間待つ。\n42. Crazy Old Manに相談後、EsseneのArmoryにいるArmor MerchantからBlack Inkを受け取る。Crazy Old Manへ戻るとMusic Box Trioに更新される。卵を使用して4時間待ち、最後にもう一度Mysterious Eggへ話しかけるとMysterious Egg (Hatching)を入手。"
+        },
+        {
+          "heading": "重要な注意点",
+          "text": "クエスト途中でもらうIncubator、Incubator A/B、Music Box系アイテム、各種本・Toy・Perfumeなどは、次の進行判定に使うことがあります。売却・破棄しないようにしてください。多くの工程は「卵を使用 → 指示された行動 → 卵をもう一度使用 → 4時間待つ」の繰り返しです。反応しない場合は、必要アイテムが所持品にあるか、指定MAP・NPC・場所が正しいか、クールダウンが終わっているかを確認してください。"
+        },
+        {
+          "heading": "完了後",
+          "text": "最終段階でMysterious Egg (Hatching)を入手します。ここまでがJarikaから始まる孵化準備の長期工程です。孵化後のペットは連れ歩くほか、別の強化システムを利用してスキル付与やマウント化へ進めることができます。"
+        }
+      ],
+      "_table": {
+        "caption": "主な必要素材まとめ",
+        "headers": [
+          "素材",
+          "必要数"
+        ],
+        "rows": [
+          [
+            "Butter",
+            "30"
+          ],
+          [
+            "Aloe",
+            "20"
+          ],
+          [
+            "Soul Stone Fragment",
+            "50"
+          ],
+          [
+            "Leather",
+            "20"
+          ],
+          [
+            "Watermelon",
+            "5"
+          ],
+          [
+            "Wood",
+            "10"
+          ],
+          [
+            "Apple",
+            "25"
+          ],
+          [
+            "Grape",
+            "25"
+          ],
+          [
+            "Firewood",
+            "50"
+          ],
+          [
+            "Fairy Powder",
+            "20"
+          ],
+          [
+            "Image Stone",
+            "10"
+          ],
+          [
+            "Jureah's Pendant 1/4",
+            "1"
+          ],
+          [
+            "Salt",
+            "15"
+          ],
+          [
+            "White Paint",
+            "5"
+          ],
+          [
+            "Jureah's Pendant 4/4",
+            "1以上"
+          ],
+          [
+            "Cheese",
+            "30"
+          ],
+          [
+            "Strawberry",
+            "30"
+          ],
+          [
+            "Corn",
+            "30"
+          ],
+          [
+            "Xen Stone",
+            "1以上"
+          ]
+        ]
+      },
+      "_links": [
+        {
+          "label": "公式Lexicon：Jarika Pet Hatch",
+          "url": "https://www.xenrebirth.com/lexicon/index.php?entry/112-jarika-pet-hatch/"
+        },
+        {
+          "label": "補足確認：Xen Rebirth Wiki Advanced Pet Quest",
+          "url": "https://xen-rebirth.fandom.com/wiki/Advanced_Pet_Quest"
+        }
+      ]
     }
   ]
 }
