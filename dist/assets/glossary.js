@@ -222,10 +222,11 @@
       if (!button) return;
       filters.major = button.dataset.major || "";
       categorySelect.value = "";
-      if (["lucky", "crafting", "pets"].includes(filters.major)) {
-        query.value = ""; filters.index = "";
-        document.querySelectorAll("[data-index]").forEach(b => b.classList.toggle("is-active", b.dataset.index === ""));
-      }
+      // A-Z / 日本語 index is a secondary filter. When switching category,
+      // always return it to "すべて" so an old letter never leaks into the new category.
+      filters.index = "";
+      document.querySelectorAll("[data-index]").forEach(b => b.classList.toggle("is-active", b.dataset.index === ""));
+      if (["lucky", "crafting", "pets"].includes(filters.major)) query.value = "";
       renderCategoryButtons();
       renderTerms();
     });
@@ -266,6 +267,8 @@
         if (!isLuckyBallHub(term) && category !== "ラッキーボール") return false;
       } else if (filters.major.startsWith("category:")) {
         if (String(term.category_id) !== filters.major.slice(9)) return false;
+      } else if (filters.major === "class") {
+        if (!classKeyForTerm(term)) return false;
       } else if (filters.major && !getMajorGroups(term).includes(filters.major)) return false;
 
       if (filters.index) {
@@ -354,7 +357,7 @@
     return `<div class="class-equipment-catalog ${hasImages ? "has-images" : "no-images"}" data-class-key="${esc(key)}">
       <div class="class-equipment-heading"><h3>${esc(source.class_name_ja || source.class_name_en)} 装備一覧</h3>
         <span class="class-equipment-total">掲載 ${items.length}件</span></div>
-      <p class="class-equipment-note">公式Xen Rebirth Lexicon掲載データをもとに整理しています。${hasImages ? " 装備画像は公式ページの画像を表示しています。" : " この職業の公式装備一覧ページには個別装備画像が掲載されていないため、画像欄は省略しています。"}</p>
+      <p class="class-equipment-note">公式Xen Rebirth Lexicon掲載データをもとに整理しています。${hasImages ? " 公式画像がある装備はその画像を表示しています。" : ""} 画像がない装備は「画像を追加」を選び、Ctrl+Vまたは画像ファイルから追加できます。</p>
       <label class="class-equipment-search-label">装備を検索
         <input type="search" class="class-equipment-search" placeholder="例：剣、Lv 40、Defense" aria-label="${esc(source.class_name_ja || source.class_name_en)}の装備を検索">
       </label>
@@ -362,12 +365,12 @@
       ${[...sections.entries()].map(([section, rows], sectionIndex) => `<details class="class-equipment-section" ${sectionIndex === 0 ? "open" : ""}>
         <summary><strong>${esc(section)}</strong><span>${rows.length}件</span></summary>
         <div class="class-equipment-table-wrap"><table class="class-equipment-table">
-          <thead><tr>${hasImages ? "<th>画像</th>" : ""}<th>装備名</th><th>種類</th><th>必要Lv</th><th>性能・詳細</th></tr></thead>
+          <thead><tr><th>画像</th><th>装備名</th><th>種類</th><th>必要Lv</th><th>性能・詳細</th></tr></thead>
           <tbody>${rows.map(item => {
             const img = safeUrl(item.image_url);
             const search = normalize([item.name_en,item.name_ja,item.section_en,item.section_ja,item.item_type_en,item.item_type_ja,item.required_level,item.stats,item.description].join(" "));
             return `<tr data-equipment-search="${esc(search)}">
-              ${hasImages ? `<td class="class-equipment-image-cell">${img ? `<img class="class-equipment-image" src="${esc(img)}" alt="${esc(item.name_en)}" loading="lazy" referrerpolicy="no-referrer">` : '<span class="class-equipment-image-empty">画像なし</span>'}</td>` : ""}
+              <td class="class-equipment-image-cell">${img ? `<img class="class-equipment-image" src="${esc(img)}" alt="${esc(item.name_en)}" loading="lazy" referrerpolicy="no-referrer">` : `<button type="button" class="class-equipment-image-add" data-equipment-image-id="${esc(item.id)}" aria-label="${esc(item.name_ja || item.name_en)}の画像を追加">画像を追加<br><small>Ctrl+V / 選択</small></button>`}</td>
               <td><strong>${esc(item.name_ja || item.name_en)}</strong>${item.name_ja ? `<span class="class-equipment-name-en">${esc(item.name_en)}</span>` : ""}</td>
               <td>${esc(item.item_type_ja || item.item_type_en || "装備")}</td>
               <td>${esc(item.required_level || "—")}</td>
@@ -379,6 +382,105 @@
       ${safeUrl(source.source_url) ? `<p class="class-equipment-source"><a href="${esc(safeUrl(source.source_url))}" target="_blank" rel="noopener noreferrer">公式Lexiconの装備一覧 ↗</a></p>` : ""}
     </div>`;
   }
+
+  let equipmentImageEditing = null;
+  let equipmentImageFile = null;
+  let equipmentImagePreview = "";
+  const equipmentImageModal = document.createElement("div");
+  equipmentImageModal.id = "equipment-image-modal";
+  equipmentImageModal.className = "glossary-modal";
+  equipmentImageModal.hidden = true;
+  equipmentImageModal.setAttribute("role","dialog");
+  equipmentImageModal.setAttribute("aria-modal","true");
+  equipmentImageModal.innerHTML = `<div class="glossary-modal-card paper equipment-image-card">
+    <div class="glossary-modal-head"><h2 id="equipment-image-title">装備画像を追加</h2>
+      <button type="button" class="glossary-close" data-equipment-image-close>閉じる</button></div>
+    <p id="equipment-image-name"></p>
+    <div class="equipment-image-dropzone" tabindex="0">
+      <img id="equipment-image-preview" alt="画像プレビュー" hidden>
+      <strong>ここを選択して Ctrl+V</strong>
+      <span>または画像を選択 / ドロップ</span>
+      <input id="equipment-image-file" type="file" accept="image/png,image/jpeg,image/webp,image/gif">
+    </div>
+    <p id="equipment-image-status" role="status" aria-live="polite"></p>
+    <div class="glossary-modal-actions"><button type="button" data-equipment-image-close>キャンセル</button>
+      <button type="button" class="glossary-manage-primary" id="equipment-image-save">画像を保存</button></div>
+  </div>`;
+  document.body.append(equipmentImageModal);
+
+  function closeEquipmentImageEditor() {
+    closeModal(equipmentImageModal.id);
+    if (equipmentImagePreview) URL.revokeObjectURL(equipmentImagePreview);
+    equipmentImagePreview = ""; equipmentImageFile = null; equipmentImageEditing = null;
+  }
+  function setEquipmentImage(file) {
+    if (!file || !file.type?.startsWith("image/")) return;
+    validateImage(file);
+    equipmentImageFile = file;
+    if (equipmentImagePreview) URL.revokeObjectURL(equipmentImagePreview);
+    equipmentImagePreview = URL.createObjectURL(file);
+    const preview = $("equipment-image-preview");
+    preview.src = equipmentImagePreview; preview.hidden = false;
+    $("equipment-image-status").textContent = "画像を選択しました。";
+  }
+  function openEquipmentImageEditor(id) {
+    const item = classEquipmentItems.find(x => String(x.id) === String(id));
+    if (!item) return;
+    equipmentImageEditing = item; equipmentImageFile = null;
+    $("equipment-image-name").textContent = `${item.name_ja || item.name_en} / ${item.name_en}`;
+    $("equipment-image-preview").hidden = true;
+    $("equipment-image-status").textContent = "画像を貼り付けるか選択してください。";
+    openModal(equipmentImageModal.id);
+  }
+  async function uploadEquipmentImage(item, file) {
+    validateImage(file);
+    const ext = (file.name?.split(".").pop() || file.type?.split("/")[1] || "png").replace(/[^a-z0-9]/gi,"").toLowerCase();
+    const objectName = `class-equipment/${item.id}/${Date.now()}.${ext}`;
+    const response = await fetch(`${CFG.SUPABASE_URL}/storage/v1/object/glossary-images/${objectName}`, {
+      method:"POST", headers:{...authHeaders(),"Content-Type":file.type || "application/octet-stream"}, body:file
+    });
+    if (!response.ok) throw new Error("画像をアップロードできませんでした。");
+    return `${CFG.SUPABASE_URL}/storage/v1/object/public/glossary-images/${objectName}`;
+  }
+  resultsEl.addEventListener("click", event => {
+    const button = event.target.closest("[data-equipment-image-id]");
+    if (button) { event.preventDefault(); openEquipmentImageEditor(button.dataset.equipmentImageId); }
+  });
+  equipmentImageModal.addEventListener("click", event => {
+    if (event.target.closest("[data-equipment-image-close]")) closeEquipmentImageEditor();
+  });
+  $("equipment-image-file")?.addEventListener("change", event => setEquipmentImage(event.target.files?.[0]));
+  const equipmentDropzone = equipmentImageModal.querySelector(".equipment-image-dropzone");
+  equipmentDropzone?.addEventListener("dragover", event => event.preventDefault());
+  equipmentDropzone?.addEventListener("drop", event => {
+    event.preventDefault();
+    const file = Array.from(event.dataTransfer?.files || []).find(x => x.type?.startsWith("image/"));
+    if (file) setEquipmentImage(file);
+  });
+  equipmentImageModal.addEventListener("paste", event => {
+    const file = Array.from(event.clipboardData?.files || []).find(x => x.type?.startsWith("image/")) ||
+      Array.from(event.clipboardData?.items || []).find(x => x.type?.startsWith("image/"))?.getAsFile();
+    if (file) { event.preventDefault(); setEquipmentImage(file); }
+  });
+  $("equipment-image-save")?.addEventListener("click", async () => {
+    if (!equipmentImageEditing || !equipmentImageFile) {
+      $("equipment-image-status").textContent = "先に画像を貼り付けるか選択してください。"; return;
+    }
+    const button = $("equipment-image-save"); button.disabled = true;
+    $("equipment-image-status").textContent = "保存中…";
+    try {
+      const imageUrl = await uploadEquipmentImage(equipmentImageEditing,equipmentImageFile);
+      const response = await api("/rest/v1/rpc/class_equipment_set_image", {
+        method:"POST", body:JSON.stringify({p_id:equipmentImageEditing.id,p_image_url:imageUrl})
+      });
+      if (!response.ok) throw new Error(await response.text());
+      closeEquipmentImageEditor();
+      await loadClassEquipmentData();
+      renderTerms();
+    } catch (error) {
+      console.error(error); $("equipment-image-status").textContent = "保存できませんでした：" + error.message;
+    } finally { button.disabled = false; }
+  });
 
   resultsEl.addEventListener("input", event => {
     if (event.target.matches(".class-equipment-search")) {
