@@ -271,3 +271,309 @@ header nav>a[aria-current]{
     border-bottom:1px solid #dfe8eb;
   }
 }
+
+
+/* =========================================================
+   Sky Fantasy Theme / Xen Rebirth wing branding
+   ========================================================= */
+:root{
+  --bg:#eef9ff;
+  --ink:#17356b;
+  --muted:#5e7aa1;
+  --line:#cfe6f4;
+  --dark:#225ca0;
+  --teal:#2f8fd5;
+  --gold:#89dcff;
+  --fantasy-violet:#7a75e8;
+  --fantasy-cyan:#73dcff;
+  --fantasy-blue:#2d6fd0;
+}
+
+body{
+  background:
+    radial-gradient(circle at 15% 0%,rgba(127,220,255,.28),transparent 26rem),
+    radial-gradient(circle at 90% 8%,rgba(141,135,245,.16),transparent 30rem),
+    linear-gradient(180deg,#f8fdff 0%,#eef8ff 45%,#f7fbff 100%);
+  color:var(--ink);
+}
+
+body:before{
+  content:"";
+  position:fixed;
+  inset:0;
+  pointer-events:none;
+  z-index:-1;
+  opacity:.26;
+  background:
+    radial-gradient(circle at 20% 18%,rgba(255,255,255,.95) 0 2px,transparent 3px),
+    radial-gradient(circle at 75% 10%,rgba(255,255,255,.9) 0 1.5px,transparent 2.5px),
+    radial-gradient(circle at 88% 34%,rgba(123,207,255,.7) 0 2px,transparent 3px);
+  background-size:240px 240px,310px 310px,380px 380px;
+}
+
+header{
+  background:
+    linear-gradient(180deg,rgba(255,255,255,.98),rgba(239,250,255,.96));
+  border-bottom:1px solid #c6e4f4;
+  box-shadow:0 8px 28px rgba(58,118,180,.10);
+}
+
+header .brand{
+  max-width:1320px;
+  min-height:116px;
+  padding:12px 28px 10px;
+  align-items:center;
+  background:
+    radial-gradient(circle at 16% 45%,rgba(105,211,255,.18),transparent 20rem);
+}
+
+.xen-visual-brand{
+  display:flex!important;
+  align-items:center!important;
+  gap:16px!important;
+  min-width:0;
+}
+
+.xen-brand-wing{
+  width:76px;
+  height:76px;
+  flex:0 0 76px;
+  object-fit:contain;
+  filter:drop-shadow(0 7px 12px rgba(48,110,188,.22));
+}
+
+.xen-brand-title{
+  display:block;
+  width:min(470px,48vw);
+  max-height:96px;
+  object-fit:contain;
+  object-position:left center;
+  border-radius:10px;
+  box-shadow:0 8px 28px rgba(79,149,215,.12);
+}
+
+header .edition{
+  color:#607da7;
+  font-weight:700;
+  letter-spacing:1.5px;
+  background:rgba(255,255,255,.65);
+  border:1px solid rgba(153,204,236,.55);
+  border-radius:999px;
+  padding:6px 10px;
+}
+
+header nav{
+  background:linear-gradient(90deg,#2867b4 0%,#357fc6 42%,#6478d7 100%);
+  border-top:1px solid rgba(255,255,255,.35);
+  box-shadow:inset 0 1px rgba(255,255,255,.18),0 4px 16px rgba(48,105,173,.12);
+}
+
+header nav>a{
+  color:#f4fbff;
+  text-shadow:0 1px 1px rgba(22,63,111,.15);
+}
+header nav>a:hover{
+  background:rgba(255,255,255,.12);
+  color:#fff;
+}
+header nav>a[aria-current]{
+  background:rgba(20,64,130,.24);
+  border-color:#b9f0ff;
+  color:#fff;
+}
+
+.site-tools-toggle,.site-search-toggle{color:#fff}
+.site-tools-toggle:hover,
+.site-tools-toggle.is-current,
+.site-search-toggle:hover{
+  background:rgba(255,255,255,.12);
+}
+.site-tools-toggle.is-current{box-shadow:inset 0 -3px #b9f0ff}
+
+.site-tools-panel,.site-search-popover{
+  border-color:#bdddf0;
+  background:rgba(255,255,255,.98);
+  box-shadow:0 18px 44px rgba(51,106,178,.20);
+}
+.site-tools-panel a:hover{background:#edf8ff}
+.site-search-popover button{
+  background:linear-gradient(135deg,#2f80cb,#716fe0);
+}
+
+main{
+  position:relative;
+}
+
+.page-intro,
+.section-heading{
+  color:#1a3e78;
+}
+
+.page-intro h1,
+.section-heading h2,
+.paper h2,
+.guide-card h3{
+  color:#1a3f82;
+}
+
+.eyebrow,
+.card-number{
+  color:#4d7fd6;
+}
+
+.paper,
+.guide-card,
+.saved-section,
+.site-search-panel,
+.event-dialog,
+.boss-row{
+  border-color:#c9e4f3!important;
+  background:linear-gradient(180deg,rgba(255,255,255,.97),rgba(247,252,255,.96))!important;
+  box-shadow:0 12px 32px rgba(66,126,187,.08);
+}
+
+.paper,
+.saved-section{
+  border-radius:12px!important;
+}
+
+.guide-card{
+  border-radius:12px;
+  box-shadow:0 10px 28px rgba(70,126,189,.08);
+}
+.guide-card:hover{
+  transform:translateY(-3px);
+  border-color:#78c8ee!important;
+  box-shadow:0 16px 34px rgba(67,127,193,.14);
+}
+
+.button,
+.capture-controls .primary{
+  background:linear-gradient(135deg,#7ddcff,#6881e8)!important;
+  color:#123b72!important;
+  border:0!important;
+  box-shadow:0 8px 18px rgba(75,132,205,.18);
+}
+.button:hover,
+.capture-controls .primary:hover{
+  background:linear-gradient(135deg,#9ce8ff,#7d8ff1)!important;
+}
+
+.secondary{
+  background:linear-gradient(135deg,#2e6fb9,#675fd1)!important;
+  color:#fff!important;
+}
+
+.notice{
+  border-left-color:#74bfe8;
+  background:linear-gradient(90deg,#eefaff,#f7f4ff);
+}
+
+table th{
+  background:linear-gradient(180deg,#edf8ff,#e8f1ff);
+  color:#244f8d;
+}
+table td,table th{border-color:#d6e9f4}
+
+.anchor-nav a,
+.route>div,
+.archer-summary-grid>div,
+.stat-purpose-grid>div,
+.rogue-tip-grid>div,
+.community-guide{
+  background:#f4fbff!important;
+  border-color:#cbe6f4!important;
+}
+
+.tool-strip{
+  border-color:#cce5f2;
+}
+
+.welcome{
+  background:
+    radial-gradient(circle at 82% 20%,rgba(148,221,255,.26),transparent 18rem),
+    linear-gradient(145deg,#204e91 0%,#2b6db6 48%,#655ecf 100%);
+  border-top-color:#9fe7ff;
+  box-shadow:0 18px 38px rgba(52,102,177,.16);
+}
+.welcome .eyebrow,
+.next-boss .eyebrow{color:#b9edff}
+.welcome p:not(.eyebrow){color:#e8f6ff}
+.welcome-foot{color:#cfe9f7}
+
+.next-boss{
+  background:
+    radial-gradient(circle at 85% 10%,rgba(133,225,255,.24),transparent 16rem),
+    linear-gradient(160deg,#23558f,#2e729d 55%,#5966cb);
+  box-shadow:0 18px 38px rgba(52,102,177,.14);
+}
+.next-boss .location,.next-boss .small{color:#d8ecf8}
+.next-boss a{color:#d9f6ff}
+.countdown{color:#b9edff!important}
+
+.site-side-rail{
+  background:linear-gradient(180deg,rgba(255,255,255,.98),rgba(242,250,255,.97));
+  border-color:#c6e2f2;
+  box-shadow:0 14px 34px rgba(61,116,181,.13);
+}
+.site-side-rail section{border-color:#dbeaf4}
+.site-side-rail h2{color:#254f8a}
+.rail-eyebrow{color:#6d76c9}
+.rail-list a{color:#315b91}
+.rail-list a:hover{color:#6b67da}
+
+.saved-star,.saved-section button{
+  border-color:#a9d4eb;
+  color:#315d96;
+  background:#f8fdff;
+}
+.saved-star:hover,.saved-section button:hover{
+  border-color:#7cc8ed;
+  background:#edf9ff;
+}
+.saved-star[aria-pressed=true]{
+  background:linear-gradient(135deg,#eafaff,#f2eeff);
+  border-color:#8fbfe9;
+  color:#4b55b6;
+}
+
+footer{
+  border-top-color:#d0e6f3;
+  color:#69809d;
+}
+
+/* Keep dark in-game database cards readable while harmonizing accents */
+.game-dialog-card,
+.knowledge-card{
+  box-shadow:0 12px 30px rgba(30,65,110,.16);
+}
+.game-dialog-card .knowledge-meta,
+.game-dialog-card .dialogue-section-title{
+  color:#8edfff;
+}
+
+/* Softer form controls */
+input,select,textarea{
+  border-color:#bddbeb;
+  border-radius:7px;
+}
+input:focus,select:focus,textarea:focus{
+  outline:2px solid #78c8ee;
+  outline-offset:1px;
+}
+
+@media(max-width:900px){
+  header .brand{min-height:96px}
+  .xen-brand-wing{width:62px;height:62px;flex-basis:62px}
+  .xen-brand-title{width:min(390px,58vw);max-height:82px}
+}
+@media(max-width:600px){
+  header .brand{
+    padding:10px 14px 8px;
+    min-height:82px;
+  }
+  .xen-visual-brand{gap:9px!important}
+  .xen-brand-wing{width:52px;height:52px;flex-basis:52px}
+  .xen-brand-title{width:min(310px,68vw);max-height:68px}
+  header .edition{display:none}
+}
