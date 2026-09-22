@@ -90,14 +90,28 @@ def image_url(row, base):
                 if found: return found
     return None
 
-def image_diagnostics(html):
+def image_diagnostics(html, base):
     soup=BeautifulSoup(html,"html.parser")
     imgs=soup.find_all("img")
     links=[a.get("href","") for a in soup.find_all("a",href=True)
            if "attachment" in a.get("href","").lower() or
               re.search(r"\\.(?:png|jpe?g|gif|webp)(?:$|[?#])",a.get("href","").lower())]
     styled=[x.get("style","") for x in soup.find_all(style=True) if "url(" in x.get("style","").lower()]
-    return len(imgs),len(links),len(styled),links[:3],styled[:2]
+    samples=[]
+    for img in imgs:
+        attrs={k:clean(v) for k,v in img.attrs.items()
+               if k in ("src","data-src","data-original","data-url","data-lazy-src","srcset","data-srcset","alt","class")}
+        row=img.find_parent("tr")
+        table=img.find_parent("table")
+        samples.append({
+          "attrs":attrs,
+          "row_text":clean(row.get_text(" ",strip=True))[:300] if row else "",
+          "table_text":clean(table.get_text(" ",strip=True))[:300] if table else "",
+          "parent":img.parent.name if img.parent else "",
+          "resolved":next((_image_candidate(attrs.get(k),base) for k in ("data-src","data-original","data-url","data-lazy-src","src","srcset","data-srcset") if _image_candidate(attrs.get(k),base)),None)
+        })
+    return {"img_tags":len(imgs),"attachment_or_image_links":len(links),"background_styles":len(styled),
+            "links":links[:10],"styles":styled[:5],"images":samples}
 
 def looks_header(values):
     text=" ".join(values).lower()
@@ -280,12 +294,12 @@ def sync_one(class_key,class_en,class_ja,url):
     image_count=sum(bool(x.get("image_url")) for x in items)
     print(f"With official images: {image_count}")
     if image_count == 0:
-        img_tags,attachment_links,styled,link_samples,style_samples=image_diagnostics(html)
-        print(f"IMAGE DIAGNOSTIC {class_key}: img_tags={img_tags}, attachment_or_image_links={attachment_links}, background_styles={styled}")
-        for sample in link_samples:
-            print("IMAGE LINK SAMPLE:",sample)
-        for sample in style_samples:
-            print("IMAGE STYLE SAMPLE:",clean(sample)[:300])
+        diag=image_diagnostics(html,url)
+        print(f"IMAGE DIAGNOSTIC {class_key}: img_tags={diag['img_tags']}, attachment_or_image_links={diag['attachment_or_image_links']}, background_styles={diag['background_styles']}")
+        for sample in diag["images"][:8]:
+            print("IMAGE TAG SAMPLE:",json.dumps(sample,ensure_ascii=False)[:1200])
+        with open(f"class-equipment-debug-{class_key}.json","w",encoding="utf-8") as f:
+            json.dump(diag,f,ensure_ascii=False,indent=2)
 
 def main():
     only=os.environ.get("CLASS_KEY","all").strip().lower()
