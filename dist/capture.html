@@ -7,13 +7,13 @@
   <meta name="description" content="Xen Rebirthのゲーム画面をブラウザでキャプチャし、NPC・マップ・クエストの英文と日本語訳を共有・検索できます。">
   <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='6' fill='%230d2630'/%3E%3Cpath d='M8 7L24 25M24 7L8 25' stroke='%23e5bd77' stroke-width='4'/%3E%3C/svg%3E">
   <link rel="stylesheet" href="assets/style.css">
-  <link rel="stylesheet" href="assets/capture.css?v=1">
+  <link rel="stylesheet" href="assets/capture.css?v=2">
   <link rel="stylesheet" href="assets/bgm-player.css?v=2">
   <link rel="stylesheet" href="assets/saved-items.css?v=1">
   <script defer src="assets/glossary-config.js"></script>
   <script defer src="assets/vendor/supabase.js"></script>
   <script defer src="https://cdn.jsdelivr.net/npm/tesseract.js@5/dist/tesseract.min.js"></script>
-  <script defer src="assets/capture.js?v=4"></script>
+  <script defer src="assets/capture.js?v=5"></script>
   <script defer src="assets/saved-items.js?v=1"></script>
 </head>
 <body>
@@ -59,14 +59,25 @@
       </div>
     </div>
 
+    <div class="auto-panel">
+      <label class="auto-toggle">
+        <input id="auto-mode" type="checkbox" disabled>
+        <span class="auto-switch" aria-hidden="true"></span>
+        <span><strong>自動解析モード</strong><small>ゲーム画面の変化を検出して自動でOpenAI解析</small></span>
+      </label>
+      <span class="auto-status" id="auto-status" data-state="off">OFF</span>
+      <span class="small">変化確認：約2.5秒ごと / AI解析：最短10秒間隔</span>
+    </div>
+
     <div class="capture-controls">
-      <button class="primary" id="ai-run" type="button">OpenAIで画面を自動解析</button>
-      <span class="small">ALTキー単押しでも実行できます（このページがアクティブな時）</span>
+      <button class="primary" id="ai-run" type="button">今すぐOpenAIで解析</button>
+      <span class="small">ALTキー単押しでも手動解析できます（このページがアクティブな時）</span>
       <button id="ocr-run" type="button" disabled>従来OCRで読み取る</button>
       <button id="translate-run" type="button" disabled>ブラウザ翻訳を試す</button>
       <span id="capture-status" class="capture-status" role="status"></span>
     </div>
-    <p class="small">※ブラウザの安全制限により、Xen Rebirthが最前面でブラウザが非アクティブな間はWebサイト側でALTキーを直接検知できません。画面共有後の読み取り自体はOpenAIで処理します。</p>
+    <p class="small">自動解析モードは、共有したXen Rebirth画面をサイト側で監視し、画面が変化して安定したタイミングだけAIへ送信します。同じ画面の連続解析を抑えるため待機時間を設けています。</p>
+    <p class="small">※ブラウザの安全制限により、Xen Rebirthが最前面でブラウザが非アクティブな間はALTキーを直接検知できません。自動解析モードはALTキーを使わず、共有映像の変化から判定します。</p>
   </section>
 
   <section class="paper capture-section">
