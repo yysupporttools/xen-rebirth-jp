@@ -74,6 +74,94 @@
     setImage(file,"image_upload");
   }
 
+  function blobToDataUrl(blob){
+    return new Promise(function(resolve,reject){
+      const reader=new FileReader();
+      reader.onload=function(){resolve(String(reader.result||""));};
+      reader.onerror=function(){reject(reader.error||new Error("画像を読み込めませんでした。"));};
+      reader.readAsDataURL(blob);
+    });
+  }
+
+  async function blobHash(blob){
+    const buffer=await blob.arrayBuffer();
+    const digest=await crypto.subtle.digest("SHA-256",buffer);
+    return Array.from(new Uint8Array(digest)).map(function(b){return b.toString(16).padStart(2,"0");}).join("");
+  }
+
+  function normText(value){
+    return String(value||"").trim().toLowerCase().replace(/[^a-z0-9ぁ-んァ-ヶ一-龠]+/g," ");
+  }
+
+  async function applyAiResult(result){
+    const f=$("capture-form").elements;
+    f.map_name.value=result.map_name||"";
+    f.npc_name.value=result.npc_name||"";
+    f.quest_name_en.value=result.quest_name_en||"";
+    f.quest_name_ja.value=result.quest_name_ja||"";
+    f.english_text.value=result.english_text||"";
+    f.japanese_text.value=result.japanese_text||"";
+    f.required_level.value=result.required_level==null?"":result.required_level;
+    f.requirements.value=result.requirements||"";
+    f.targets.value=result.targets||"";
+    f.rewards.value=result.rewards||"";
+    f.notes.value=result.notes||"";
+    $("translate-run").disabled=!f.english_text.value.trim();
+
+    const en=normText(result.quest_name_en);
+    const ja=normText(result.quest_name_ja);
+    const match=quests.find(function(q){
+      return (en&&normText(q.title_en)===en)||(ja&&normText(q.title_ja)===ja);
+    });
+    if(match){
+      $("quest-link").value=match.id;
+      await changeQuest();
+    }
+
+    const warnings=Array.isArray(result.warnings)?result.warnings.filter(Boolean):[];
+    const confidence=Number.isFinite(Number(result.confidence))?Number(result.confidence):null;
+    const meta=result._meta||{};
+    let msg="OpenAI解析完了";
+    if(confidence!=null) msg+="（信頼度 "+confidence+"%）";
+    if(meta.cached) msg+="・同じ画像の保存済み解析結果を使用";
+    if(warnings.length) msg+="。確認事項："+warnings.join(" / ");
+    else msg+="。内容を確認してから登録してください。";
+    setStatus("capture-status",msg);
+  }
+
+  async function runOpenAiAnalysis(){
+    const button=$("ai-run");
+    button.disabled=true;
+    try{
+      if(!imageBlob&&stream){
+        setStatus("capture-status","現在のゲーム画面をキャプチャしています…");
+        await captureFrame();
+      }
+      if(!imageBlob) throw new Error("先に「画面共有を開始」するか、スクリーンショットを選択してください。");
+
+      setStatus("capture-status","OpenAIでゲーム画面を解析中…");
+      const image=await blobToDataUrl(imageBlob);
+      const imageHash=await blobHash(imageBlob);
+      const response=await fetch(cfg.SUPABASE_URL+"/functions/v1/analyze-game-screen",{
+        method:"POST",
+        headers:{
+          "Content-Type":"application/json",
+          "apikey":cfg.SUPABASE_ANON_KEY,
+          "x-xen-client":"capture-v1"
+        },
+        body:JSON.stringify({image:image,image_hash:imageHash})
+      });
+      let data={};
+      try{data=await response.json();}catch(_){}
+      if(!response.ok) throw new Error(data.error||("AI解析に失敗しました（HTTP "+response.status+"）"));
+      await applyAiResult(data);
+    }catch(err){
+      setStatus("capture-status",err&&err.message?err.message:String(err));
+    }finally{
+      button.disabled=false;
+    }
+  }
+
   async function runOcr(){
     if(!imageBlob) return;
     if(!window.Tesseract){setStatus("capture-status","OCRライブラリを読み込めませんでした。通信環境を確認してください。");return;}
