@@ -7,13 +7,13 @@
   <meta name="description" content="Xen Rebirthのゲーム画面をブラウザでキャプチャし、NPC・マップ・クエストの英文と日本語訳を共有・検索できます。">
   <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='6' fill='%230d2630'/%3E%3Cpath d='M8 7L24 25M24 7L8 25' stroke='%23e5bd77' stroke-width='4'/%3E%3C/svg%3E">
   <link rel="stylesheet" href="assets/style.css">
-  <link rel="stylesheet" href="assets/capture.css?v=6">
+  <link rel="stylesheet" href="assets/capture.css?v=7">
   <link rel="stylesheet" href="assets/bgm-player.css?v=2">
   <link rel="stylesheet" href="assets/saved-items.css?v=1">
   <script defer src="assets/glossary-config.js"></script>
   <script defer src="assets/vendor/supabase.js"></script>
   <script defer src="https://cdn.jsdelivr.net/npm/tesseract.js@5/dist/tesseract.min.js"></script>
-  <script defer src="assets/capture.js?v=18"></script>
+  <script defer src="assets/capture.js?v=19"></script>
   <script defer src="assets/saved-items.js?v=1"></script>
 </head>
 <body>
@@ -171,7 +171,14 @@
       <select id="map-filter" aria-label="マップ絞り込み"><option value="">すべてのマップ</option></select>
       <button id="knowledge-reload" type="button">再読み込み</button>
     </div>
-    <div id="npc-index" class="npc-index"></div>
+    <div class="npc-index-head">
+      <strong>登録済みNPC</strong>
+      <div>
+        <span id="npc-index-count">0 NPC</span>
+        <button id="npc-index-toggle" type="button" aria-expanded="false">一覧を開く ▼</button>
+      </div>
+    </div>
+    <div id="npc-index" class="npc-index is-collapsed"></div>
     <div id="knowledge-results" class="knowledge-results"></div>
   </section>
 
