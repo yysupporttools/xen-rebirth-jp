@@ -11,6 +11,9 @@
   let previewUrl="";
   let records=[];
   let quests=[];
+  let npcProfiles=[];
+  let npcImageBlob=null;
+  let npcImagePreviewUrl="";
   let aiAnalyzing=false;
   let altDown=false;
   let altWasChord=false;
@@ -258,6 +261,35 @@
     return String(value||"").trim().toLowerCase().replace(/[^a-z0-9ぁ-んァ-ヶ一-龠]+/g," ");
   }
 
+  function linesToArray(value){
+    return String(value||"").split(/\r?\n/).map(function(x){return x.trim();}).filter(Boolean);
+  }
+
+  function choicesArray(value){
+    if(Array.isArray(value)) return value.map(function(x){return String(x||"").trim();}).filter(Boolean);
+    if(typeof value==="string"){
+      try{
+        const parsed=JSON.parse(value);
+        if(Array.isArray(parsed)) return parsed.map(function(x){return String(x||"").trim();}).filter(Boolean);
+      }catch(_){}
+      return linesToArray(value);
+    }
+    return [];
+  }
+
+  function profileKey(name,map){
+    return normText(name)+"|"+normText(map);
+  }
+
+  function findNpcProfile(name,map){
+    const exact=profileKey(name,map);
+    const fallback=profileKey(name,"");
+    return npcProfiles.find(function(p){return profileKey(p.npc_name,p.map_name)===exact;})
+      || npcProfiles.find(function(p){return profileKey(p.npc_name,"")===fallback;})
+      || npcProfiles.find(function(p){return normText(p.npc_name)===normText(name);})
+      || null;
+  }
+
   async function applyAiResult(result){
     const f=$("capture-form").elements;
     const npc=String(result.npc_name||"").trim();
@@ -273,8 +305,17 @@
     f.npc_name.value=npc;
     f.quest_name_en.value=result.quest_name_en||"";
     f.quest_name_ja.value=result.quest_name_ja||"";
-    f.english_text.value=result.english_text||"";
-    f.japanese_text.value=result.japanese_text||"";
+
+    const dialogueEn=String(result.dialogue_text_en||result.english_text||"");
+    const dialogueJa=String(result.dialogue_text_ja||result.japanese_text||"");
+    const choicesEn=choicesArray(result.choices_en);
+    const choicesJa=choicesArray(result.choices_ja);
+    f.dialogue_text_en.value=dialogueEn;
+    f.dialogue_text_ja.value=dialogueJa;
+    f.choices_en.value=choicesEn.join("\n");
+    f.choices_ja.value=choicesJa.join("\n");
+    f.english_text.value=result.english_text||[dialogueEn].concat(choicesEn).filter(Boolean).join("\n");
+    f.japanese_text.value=result.japanese_text||[dialogueJa].concat(choicesJa).filter(Boolean).join("\n");
     f.required_level.value=result.required_level==null?"":result.required_level;
     f.requirements.value=result.requirements||"";
     f.targets.value=result.targets||"";
@@ -304,13 +345,17 @@
   }
 
   async function autoSaveAiResult(result,imageHash){
-    const res=await db.rpc("game_knowledge_auto_save",{
+    const res=await db.rpc("game_knowledge_auto_save_v2",{
       p_map_name:String(result.map_name||""),
       p_npc_name:String(result.npc_name||""),
       p_quest_name_en:String(result.quest_name_en||""),
       p_quest_name_ja:String(result.quest_name_ja||""),
       p_english_text:String(result.english_text||""),
       p_japanese_text:String(result.japanese_text||""),
+      p_dialogue_text_en:String(result.dialogue_text_en||result.english_text||""),
+      p_dialogue_text_ja:String(result.dialogue_text_ja||result.japanese_text||""),
+      p_choices_en:choicesArray(result.choices_en),
+      p_choices_ja:choicesArray(result.choices_ja),
       p_required_level:result.required_level==null?null:Number(result.required_level),
       p_requirements:String(result.requirements||""),
       p_targets:String(result.targets||""),
@@ -395,6 +440,7 @@
       const text=(result&&result.data&&result.data.text?result.data.text:"").trim();
       if(text){
         $("english-text").value=text;
+        $("dialogue-text-en").value=text;
         suggestNpc(text);
         $("translate-run").disabled=false;
         setStatus("capture-status","OCR完了。誤認識がないか英文を確認してください。");
@@ -416,7 +462,7 @@
   }
 
   async function translateEnglish(){
-    const text=$("english-text").value.trim();
+    const text=$("dialogue-text-en").value.trim()||$("english-text").value.trim();
     if(!text){setStatus("capture-status","先に英文を入力またはOCRで読み取ってください。");return;}
     $("translate-run").disabled=true;
     try{
@@ -431,8 +477,9 @@
       }else{
         throw new Error("このブラウザは内蔵翻訳APIに対応していません。日本語訳欄へ手入力してください。");
       }
+      $("dialogue-text-ja").value=translated||"";
       $("japanese-text").value=translated||"";
-      setStatus("capture-status","翻訳しました。ゲーム用語・固有名詞を確認してから登録してください。");
+      setStatus("capture-status","会話内容を翻訳しました。ゲーム用語・固有名詞を確認してください。");
     }catch(err){
       setStatus("capture-status",err.message);
     }finally{$("translate-run").disabled=false;}
@@ -480,6 +527,54 @@
     return db.storage.from("game-captures").getPublicUrl(path).data.publicUrl||"";
   }
 
+  function handleNpcImageFile(file){
+    if(!file||!/^image\/(png|jpeg|webp)$/.test(file.type)){
+      setStatus("npc-image-status","PNG / JPEG / WebP画像を選択してください。");
+      return;
+    }
+    npcImageBlob=file;
+    if(npcImagePreviewUrl) URL.revokeObjectURL(npcImagePreviewUrl);
+    npcImagePreviewUrl=URL.createObjectURL(file);
+    $("npc-image-preview").src=npcImagePreviewUrl;
+    $("npc-image-preview").hidden=false;
+    $("npc-image-empty").hidden=true;
+    $("npc-image-save").disabled=false;
+    setStatus("npc-image-status","画像を選択しました。NPC名を確認して保存してください。");
+  }
+
+  async function saveNpcImage(){
+    const f=$("capture-form").elements;
+    const npc=String(f.npc_name.value||"").trim();
+    const map=String(f.map_name.value||"").trim();
+    if(!npc){setStatus("npc-image-status","先にNPC名を入力してください。");return;}
+    if(!npcImageBlob){setStatus("npc-image-status","NPC画像を選択してください。");return;}
+    const button=$("npc-image-save");
+    button.disabled=true;
+    setStatus("npc-image-status","NPC画像を保存中…");
+    try{
+      const ext=npcImageBlob.type==="image/png"?"png":npcImageBlob.type==="image/jpeg"?"jpg":"webp";
+      const safe=npc.toLowerCase().replace(/[^a-z0-9]+/g,"-").replace(/^-+|-+$/g,"")||"npc";
+      const path=safe+"/"+Date.now()+"-"+crypto.randomUUID()+"."+ext;
+      const up=await db.storage.from("npc-images").upload(path,npcImageBlob,{contentType:npcImageBlob.type||"image/webp",upsert:false});
+      if(up.error) throw new Error(up.error.message);
+      const url=db.storage.from("npc-images").getPublicUrl(path).data.publicUrl||"";
+      const saved=await db.rpc("npc_profile_save_image",{
+        p_npc_name:npc,
+        p_map_name:map,
+        p_image_url:url,
+        p_contributor_id:contributorId
+      });
+      if(saved.error) throw new Error(saved.error.message);
+      setStatus("npc-image-status","NPC画像を保存しました。");
+      await loadNpcProfiles();
+      renderRecords();
+    }catch(err){
+      setStatus("npc-image-status","保存できませんでした："+(err&&err.message?err.message:String(err)));
+    }finally{
+      button.disabled=false;
+    }
+  }
+
   async function saveRecord(e){
     e.preventDefault();
     const form=e.currentTarget;
@@ -490,26 +585,36 @@
       const fd=new FormData(form);
       const imageUrl=await uploadImage();
       const level=String(fd.get("required_level")||"").trim();
+      const dialogEn=String(fd.get("dialogue_text_en")||"");
+      const dialogJa=String(fd.get("dialogue_text_ja")||"");
+      const choiceEn=linesToArray(fd.get("choices_en")||"");
+      const choiceJa=linesToArray(fd.get("choices_ja")||"");
+      const fullEn=[dialogEn].concat(choiceEn).filter(Boolean).join("\n");
+      const fullJa=[dialogJa].concat(choiceJa).filter(Boolean).join("\n");
       const args={
         p_map_name:String(fd.get("map_name")||""),
         p_npc_name:String(fd.get("npc_name")||""),
         p_quest_name_en:String(fd.get("quest_name_en")||""),
         p_quest_name_ja:String(fd.get("quest_name_ja")||""),
-        p_english_text:String(fd.get("english_text")||""),
-        p_japanese_text:String(fd.get("japanese_text")||""),
+        p_english_text:fullEn,
+        p_japanese_text:fullJa,
+        p_dialogue_text_en:dialogEn,
+        p_dialogue_text_ja:dialogJa,
+        p_choices_en:choiceEn,
+        p_choices_ja:choiceJa,
         p_required_level:level===""?null:Number(level),
         p_requirements:String(fd.get("requirements")||""),
         p_targets:String(fd.get("targets")||""),
         p_rewards:String(fd.get("rewards")||""),
         p_notes:String(fd.get("notes")||""),
-        p_ocr_text:String(fd.get("english_text")||""),
+        p_ocr_text:fullEn,
         p_source_image_url:imageUrl,
         p_source_type:imageBlob?imageSourceType:"manual",
         p_contributor_id:contributorId,
         p_quest_id:String(fd.get("quest_id")||"")||null,
         p_quest_step_id:String(fd.get("quest_step_id")||"")||null
       };
-      const res=await db.rpc("game_knowledge_save",args);
+      const res=await db.rpc("game_knowledge_save_v2",args);
       if(res.error) throw new Error(res.error.message);
       setStatus("form-status","登録しました。NPC検索に反映しました。");
       await loadRecords();
@@ -522,7 +627,19 @@
     $("capture-form").reset();
     $("step-link").innerHTML='<option value="">STEP指定なし</option>';
     $("step-link").disabled=true;
+    npcImageBlob=null;
+    if(npcImagePreviewUrl){URL.revokeObjectURL(npcImagePreviewUrl);npcImagePreviewUrl="";}
+    $("npc-image-preview").hidden=true;
+    $("npc-image-preview").removeAttribute("src");
+    $("npc-image-empty").hidden=false;
+    $("npc-image-save").disabled=true;
+    setStatus("npc-image-status","");
     setStatus("form-status","");
+  }
+
+  async function loadNpcProfiles(){
+    const res=await db.from("npc_profiles").select("*").order("updated_at",{ascending:false}).limit(1000);
+    if(!res.error) npcProfiles=res.data||[];
   }
 
   async function loadRecords(silent){
@@ -559,7 +676,8 @@
     const word=$("knowledge-search").value.trim().toLowerCase();
     const map=$("map-filter").value;
     const rows=records.filter(function(r){
-      const hay=[r.npc_name,r.map_name,r.quest_name_en,r.quest_name_ja,r.english_text,r.japanese_text,r.requirements,r.targets,r.rewards,r.notes].join(" ").toLowerCase();
+      const choices=[].concat(choicesArray(r.choices_en),choicesArray(r.choices_ja)).join(" ");
+      const hay=[r.npc_name,r.map_name,r.quest_name_en,r.quest_name_ja,r.english_text,r.japanese_text,r.dialogue_text_en,r.dialogue_text_ja,choices,r.requirements,r.targets,r.rewards,r.notes].join(" ").toLowerCase();
       return (!word||hay.includes(word))&&(!map||r.map_name===map);
     });
     $("record-count").textContent=rows.length+"件";
@@ -567,23 +685,55 @@
       $("knowledge-results").innerHTML='<div class="notice">該当する登録情報はありません。</div>';
       return;
     }
+
     $("knowledge-results").innerHTML=rows.map(function(r){
       const quest=[r.quest_name_ja,r.quest_name_en].filter(Boolean).join(" / ");
+      const profile=findNpcProfile(r.npc_name,r.map_name);
+      const dialogueEn=r.dialogue_text_en||r.english_text||"";
+      const dialogueJa=r.dialogue_text_ja||r.japanese_text||"";
+      const choicesEn=choicesArray(r.choices_en);
+      const choicesJa=choicesArray(r.choices_ja);
+      const count=Math.max(choicesEn.length,choicesJa.length);
+      const choiceRows=[];
+      for(let i=0;i<count;i++){
+        choiceRows.push(
+          '<div class="game-choice-row"><span class="game-choice-mark">✦</span><div>'+
+          (choicesEn[i]?'<div class="choice-en">'+esc(choicesEn[i])+'</div>':"")+
+          (choicesJa[i]?'<div class="choice-ja">'+esc(choicesJa[i])+'</div>':"")+
+          '</div></div>'
+        );
+      }
+
       const extra=[
         r.requirements?'<div><strong>必要アイテム</strong><br>'+esc(r.requirements)+'</div>':"",
         r.targets?'<div><strong>討伐対象</strong><br>'+esc(r.targets)+'</div>':"",
         r.rewards?'<div><strong>報酬</strong><br>'+esc(r.rewards)+'</div>':""
       ].join("");
-      return '<article class="knowledge-card">'+
-        '<h3>'+esc(r.npc_name)+'</h3>'+
+
+      return '<article class="knowledge-card game-dialog-card">'+
+        '<div class="game-dialog-title"><strong>'+esc(r.npc_name)+'</strong>'+
+          '<span>'+esc(r.map_name||"MAP未登録")+'</span>'+
+        '</div>'+
         '<div class="knowledge-meta">'+
-          (r.map_name?'<span>MAP：'+esc(r.map_name)+'</span>':"")+
           (r.required_level!=null?'<span>Lv '+esc(r.required_level)+'</span>':"")+
           (quest?'<span>'+esc(quest)+'</span>':"")+
+          (r.confidence!=null?'<span>AI '+esc(r.confidence)+'%</span>':"")+
         '</div>'+
-        '<div class="knowledge-pair">'+
-          '<div><strong>English</strong><div class="knowledge-text">'+esc(r.english_text||"英文未登録")+'</div></div>'+
-          '<div><strong>日本語訳</strong><div class="knowledge-text">'+esc(r.japanese_text||"翻訳未登録")+'</div></div>'+
+        '<div class="game-dialog-layout">'+
+          '<aside class="game-npc-portrait">'+
+            (profile&&profile.image_url?'<img src="'+esc(profile.image_url)+'" alt="'+esc(r.npc_name)+'">':'<div class="portrait-placeholder">NPC<br>IMAGE</div>')+
+          '</aside>'+
+          '<div class="game-dialog-main">'+
+            '<section class="game-dialog-upper">'+
+              '<div class="game-panel-label">会話内容 / DIALOGUE</div>'+
+              '<div class="dialog-en">'+esc(dialogueEn||"会話内容未登録")+'</div>'+
+              (dialogueJa?'<div class="dialog-ja">'+esc(dialogueJa)+'</div>':"")+
+            '</section>'+
+            '<section class="game-dialog-lower">'+
+              '<div class="game-panel-label">選択項目 / CHOICES</div>'+
+              (choiceRows.length?choiceRows.join(""):'<div class="no-choices">選択項目なし / 未登録</div>')+
+            '</section>'+
+          '</div>'+
         '</div>'+
         (extra?'<div class="knowledge-extra">'+extra+'</div>':"")+
         (r.notes?'<p><strong>メモ：</strong>'+esc(r.notes)+'</p>':"")+
@@ -630,13 +780,19 @@
     altWasChord=false;
   });
 
-  $("screen-start").addEventListener("click",startScreen);
+  $("npc-image-file").addEventListener("change",function(e){handleNpcImageFile(e.target.files&&e.target.files[0]);});
+  $("npc-image-save").addEventListener("click",saveNpcImage);
+
+    $("screen-start").addEventListener("click",startScreen);
   $("screen-stop").addEventListener("click",stopScreen);
   $("screen-shot").addEventListener("click",captureFrame);
   $("image-file").addEventListener("change",function(e){handleFile(e.target.files&&e.target.files[0]);});
   $("ocr-run").addEventListener("click",runOcr);
   $("translate-run").addEventListener("click",translateEnglish);
-  $("english-text").addEventListener("input",function(){$("translate-run").disabled=!this.value.trim();});
+  $("dialogue-text-en").addEventListener("input",function(){
+    $("english-text").value=this.value;
+    $("translate-run").disabled=!this.value.trim();
+  });
   $("capture-form").addEventListener("submit",saveRecord);
   $("form-clear").addEventListener("click",clearForm);
   $("quest-link").addEventListener("change",changeQuest);
@@ -650,5 +806,5 @@
   });
   window.addEventListener("beforeunload",stopScreen);
 
-  Promise.all([loadQuests(),loadRecords()]).catch(function(err){setStatus("capture-status",err.message);});
+  Promise.all([loadQuests(),loadNpcProfiles(),loadRecords()]).catch(function(err){setStatus("capture-status",err.message);});
 })();
