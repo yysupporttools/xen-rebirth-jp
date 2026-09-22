@@ -2,6 +2,11 @@ name: Xen Rebirth event sync Ver.10
 
 on:
   workflow_dispatch:
+  push:
+    branches: [main]
+    paths:
+      - ".github/workflows/xen-events-sync.yml"
+      - "scripts/sync-xen-events.js"
 
   schedule:
     - cron: "20 18 * * *"
@@ -22,5 +27,24 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: "22"
+      - name: Sync OpenAI key to Supabase AI backend
+        run: |
+          node - <<'NODE'
+          const url = "https://dzxxjtmpcfsmvdgkcwvn.supabase.co/rest/v1/app_secrets?on_conflict=name";
+          const key = process.env.SUPABASE_SERVICE_ROLE_KEY;
+          const value = process.env.OPENAI_API_KEY;
+          const r = await fetch(url, {
+            method: "POST",
+            headers: {
+              apikey: key,
+              Authorization: `Bearer ${key}`,
+              "Content-Type": "application/json",
+              Prefer: "resolution=merge-duplicates,return=minimal"
+            },
+            body: JSON.stringify([{ name: "OPENAI_API_KEY", value, updated_at: new Date().toISOString() }])
+          });
+          if (!r.ok) throw new Error("Secret sync failed: " + r.status + " " + (await r.text()).slice(0,500));
+          console.log("OpenAI server key synced.");
+          NODE
       - name: Sync official events to Supabase
         run: node scripts/sync-xen-events.js
