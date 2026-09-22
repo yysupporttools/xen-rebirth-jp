@@ -15,6 +15,18 @@
   let altDown=false;
   let altWasChord=false;
   let altPressedAt=0;
+
+  let autoEnabled=false;
+  let autoTimer=null;
+  let autoBaseline=null;
+  let autoPending=null;
+  let autoPendingAt=0;
+  let lastAutoAnalysisAt=0;
+  const AUTO_POLL_MS=2500;
+  const AUTO_COOLDOWN_MS=10000;
+  const AUTO_CHANGE_RATIO=0.018;
+  const AUTO_STABLE_RATIO=0.012;
+  const AUTO_MAX_PENDING_MS=12000;
   const contributorId=(function(){
     const key="xen-game-knowledge-contributor";
     let value=localStorage.getItem(key);
@@ -23,7 +35,13 @@
   })();
 
   function setStatus(id,msg){$(id).textContent=msg||"";}
-  function setImage(blob,type){
+  function setAutoStatus(state,msg){
+    const el=$("auto-status");
+    if(!el) return;
+    el.dataset.state=state;
+    el.textContent=msg;
+  }
+  function setImage(blob,type,silent){
     imageBlob=blob;
     imageSourceType=type||"image_upload";
     if(previewUrl) URL.revokeObjectURL(previewUrl);
@@ -33,7 +51,7 @@
     $("preview-empty").hidden=true;
     $("ocr-run").disabled=false;
     $("translate-run").disabled=!$("english-text").value.trim();
-    setStatus("capture-status","画像を取り込みました。必要ならOCRを実行してください。");
+    if(!silent) setStatus("capture-status","画像を取り込みました。必要ならOCRを実行してください。");
   }
 
   async function startScreen(){
@@ -43,6 +61,8 @@
       $("screen-shot").disabled=false;
       $("screen-stop").disabled=false;
       $("screen-start").disabled=true;
+      $("auto-mode").disabled=false;
+      setAutoStatus("off","OFF");
       const track=stream.getVideoTracks()[0];
       if(track) track.addEventListener("ended",stopScreen);
       setStatus("capture-status","共有中です。NPC会話やクエスト画面を表示して「現在の画面をキャプチャ」を押してください。");
@@ -52,25 +72,165 @@
   }
 
   function stopScreen(){
+    stopAutoMonitor(true);
     if(stream) stream.getTracks().forEach(function(t){t.stop();});
     stream=null;
     $("screen-video").srcObject=null;
     $("screen-shot").disabled=true;
     $("screen-stop").disabled=true;
     $("screen-start").disabled=false;
+    $("auto-mode").disabled=true;
+    $("auto-mode").checked=false;
+    setAutoStatus("off","OFF");
   }
 
-  async function captureFrame(){
+  async function captureFrame(silent){
     const video=$("screen-video");
-    if(!video.videoWidth){setStatus("capture-status","共有画面がまだ準備できていません。");return;}
+    if(!video.videoWidth){if(!silent)setStatus("capture-status","共有画面がまだ準備できていません。");return null;}
     const maxWidth=1600;
     const scale=Math.min(1,maxWidth/video.videoWidth);
     const canvas=document.createElement("canvas");
     canvas.width=Math.round(video.videoWidth*scale);
     canvas.height=Math.round(video.videoHeight*scale);
     canvas.getContext("2d").drawImage(video,0,0,canvas.width,canvas.height);
-    const blob=await new Promise(function(resolve){canvas.toBlob(resolve,"image/webp",0.82);});
-    if(blob) setImage(blob,"screen_capture");
+    const blob=await new Promise(function(resolve){canvas.toBlob(resolve,"image/webp",0.84);});
+    if(blob) setImage(blob,"screen_capture",!!silent);
+    return blob||null;
+  }
+
+  function monitorSample(){
+    const video=$("screen-video");
+    if(!stream||!video.videoWidth||video.readyState<2) return null;
+    const w=128,h=72;
+    const canvas=document.createElement("canvas");
+    canvas.width=w;canvas.height=h;
+    const ctx=canvas.getContext("2d",{willReadFrequently:true});
+    ctx.drawImage(video,0,0,w,h);
+    const data=ctx.getImageData(0,0,w,h).data;
+    const sample=[];
+    for(let y=3;y<h-3;y++){
+      for(let x=6;x<w-4;x++){
+        const inCenter=(x>=20&&x<=101&&y>=7&&y<=58);
+        const inRight=(x>=88&&y>=4&&y<=65);
+        const inBottom=(x>=12&&x<=116&&y>=39&&y<=67);
+        if(!(inCenter||inRight||inBottom)) continue;
+        const i=(y*w+x)*4;
+        sample.push(Math.round(data[i]*0.299+data[i+1]*0.587+data[i+2]*0.114));
+      }
+    }
+    return new Uint8Array(sample);
+  }
+
+  function sampleDifference(a,b){
+    if(!a||!b||a.length!==b.length) return 1;
+    let changed=0,sum=0;
+    for(let i=0;i<a.length;i++){
+      const d=Math.abs(a[i]-b[i]);
+      sum+=d;
+      if(d>=22) changed++;
+    }
+    const ratio=changed/a.length;
+    const mean=sum/a.length;
+    return Math.max(ratio,Math.min(1,mean/80));
+  }
+
+  function stopAutoMonitor(resetToggle){
+    autoEnabled=false;
+    if(autoTimer){clearInterval(autoTimer);autoTimer=null;}
+    autoBaseline=null;
+    autoPending=null;
+    autoPendingAt=0;
+    if(resetToggle&&$("auto-mode")) $("auto-mode").checked=false;
+  }
+
+  async function startAutoMonitor(){
+    if(!stream){
+      $("auto-mode").checked=false;
+      setAutoStatus("off","OFF");
+      setStatus("capture-status","先に画面共有を開始してください。");
+      return;
+    }
+    autoEnabled=true;
+    autoBaseline=monitorSample();
+    autoPending=null;
+    autoPendingAt=0;
+    setAutoStatus("watching","監視中");
+    setStatus("capture-status","自動解析モードを開始しました。NPC会話・クエスト画面の変化を監視します。");
+    if(autoTimer) clearInterval(autoTimer);
+    autoTimer=setInterval(autoTick,AUTO_POLL_MS);
+
+    setTimeout(function(){
+      if(autoEnabled&&stream&&!aiAnalyzing&&(Date.now()-lastAutoAnalysisAt>=AUTO_COOLDOWN_MS)){
+        setAutoStatus("analyzing","初回解析中");
+        lastAutoAnalysisAt=Date.now();
+        runOpenAiAnalysis("auto");
+      }
+    },900);
+  }
+
+  async function autoTick(){
+    if(!autoEnabled||!stream) return;
+    if(aiAnalyzing){
+      setAutoStatus("analyzing","解析中");
+      return;
+    }
+
+    const now=Date.now();
+    if(now-lastAutoAnalysisAt<AUTO_COOLDOWN_MS){
+      const remain=Math.ceil((AUTO_COOLDOWN_MS-(now-lastAutoAnalysisAt))/1000);
+      setAutoStatus("cooldown","待機 "+remain+"秒");
+      return;
+    }
+
+    const sample=monitorSample();
+    if(!sample) return;
+    if(!autoBaseline){
+      autoBaseline=sample;
+      setAutoStatus("watching","監視中");
+      return;
+    }
+
+    const changed=sampleDifference(autoBaseline,sample);
+    if(changed<AUTO_CHANGE_RATIO){
+      autoBaseline=sample;
+      autoPending=null;
+      autoPendingAt=0;
+      setAutoStatus("watching","監視中");
+      return;
+    }
+
+    if(!autoPending){
+      autoPending=sample;
+      autoPendingAt=now;
+      setAutoStatus("detected","変化検出・安定待ち");
+      return;
+    }
+
+    const stable=sampleDifference(autoPending,sample);
+    if(stable<=AUTO_STABLE_RATIO){
+      autoBaseline=sample;
+      autoPending=null;
+      autoPendingAt=0;
+      lastAutoAnalysisAt=now;
+      setAutoStatus("analyzing","自動解析中");
+      await runOpenAiAnalysis("auto");
+      if(autoEnabled&&stream){
+        autoBaseline=monitorSample()||autoBaseline;
+        setAutoStatus("cooldown","解析完了・待機");
+      }
+      return;
+    }
+
+    if(now-autoPendingAt>AUTO_MAX_PENDING_MS){
+      autoBaseline=sample;
+      autoPending=null;
+      autoPendingAt=0;
+      setAutoStatus("watching","動きが大きいため再監視");
+      return;
+    }
+
+    autoPending=sample;
+    setAutoStatus("detected","画面安定待ち");
   }
 
   function handleFile(file){
@@ -133,19 +293,21 @@
     setStatus("capture-status",msg);
   }
 
-  async function runOpenAiAnalysis(){
+  async function runOpenAiAnalysis(trigger){
     if(aiAnalyzing) return;
     aiAnalyzing=true;
+    const source=trigger||"manual";
     const button=$("ai-run");
     button.disabled=true;
     try{
       if(stream){
-        setStatus("capture-status","現在のゲーム画面をキャプチャしています…");
-        await captureFrame();
+        if(source!=="auto") setStatus("capture-status","現在のゲーム画面をキャプチャしています…");
+        await captureFrame(true);
       }
       if(!imageBlob) throw new Error("先に「画面共有を開始」するか、スクリーンショットを選択してください。");
 
-      setStatus("capture-status","OpenAIでゲーム画面を解析中…");
+      if(source==="auto") setAutoStatus("analyzing","OpenAI解析中");
+      setStatus("capture-status",source==="auto"?"画面変化を検出しました。OpenAIで自動解析中…":"OpenAIでゲーム画面を解析中…");
       const image=await blobToDataUrl(imageBlob);
       const imageHash=await blobHash(imageBlob);
       const response=await fetch(cfg.SUPABASE_URL+"/functions/v1/analyze-game-screen",{
@@ -166,6 +328,11 @@
     }finally{
       aiAnalyzing=false;
       button.disabled=false;
+      if(source!=="auto"&&stream){
+        lastAutoAnalysisAt=Date.now();
+        autoBaseline=monitorSample()||autoBaseline;
+      }
+      if(autoEnabled&&stream&&source!=="auto") setAutoStatus("cooldown","手動解析後・待機");
     }
   }
 
@@ -379,7 +546,15 @@
     }).join("");
   }
 
-  $("ai-run").addEventListener("click",runOpenAiAnalysis);
+  $("ai-run").addEventListener("click",function(){runOpenAiAnalysis("manual");});
+  $("auto-mode").addEventListener("change",function(){
+    if(this.checked) startAutoMonitor();
+    else{
+      stopAutoMonitor(false);
+      setAutoStatus("off","OFF");
+      setStatus("capture-status","自動解析モードを停止しました。");
+    }
+  });
 
   document.addEventListener("keydown",function(e){
     if(e.key==="Alt"&&!e.repeat&&!e.ctrlKey&&!e.shiftKey&&!e.metaKey){
@@ -399,7 +574,7 @@
     altWasChord=false;
     if(single){
       e.preventDefault();
-      runOpenAiAnalysis();
+      runOpenAiAnalysis("alt");
     }
   },true);
 
