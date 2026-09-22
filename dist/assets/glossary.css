@@ -1458,3 +1458,38 @@ label > span {
 .equipment-image-dropzone:focus{outline:3px solid rgba(20,130,130,.2)}
 #equipment-image-preview{max-width:180px;max-height:180px;object-fit:contain}
 .equipment-image-dropzone input{max-width:100%}
+
+
+/* Official reference guide image galleries */
+.reference-image-grid{
+  display:grid;
+  grid-template-columns:repeat(3,minmax(0,1fr));
+  gap:10px;
+  margin:14px 0 4px;
+}
+.reference-image{
+  display:block;
+  overflow:hidden;
+  border:1px solid #c9d9d8;
+  border-radius:6px;
+  background:#fff;
+  color:#53676a;
+  text-decoration:none;
+}
+.reference-image:hover{border-color:#247b77;color:#247b77}
+.reference-image img{
+  display:block;
+  width:100%;
+  height:180px;
+  object-fit:contain;
+  background:#102b35;
+}
+.reference-image span{display:block;padding:7px 9px;font-size:11px;line-height:1.45}
+@media(max-width:760px){
+  .reference-image-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .reference-image img{height:150px}
+}
+@media(max-width:480px){
+  .reference-image-grid{grid-template-columns:1fr}
+  .reference-image img{height:auto;max-height:320px}
+}
