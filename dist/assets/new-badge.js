@@ -186,15 +186,18 @@
       イベントページを開いたら既読
     */
 
-    if (
-      location.pathname.endsWith(
-        "/events.html"
-      )
-    ) {
-      setStorage(
-        EVENT_STORAGE,
-        current
-      );
+    const currentFile =
+      location.pathname.split("/").pop() || "";
+
+    if (currentFile === "events.html") {
+      setStorage(EVENT_STORAGE,current);
+
+      const existing =
+        findNavLink("events.html")?.querySelector(".xen-new-badge");
+
+      if (existing) {
+        existing.remove();
+      }
 
       return;
     }
@@ -235,15 +238,18 @@
       掲示板を開いたら既読
     */
 
-    if (
-      location.pathname.endsWith(
-        "/board.html"
-      )
-    ) {
-      setStorage(
-        BOARD_STORAGE,
-        current
-      );
+    const currentFile =
+      location.pathname.split("/").pop() || "";
+
+    if (currentFile === "board.html") {
+      setStorage(BOARD_STORAGE,current);
+
+      const existing =
+        findNavLink("board.html")?.querySelector(".xen-new-badge");
+
+      if (existing) {
+        existing.remove();
+      }
 
       return;
     }
