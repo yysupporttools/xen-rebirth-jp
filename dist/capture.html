@@ -7,13 +7,13 @@
   <meta name="description" content="Xen Rebirthのゲーム画面をブラウザでキャプチャし、NPC・マップ・クエストの英文と日本語訳を共有・検索できます。">
   <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='6' fill='%230d2630'/%3E%3Cpath d='M8 7L24 25M24 7L8 25' stroke='%23e5bd77' stroke-width='4'/%3E%3C/svg%3E">
   <link rel="stylesheet" href="assets/style.css">
-  <link rel="stylesheet" href="assets/capture.css?v=4">
+  <link rel="stylesheet" href="assets/capture.css?v=5">
   <link rel="stylesheet" href="assets/bgm-player.css?v=2">
   <link rel="stylesheet" href="assets/saved-items.css?v=1">
   <script defer src="assets/glossary-config.js"></script>
   <script defer src="assets/vendor/supabase.js"></script>
   <script defer src="https://cdn.jsdelivr.net/npm/tesseract.js@5/dist/tesseract.min.js"></script>
-  <script defer src="assets/capture.js?v=9"></script>
+  <script defer src="assets/capture.js?v=10"></script>
   <script defer src="assets/saved-items.js?v=1"></script>
 </head>
 <body>
@@ -76,6 +76,7 @@
       <button id="translate-run" type="button" disabled>ブラウザ翻訳を試す</button>
       <span id="capture-status" class="capture-status" role="status"></span>
     </div>
+    <div id="map-collect-status" class="capture-status map-collect-status" role="status"></div>
     <p class="small">自動解析モードは、共有したXen Rebirth画面をサイト側で監視し、画面が変化して安定したタイミングだけAIへ送信します。同じ画面の連続解析を抑えるため待機時間を設けています。</p>
     <p class="small">※ブラウザの安全制限により、Xen Rebirthが最前面でブラウザが非アクティブな間はALTキーを直接検知できません。自動解析モードはALTキーを使わず、共有映像の変化から判定します。</p>
   </section>
@@ -164,6 +165,21 @@
     </div>
     <div id="npc-index" class="npc-index"></div>
     <div id="knowledge-results" class="knowledge-results"></div>
+  </section>
+
+  <section class="paper capture-section" id="map-database">
+    <div class="section-heading">
+      <div><p class="eyebrow">MAP DATABASE</p><h2>4. 自動収集したマップ・NPC位置</h2></div>
+      <span id="map-db-count">0 NPC</span>
+    </div>
+    <p class="note">ゲーム中に拡大マップを開くと、マップ名と表示中のNPC名・位置を自動で蓄積します。複数回の観測結果から位置を平均化します。</p>
+    <div class="map-db-toolbar">
+      <select id="map-db-select" aria-label="マップ選択"><option value="">マップを選択</option></select>
+    </div>
+    <div class="map-db-layout">
+      <div id="map-db-canvas" class="map-db-canvas"><div class="map-db-empty">まだマップ情報がありません。</div></div>
+      <div id="map-db-list" class="map-db-list"></div>
+    </div>
   </section>
 </main>
 
