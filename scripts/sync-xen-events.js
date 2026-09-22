@@ -26,6 +26,22 @@ function sleep(ms){return new Promise(r=>setTimeout(r,ms));}
 async function get(url){const c=new AbortController(),t=setTimeout(()=>c.abort(),30000);try{const r=await fetch(url,{redirect:"follow",signal:c.signal,headers:{"user-agent":"Mozilla/5.0 (compatible; XenRebirthJP-CalendarSync/10.0)","accept":"text/html,application/xhtml+xml"}});if(!r.ok)throw new Error(`HTTP ${r.status} ${url}`);return await r.text();}finally{clearTimeout(t);}}
 function canonical(raw){const u=new URL(decode(raw),CALENDAR_URL);u.hash="";return u.href;}
 function discover(html){const re=/<a\b[^>]*href=["']([^"']*(?:\?|&amp;)event\/(\d+)[^"']*)["'][^>]*>([\s\S]*?)<\/a>/gi,map=new Map();for(const m of html.matchAll(re)){const id=m[2],title=clean(m[3]);if(title&&!map.has(id))map.set(id,{id,title,url:canonical(m[1])});}return [...map.values()];}
+function calendarViewLinks(html){
+ const out=[],seen=new Set();
+ const re=/<a\b([^>]*?)href=["']([^"']+)["']([^>]*)>([\s\S]*?)<\/a>/gi;
+ for(const m of html.matchAll(re)){
+   let url; try{url=canonical(m[2]);}catch{continue;}
+   if(!url.startsWith("https://www.xenrebirth.com/calendar/"))continue;
+   if(/[?&]event\/|\/event\//i.test(url))continue;
+   if(url===CALENDAR_URL||seen.has(url))continue;
+   const attrs=(m[1]+" "+m[3]).replace(/\s+/g," ").trim();
+   const label=clean(m[4]);
+   if(/(?:month|calendar|next|prev|today|view|date|202\d)/i.test(url+" "+attrs+" "+label)){
+     seen.add(url);out.push({url,label,attrs:attrs.slice(0,240)});
+   }
+ }
+ return out.slice(0,80);
+}
 function titleOf(html,fallback){const m=html.match(/<h1[^>]*>([\s\S]*?)<\/h1>/i);return m?clean(m[1]):fallback;}
 function headerWindow(html,title){const p=clean(html);let i=p.indexOf(title);if(i<0)i=0;return p.slice(i,i+2500).replace(/\s*\n\s*/g," | ").replace(/\s+/g," ").trim();}
 function categoryOf(h){const m=h.match(/\bCategory\s*\|\s*([^|]{2,80}?)(?=\s*\|)/i);return m?m[1].trim():null;}
@@ -113,6 +129,7 @@ async function insertRow(rec,tr){const body={official_event_id:rec.official_even
  console.log(`Mode: PRODUCTION WRITE / MANUAL / model=${OPENAI_MODEL}`);
  console.log("Safety: NO DELETE operations are implemented.");
  const [calendarHtml,existing]=await Promise.all([get(CALENDAR_URL),loadExistingEvents()]);
+ console.log("Calendar navigation candidates:", JSON.stringify(calendarViewLinks(calendarHtml),null,2));
  const events=discover(calendarHtml).slice(0,MAX_EVENTS);
  let updated=0,inserted=0,review=0;
  for(let i=0;i<events.length;i++){
