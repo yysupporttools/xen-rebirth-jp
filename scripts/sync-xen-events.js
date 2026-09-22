@@ -7,7 +7,7 @@
 */
 
 const CALENDAR_URL="https://www.xenrebirth.com/calendar/";
-const MAX_EVENTS=Number(process.env.MAX_EVENTS||50);
+const MAX_EVENTS=Number(process.env.MAX_EVENTS||150);
 const SUPABASE_URL="https://dzxxjtmpcfsmvdgkcwvn.supabase.co";
 const SUPABASE_SECRET=process.env.SUPABASE_SERVICE_ROLE_KEY||"";
 const OPENAI_API_KEY=process.env.OPENAI_API_KEY||"";
@@ -26,21 +26,33 @@ function sleep(ms){return new Promise(r=>setTimeout(r,ms));}
 async function get(url){const c=new AbortController(),t=setTimeout(()=>c.abort(),30000);try{const r=await fetch(url,{redirect:"follow",signal:c.signal,headers:{"user-agent":"Mozilla/5.0 (compatible; XenRebirthJP-CalendarSync/10.0)","accept":"text/html,application/xhtml+xml"}});if(!r.ok)throw new Error(`HTTP ${r.status} ${url}`);return await r.text();}finally{clearTimeout(t);}}
 function canonical(raw){const u=new URL(decode(raw),CALENDAR_URL);u.hash="";return u.href;}
 function discover(html){const re=/<a\b[^>]*href=["']([^"']*(?:\?|&amp;)event\/(\d+)[^"']*)["'][^>]*>([\s\S]*?)<\/a>/gi,map=new Map();for(const m of html.matchAll(re)){const id=m[2],title=clean(m[3]);if(title&&!map.has(id))map.set(id,{id,title,url:canonical(m[1])});}return [...map.values()];}
-function calendarViewLinks(html){
- const out=[],seen=new Set();
- const re=/<a\b([^>]*?)href=["']([^"']+)["']([^>]*)>([\s\S]*?)<\/a>/gi;
- for(const m of html.matchAll(re)){
-   let url; try{url=canonical(m[2]);}catch{continue;}
-   if(!url.startsWith("https://www.xenrebirth.com/calendar/"))continue;
-   if(/[?&]event\/|\/event\//i.test(url))continue;
-   if(url===CALENDAR_URL||seen.has(url))continue;
-   const attrs=(m[1]+" "+m[3]).replace(/\s+/g," ").trim();
-   const label=clean(m[4]);
-   if(/(?:month|calendar|next|prev|today|view|date|202\d)/i.test(url+" "+attrs+" "+label)){
-     seen.add(url);out.push({url,label,attrs:attrs.slice(0,240)});
-   }
+function tokyoYearMonth(){
+ const parts=new Intl.DateTimeFormat("en-US",{timeZone:"Asia/Tokyo",year:"numeric",month:"numeric"}).formatToParts(new Date());
+ const o=Object.fromEntries(parts.filter(x=>x.type!=="literal").map(x=>[x.type,x.value]));
+ return {year:Number(o.year),month:Number(o.month)};
+}
+function addMonthsYm(year,month,delta){
+ const d=new Date(Date.UTC(year,month-1+delta,1));
+ return {year:d.getUTCFullYear(),month:d.getUTCMonth()+1};
+}
+function calendarMonthUrl(year,month){
+ return `https://www.xenrebirth.com/calendar/index.php?calendar/${year}/${month}/`;
+}
+async function collectCalendarEvents(rootHtml,monthsAhead=2){
+ const ym=tokyoYearMonth();
+ const pages=[{url:CALENDAR_URL,html:rootHtml}];
+ for(let i=1;i<=monthsAhead;i++){
+   const x=addMonthsYm(ym.year,ym.month,i);
+   const url=calendarMonthUrl(x.year,x.month);
+   pages.push({url,html:await get(url)});
  }
- return out.slice(0,80);
+ const map=new Map();
+ for(const p of pages){
+   const found=discover(p.html);
+   console.log(`Calendar page ${p.url} -> ${found.length} event links`);
+   for(const e of found)if(!map.has(e.id))map.set(e.id,e);
+ }
+ return [...map.values()];
 }
 function titleOf(html,fallback){const m=html.match(/<h1[^>]*>([\s\S]*?)<\/h1>/i);return m?clean(m[1]):fallback;}
 function headerWindow(html,title){const p=clean(html);let i=p.indexOf(title);if(i<0)i=0;return p.slice(i,i+2500).replace(/\s*\n\s*/g," | ").replace(/\s+/g," ").trim();}
@@ -125,12 +137,11 @@ async function updateRow(id,rec){const body={official_event_id:rec.official_even
 async function insertRow(rec,tr){const body={official_event_id:rec.official_event_id,title_en:rec.title_en,title_ja:tr.title_ja||null,category:rec.category,start_time:rec.start_time,end_time:rec.end_time,description_en:rec.description_en,description_ja:tr.description_ja||null,requirements_ja:tr.requirements_ja||null,rewards_ja:tr.rewards_ja||null,official_url:rec.official_url,all_day:!!rec.all_day};await sb("xen_events",{method:"POST",headers:{"Prefer":"return=minimal"},body:JSON.stringify(body)});}
 
 (async()=>{
- console.log("=== Xen Rebirth Event Sync Ver.10 ===");
+ console.log("=== Xen Rebirth Event Sync Ver.11 ===");
  console.log(`Mode: PRODUCTION WRITE / MANUAL / model=${OPENAI_MODEL}`);
  console.log("Safety: NO DELETE operations are implemented.");
  const [calendarHtml,existing]=await Promise.all([get(CALENDAR_URL),loadExistingEvents()]);
- console.log("Calendar navigation candidates:", JSON.stringify(calendarViewLinks(calendarHtml),null,2));
- const events=discover(calendarHtml).slice(0,MAX_EVENTS);
+ const events=(await collectCalendarEvents(calendarHtml,2)).slice(0,MAX_EVENTS);
  let updated=0,inserted=0,review=0;
  for(let i=0;i<events.length;i++){
    const e=events[i],html=await get(e.url),title=titleOf(html,e.title),h=headerWindow(html,title),rec=normalize({...e,title},h,html);
