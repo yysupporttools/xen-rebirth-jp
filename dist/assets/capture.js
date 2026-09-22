@@ -12,6 +12,7 @@
   let records=[];
   let activeRecordId="";
   let activeNpcName="";
+  const FAST_SCREEN_CACHE_KEY="xen-fast-screen-cache-v1";
   let quests=[];
   let npcProfiles=[];
   let dialogueTransitions=[];
@@ -263,6 +264,50 @@
     return Array.from(new Uint8Array(digest)).map(function(b){return b.toString(16).padStart(2,"0");}).join("");
   }
 
+  function readFastScreenCache(){
+    try{
+      const parsed=JSON.parse(localStorage.getItem(FAST_SCREEN_CACHE_KEY)||"{}");
+      return parsed&&typeof parsed==="object"?parsed:{};
+    }catch(_){return {};}
+  }
+
+  function rememberFastScreen(imageHash,recordId,npcName){
+    if(!imageHash||!recordId) return;
+    const cache=readFastScreenCache();
+    cache[imageHash]={record_id:recordId,npc_name:npcName||"",at:Date.now()};
+    const entries=Object.entries(cache).sort(function(a,b){return Number(b[1].at||0)-Number(a[1].at||0);}).slice(0,250);
+    try{localStorage.setItem(FAST_SCREEN_CACHE_KEY,JSON.stringify(Object.fromEntries(entries)));}catch(_){}
+  }
+
+  function fastScreenRecord(imageHash){
+    const hit=readFastScreenCache()[imageHash];
+    if(!hit) return null;
+    return records.find(function(r){return r.id===hit.record_id;})||null;
+  }
+
+  function dialogueRowsForNpc(name){
+    return records.filter(function(r){return r.npc_name===name;}).sort(function(a,b){
+      return new Date(a.created_at||0)-new Date(b.created_at||0);
+    });
+  }
+
+  function dialogueRootForNpc(name){
+    const rows=dialogueRowsForNpc(name);
+    if(!rows.length) return null;
+    const ids=new Set(rows.map(function(r){return r.id;}));
+    const inbound=new Set(dialogueTransitions.filter(function(t){
+      return ids.has(t.from_record_id)&&ids.has(t.to_record_id);
+    }).map(function(t){return t.to_record_id;}));
+    return rows.find(function(r){return !inbound.has(r.id);})||rows[0];
+  }
+
+  function dialoguePageInfo(record){
+    if(!record) return {index:1,total:1};
+    const rows=dialogueRowsForNpc(record.npc_name);
+    const idx=Math.max(0,rows.findIndex(function(r){return r.id===record.id;}));
+    return {index:idx+1,total:Math.max(1,rows.length)};
+  }
+
   function normText(value){
     return String(value||"").trim().toLowerCase().replace(/[^a-z0-9ぁ-んァ-ヶ一-龠]+/g," ");
   }
@@ -384,6 +429,7 @@
     if(info.saved){
       activeRecordId=String(info.id||"");
       activeNpcName=String(result.npc_name||"").trim();
+      if(result._client_image_hash) rememberFastScreen(result._client_image_hash,activeRecordId,activeNpcName);
       setStatus("form-status",info.inserted?"AI解析結果を自動保存しました。現在の会話だけ表示します。":"同じ内容は登録済みのため更新のみ行いました。");
       await loadRecords(true);
       return info;
@@ -626,6 +672,17 @@
       setStatus("capture-status",source==="auto"?"画面変化を検出しました。OpenAIで自動解析中…":"OpenAIでゲーム画面を解析中…");
       const image=await blobToDataUrl(imageBlob);
       const imageHash=await blobHash(imageBlob);
+
+      const instant=fastScreenRecord(imageHash);
+      if(instant){
+        activeRecordId=instant.id;
+        activeNpcName=instant.npc_name||"";
+        renderRecords();
+        setStatus("capture-status","保存済みの翻訳を即時表示しました。AI解析は使用していません。");
+        setStatus("form-status","保存済みデータを表示中（API使用なし）");
+        return;
+      }
+
       const response=await fetch(cfg.SUPABASE_URL+"/functions/v1/analyze-game-screen",{
         method:"POST",
         headers:{
@@ -637,7 +694,14 @@
       });
       let data={};
       try{data=await response.json();}catch(_){}
-      if(!response.ok) throw new Error(data.error||("AI解析に失敗しました（HTTP "+response.status+"）"));
+      if(!response.ok){
+        if(response.status===429&&data.reset_at){
+          const reset=new Date(data.reset_at).toLocaleString("ja-JP",{timeZone:"Asia/Tokyo",month:"numeric",day:"numeric",hour:"2-digit",minute:"2-digit"});
+          throw new Error((data.error||"AI解析上限に達しました。")+" "+(data.used!=null&&data.limit!=null?data.used+"/"+data.limit+"回使用。 ":"")+"次回リセット："+reset);
+        }
+        throw new Error(data.error||("AI解析に失敗しました（HTTP "+response.status+"）"));
+      }
+      data._client_image_hash=imageHash;
       await applyAiResult(data);
 
       if(data.screen_type==="npc_dialog"){
@@ -983,12 +1047,14 @@
     ].join("");
 
     const stack=dialogueNavStacks.get(cardKey)||[];
+    const page=dialoguePageInfo(r);
     return '<article class="knowledge-card game-dialog-card" data-card-key="'+esc(cardKey)+'" data-record-id="'+esc(r.id)+'">'+
       '<div class="game-dialog-title"><strong>'+esc(r.npc_name)+'</strong>'+
         '<span>'+esc(r.map_name||"MAP未登録")+'</span>'+
       '</div>'+
       '<div class="knowledge-meta">'+
-        (stack.length?'<button type="button" class="dialogue-back" data-dialogue-back="1">← 前の会話へ</button>':"")+
+        (stack.length?'<button type="button" class="dialogue-back" data-dialogue-back="1">← 1つ前の会話へ</button>':"")+
+        '<span>会話 '+page.index+' / '+page.total+'</span>'+
         (r.required_level!=null?'<span>Lv '+esc(r.required_level)+'</span>':"")+
         (quest?'<span>'+esc(quest)+'</span>':"")+
         (r.confidence!=null?'<span>AI '+esc(r.confidence)+'%</span>':"")+
@@ -1044,8 +1110,9 @@
     $("npc-index").querySelectorAll("[data-npc]").forEach(function(btn){
       btn.addEventListener("click",function(){
         activeNpcName=btn.dataset.npc||"";
-        const latest=records.find(function(r){return r.npc_name===activeNpcName;});
-        activeRecordId=latest?latest.id:"";
+        const first=dialogueRootForNpc(activeNpcName);
+        activeRecordId=first?first.id:"";
+        dialogueNavStacks.clear();
         $("knowledge-search").value=activeNpcName;
         renderRecords();
       });
@@ -1072,10 +1139,15 @@
       current=rows.find(function(r){return r.id===activeRecordId;})||null;
     }
     if(!current&&activeNpcName){
-      current=rows.find(function(r){return r.npc_name===activeNpcName;})||null;
+      const root=dialogueRootForNpc(activeNpcName);
+      current=root&&rows.some(function(r){return r.id===root.id;})?root:null;
     }
     if(!current&&word){
-      current=rows.find(function(r){return String(r.npc_name||"").toLowerCase()===word;})||rows[0];
+      const exactNpc=rows.find(function(r){return String(r.npc_name||"").toLowerCase()===word;});
+      if(exactNpc){
+        const root=dialogueRootForNpc(exactNpc.npc_name);
+        current=root&&rows.some(function(r){return r.id===root.id;})?root:exactNpc;
+      }else current=rows[0];
     }
     if(!current) current=rows[0];
 
@@ -1102,6 +1174,8 @@
     const stack=dialogueNavStacks.get(cardKey)||[];
     stack.push(currentId);
     dialogueNavStacks.set(cardKey,stack);
+    activeRecordId=target.id;
+    activeNpcName=target.npc_name||activeNpcName;
     card.outerHTML=renderDialogueCard(target,cardKey);
   }
 
@@ -1113,7 +1187,11 @@
     const previousId=stack.pop();
     dialogueNavStacks.set(cardKey,stack);
     const previous=records.find(function(r){return r.id===previousId;});
-    if(previous) card.outerHTML=renderDialogueCard(previous,cardKey);
+    if(previous){
+      activeRecordId=previous.id;
+      activeNpcName=previous.npc_name||activeNpcName;
+      card.outerHTML=renderDialogueCard(previous,cardKey);
+    }
   }
 
   $("map-db-select").addEventListener("change",renderMapDatabase);
@@ -1122,8 +1200,9 @@
     if(!target) return;
     const npc=target.dataset.mapNpc;
     activeNpcName=npc;
-    const latest=records.find(function(r){return r.npc_name===npc;});
-    activeRecordId=latest?latest.id:"";
+    const first=dialogueRootForNpc(npc);
+    activeRecordId=first?first.id:"";
+    dialogueNavStacks.clear();
     $("knowledge-search").value=npc;
     renderRecords();
     $("npc-database").scrollIntoView({behavior:"smooth",block:"start"});
@@ -1192,6 +1271,7 @@
   $("knowledge-search").addEventListener("input",function(){
     activeRecordId="";
     activeNpcName=this.value.trim();
+    dialogueNavStacks.clear();
     renderRecords();
   });
   $("map-filter").addEventListener("change",function(){
