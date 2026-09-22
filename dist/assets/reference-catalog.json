@@ -2229,6 +2229,447 @@
           ]
         }
       ]
+    },
+    {
+      "slug": "pet-enhancement-guide",
+      "name_en": "Skill Pets Enhancement",
+      "name_ja": "スキルペット強化",
+      "source_url": "https://www.xenrebirth.com/lexicon/index.php?entry/51-alchemist-blacksmith-enhancement-guide/#3.2-Skill-Pets",
+      "_blocks": [
+        {
+          "heading": "スキルペット強化とは",
+          "text": "Jarikaのペットクエストで入手したペットに、ランダムなスキルをLv1で付与し、その後Lv10まで強化できます。対象Lvは35以上です。強化はEsseneのMagic Refinery、またはBrynhilld・Summerhill StreetのOre RefineryにいるAlchemist NPCで行います。"
+        },
+        {
+          "heading": "① 最初のスキルを付与",
+          "text": "必要素材：Sirius Star ×3、Silkion ×1、75,000 Kron。成功率はMeridian Rなしで10%、Meridian R ×10を入れると90%。公式ガイドではMeridian Rの使用が強く推奨されています。"
+        },
+        {
+          "heading": "② Lv1 → Lv10まで育成",
+          "text": "1回の強化に必要な素材：Vitamin Powder ×4、Hypermill ×4、120,000 Kron。Lv1～Lv10の強化成功率はMeridian Rなしで10%、Meridian R ×10使用時は90%と記載されています。"
+        },
+        {
+          "heading": "付与されるスキル",
+          "text": "Attack / Crit / Defense / Dodge / Max HP / Max MP / Max Weight / Skill Crit のいずれか。スキルの種類とレベルはランダムです。また、スキルを付与したペットは騎乗できません。※公式本文のスキル一覧では「Crit」、数値表では同じ位置の列が「Hit Rate」と表記されているため、下表は公式の数値表に合わせて「Hit Rate（命中率）」として掲載しています。"
+        }
+      ],
+      "_tables": [
+        {
+          "caption": "スキルペット Lv1～Lv10 強化効果",
+          "headers": [
+            "Lv",
+            "Attack / Magic",
+            "Defense",
+            "Dodge",
+            "Hit Rate（命中率）",
+            "Max HP",
+            "Max MP",
+            "Max WT",
+            "Skill Crit"
+          ],
+          "rows": [
+            [
+              "Lv 1",
+              "+2",
+              "+1",
+              "+1",
+              "+5",
+              "+10",
+              "+10",
+              "+20",
+              "+1"
+            ],
+            [
+              "Lv 2",
+              "+4",
+              "+2",
+              "+2",
+              "+10",
+              "+20",
+              "+20",
+              "+40",
+              "+2"
+            ],
+            [
+              "Lv 3",
+              "+6",
+              "+3",
+              "+3",
+              "+15",
+              "+30",
+              "+30",
+              "+60",
+              "+3"
+            ],
+            [
+              "Lv 4",
+              "+8",
+              "+4",
+              "+4",
+              "+20",
+              "+40",
+              "+40",
+              "+80",
+              "+4"
+            ],
+            [
+              "Lv 5",
+              "+10",
+              "+5",
+              "+5",
+              "+25",
+              "+50",
+              "+50",
+              "+100",
+              "+5"
+            ],
+            [
+              "Lv 6",
+              "+12",
+              "+6",
+              "+6",
+              "+30",
+              "+60",
+              "+60",
+              "+120",
+              "+6"
+            ],
+            [
+              "Lv 7",
+              "+14",
+              "+7",
+              "+7",
+              "+35",
+              "+70",
+              "+70",
+              "+140",
+              "+7"
+            ],
+            [
+              "Lv 8",
+              "+16",
+              "+8",
+              "+8",
+              "+40",
+              "+80",
+              "+80",
+              "+160",
+              "+8"
+            ],
+            [
+              "Lv 9",
+              "+18",
+              "+9",
+              "+9",
+              "+45",
+              "+90",
+              "+90",
+              "+180",
+              "+9"
+            ],
+            [
+              "Lv 10",
+              "+20",
+              "+10",
+              "+10",
+              "+50",
+              "+100",
+              "+100",
+              "+200",
+              "+10"
+            ]
+          ]
+        }
+      ],
+      "_links": [
+        {
+          "label": "公式Lexicon：Skill Pets",
+          "url": "https://www.xenrebirth.com/lexicon/index.php?entry/51-alchemist-blacksmith-enhancement-guide/#3.2-Skill-Pets"
+        }
+      ]
+    },
+    {
+      "slug": "equipment-enhancement-guide",
+      "name_en": "Gear Enhancement",
+      "name_ja": "装備強化",
+      "source_url": "https://www.xenrebirth.com/lexicon/index.php?entry/51-alchemist-blacksmith-enhancement-guide/#2-Gears",
+      "_blocks": [
+        {
+          "heading": "装備強化とは",
+          "text": "Xen Stoneを使って、各クラスのArmor（鎧）・Helmet（兜）・Gloves（手袋）・Shoes（靴）・Shield（盾）・Weapon（武器）を強化します。対象Lvは16以上。Brynhilld・Jotunheim・AlbatrossのBlacksmith ShopにいるBlacksmith NPCで行います。Xenian装備は強化できません。"
+        },
+        {
+          "heading": "装備可能Lvの上昇に注意",
+          "text": "強化値が偶数になるたび、装備の必要Lvが1上がります。公式例ではLv66装備の場合、+2でLv67、+4でLv68、+6でLv69になります。"
+        },
+        {
+          "heading": "失敗したとき",
+          "text": "+4→+5失敗：+3へ戻る\\n+5→+6失敗：+2へ戻る\\n+6→+7失敗：+0へ戻る\\n+7以降の強化失敗：装備が破壊される"
+        },
+        {
+          "heading": "部位ごとの特徴",
+          "text": "鎧・兜・手袋：追加ステータスはなく、+1ごとにDEF +2。\\n盾：Successful Dodge Rate（回避成功率）が追加され、強化段階に応じてDEFも上昇。ArcherとMageには標準の盾がありません。\\n靴：DEFに加えてMovement Rate（移動速度）が上昇。\\n武器：Cleric/MageはMagicとMax MP、Archer/Knight/Rogue/TemplarはAttackとAttack Rateが上昇します。"
+        }
+      ],
+      "_tables": [
+        {
+          "caption": "鎧・兜・手袋",
+          "headers": [
+            "強化値",
+            "効果"
+          ],
+          "rows": [
+            [
+              "+1",
+              "DEF +2"
+            ],
+            [
+              "+2",
+              "DEF +4"
+            ],
+            [
+              "+3",
+              "DEF +6"
+            ],
+            [
+              "+4",
+              "DEF +8"
+            ],
+            [
+              "+5",
+              "DEF +10"
+            ],
+            [
+              "+6",
+              "DEF +12"
+            ],
+            [
+              "+7",
+              "DEF +14"
+            ],
+            [
+              "+8",
+              "DEF +16"
+            ],
+            [
+              "+9",
+              "DEF +18"
+            ],
+            [
+              "+10",
+              "DEF +20"
+            ]
+          ]
+        },
+        {
+          "caption": "盾",
+          "headers": [
+            "強化値",
+            "Successful Dodge Rate",
+            "DEF"
+          ],
+          "rows": [
+            [
+              "+1",
+              "+1",
+              "—"
+            ],
+            [
+              "+2",
+              "+1",
+              "+1"
+            ],
+            [
+              "+3",
+              "+2",
+              "+1"
+            ],
+            [
+              "+4",
+              "+2",
+              "+2"
+            ],
+            [
+              "+5",
+              "+3",
+              "+2"
+            ],
+            [
+              "+6",
+              "+3",
+              "+3"
+            ],
+            [
+              "+7",
+              "+4",
+              "+3"
+            ],
+            [
+              "+8",
+              "+4",
+              "+4"
+            ],
+            [
+              "+9",
+              "+5",
+              "+4"
+            ],
+            [
+              "+10",
+              "+5",
+              "+5"
+            ]
+          ]
+        },
+        {
+          "caption": "靴",
+          "headers": [
+            "強化値",
+            "DEF",
+            "Movement Rate"
+          ],
+          "rows": [
+            [
+              "+1",
+              "DEF +2",
+              "+1"
+            ],
+            [
+              "+2",
+              "DEF +4",
+              "+1"
+            ],
+            [
+              "+3",
+              "DEF +6",
+              "+1"
+            ],
+            [
+              "+4",
+              "DEF +8",
+              "+1"
+            ],
+            [
+              "+5",
+              "DEF +10",
+              "+2"
+            ],
+            [
+              "+6",
+              "DEF +12",
+              "+3"
+            ],
+            [
+              "+7",
+              "DEF +14",
+              "+4"
+            ],
+            [
+              "+8",
+              "DEF +16",
+              "+5"
+            ],
+            [
+              "+9",
+              "DEF +18",
+              "+6"
+            ],
+            [
+              "+10",
+              "DEF +20",
+              "+7"
+            ]
+          ]
+        },
+        {
+          "caption": "武器",
+          "headers": [
+            "強化値",
+            "Cleric / Mage：Magic",
+            "Max MP",
+            "Archer / Knight / Rogue / Templar：Attack",
+            "Attack Rate"
+          ],
+          "rows": [
+            [
+              "+1",
+              "Magic +2",
+              "+10",
+              "Attack +2",
+              "-0.1秒"
+            ],
+            [
+              "+2",
+              "Magic +4",
+              "+10",
+              "Attack +4",
+              "-0.1秒"
+            ],
+            [
+              "+3",
+              "Magic +6",
+              "+10",
+              "Attack +6",
+              "-0.1秒"
+            ],
+            [
+              "+4",
+              "Magic +8",
+              "+10",
+              "Attack +8",
+              "-0.1秒"
+            ],
+            [
+              "+5",
+              "Magic +10",
+              "+20",
+              "Attack +10",
+              "-0.1秒"
+            ],
+            [
+              "+6",
+              "Magic +12",
+              "+20",
+              "Attack +12",
+              "-0.2秒"
+            ],
+            [
+              "+7",
+              "Magic +14",
+              "+20",
+              "Attack +14",
+              "-0.2秒"
+            ],
+            [
+              "+8",
+              "Magic +16",
+              "+20",
+              "Attack +16",
+              "-0.2秒"
+            ],
+            [
+              "+9",
+              "Magic +18",
+              "+20",
+              "Attack +18",
+              "-0.2秒"
+            ],
+            [
+              "+10",
+              "Magic +20",
+              "+20",
+              "Attack +20",
+              "-0.2秒"
+            ]
+          ]
+        }
+      ],
+      "_links": [
+        {
+          "label": "公式Lexicon：Gears",
+          "url": "https://www.xenrebirth.com/lexicon/index.php?entry/51-alchemist-blacksmith-enhancement-guide/#2-Gears"
+        }
+      ]
     }
   ]
 }
