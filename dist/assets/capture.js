@@ -488,7 +488,7 @@
 
     let mapImageUrl="";
     const existing=gameMaps.find(function(m){return normText(m.map_name)===normText(mapName);});
-    if(existing&&existing.map_image_url){
+    if(existing&&existing.map_image_url&&existing.source_image_hash===pack.hash){
       mapImageUrl=existing.map_image_url;
     }else{
       const panel=await cropBlobNormalized(pack.blob,savedRegion,0.9);
@@ -653,7 +653,7 @@
         }
       }
       if(data.screen_type==="expanded_map"&&!dedicatedMapSaved){
-        await saveMapAnalysis(data,imageHash);
+        setStatus("map-collect-status","拡大マップは検出しましたが、専用マップ解析で確定できなかったため保存しませんでした。");
       }
     }catch(err){
       setStatus("capture-status",err&&err.message?err.message:String(err));
