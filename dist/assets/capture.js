@@ -15,6 +15,7 @@
   let altDown=false;
   let altWasChord=false;
   let altPressedAt=0;
+  let lastAiContext={npc_name:"",map_name:"",at:0};
 
   let autoEnabled=false;
   let autoTimer=null;
@@ -259,8 +260,17 @@
 
   async function applyAiResult(result){
     const f=$("capture-form").elements;
-    f.map_name.value=result.map_name||"";
-    f.npc_name.value=result.npc_name||"";
+    const npc=String(result.npc_name||"").trim();
+    let map=String(result.map_name||"").trim();
+    if(!map&&npc&&lastAiContext.npc_name===npc&&Date.now()-lastAiContext.at<300000){
+      map=lastAiContext.map_name||"";
+      result.map_name=map;
+    }
+    if(npc){
+      lastAiContext={npc_name:npc,map_name:map,at:Date.now()};
+    }
+    f.map_name.value=map;
+    f.npc_name.value=npc;
     f.quest_name_en.value=result.quest_name_en||"";
     f.quest_name_ja.value=result.quest_name_ja||"";
     f.english_text.value=result.english_text||"";
@@ -293,6 +303,42 @@
     setStatus("capture-status",msg);
   }
 
+  async function autoSaveAiResult(result,imageHash){
+    const res=await db.rpc("game_knowledge_auto_save",{
+      p_map_name:String(result.map_name||""),
+      p_npc_name:String(result.npc_name||""),
+      p_quest_name_en:String(result.quest_name_en||""),
+      p_quest_name_ja:String(result.quest_name_ja||""),
+      p_english_text:String(result.english_text||""),
+      p_japanese_text:String(result.japanese_text||""),
+      p_required_level:result.required_level==null?null:Number(result.required_level),
+      p_requirements:String(result.requirements||""),
+      p_targets:String(result.targets||""),
+      p_rewards:String(result.rewards||""),
+      p_notes:String(result.notes||""),
+      p_screen_type:String(result.screen_type||""),
+      p_confidence:Number.isFinite(Number(result.confidence))?Number(result.confidence):null,
+      p_image_hash:imageHash||"",
+      p_source_type:"screen_capture",
+      p_contributor_id:contributorId
+    });
+    if(res.error) throw new Error("自動保存に失敗しました："+res.error.message);
+    const info=res.data||{};
+    if(info.saved){
+      setStatus("form-status",info.inserted?"AI解析結果を自動保存しました。":"同じ内容は登録済みのため更新のみ行いました。");
+      await loadRecords(true);
+      return info;
+    }
+    const reasons={
+      screen_type:"NPC会話・クエスト画面ではないため保存しませんでした。",
+      low_confidence:"認識精度が低いため自動保存しませんでした。",
+      npc_missing:"NPC名を確認できなかったため自動保存しませんでした。",
+      content_missing:"保存できる英文・クエスト名がありませんでした。"
+    };
+    setStatus("form-status",reasons[info.reason]||"今回は自動保存対象外です。");
+    return info;
+  }
+
   async function runOpenAiAnalysis(trigger){
     if(aiAnalyzing) return;
     aiAnalyzing=true;
@@ -323,6 +369,7 @@
       try{data=await response.json();}catch(_){}
       if(!response.ok) throw new Error(data.error||("AI解析に失敗しました（HTTP "+response.status+"）"));
       await applyAiResult(data);
+      await autoSaveAiResult(data,imageHash);
     }catch(err){
       setStatus("capture-status",err&&err.message?err.message:String(err));
     }finally{
@@ -478,8 +525,8 @@
     setStatus("form-status","");
   }
 
-  async function loadRecords(){
-    setStatus("capture-status","登録済みデータを読み込み中…");
+  async function loadRecords(silent){
+    if(!silent) setStatus("capture-status","登録済みデータを読み込み中…");
     const res=await db.from("game_knowledge").select("*").order("created_at",{ascending:false}).limit(1000);
     if(res.error){
       $("knowledge-results").innerHTML='<p class="notice">データを読み込めませんでした：'+esc(res.error.message)+'</p>';
@@ -488,7 +535,7 @@
     records=res.data||[];
     buildFilters();
     renderRecords();
-    setStatus("capture-status","");
+    if(!silent) setStatus("capture-status","");
   }
 
   function buildFilters(){
