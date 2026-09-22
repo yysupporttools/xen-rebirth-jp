@@ -986,7 +986,11 @@
         "apikey":cfg.SUPABASE_ANON_KEY,
         "x-xen-client":"capture-v1"
       },
-      body:JSON.stringify({image:dataUrl,image_hash:hash})
+      body:JSON.stringify({
+        image:dataUrl,
+        image_hash:hash,
+        known_maps:gameMaps.map(function(m){return m.map_name;}).filter(Boolean).slice(0,40)
+      })
     });
     let data={};
     try{data=await response.json();}catch(_){}
@@ -1024,10 +1028,59 @@
     };
   }
 
+  function npcMapMatchScore(detected,known){
+    const nameScore=bigramDice(detected.name||"",known.npc_name||"");
+    if(nameScore<0.76) return 0;
+    const dx=Number(detected.x||0)-Number(known.x_norm||0);
+    const dy=Number(detected.y||0)-Number(known.y_norm||0);
+    const dist=Math.sqrt(dx*dx+dy*dy);
+    let pos=0;
+    if(dist<=70) pos=2.4;
+    else if(dist<=120) pos=1.8;
+    else if(dist<=180) pos=1.1;
+    else if(dist<=260) pos=0.4;
+    const sameNameMaps=new Set(
+      mapNpcs.filter(function(x){return bigramDice(x.npc_name||"",known.npc_name||"")>=0.9;})
+        .map(function(x){return x.map_id;})
+    ).size;
+    const uniqueWeight=sameNameMaps<=1?1.7:(sameNameMaps===2?1.3:1);
+    return (nameScore*2.4+pos)*uniqueWeight;
+  }
+
+  function inferKnownMapFromNpcPattern(detected){
+    if(!Array.isArray(detected)||detected.length<2||!gameMaps.length||!mapNpcs.length) return null;
+    const results=gameMaps.map(function(map){
+      const known=mapNpcs.filter(function(n){return n.map_id===map.id;});
+      const used=new Set();
+      let score=0,matches=0;
+      detected.forEach(function(d){
+        let best=null;
+        known.forEach(function(k){
+          if(used.has(k.id)) return;
+          const s=npcMapMatchScore(d,k);
+          if(s>0&&(!best||s>best.score)) best={row:k,score:s};
+        });
+        if(best&&best.score>=2.6){
+          used.add(best.row.id);
+          matches++;
+          score+=best.score;
+        }
+      });
+      return {map:map,matches:matches,score:score};
+    }).sort(function(a,b){
+      if(b.matches!==a.matches) return b.matches-a.matches;
+      return b.score-a.score;
+    });
+    const best=results[0],second=results[1];
+    if(!best||best.matches<2||best.score<6.2) return null;
+    if(second&&second.matches===best.matches&&best.score-second.score<1.4) return null;
+    return best;
+  }
+
   async function saveDedicatedMapAnalysis(pack){
     if(!pack||!pack.data||!pack.data.map_visible) return false;
     const result=pack.data;
-    const mapName=String(result.map_name||"").trim();
+    let mapName=String(result.map_name||"").trim();
     const confidence=Number(result.confidence||0);
     const sourceRegion=validMapRegion(result.panel_region)?result.panel_region:{x:420,y:0,width:580,height:760};
     const savedRegion=canonicalMapRegion(sourceRegion);
@@ -1035,6 +1088,15 @@
       return n&&String(n.name||"").trim()&&Number(n.confidence||0)>=70;
     }):[];
     const npcs=rawNpcs.map(function(n){return remapNpcToSavedRegion(n,sourceRegion,savedRegion);});
+
+    const existingByName=gameMaps.find(function(m){return normText(m.map_name)===normText(mapName);});
+    const inferred=inferKnownMapFromNpcPattern(npcs);
+    let inferredByPattern=false;
+    if(inferred&&(!existingByName||normText(existingByName.map_name)!==normText(inferred.map.map_name))){
+      mapName=inferred.map.map_name;
+      inferredByPattern=true;
+    }
+
     if(!mapName||confidence<70) return false;
 
     let mapImageUrl="";
@@ -1061,7 +1123,11 @@
     });
     if(res.error) throw new Error("マップ情報の保存に失敗しました："+res.error.message);
     const info=res.data||{};
-    setStatus("map-collect-status",mapName+" の拡大マップを保存：NPC "+npcs.length+"件 / 新規観測 "+(info.new_sightings||0)+"件");
+    setStatus(
+      "map-collect-status",
+      (inferredByPattern?"NPC配置から "+mapName+" と補完しました。":"")+
+      mapName+" の拡大マップを保存：NPC "+npcs.length+"件 / 新規観測 "+(info.new_sightings||0)+"件"
+    );
     await loadMapData();
     return true;
   }
