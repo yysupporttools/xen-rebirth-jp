@@ -242,3 +242,37 @@
   .game-dialog-layout{grid-template-columns:100px 1fr}
   .game-npc-portrait{min-height:240px}
 }
+
+.game-choice-link{
+  width:100%;
+  border:0;
+  border-bottom:1px solid rgba(255,255,255,.08);
+  background:transparent;
+  color:inherit;
+  text-align:left;
+  cursor:pointer;
+  font:inherit;
+}
+.game-choice-link:hover,
+.game-choice-link:focus-visible{
+  background:rgba(227,190,103,.10);
+  outline:1px solid rgba(227,190,103,.45);
+  outline-offset:-1px;
+}
+.choice-next{
+  margin-left:auto;
+  align-self:center;
+  color:#e3be67;
+  font-size:18px;
+  font-weight:800;
+}
+.dialogue-back{
+  border:1px solid #6f8792;
+  background:#203945;
+  color:#dce7eb;
+  border-radius:999px;
+  padding:4px 9px;
+  font-size:12px;
+  cursor:pointer;
+}
+.dialogue-back:hover{background:#2c4b59}
