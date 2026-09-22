@@ -47,7 +47,7 @@ def http(url, method="GET", body=None, headers=None, timeout=45):
         raise RuntimeError(f"HTTP {e.code} {url}: {raw[:800]}")
 
 def sb(path, method="GET", body=None, prefer=None):
-    h={"apikey":SUPABASE_SECRET,"Authorization":"Bearer "+SUPABASE_SECRET,"Accept":"application/json"}
+    h={"apikey":SUPABASE_SECRET,"Authorization":"Bearer "+SUPABASE_SECRET,"Accept":"application/json","User-Agent":"XenRebirthJP-ClassEquipmentSync/1.0"}
     if prefer: h["Prefer"]=prefer
     status,raw=http(f"{SUPABASE_URL}/rest/v1/{path}",method,body,h)
     return json.loads(raw) if raw.strip() else None
