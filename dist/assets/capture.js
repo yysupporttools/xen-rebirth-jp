@@ -13,6 +13,10 @@
   let activeRecordId="";
   let activeNpcName="";
   const FAST_SCREEN_CACHE_KEY="xen-fast-screen-cache-v1";
+  const KNOWN_NPC_SIGNATURES_KEY="xen-known-npc-signatures-v1";
+  let fastNpcTimer=null;
+  let lastFastNpcName="";
+  let lastFastNpcAt=0;
   let quests=[];
   let npcProfiles=[];
   let dialogueTransitions=[];
@@ -148,6 +152,7 @@
   function stopAutoMonitor(resetToggle){
     autoEnabled=false;
     if(autoTimer){clearInterval(autoTimer);autoTimer=null;}
+    if(fastNpcTimer){clearInterval(fastNpcTimer);fastNpcTimer=null;}
     autoBaseline=null;
     autoPending=null;
     autoPendingAt=0;
@@ -169,6 +174,8 @@
     setStatus("capture-status","自動解析モードを開始しました。NPC会話・クエスト画面の変化を監視します。");
     if(autoTimer) clearInterval(autoTimer);
     autoTimer=setInterval(autoTick,AUTO_POLL_MS);
+    if(fastNpcTimer) clearInterval(fastNpcTimer);
+    fastNpcTimer=setInterval(fastKnownNpcTick,900);
 
     setTimeout(function(){
       if(autoEnabled&&stream&&!aiAnalyzing&&(Date.now()-lastAutoAnalysisAt>=AUTO_COOLDOWN_MS)){
@@ -308,6 +315,146 @@
     return {index:idx+1,total:Math.max(1,rows.length)};
   }
 
+  function readKnownNpcSignatures(){
+    try{
+      const value=JSON.parse(localStorage.getItem(KNOWN_NPC_SIGNATURES_KEY)||"{}");
+      return value&&typeof value==="object"?value:{};
+    }catch(_){return {};}
+  }
+
+  function writeKnownNpcSignatures(value){
+    try{localStorage.setItem(KNOWN_NPC_SIGNATURES_KEY,JSON.stringify(value));}catch(_){}
+  }
+
+  function dhashFromCanvas(canvas){
+    const ctx=canvas.getContext("2d",{willReadFrequently:true});
+    const data=ctx.getImageData(0,0,canvas.width,canvas.height).data;
+    let bits="";
+    for(let y=0;y<canvas.height;y++){
+      for(let x=0;x<canvas.width-1;x++){
+        const i=(y*canvas.width+x)*4;
+        const j=(y*canvas.width+x+1)*4;
+        const a=data[i]*0.299+data[i+1]*0.587+data[i+2]*0.114;
+        const b=data[j]*0.299+data[j+1]*0.587+data[j+2]*0.114;
+        bits+=a>b?"1":"0";
+      }
+    }
+    return bits;
+  }
+
+  function drawSignatureZone(source,sx,sy,sw,sh){
+    const canvas=document.createElement("canvas");
+    canvas.width=25;
+    canvas.height=16;
+    const ctx=canvas.getContext("2d");
+    ctx.drawImage(source,sx,sy,sw,sh,0,0,canvas.width,canvas.height);
+    return dhashFromCanvas(canvas);
+  }
+
+  function npcSignatureFromSource(source,w,h){
+    if(!source||!w||!h) return "";
+    const aspect=w/h;
+    const headerW=aspect>=1.55?w*0.30:w*0.70;
+    const headerH=aspect>=1.55?h*0.075:h*0.12;
+    const portraitW=aspect>=1.55?w*0.095:w*0.28;
+    const portraitY=aspect>=1.55?h*0.045:h*0.08;
+    const portraitH=aspect>=1.55?h*0.285:h*0.68;
+    const header=drawSignatureZone(source,0,0,Math.max(1,headerW),Math.max(1,headerH));
+    const portrait=drawSignatureZone(source,0,portraitY,Math.max(1,portraitW),Math.max(1,portraitH));
+    return header+"|"+portrait;
+  }
+
+  async function npcSignatureFromBlob(blob){
+    if(!blob) return "";
+    const bitmap=await createImageBitmap(blob);
+    try{return npcSignatureFromSource(bitmap,bitmap.width,bitmap.height);}
+    finally{if(bitmap.close) bitmap.close();}
+  }
+
+  function npcSignatureFromVideo(){
+    const video=$("screen-video");
+    if(!stream||!video.videoWidth||video.readyState<2) return "";
+    return npcSignatureFromSource(video,video.videoWidth,video.videoHeight);
+  }
+
+  function signatureDistance(a,b){
+    if(!a||!b||a.length!==b.length) return 1;
+    let diff=0,total=0;
+    for(let i=0;i<a.length;i++){
+      if(a[i]==="|") continue;
+      total++;
+      if(a[i]!==b[i]) diff++;
+    }
+    return total?diff/total:1;
+  }
+
+  async function rememberKnownNpcSignature(result){
+    const npc=String(result&&result.npc_name||"").trim();
+    if(!npc||Number(result&&result.confidence||0)<85||!imageBlob) return;
+    const signature=await npcSignatureFromBlob(imageBlob);
+    if(!signature) return;
+    const root=dialogueRootForNpc(npc);
+    const db=readKnownNpcSignatures();
+    const key=normText(npc);
+    const entry=db[key]||{npc_name:npc,root_record_id:"",signatures:[]};
+    entry.npc_name=npc;
+    entry.root_record_id=root?root.id:(activeRecordId||entry.root_record_id||"");
+    entry.signatures=Array.isArray(entry.signatures)?entry.signatures:[];
+    if(!entry.signatures.some(function(x){return signatureDistance(x.bits,signature)<0.025;})){
+      entry.signatures.unshift({bits:signature,at:Date.now()});
+      entry.signatures=entry.signatures.slice(0,4);
+    }
+    db[key]=entry;
+    writeKnownNpcSignatures(db);
+  }
+
+  function bestKnownNpcMatch(signature){
+    if(!signature) return null;
+    const db=readKnownNpcSignatures();
+    const candidates=[];
+    Object.keys(db).forEach(function(key){
+      const entry=db[key];
+      (entry.signatures||[]).forEach(function(s){
+        candidates.push({entry:entry,distance:signatureDistance(signature,s.bits)});
+      });
+    });
+    candidates.sort(function(a,b){return a.distance-b.distance;});
+    if(!candidates.length) return null;
+    const best=candidates[0];
+    const second=candidates[1];
+    if(best.distance>0.135) return null;
+    if(second&&second.entry.npc_name!==best.entry.npc_name&&second.distance-best.distance<0.035) return null;
+    return best;
+  }
+
+  function showKnownNpcMatch(match){
+    if(!match||!match.entry) return false;
+    const npc=match.entry.npc_name||"";
+    let root=records.find(function(r){return r.id===match.entry.root_record_id;})||dialogueRootForNpc(npc);
+    if(!root) return false;
+    activeNpcName=npc;
+    activeRecordId=root.id;
+    dialogueNavStacks.clear();
+    if($("knowledge-search").value!==npc) $("knowledge-search").value=npc;
+    renderRecords();
+    lastFastNpcName=npc;
+    lastFastNpcAt=Date.now();
+    setStatus("capture-status","保存済みNPC「"+npc+"」を高速認識しました（AI解析なし・"+Math.round(match.distance*100)+"%差分）。");
+    setStatus("form-status","保存済み翻訳を即時表示中（API使用なし）");
+    return true;
+  }
+
+  async function fastKnownNpcTick(){
+    if(!autoEnabled||!stream) return;
+    const signature=npcSignatureFromVideo();
+    if(!signature) return;
+    const match=bestKnownNpcMatch(signature);
+    if(!match) return;
+    const npc=match.entry.npc_name||"";
+    if(npc===lastFastNpcName&&Date.now()-lastFastNpcAt<5000) return;
+    showKnownNpcMatch(match);
+  }
+
   function normText(value){
     return String(value||"").trim().toLowerCase().replace(/[^a-z0-9ぁ-んァ-ヶ一-龠]+/g," ");
   }
@@ -432,6 +579,7 @@
       if(result._client_image_hash) rememberFastScreen(result._client_image_hash,activeRecordId,activeNpcName);
       setStatus("form-status",info.inserted?"AI解析結果を自動保存しました。現在の会話だけ表示します。":"同じ内容は登録済みのため更新のみ行いました。");
       await loadRecords(true);
+      await rememberKnownNpcSignature(result);
       return info;
     }
     const reasons={
@@ -659,6 +807,7 @@
     if(aiAnalyzing) return;
     aiAnalyzing=true;
     const source=trigger||"manual";
+    const analysisStartedAt=Date.now();
     const button=$("ai-run");
     button.disabled=true;
     try{
@@ -702,6 +851,10 @@
         throw new Error(data.error||("AI解析に失敗しました（HTTP "+response.status+"）"));
       }
       data._client_image_hash=imageHash;
+      if(source==="auto"&&lastFastNpcAt>analysisStartedAt){
+        setStatus("capture-status","保存済みNPCを高速表示済みのため、古いAI解析結果の画面反映を省略しました。");
+        return;
+      }
       await applyAiResult(data);
 
       if(data.screen_type==="npc_dialog"){
