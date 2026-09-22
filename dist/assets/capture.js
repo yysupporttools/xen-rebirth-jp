@@ -157,9 +157,9 @@
     }
     const res=await db.from("quest_steps").select("id,step_number,title,npc_name,location").eq("quest_id",id).order("step_number");
     if(res.error) return;
-    step.innerHTML+String((res.data||[]).map(function(s){
+    step.innerHTML+=(res.data||[]).map(function(s){
       return '<option value="'+esc(s.id)+'">STEP '+esc(s.step_number)+' '+esc(s.title||s.npc_name||"")+'</option>';
-    }).join(""));
+    }).join("");
   }
 
   async function uploadImage(){
