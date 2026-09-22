@@ -75,10 +75,15 @@ jobs:
             if (!r.ok) throw new Error("AI screen analyzer failed: " + r.status + " " + body.slice(0,800));
             const data = JSON.parse(body);
             if (!data.english_text) throw new Error("AI screen analyzer returned no English text");
+            if (!Array.isArray(data.map_npcs)) throw new Error("AI screen analyzer returned no map_npcs array");
+            if (!data.map_region || typeof data.map_region !== "object") throw new Error("AI screen analyzer returned no map_region");
             console.log("AI screen analyzer OK:", {
               npc_name: data.npc_name,
               quest_name_en: data.quest_name_en,
               confidence: data.confidence,
+              screen_type: data.screen_type,
+              map_name: data.map_name,
+              map_npc_count: data.map_npcs.length,
               cached: data._meta?.cached,
               english_chars: data.english_text.length
             });
