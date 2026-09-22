@@ -7,13 +7,13 @@
   <meta name="description" content="Xen Rebirthのゲーム画面をブラウザでキャプチャし、NPC・マップ・クエストの英文と日本語訳を共有・検索できます。">
   <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='6' fill='%230d2630'/%3E%3Cpath d='M8 7L24 25M24 7L8 25' stroke='%23e5bd77' stroke-width='4'/%3E%3C/svg%3E">
   <link rel="stylesheet" href="assets/style.css">
-  <link rel="stylesheet" href="assets/capture.css?v=3">
+  <link rel="stylesheet" href="assets/capture.css?v=4">
   <link rel="stylesheet" href="assets/bgm-player.css?v=2">
   <link rel="stylesheet" href="assets/saved-items.css?v=1">
   <script defer src="assets/glossary-config.js"></script>
   <script defer src="assets/vendor/supabase.js"></script>
   <script defer src="https://cdn.jsdelivr.net/npm/tesseract.js@5/dist/tesseract.min.js"></script>
-  <script defer src="assets/capture.js?v=8"></script>
+  <script defer src="assets/capture.js?v=9"></script>
   <script defer src="assets/saved-items.js?v=1"></script>
 </head>
 <body>
@@ -156,7 +156,7 @@
 
   <section class="paper capture-section" id="npc-database">
     <div class="section-heading"><div><p class="eyebrow">NPC / QUEST DATABASE</p><h2>3. 登録済み情報を検索</h2></div><span id="record-count">0件</span></div>
-    <p class="note">ゲーム画面と同じ考え方で、上側を「会話内容」、下側を「選択項目」として分けて表示します。NPC画像が登録されている場合は左側に表示します。</p>
+    <p class="note">ゲーム画面と同じ考え方で、上側を「会話内容」、下側を「選択項目」として分けて表示します。次の会話が登録されている選択肢はクリックすると、その会話画面へ切り替わります。</p>
     <div class="knowledge-toolbar">
       <input id="knowledge-search" type="search" placeholder="NPC名・マップ・クエスト名・本文から検索" aria-label="NPC・クエスト検索">
       <select id="map-filter" aria-label="マップ絞り込み"><option value="">すべてのマップ</option></select>
