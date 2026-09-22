@@ -55,14 +55,49 @@ def sb(path, method="GET", body=None, prefer=None):
 def clean(s):
     return re.sub(r"\s+"," ",unescape(str(s or ""))).strip()
 
+def _image_candidate(value, base):
+    value=clean(value)
+    if not value: return None
+    # srcset may contain "url 2x, url2 3x".
+    value=value.split(",")[0].strip().split(" ")[0].strip("'\\\"")
+    if not value or value.startswith("data:"): return None
+    low=value.lower()
+    if any(x in low for x in ("smilie","emoji","avatar","reaction","logo","favicon")): return None
+    # Official WoltLab attachments do not always end in an image extension.
+    if not (re.search(r"\\.(?:png|jpe?g|gif|webp|bmp)(?:$|[?#])",low) or
+            "attachment" in low or "/images/" in low or "/image/" in low):
+        return None
+    return urljoin(base,value)
+
 def image_url(row, base):
-    for img in row.find_all("img"):
-        src=img.get("data-src") or img.get("data-original") or img.get("data-url") or img.get("src")
-        if not src: continue
-        low=src.lower()
-        if any(x in low for x in ("smilie","emoji","avatar","reaction")): continue
-        return urljoin(base,src)
+    # 1) Normal/lazy-loaded image elements.
+    for img in row.find_all(["img","source"]):
+        for attr in ("data-src","data-original","data-url","data-lazy-src","src","srcset","data-srcset"):
+            found=_image_candidate(img.get(attr),base)
+            if found: return found
+    # 2) WoltLab attachment links sometimes contain no <img> in the table cell.
+    for a in row.find_all("a",href=True):
+        found=_image_candidate(a.get("href"),base)
+        if found: return found
+    # 3) Thumbnail spans/divs can use CSS background-image.
+    for el in row.find_all(True):
+        for attr in ("style","data-background-image","data-bg","data-image"):
+            raw=el.get(attr)
+            if not raw: continue
+            urls=re.findall(r"url\\(([^)]+)\\)",raw,re.I) if attr=="style" else [raw]
+            for value in urls:
+                found=_image_candidate(value,base)
+                if found: return found
     return None
+
+def image_diagnostics(html):
+    soup=BeautifulSoup(html,"html.parser")
+    imgs=soup.find_all("img")
+    links=[a.get("href","") for a in soup.find_all("a",href=True)
+           if "attachment" in a.get("href","").lower() or
+              re.search(r"\\.(?:png|jpe?g|gif|webp)(?:$|[?#])",a.get("href","").lower())]
+    styled=[x.get("style","") for x in soup.find_all(style=True) if "url(" in x.get("style","").lower()]
+    return len(imgs),len(links),len(styled),links[:3],styled[:2]
 
 def looks_header(values):
     text=" ".join(values).lower()
@@ -226,6 +261,12 @@ def sync_one(class_key,class_en,class_ja,url):
     source=source_row(class_key)
     existing=sb("class_equipment_items?select=*&source_id=eq."+quote(str(source["id"]))) or []
     translate_new(class_en,items,existing)
+    # Never erase an already captured official image just because a later HTML response
+    # temporarily omits lazy-loaded thumbnails.
+    old_by_key={x.get("source_item_key"):x for x in existing}
+    for item in items:
+        if not item.get("image_url"):
+            item["image_url"]=(old_by_key.get(item["source_item_key"]) or {}).get("image_url")
     payload=[{"source_id":source["id"],**x} for x in items]
     sb("class_equipment_items?on_conflict=source_id,source_item_key","POST",payload,
        "resolution=merge-duplicates,return=minimal")
@@ -236,7 +277,15 @@ def sync_one(class_key,class_en,class_ja,url):
     with open(f"class-equipment-{class_key}.json","w",encoding="utf-8") as f:
         json.dump({"class_key":class_key,"source_url":url,"items":items},f,ensure_ascii=False,indent=2)
     print(f"Extracted/upserted: {len(items)} items")
-    print(f"With official images: {sum(bool(x.get('image_url')) for x in items)}")
+    image_count=sum(bool(x.get("image_url")) for x in items)
+    print(f"With official images: {image_count}")
+    if image_count == 0:
+        img_tags,attachment_links,styled,link_samples,style_samples=image_diagnostics(html)
+        print(f"IMAGE DIAGNOSTIC {class_key}: img_tags={img_tags}, attachment_or_image_links={attachment_links}, background_styles={styled}")
+        for sample in link_samples:
+            print("IMAGE LINK SAMPLE:",sample)
+        for sample in style_samples:
+            print("IMAGE STYLE SAMPLE:",clean(sample)[:300])
 
 def main():
     only=os.environ.get("CLASS_KEY","all").strip().lower()
