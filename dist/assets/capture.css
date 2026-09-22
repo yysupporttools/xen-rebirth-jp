@@ -276,3 +276,116 @@
   cursor:pointer;
 }
 .dialogue-back:hover{background:#2c4b59}
+
+
+/* Automatic map database */
+.map-collect-status{
+  margin-top:8px;
+  min-height:20px;
+  font-weight:700;
+}
+.map-db-toolbar{
+  display:flex;
+  gap:10px;
+  margin:12px 0;
+}
+.map-db-toolbar select{
+  min-width:240px;
+  padding:10px 12px;
+  border:1px solid var(--line);
+  background:#fff;
+  font:inherit;
+}
+.map-db-layout{
+  display:grid;
+  grid-template-columns:minmax(0,2fr) minmax(260px,1fr);
+  gap:16px;
+}
+.map-db-canvas{
+  position:relative;
+  min-height:420px;
+  border:1px solid var(--line);
+  border-radius:6px;
+  background:#102934 center/contain no-repeat;
+  overflow:hidden;
+}
+.map-db-empty{
+  position:absolute;
+  inset:0;
+  display:grid;
+  place-items:center;
+  color:#9db0b8;
+}
+.map-npc-marker{
+  position:absolute;
+  transform:translate(-50%,-50%);
+  border:0;
+  background:transparent;
+  color:#fff;
+  cursor:pointer;
+  text-align:center;
+  padding:0;
+  z-index:2;
+}
+.map-npc-marker>span{
+  display:block;
+  width:12px;
+  height:12px;
+  margin:auto;
+  border-radius:50%;
+  background:#38d77b;
+  border:2px solid #e7fff0;
+  box-shadow:0 0 0 2px rgba(0,0,0,.55);
+}
+.map-npc-marker>b{
+  display:block;
+  margin-top:3px;
+  padding:2px 4px;
+  border-radius:3px;
+  background:rgba(7,19,26,.78);
+  font-size:11px;
+  white-space:nowrap;
+  text-shadow:0 1px 2px #000;
+}
+.map-npc-marker:hover>b,
+.map-npc-marker:focus-visible>b{
+  background:#0b5968;
+}
+.map-db-list{
+  display:flex;
+  flex-direction:column;
+  gap:7px;
+  max-height:520px;
+  overflow:auto;
+}
+.map-db-list>button{
+  display:grid;
+  grid-template-columns:1fr auto;
+  gap:3px 10px;
+  width:100%;
+  padding:9px 11px;
+  border:1px solid var(--line);
+  background:#fff;
+  text-align:left;
+  cursor:pointer;
+}
+.map-db-list>button:hover{
+  background:#f1f7f7;
+}
+.map-db-list strong{
+  grid-column:1;
+}
+.map-db-list span{
+  grid-column:2;
+  grid-row:1;
+  font-size:12px;
+  color:var(--muted);
+}
+.map-db-list small{
+  grid-column:1/3;
+  color:var(--muted);
+}
+@media(max-width:800px){
+  .map-db-layout{grid-template-columns:1fr}
+  .map-db-canvas{min-height:320px}
+}
