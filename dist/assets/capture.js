@@ -1403,7 +1403,7 @@
 
   $("capture-mini-now").addEventListener("click",function(){runOpenAiAnalysis("manual");});
   $("capture-mini-top").addEventListener("click",function(){
-    $("main").scrollIntoView({behavior:"smooth",block:"start"});
+    $("capture-source-section").scrollIntoView({behavior:"smooth",block:"start"});
   });
   syncMiniCaptureStatus();
 
