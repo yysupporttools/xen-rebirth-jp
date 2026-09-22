@@ -428,3 +428,68 @@
 .capture-mini-bar small{
   color:var(--muted);
 }
+
+
+/* Collapsible registered NPC index */
+.npc-index-head{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:12px;
+  margin:14px 0 6px;
+}
+.npc-index-head>div{
+  display:flex;
+  align-items:center;
+  gap:8px;
+}
+#npc-index-count{
+  color:var(--muted);
+  font-size:12px;
+}
+#npc-index-toggle{
+  border:1px solid var(--line);
+  background:#fff;
+  border-radius:999px;
+  padding:6px 11px;
+  cursor:pointer;
+  font-weight:700;
+}
+#npc-index-toggle:hover{
+  background:#f2f7f8;
+}
+.npc-index{
+  position:relative;
+  transition:max-height .2s ease;
+}
+.npc-index.is-collapsed{
+  max-height:82px;
+  overflow:hidden;
+  padding-bottom:8px;
+}
+.npc-index.is-collapsed:after{
+  content:"";
+  position:absolute;
+  left:0;
+  right:0;
+  bottom:0;
+  height:28px;
+  pointer-events:none;
+  background:linear-gradient(to bottom,rgba(255,255,255,0),#fff);
+}
+.npc-index.is-expanded{
+  max-height:none;
+  overflow:visible;
+}
+@media(max-width:800px){
+  .npc-index-head{
+    align-items:flex-start;
+  }
+  .npc-index-head>div{
+    flex-wrap:wrap;
+    justify-content:flex-end;
+  }
+  .npc-index.is-collapsed{
+    max-height:116px;
+  }
+}
