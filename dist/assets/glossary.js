@@ -266,8 +266,10 @@
 
       if (!words.every(word => searchText.includes(word))) return false;
       if (categorySelect.value && category !== categorySelect.value && !(categorySelect.value === "ラッキーボール" && isLuckyBallHub(term))) return false;
-      if (["crafting", "pets"].includes(filters.major)) {
-        if (term._catalogType !== filters.major) return false;
+      if (filters.major === "crafting") {
+        if (term._catalogType !== "crafting") return false;
+      } else if (filters.major === "pets") {
+        if (term._catalogType !== "pets" && category !== "ペット・騎乗ペット") return false;
       } else if (filters.major === "lucky") {
         if (!isLuckyBallHub(term) && category !== "ラッキーボール") return false;
       } else if (filters.major.startsWith("category:")) {
@@ -714,7 +716,7 @@
         if (existing) {
           for (const key of ["_catalogType", "_section", "_blocks", "_table", "_tables", "_links"]) existing[key] = source[key];
         } else {
-          const category = categories.find(c => c.name === (source._catalogType === "pets" ? "ペット" : "アイテム"));
+          const category = categories.find(c => c.name === (source._catalogType === "pets" ? "ペット・騎乗ペット" : "アイテム"));
           terms.push({...source, id:"catalog-" + source.slug, category_id:category?.id || "catalog-items", _catalogSeed:true});
         }
       }
