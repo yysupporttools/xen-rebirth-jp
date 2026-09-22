@@ -11,6 +11,10 @@
   let previewUrl="";
   let records=[];
   let quests=[];
+  let aiAnalyzing=false;
+  let altDown=false;
+  let altWasChord=false;
+  let altPressedAt=0;
   const contributorId=(function(){
     const key="xen-game-knowledge-contributor";
     let value=localStorage.getItem(key);
@@ -130,10 +134,12 @@
   }
 
   async function runOpenAiAnalysis(){
+    if(aiAnalyzing) return;
+    aiAnalyzing=true;
     const button=$("ai-run");
     button.disabled=true;
     try{
-      if(!imageBlob&&stream){
+      if(stream){
         setStatus("capture-status","現在のゲーム画面をキャプチャしています…");
         await captureFrame();
       }
@@ -158,6 +164,7 @@
     }catch(err){
       setStatus("capture-status",err&&err.message?err.message:String(err));
     }finally{
+      aiAnalyzing=false;
       button.disabled=false;
     }
   }
@@ -371,6 +378,35 @@
       '</article>';
     }).join("");
   }
+
+  $("ai-run").addEventListener("click",runOpenAiAnalysis);
+
+  document.addEventListener("keydown",function(e){
+    if(e.key==="Alt"&&!e.repeat&&!e.ctrlKey&&!e.shiftKey&&!e.metaKey){
+      altDown=true;
+      altWasChord=false;
+      altPressedAt=Date.now();
+      e.preventDefault();
+      return;
+    }
+    if(altDown) altWasChord=true;
+  },true);
+
+  document.addEventListener("keyup",function(e){
+    if(e.key!=="Alt") return;
+    const single=altDown&&!altWasChord&&(Date.now()-altPressedAt<=1200);
+    altDown=false;
+    altWasChord=false;
+    if(single){
+      e.preventDefault();
+      runOpenAiAnalysis();
+    }
+  },true);
+
+  window.addEventListener("blur",function(){
+    altDown=false;
+    altWasChord=false;
+  });
 
   $("screen-start").addEventListener("click",startScreen);
   $("screen-stop").addEventListener("click",stopScreen);
