@@ -13,7 +13,7 @@
   <script defer src="assets/glossary-config.js"></script>
   <script defer src="assets/vendor/supabase.js"></script>
   <script defer src="https://cdn.jsdelivr.net/npm/tesseract.js@5/dist/tesseract.min.js"></script>
-  <script defer src="assets/capture.js?v=2"></script>
+  <script defer src="assets/capture.js?v=3"></script>
   <script defer src="assets/saved-items.js?v=1"></script>
 </head>
 <body>
@@ -60,7 +60,9 @@
     </div>
 
     <div class="capture-controls">
-      <button id="ocr-run" type="button" disabled>英語をOCRで読み取る</button>
+      <button class="primary" id="ai-run" type="button">OpenAIで画面を自動解析</button>
+      <span class="small">サイトを操作中は F8 でも実行できます</span>
+      <button id="ocr-run" type="button" disabled>従来OCRで読み取る</button>
       <button id="translate-run" type="button" disabled>ブラウザ翻訳を試す</button>
       <span id="capture-status" class="capture-status" role="status"></span>
     </div>
