@@ -722,7 +722,19 @@
   }
   function referenceHtml(term) {
     const links = rows => (rows || []).filter(x => safeUrl(x.url)).map(x => `<a href="${esc(safeUrl(x.url))}" target="_blank" rel="noopener noreferrer">${esc(x.label)} ↗</a>`).join("");
-    const images = rows => (rows || []).filter(x => safeUrl(x.url)).map(x => `<a class="reference-image" href="${esc(safeUrl(x.url))}" target="_blank" rel="noopener noreferrer"><img src="${esc(safeUrl(x.url))}" alt="${esc(x.label || "公式掲載画像")}" loading="lazy" referrerpolicy="no-referrer"><span>${esc(x.label || "公式掲載画像")}　拡大 ↗</span></a>`).join("");
+    const referenceImageSrc = url => {
+      const safe = safeUrl(url);
+      if (!safe) return "";
+      if (safe.toLowerCase().includes("xenrebirth.com/index.php?attachment/")) {
+        return safe + "&thumbnail=1";
+      }
+      return safe;
+    };
+    const images = rows => (rows || []).filter(x => safeUrl(x.url)).map(x => {
+      const href = safeUrl(x.url);
+      const src = referenceImageSrc(x.url);
+      return `<a class="reference-image" href="${esc(href)}" target="_blank" rel="noopener noreferrer"><img src="${esc(src)}" alt="${esc(x.label || "公式掲載画像")}" loading="lazy" referrerpolicy="no-referrer"><span>${esc(x.label || "公式掲載画像")}　拡大 ↗</span></a>`;
+    }).join("");
     const blocks = (term._blocks || []).map(b => `<section class="reference-block"><h3>${esc(b.heading)}</h3>${b.text ? `<p>${esc(b.text).replace(/\n/g,"<br>")}</p>` : ""}${b.images?.length ? `<div class="reference-image-grid">${images(b.images)}</div>` : ""}<div class="reference-links">${links(b.links)}</div></section>`).join("");
     const makeTable = table => `<div class="reference-table-wrap"><table><caption>${esc(table.caption || "公式掲載値の整理")}</caption><thead><tr>${table.headers.map(h=>`<th scope="col">${esc(h)}</th>`).join("")}</tr></thead><tbody>${table.rows.map(row=>`<tr>${row.map((v,i)=>i===0?`<th scope="row">${esc(v)}</th>`:`<td>${esc(v)}</td>`).join("")}</tr>`).join("")}</tbody></table></div>`;
     const table = term._table ? makeTable(term._table) : "";
