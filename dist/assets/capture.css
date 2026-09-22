@@ -389,3 +389,42 @@
   .map-db-layout{grid-template-columns:1fr}
   .map-db-canvas{min-height:320px}
 }
+
+
+.capture-mini-bar{
+  display:flex;
+  align-items:center;
+  gap:8px;
+  flex-wrap:wrap;
+  margin:12px 0 14px;
+  padding:10px 12px;
+  border:1px solid var(--line);
+  border-radius:6px;
+  background:#f5f8f9;
+}
+.capture-mini-bar>span{
+  display:inline-flex;
+  align-items:center;
+  min-height:28px;
+  padding:3px 9px;
+  border-radius:999px;
+  font-size:12px;
+  font-weight:800;
+  border:1px solid #b9c6cb;
+  background:#fff;
+}
+.capture-mini-bar>span[data-state="on"]{
+  background:#e9f8f3;
+  border-color:#7fc2af;
+  color:#165d50;
+}
+.capture-mini-bar>span[data-state="off"]{
+  color:#6e7b81;
+}
+.capture-mini-bar button{
+  min-height:34px;
+  padding:6px 10px;
+}
+.capture-mini-bar small{
+  color:var(--muted);
+}
