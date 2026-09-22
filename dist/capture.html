@@ -13,7 +13,7 @@
   <script defer src="assets/glossary-config.js"></script>
   <script defer src="assets/vendor/supabase.js"></script>
   <script defer src="https://cdn.jsdelivr.net/npm/tesseract.js@5/dist/tesseract.min.js"></script>
-  <script defer src="assets/capture.js?v=13"></script>
+  <script defer src="assets/capture.js?v=14"></script>
   <script defer src="assets/saved-items.js?v=1"></script>
 </head>
 <body>
@@ -78,7 +78,7 @@
       <span id="capture-status" class="capture-status" role="status"></span>
     </div>
     <div id="map-collect-status" class="capture-status map-collect-status" role="status"></div>
-    <p class="small">自動解析モードは、共有したXen Rebirth画面をサイト側で監視し、画面が変化して安定したタイミングだけAIへ送信します。同じ画面の連続解析を抑えるため待機時間を設けています。</p>
+    <p class="small">自動解析モードは、共有したXen Rebirth画面を監視し、新しい画面だけAI解析します。同一画面を以前解析済みの場合はブラウザ内キャッシュから即時表示し、APIを使用しません。</p>
     <p class="small">※ブラウザの安全制限により、Xen Rebirthが最前面でブラウザが非アクティブな間はALTキーを直接検知できません。自動解析モードはALTキーを使わず、共有映像の変化から判定します。</p>
   </section>
 
@@ -158,7 +158,7 @@
 
   <section class="paper capture-section" id="npc-database">
     <div class="section-heading"><div><p class="eyebrow">NPC / QUEST DATABASE</p><h2>3. 登録済み情報を検索</h2></div><span id="record-count">0件</span></div>
-    <p class="note">保存済みの会話は内部に残しますが、画面には現在選択・解析しているNPCの会話を1件だけ表示します。次の会話が登録されている選択肢はクリックすると、その会話画面へ切り替わります。</p>
+    <p class="note">保存済みNPCを押すと、そのNPCで最初に保存された会話を「会話1」として表示します。遷移先が登録されている選択肢を押すと次の会話へ進み、「← 1つ前の会話へ」で戻れます。過去データは内部に残しますが、画面には現在の会話1件だけを表示します。</p>
     <div class="knowledge-toolbar">
       <input id="knowledge-search" type="search" placeholder="NPC名・マップ・クエスト名・本文から検索" aria-label="NPC・クエスト検索">
       <select id="map-filter" aria-label="マップ絞り込み"><option value="">すべてのマップ</option></select>
