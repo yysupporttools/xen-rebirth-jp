@@ -705,7 +705,7 @@
   async function loadReferenceCatalog() {
     try {
       if (!referenceCatalog) {
-        const response = await fetch("assets/reference-catalog.json?v=20260922d");
+        const response = await fetch("assets/reference-catalog.json?v=20260922e");
         if (!response.ok) throw new Error("Reference catalogue unavailable");
         referenceCatalog = (await response.json()).terms;
       }
