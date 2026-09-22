@@ -344,16 +344,17 @@
       .sort((a,b) => (Number(a.sort_order)||0) - (Number(b.sort_order)||0));
     if (!items.length) return `<p role="status">${esc(classEquipmentError || "この職業の装備一覧はまだ同期されていません。")}</p>`;
 
+    const hasImages = items.some(item => Boolean(safeUrl(item.image_url)));
     const sections = new Map();
     for (const item of items) {
       const section = item.section_ja || item.section_en || "装備一覧";
       if (!sections.has(section)) sections.set(section, []);
       sections.get(section).push(item);
     }
-    return `<div class="class-equipment-catalog" data-class-key="${esc(key)}">
+    return `<div class="class-equipment-catalog ${hasImages ? "has-images" : "no-images"}" data-class-key="${esc(key)}">
       <div class="class-equipment-heading"><h3>${esc(source.class_name_ja || source.class_name_en)} 装備一覧</h3>
         <span class="class-equipment-total">掲載 ${items.length}件</span></div>
-      <p class="class-equipment-note">公式Xen Rebirth Lexicon掲載データをもとに整理しています。装備画像は公式ページの画像を表示しています。</p>
+      <p class="class-equipment-note">公式Xen Rebirth Lexicon掲載データをもとに整理しています。${hasImages ? " 装備画像は公式ページの画像を表示しています。" : " この職業の公式装備一覧ページには個別装備画像が掲載されていないため、画像欄は省略しています。"}</p>
       <label class="class-equipment-search-label">装備を検索
         <input type="search" class="class-equipment-search" placeholder="例：剣、Lv 40、Defense" aria-label="${esc(source.class_name_ja || source.class_name_en)}の装備を検索">
       </label>
@@ -361,12 +362,12 @@
       ${[...sections.entries()].map(([section, rows], sectionIndex) => `<details class="class-equipment-section" ${sectionIndex === 0 ? "open" : ""}>
         <summary><strong>${esc(section)}</strong><span>${rows.length}件</span></summary>
         <div class="class-equipment-table-wrap"><table class="class-equipment-table">
-          <thead><tr><th>画像</th><th>装備名</th><th>種類</th><th>必要Lv</th><th>性能・詳細</th></tr></thead>
+          <thead><tr>${hasImages ? "<th>画像</th>" : ""}<th>装備名</th><th>種類</th><th>必要Lv</th><th>性能・詳細</th></tr></thead>
           <tbody>${rows.map(item => {
             const img = safeUrl(item.image_url);
             const search = normalize([item.name_en,item.name_ja,item.section_en,item.section_ja,item.item_type_en,item.item_type_ja,item.required_level,item.stats,item.description].join(" "));
             return `<tr data-equipment-search="${esc(search)}">
-              <td class="class-equipment-image-cell">${img ? `<img class="class-equipment-image" src="${esc(img)}" alt="${esc(item.name_en)}" loading="lazy" referrerpolicy="no-referrer">` : '<span class="class-equipment-image-empty">画像なし</span>'}</td>
+              ${hasImages ? `<td class="class-equipment-image-cell">${img ? `<img class="class-equipment-image" src="${esc(img)}" alt="${esc(item.name_en)}" loading="lazy" referrerpolicy="no-referrer">` : '<span class="class-equipment-image-empty">画像なし</span>'}</td>` : ""}
               <td><strong>${esc(item.name_ja || item.name_en)}</strong>${item.name_ja ? `<span class="class-equipment-name-en">${esc(item.name_en)}</span>` : ""}</td>
               <td>${esc(item.item_type_ja || item.item_type_en || "装備")}</td>
               <td>${esc(item.required_level || "—")}</td>
