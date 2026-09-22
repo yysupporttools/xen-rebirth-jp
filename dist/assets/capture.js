@@ -13,6 +13,8 @@
   let quests=[];
   let npcProfiles=[];
   let dialogueTransitions=[];
+  let gameMaps=[];
+  let mapNpcs=[];
   const dialogueNavStacks=new Map();
   let npcImageBlob=null;
   let npcImagePreviewUrl="";
@@ -294,6 +296,12 @@
 
   async function applyAiResult(result){
     const f=$("capture-form").elements;
+    if(result.screen_type==="expanded_map"){
+      if(result.map_name) f.map_name.value=String(result.map_name);
+      const n=Array.isArray(result.map_npcs)?result.map_npcs.length:0;
+      setStatus("capture-status","拡大マップを認識しました："+(result.map_name||"マップ名不明")+" / NPC候補 "+n+"件");
+      return;
+    }
     const npc=String(result.npc_name||"").trim();
     let map=String(result.map_name||"").trim();
     if(!map&&npc&&lastAiContext.npc_name===npc&&Date.now()-lastAiContext.at<300000){
@@ -386,6 +394,77 @@
     return info;
   }
 
+  function validMapRegion(region){
+    if(!region) return false;
+    return Number(region.width)>20&&Number(region.height)>20;
+  }
+
+  async function cropMapBlob(region){
+    if(!imageBlob||!validMapRegion(region)) return null;
+    const bitmap=await createImageBitmap(imageBlob);
+    const x=Math.max(0,Math.round(bitmap.width*(Number(region.x)||0)/1000));
+    const y=Math.max(0,Math.round(bitmap.height*(Number(region.y)||0)/1000));
+    const w=Math.max(1,Math.min(bitmap.width-x,Math.round(bitmap.width*(Number(region.width)||0)/1000)));
+    const h=Math.max(1,Math.min(bitmap.height-y,Math.round(bitmap.height*(Number(region.height)||0)/1000)));
+    const canvas=document.createElement("canvas");
+    canvas.width=w;
+    canvas.height=h;
+    canvas.getContext("2d").drawImage(bitmap,x,y,w,h,0,0,w,h);
+    if(bitmap.close) bitmap.close();
+    return await new Promise(function(resolve){canvas.toBlob(resolve,"image/webp",0.86);});
+  }
+
+  async function uploadMapImage(mapName,region,imageHash){
+    const existing=gameMaps.find(function(m){return normText(m.map_name)===normText(mapName);});
+    if(existing&&existing.map_image_url) return existing.map_image_url;
+    const blob=await cropMapBlob(region);
+    if(!blob) return "";
+    const safe=String(mapName||"map").toLowerCase().replace(/[^a-z0-9]+/g,"-").replace(/^-+|-+$/g,"")||"map";
+    const path=safe+"/"+Date.now()+"-"+(imageHash||crypto.randomUUID())+".webp";
+    const up=await db.storage.from("map-images").upload(path,blob,{contentType:"image/webp",upsert:false});
+    if(up.error) throw new Error("マップ画像保存に失敗しました："+up.error.message);
+    return db.storage.from("map-images").getPublicUrl(path).data.publicUrl||"";
+  }
+
+  async function saveMapAnalysis(result,imageHash){
+    if(result.screen_type!=="expanded_map") return null;
+    const mapName=String(result.map_name||"").trim();
+    const confidence=Number(result.map_confidence||result.confidence||0);
+    const npcs=Array.isArray(result.map_npcs)?result.map_npcs.filter(function(n){
+      return n&&String(n.name||"").trim()&&Number(n.confidence||0)>=70;
+    }):[];
+
+    if(!mapName||confidence<70){
+      setStatus("map-collect-status","マップ名または認識精度が不足したため保存しませんでした。");
+      return null;
+    }
+
+    let mapImageUrl="";
+    try{
+      mapImageUrl=await uploadMapImage(mapName,result.map_region,imageHash);
+    }catch(err){
+      setStatus("map-collect-status",err.message||String(err));
+    }
+
+    const res=await db.rpc("map_analysis_save",{
+      p_map_name:mapName,
+      p_npcs:npcs,
+      p_image_hash:imageHash||"",
+      p_map_image_url:mapImageUrl,
+      p_confidence:confidence,
+      p_contributor_id:contributorId
+    });
+    if(res.error) throw new Error("マップ情報の保存に失敗しました："+res.error.message);
+
+    const info=res.data||{};
+    setStatus(
+      "map-collect-status",
+      mapName+" を保存：NPC "+npcs.length+"件 / 新規観測 "+(info.new_sightings||0)+"件"
+    );
+    await loadMapData();
+    return info;
+  }
+
   async function runOpenAiAnalysis(trigger){
     if(aiAnalyzing) return;
     aiAnalyzing=true;
@@ -416,7 +495,11 @@
       try{data=await response.json();}catch(_){}
       if(!response.ok) throw new Error(data.error||("AI解析に失敗しました（HTTP "+response.status+"）"));
       await applyAiResult(data);
-      await autoSaveAiResult(data,imageHash);
+      if(data.screen_type==="expanded_map"){
+        await saveMapAnalysis(data,imageHash);
+      }else{
+        await autoSaveAiResult(data,imageHash);
+      }
     }catch(err){
       setStatus("capture-status",err&&err.message?err.message:String(err));
     }finally{
@@ -639,6 +722,55 @@
     setStatus("form-status","");
   }
 
+  async function loadMapData(){
+    const mapsRes=await db.from("game_maps").select("*").order("map_name",{ascending:true}).limit(1000);
+    const npcsRes=await db.from("map_npcs").select("*,game_maps(map_name,map_image_url)").order("npc_name",{ascending:true}).limit(5000);
+    if(!mapsRes.error) gameMaps=mapsRes.data||[];
+    if(!npcsRes.error) mapNpcs=npcsRes.data||[];
+    renderMapDatabase();
+  }
+
+  function renderMapDatabase(){
+    const select=$("map-db-select");
+    const canvas=$("map-db-canvas");
+    const list=$("map-db-list");
+    if(!select||!canvas||!list) return;
+
+    const current=select.value;
+    select.innerHTML='<option value="">マップを選択</option>'+gameMaps.map(function(m){
+      return '<option value="'+esc(m.id)+'">'+esc(m.map_name)+'</option>';
+    }).join("");
+    if(gameMaps.some(function(m){return m.id===current;})) select.value=current;
+    if(!select.value&&gameMaps.length) select.value=gameMaps[0].id;
+
+    const map=gameMaps.find(function(m){return m.id===select.value;});
+    if(!map){
+      canvas.innerHTML='<div class="map-db-empty">まだマップ情報がありません。</div>';
+      list.innerHTML="";
+      $("map-db-count").textContent="0 NPC";
+      return;
+    }
+
+    const rows=mapNpcs.filter(function(n){return n.map_id===map.id;});
+    $("map-db-count").textContent=rows.length+" NPC";
+    canvas.style.backgroundImage=map.map_image_url?'url("'+String(map.map_image_url).replace(/"/g,"%22")+'")':"none";
+    canvas.innerHTML=rows.map(function(n){
+      const x=Math.max(0,Math.min(100,Number(n.x_norm)/10));
+      const y=Math.max(0,Math.min(100,Number(n.y_norm)/10));
+      return '<button type="button" class="map-npc-marker" style="left:'+x+'%;top:'+y+'%" data-map-npc="'+esc(n.npc_name)+'" title="'+esc(n.npc_name)+'">'+
+        '<span></span><b>'+esc(n.npc_name)+'</b>'+
+      '</button>';
+    }).join("");
+
+    list.innerHTML=rows.map(function(n){
+      return '<button type="button" data-map-npc="'+esc(n.npc_name)+'">'+
+        '<strong>'+esc(n.npc_name)+'</strong>'+
+        '<span>X '+Math.round(Number(n.x_norm))+' / Y '+Math.round(Number(n.y_norm))+'</span>'+
+        '<small>'+esc(n.sighting_count)+'回観測・'+Math.round(Number(n.confidence))+'%</small>'+
+      '</button>';
+    }).join("");
+  }
+
   async function loadNpcProfiles(){
     const res=await db.from("npc_profiles").select("*").order("updated_at",{ascending:false}).limit(1000);
     if(!res.error){
@@ -802,6 +934,16 @@
     if(previous) card.outerHTML=renderDialogueCard(previous,cardKey);
   }
 
+  $("map-db-select").addEventListener("change",renderMapDatabase);
+  $("map-database").addEventListener("click",function(e){
+    const target=e.target.closest("[data-map-npc]");
+    if(!target) return;
+    const npc=target.dataset.mapNpc;
+    $("knowledge-search").value=npc;
+    renderRecords();
+    $("npc-database").scrollIntoView({behavior:"smooth",block:"start"});
+  });
+
   $("knowledge-results").addEventListener("click",function(e){
     const next=e.target.closest("[data-dialogue-target]");
     if(next){openDialogueTarget(next);return;}
@@ -872,5 +1014,5 @@
   });
   window.addEventListener("beforeunload",stopScreen);
 
-  Promise.all([loadQuests(),loadNpcProfiles(),loadDialogueTransitions(),loadRecords()]).catch(function(err){setStatus("capture-status",err.message);});
+  Promise.all([loadQuests(),loadNpcProfiles(),loadDialogueTransitions(),loadMapData(),loadRecords()]).catch(function(err){setStatus("capture-status",err.message);});
 })();
