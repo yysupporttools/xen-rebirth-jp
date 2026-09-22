@@ -2690,7 +2690,16 @@
         {
           "heading": "Seal of Fate / Rebirthの交換",
           "text": "リロールに使うSeal of FateまたはRebirthの交換は、EsseneのMiracle Researcherで行えます。公式ガイドではMiracle WispsとWisps Exchangesを使う案内になっています。",
-          "images": []
+          "images": [
+            {
+              "url": "assets/guides/master-of-fate/miracle-researcher.webp",
+              "label": "Miracle Researcher"
+            },
+            {
+              "url": "assets/guides/master-of-fate/miracle-researcher-menu.webp",
+              "label": "Seal of Fate / Rebirth 交換メニュー"
+            }
+          ]
         },
         {
           "heading": "強化済み：狙ったステータスへリロール",
