@@ -6,6 +6,7 @@
   const esc=function(v){return String(v==null?"":v).replace(/[&<>"']/g,function(c){return {"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c];});};
 
   let stream=null;
+  let captureBlackCheckTimer=null;
   let captureSourceVideo=null;
   let imageBlob=null;
   let imageSourceType="manual";
@@ -140,6 +141,77 @@
     if(!silent) setStatus("capture-status","画像を取り込みました。必要ならOCRを実行してください。");
   }
 
+  function captureSurfaceLabel(){
+    try{
+      const track=stream&&stream.getVideoTracks?stream.getVideoTracks()[0]:null;
+      const surface=track&&track.getSettings?track.getSettings().displaySurface:"";
+      if(surface==="monitor") return "画面全体";
+      if(surface==="window") return "ウィンドウ";
+      if(surface==="browser") return "ブラウザタブ";
+      return surface||"共有画面";
+    }catch(_){return "共有画面";}
+  }
+
+  function frameLooksBlack(video){
+    if(!video||!video.videoWidth||video.readyState<2) return null;
+    const w=96,h=54;
+    const canvas=document.createElement("canvas");
+    canvas.width=w;canvas.height=h;
+    const ctx=canvas.getContext("2d",{willReadFrequently:true});
+    ctx.drawImage(video,0,0,w,h);
+    const d=ctx.getImageData(0,0,w,h).data;
+    let sum=0,sum2=0,bright=0,count=0;
+    for(let i=0;i<d.length;i+=4){
+      const g=d[i]*0.299+d[i+1]*0.587+d[i+2]*0.114;
+      sum+=g;sum2+=g*g;count++;
+      if(g>=24) bright++;
+    }
+    const mean=sum/Math.max(1,count);
+    const variance=Math.max(0,sum2/Math.max(1,count)-mean*mean);
+    return mean<7&&variance<18&&bright/Math.max(1,count)<0.003;
+  }
+
+  function hideBlackCaptureWarning(){
+    const el=$("capture-black-warning");
+    if(el) el.hidden=true;
+  }
+
+  function showBlackCaptureWarning(){
+    const el=$("capture-black-warning");
+    if(!el) return;
+    const surface=captureSurfaceLabel();
+    const text=$("capture-black-warning-text");
+    if(text){
+      text.textContent=surface==="ウィンドウ"
+        ?"ゲームのウィンドウ共有が黒画面になっています。Xen Rebirthをウィンドウ/ボーダーレス表示にするか、「画面全体」を選んで共有し直してください。"
+        :"共有映像が黒画面です。「画面全体」を選んで共有し直すと改善することがあります。";
+    }
+    el.hidden=false;
+    setStatus("capture-status","共有映像が黒画面のため読み取りを停止しています。下の案内から共有し直してください。");
+  }
+
+  function scheduleBlackCaptureCheck(){
+    if(captureBlackCheckTimer) clearTimeout(captureBlackCheckTimer);
+    let attempt=0,blackHits=0;
+    const check=function(){
+      if(!stream) return;
+      const video=getCaptureVideo();
+      const black=frameLooksBlack(video);
+      if(black===true) blackHits++;
+      else if(black===false){
+        hideBlackCaptureWarning();
+        blackHits=0;
+      }
+      attempt++;
+      if(attempt<4){
+        captureBlackCheckTimer=setTimeout(check,attempt===1?700:1000);
+      }else if(blackHits>=3){
+        showBlackCaptureWarning();
+      }
+    };
+    captureBlackCheckTimer=setTimeout(check,450);
+  }
+
   async function startScreen(){
     try{
       stream=await navigator.mediaDevices.getDisplayMedia({video:{frameRate:{ideal:8,max:15}},audio:false});
@@ -155,15 +227,19 @@
       setAutoStatus("off","OFF");
       const track=stream.getVideoTracks()[0];
       if(track) track.addEventListener("ended",stopScreen);
-      setStatus("capture-status","共有中です。ページ内で3.登録済み情報を見ている間も、裏側の専用映像から読み取りを継続します。");
+      hideBlackCaptureWarning();
+      setStatus("capture-status","共有中（"+captureSurfaceLabel()+"）です。ページ内で3.登録済み情報を見ている間も、裏側の専用映像から読み取りを継続します。");
       syncMiniCaptureStatus();
       startLocalMapMonitor();
+      scheduleBlackCaptureCheck();
     }catch(err){
       setStatus("capture-status",err.name==="NotAllowedError"?"画面共有はキャンセルされました。":"画面共有を開始できませんでした："+err.message);
     }
   }
 
   function stopScreen(){
+    if(captureBlackCheckTimer){clearTimeout(captureBlackCheckTimer);captureBlackCheckTimer=null;}
+    hideBlackCaptureWarning();
     stopAutoMonitor(true);
     stopLocalMapMonitor();
     if(stream) stream.getTracks().forEach(function(t){t.stop();});
@@ -182,6 +258,10 @@
   async function captureFrame(silent){
     const video=getCaptureVideo();
     if(!video.videoWidth){if(!silent)setStatus("capture-status","共有画面がまだ準備できていません。");return null;}
+    if(frameLooksBlack(video)===true){
+      showBlackCaptureWarning();
+      return null;
+    }
     const maxWidth=1600;
     const scale=Math.min(1,maxWidth/video.videoWidth);
     const canvas=document.createElement("canvas");
@@ -2657,6 +2737,11 @@
   $("npc-image-save").addEventListener("click",saveNpcImage);
 
     $("screen-start").addEventListener("click",startScreen);
+  $("screen-retry").addEventListener("click",function(){
+    stopScreen();
+    setStatus("capture-status","共有先を選び直します。「画面全体」を選ぶ方法を推奨します。");
+    setTimeout(startScreen,250);
+  });
   $("screen-stop").addEventListener("click",stopScreen);
   $("screen-shot").addEventListener("click",captureFrame);
   $("image-file").addEventListener("change",function(e){handleFile(e.target.files&&e.target.files[0]);});
