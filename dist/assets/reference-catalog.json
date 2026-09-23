@@ -3641,6 +3641,174 @@
           "url": "https://www.xenrebirth.com/lexicon/index.php?entry/84-recycle-girl/"
         }
       ]
+    },
+    {
+      "slug": "guild-dungeon-token-rewards",
+      "name_en": "Guild Dungeon Token Rewards",
+      "name_ja": "ギルドダンジョン報酬",
+      "source_url": "https://www.xenrebirth.com/lexicon/index.php?entry/159-guild-dungeon-token-rewards/",
+      "_section": "ダンジョン・ボス",
+      "_blocks": [
+        {
+          "heading": "概要",
+          "text": "ギルドダンジョン攻略後に獲得できるトークン報酬の一覧です。報酬はギルドレベルによって変化し、Guild Token・Minion Tokenに加えてAmber / Gold / Platinum系トークンを獲得できます。"
+        },
+        {
+          "heading": "参加条件",
+          "text": "キャラクターLv50以上で参加できます。最低5人が参加する必要があり、入場開始操作を行えるのはパーティリーダーのみです。開始後、他のメンバーも一緒に入場します。"
+        },
+        {
+          "heading": "報酬を受け取る条件",
+          "text": "トークン報酬を受け取るには2000ポイントが必要です。獲得できるトークンの種類と個数はギルドレベルによって決まります。"
+        },
+        {
+          "heading": "トークンの使い道",
+          "text": "獲得したトークンはTramis Mansion（Brynhilld）にいるToken Exchange NPCで交換に利用できます。"
+        },
+        {
+          "heading": "Lv16～20について",
+          "text": "公式Lexiconの表にはGuild Level 16～20の行がありますが、参照ページではToken Amount / Guild Token / Minion Tokenの具体的な値が掲載されていません。未確認値は推測で補完せず、公式掲載内容のまま未記載として扱います。"
+        }
+      ],
+      "_tables": [
+        {
+          "caption": "ギルドレベル別 トークン報酬",
+          "headers": [
+            "Guild Level",
+            "Token Amount and Type",
+            "Guild Token",
+            "Minion Token"
+          ],
+          "rows": [
+            [
+              "1",
+              "Amber ×1",
+              "1",
+              "1"
+            ],
+            [
+              "2",
+              "Amber ×1",
+              "2",
+              "2"
+            ],
+            [
+              "3",
+              "Amber ×2",
+              "3",
+              "3"
+            ],
+            [
+              "4",
+              "Amber ×2",
+              "4",
+              "4"
+            ],
+            [
+              "5",
+              "Amber ×3",
+              "5",
+              "5"
+            ],
+            [
+              "6",
+              "Gold ×3",
+              "6",
+              "6"
+            ],
+            [
+              "7",
+              "Gold ×4",
+              "7",
+              "7"
+            ],
+            [
+              "8",
+              "Gold ×4",
+              "8",
+              "8"
+            ],
+            [
+              "9",
+              "Gold ×5",
+              "9",
+              "9"
+            ],
+            [
+              "10",
+              "Gold ×5",
+              "10",
+              "10"
+            ],
+            [
+              "11",
+              "Platinum ×6",
+              "10",
+              "10"
+            ],
+            [
+              "12",
+              "Platinum ×6",
+              "10",
+              "10"
+            ],
+            [
+              "13",
+              "Platinum ×7",
+              "10",
+              "10"
+            ],
+            [
+              "14",
+              "Platinum ×7",
+              "10",
+              "10"
+            ],
+            [
+              "15",
+              "Platinum ×8",
+              "10",
+              "10"
+            ],
+            [
+              "16",
+              "公式表では未記載",
+              "—",
+              "—"
+            ],
+            [
+              "17",
+              "公式表では未記載",
+              "—",
+              "—"
+            ],
+            [
+              "18",
+              "公式表では未記載",
+              "—",
+              "—"
+            ],
+            [
+              "19",
+              "公式表では未記載",
+              "—",
+              "—"
+            ],
+            [
+              "20",
+              "公式表では未記載",
+              "—",
+              "—"
+            ]
+          ]
+        }
+      ],
+      "_links": [
+        {
+          "label": "公式Lexicon：Guild Dungeon Token Rewards",
+          "url": "https://www.xenrebirth.com/lexicon/index.php?entry/159-guild-dungeon-token-rewards/"
+        }
+      ]
     }
   ]
 }
