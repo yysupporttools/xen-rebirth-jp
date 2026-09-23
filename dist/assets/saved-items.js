@@ -165,6 +165,19 @@
     data.recent = [{...record,time:Date.now()}, ...data.recent.filter(x => x.url !== record.url)].slice(0,30);
     write(data);
   }
+
+  function isQuestDetailRecord(record) {
+    return !!record && /^quests\.html#[^#]+/.test(record.url || '');
+  }
+
+  function orderedFavorites(records) {
+    return [...records].sort((a, b) => {
+      const questOrder = Number(isQuestDetailRecord(b)) - Number(isQuestDetailRecord(a));
+      if (questOrder) return questOrder;
+      return (Number(b.time) || 0) - (Number(a.time) || 0);
+    });
+  }
+
   function syncButtons() {
     const saved = new Set(read().favorites.map(x => x.url));
     for (const [button, record] of buttons) {
@@ -188,9 +201,18 @@
         status.textContent = 'お気に入りは100件まで保存できます。不要な項目を解除してから追加してください。';
         return;
       }
-      data.favorites = exists ? data.favorites.filter(x => x.url !== record.url) : [{...record,time:Date.now()},...data.favorites];
+      if (exists) {
+        data.favorites = data.favorites.filter(x => x.url !== record.url);
+      } else {
+        if (isQuestDetailRecord(record)) {
+          data.favorites = data.favorites.filter(x => x.url !== 'quests.html');
+        }
+        data.favorites = [{...record,time:Date.now()}, ...data.favorites.filter(x => x.url !== record.url)];
+      }
       if (write(data)) {
-        status.textContent = exists ? 'お気に入りを解除しました。' : 'お気に入りに追加しました。';
+        status.textContent = exists
+          ? (isQuestDetailRecord(record) ? 'このクエストをお気に入りから解除しました。' : 'お気に入りを解除しました。')
+          : (isQuestDetailRecord(record) ? 'このクエストをお気に入りに追加しました。' : 'お気に入りに追加しました。');
         syncButtons();
         render();
       }
@@ -251,22 +273,26 @@
   function renderSideRail(data) {
     const rail=ensureSideRail();
     const current=rail.querySelector('#rail-current-action');
+    const currentHeading=rail.querySelector('.rail-current h2');
+    if (currentHeading) currentHeading.textContent=isQuestDetailRecord(currentPage) ? 'このクエスト' : 'このページ';
     current.replaceChildren();
     if (currentPage) current.append(star(currentPage));
     else {
       const p=document.createElement('p');
       p.className='rail-empty';
-      p.textContent='このページは保存対象外です。';
+      p.textContent=location.hash && location.pathname.endsWith('/quests.html')
+        ? 'クエストを読み込み中…'
+        : 'このページは保存対象外です。';
       current.append(p);
     }
-    renderRailLinks(rail.querySelector('#rail-favorites'),data.favorites,'まだありません。',5);
+    renderRailLinks(rail.querySelector('#rail-favorites'),orderedFavorites(data.favorites),'まだありません。',5);
     renderRailLinks(rail.querySelector('#rail-recents'),data.recent,'まだありません。',6);
   }
   function render() {
     const data=read();
     const favorites=document.getElementById('saved-favorites');
     if (favorites) {
-      renderList(favorites,data.favorites,'まだお気に入りはありません。ページや用語の☆を押して追加してください。');
+      renderList(favorites,orderedFavorites(data.favorites),'まだお気に入りはありません。ページ・用語・クエストの☆を押して追加してください。');
       const recents=document.getElementById('saved-recents');
       if (recents) renderList(recents,data.recent,'まだ閲覧履歴はありません。攻略ページや用語を開くと自動で記録されます。');
       const count=document.getElementById('saved-count');
@@ -278,8 +304,76 @@
     syncButtons();
   }
   const page=clean({url:location.pathname,title:document.querySelector('h1')?.textContent.trim() || document.title});
-  currentPage=page;
-  if (page) remember(page);
+  const onQuestsPage=location.pathname.endsWith('/quests.html');
+  currentPage=onQuestsPage && location.hash ? null : page;
+  if (currentPage) remember(currentPage);
+
+  function questRecordFromDetail() {
+    if (!onQuestsPage || !location.hash) return null;
+    const title=main.querySelector('#quest-detail .quest-detail-title')?.textContent?.trim();
+    const id=location.hash.slice(1);
+    if (!title || !id) return null;
+    return clean({
+      url:'quests.html#'+encodeURIComponent(id),
+      title:title
+    });
+  }
+
+  function ensureQuestFavorite(record) {
+    if (!record) return;
+    const card=main.querySelector('#quest-detail > article.paper');
+    if (!card) return;
+    let row=card.querySelector(':scope > .quest-detail-favorite-row');
+    if (!row) {
+      row=document.createElement('div');
+      row.className='quest-detail-favorite-row';
+      card.prepend(row);
+    }
+    if (row.dataset.savedUrl === record.url) return;
+    row.dataset.savedUrl=record.url;
+    row.replaceChildren(star(record));
+  }
+
+  function syncQuestContext() {
+    if (!onQuestsPage) return;
+    if (location.hash) {
+      const record=questRecordFromDetail();
+      if (!record) {
+        currentPage=null;
+        renderSideRail(read());
+        syncButtons();
+        return;
+      }
+      const changed=currentPage?.url !== record.url;
+      currentPage=record;
+      if (changed) remember(record);
+      ensureQuestFavorite(record);
+    } else {
+      const changed=currentPage?.url !== page?.url;
+      currentPage=page;
+      if (changed && currentPage) remember(currentPage);
+    }
+    renderSideRail(read());
+    syncButtons();
+  }
+
+  if (onQuestsPage) {
+    const detail=document.getElementById('quest-detail');
+    if (detail) {
+      const observer=new MutationObserver(syncQuestContext);
+      observer.observe(detail,{childList:true,subtree:true,attributes:true,attributeFilter:['hidden']});
+    }
+    window.addEventListener('hashchange',() => {
+      if (location.hash) {
+        currentPage=null;
+        renderSideRail(read());
+        syncButtons();
+      } else {
+        syncQuestContext();
+      }
+    });
+    syncQuestContext();
+  }
 
   function itemRecord(node) {
     const summary=node.matches('details') ? node.querySelector(':scope > summary') : node.querySelector(':scope > details > summary');
@@ -316,6 +410,6 @@
     if (write(data)) { status.textContent='閲覧履歴を消去しました。'; render(); }
   });
   window.addEventListener('storage',event => { if (event.key === KEY || event.key === null) { syncButtons(); render(); } });
-  window.addEventListener('pageshow',event => { if (event.persisted) { if(page) remember(page); syncButtons(); render(); } });
+  window.addEventListener('pageshow',event => { if (event.persisted) { if(currentPage) remember(currentPage); if(onQuestsPage) syncQuestContext(); syncButtons(); render(); } });
   syncButtons(); render();
 })();
