@@ -99,3 +99,120 @@
   .beginner-phase-head{gap:12px}
   .beginner-phase-head>span{width:40px;height:40px;font-size:16px}
 }
+
+
+/* Ver.4 Xen sky branding theme */
+:root{
+  --bg:#dfe7ee;
+  --ink:#173149;
+  --muted:#5d7182;
+  --line:#c4d1dc;
+  --dark:#112d46;
+  --teal:#2d82b3;
+  --gold:#d8c78f;
+  --card:#f2f6f8;
+}
+body{
+  background:
+    radial-gradient(circle at 12% -8%,rgba(84,178,215,.18),transparent 34rem),
+    radial-gradient(circle at 92% 12%,rgba(98,148,205,.11),transparent 30rem),
+    linear-gradient(180deg,#dce6ee 0,#e8eef3 36rem,#dfe7ee 100%);
+  color:var(--ink);
+}
+header{
+  background:linear-gradient(180deg,rgba(15,40,63,.98),rgba(20,53,78,.98));
+  border-bottom:1px solid #315773;
+  box-shadow:0 10px 30px rgba(12,35,54,.18);
+}
+.brand>a{color:#f1f7fb;text-shadow:0 1px 12px rgba(90,190,230,.12)}
+.brand small{color:#b8cfdd}
+.edition{color:#94b0c1}
+.mark{
+  width:58px;height:58px;
+  border-radius:14px;
+  background:#eaf7fb url("xen-wing-logo.webp") center/contain no-repeat;
+  color:transparent;
+  font-size:0;
+  box-shadow:0 6px 18px rgba(2,18,36,.32),inset 0 0 0 1px rgba(145,220,242,.32);
+}
+nav a{color:#bdd0dc}
+nav a:hover{color:#fff}
+nav a[aria-current]{border-color:#6bc4e7;color:#fff}
+a{color:#1f729f}
+a:hover{color:#15567d}
+.site-title-banner{
+  position:relative;
+  overflow:hidden;
+  margin:0 0 28px;
+  border-radius:16px;
+  border:1px solid rgba(67,115,145,.45);
+  background:#163b57;
+  box-shadow:0 18px 42px rgba(20,52,77,.18);
+}
+.site-title-banner img{
+  display:block;
+  width:100%;
+  aspect-ratio:16/9;
+  object-fit:cover;
+  filter:brightness(.86) saturate(.88) contrast(1.03);
+}
+.site-title-banner:after{
+  content:"";
+  position:absolute;
+  inset:0;
+  pointer-events:none;
+  background:
+    linear-gradient(180deg,rgba(13,42,65,.05),rgba(13,42,65,.16)),
+    radial-gradient(circle at 50% 42%,transparent 38%,rgba(11,35,56,.10) 100%);
+}
+.welcome{
+  background:linear-gradient(145deg,#112e47,#1d4a65);
+  border-top:3px solid #6bb9d4;
+  border-radius:12px;
+  box-shadow:0 12px 30px rgba(18,49,74,.16);
+}
+.next-boss{
+  background:linear-gradient(145deg,#173b55,#24566c);
+  border:1px solid rgba(116,190,215,.22);
+  border-radius:12px;
+  box-shadow:0 12px 30px rgba(18,49,74,.14);
+}
+.welcome .eyebrow,.next-boss .eyebrow{color:#dfd09a}
+.welcome p:not(.eyebrow){color:#d0dde5}
+.next-boss .location,.next-boss .small{color:#c3d4dd}
+.next-boss a{color:#bde8f2}
+.button{
+  background:linear-gradient(135deg,#d8c78f,#eadca8);
+  color:#173149;
+  border-radius:8px;
+  box-shadow:0 5px 14px rgba(8,31,47,.18);
+}
+.button:hover{background:linear-gradient(135deg,#e1d19a,#f0e2b0);color:#173149}
+.secondary{background:#173b55;color:#fff}
+.secondary:hover{background:#24536d;color:#fff}
+.guide-card,.paper,.growth-timeline>div,.build-grid>div{
+  background:rgba(244,247,249,.96);
+  border-color:#c6d3dd;
+  border-radius:10px;
+  box-shadow:0 8px 22px rgba(22,54,78,.07);
+}
+.guide-card:hover{
+  border-color:#4a94bd;
+  box-shadow:0 12px 28px rgba(22,69,100,.12);
+}
+.route>div,.archer-summary-grid>div,.stat-purpose-grid>div,.rogue-tip-grid>div,
+.npc-path,.community-note,.beginner-shot,th{
+  background:#e6edf2;
+}
+.community-guide{background:#eef4f7;border-color:#c4d6e1}
+.notice{background:#f3eedf;border-left-color:#bca55f}
+.anchor-nav a{background:#eef3f6;border-color:#c3d1dc}
+.boss-row{background:#f1f5f7;border-color:#c5d2dc}
+.clock-bar{background:#16364f}
+.tool-strip{border-color:#becdd8}
+footer{border-color:#bdcbd6;color:#596f80}
+@media(max-width:600px){
+  .mark{width:50px;height:50px;border-radius:12px}
+  .site-title-banner{margin-bottom:18px;border-radius:10px}
+  .site-title-banner img{aspect-ratio:16/9}
+}
