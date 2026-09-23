@@ -2,7 +2,7 @@
   'use strict';
   const KEY = 'xenRebirthSavedItemsV1';
   const base = new URL('./', location.href);
-  const allowed = new Set(['index.html','start.html','classes.html','class-change.html','class-archer.html','class-cleric.html','class-knight.html','class-mage.html','class-rogue.html','class-templar.html','systems.html','quests.html','events.html','bosses.html','tools.html','glossary.html','board.html','sources.html','search.html','capture.html','favorites.html','rules.html']);
+  const allowed = new Set(['index.html','start.html','classes.html','class-change.html','class-archer.html','class-cleric.html','class-knight.html','class-mage.html','class-rogue.html','class-templar.html','systems.html','quests.html','events.html','bosses.html','tools.html','glossary.html','board.html','sources.html','search.html','capture.html','favorites.html','rules.html','story.html']);
   const buttons = new Map();
   let currentPage = null;
   let sideRail = null;

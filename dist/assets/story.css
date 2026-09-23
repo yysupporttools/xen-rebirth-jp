@@ -1,0 +1,7 @@
+.story-intro{max-width:none;padding:38px 32px;border:1px solid #c6d3dd;border-radius:12px;background:linear-gradient(135deg,#f5f9fc,#dcebf5);box-shadow:0 8px 22px #16364f12}
+.story-intro h1{font-size:clamp(28px,4vw,42px);line-height:1.6}
+.story-divider{padding:24px 6px 12px}.story-divider h2{font-size:28px}
+.story-chapter{padding:32px}.story-chapter p:not(.eyebrow){max-width:48em;line-height:2.2;margin-bottom:22px}.story-chapter h2{margin-bottom:24px}.story-chapter .story-last{font-weight:bold;font-size:21px;color:#245777}
+.story-actions{display:flex;flex-wrap:wrap;gap:14px}.story-start{border-top:3px solid #75a9c9}
+@media(max-width:600px){.story-intro,.story-chapter{padding:22px}.story-divider h2{font-size:24px}.story-actions{flex-direction:column}.story-actions .button{white-space:normal}}
+
