@@ -1493,3 +1493,21 @@ label > span {
   .reference-image-grid{grid-template-columns:1fr}
   .reference-image img{height:auto;max-height:320px}
 }
+
+.glossary-boss-nickname{
+  display:inline-flex;
+  align-items:center;
+  margin-left:8px;
+  padding:3px 8px;
+  border-radius:999px;
+  background:#fff3cf;
+  border:1px solid #d9bd67;
+  color:#6c5208;
+  font-size:12px;
+  font-weight:800;
+  white-space:nowrap;
+}
+.glossary-image-add-button{
+  border-style:dashed;
+  font-weight:800;
+}
