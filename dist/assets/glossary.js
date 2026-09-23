@@ -731,14 +731,14 @@
   async function loadReferenceCatalog() {
     try {
       if (!referenceCatalog) {
-        const response = await fetch("assets/reference-catalog.json?v=20260923f");
+        const response = await fetch("assets/reference-catalog.json?v=20260923g");
         if (!response.ok) throw new Error("Reference catalogue unavailable");
         referenceCatalog = (await response.json()).terms;
       }
       for (const source of referenceCatalog) {
         const existing = terms.find(t => t.slug === source.slug || normalize(t.name_en) === normalize(source.name_en));
         if (existing) {
-          for (const key of ["_catalogType", "_section", "_blocks", "_table", "_tables", "_links", "_shortcuts"]) existing[key] = source[key];
+          for (const key of ["_catalogType", "_section", "_blocks", "_table", "_tables", "_links", "_shortcuts", "_exchangeSections"]) existing[key] = source[key];
         } else {
           const category = categories.find(c => c.name === (source._catalogType === "pets" ? "ペット・騎乗ペット" : "アイテム"));
           terms.push({...source, id:"catalog-" + source.slug, category_id:category?.id || "catalog-items", _catalogSeed:true});
@@ -765,6 +765,38 @@
     const makeTable = table => `<div class="reference-table-wrap"><table><caption>${esc(table.caption || "公式掲載値の整理")}</caption><thead><tr>${table.headers.map(h=>`<th scope="col">${esc(h)}</th>`).join("")}</tr></thead><tbody>${table.rows.map(row=>`<tr>${row.map((v,i)=>i===0?`<th scope="row">${esc(v)}</th>`:`<td>${esc(v)}</td>`).join("")}</tr>`).join("")}</tbody></table></div>`;
     const table = term._table ? makeTable(term._table) : "";
     const tables = (term._tables || []).map(makeTable).join("");
+    const exchangeSections = (term._exchangeSections || []).map(section => {
+      const tokenSrc = referenceImageSrc(section.token_image);
+      const rows = (section.rows || []).map(row => {
+        const itemSrc = referenceImageSrc(row.image);
+        const icon = itemSrc
+          ? `<img class="token-exchange-item-icon" src="${esc(itemSrc)}" alt="" loading="lazy" referrerpolicy="no-referrer">`
+          : '<span class="token-exchange-item-icon token-exchange-item-icon-empty" aria-hidden="true">?</span>';
+        return `<tr>
+          <td class="token-exchange-image-cell">${icon}</td>
+          <th scope="row" class="token-exchange-name-cell">${esc(row.item || "")}</th>
+          <td class="token-exchange-effect-cell">${esc(row.stats || "")}</td>
+          <td class="token-exchange-number-cell">${esc(row.quantity || "")}</td>
+          <td class="token-exchange-number-cell">${esc(row.price || "")}</td>
+        </tr>`;
+      }).join("");
+      return `<section class="token-exchange-section">
+        <h3 class="token-exchange-heading">${tokenSrc ? `<img src="${esc(tokenSrc)}" alt="" loading="lazy" referrerpolicy="no-referrer">` : ""}<span>${esc(section.heading || "")}</span></h3>
+        ${section.description ? `<p class="token-exchange-description">${esc(section.description)}</p>` : ""}
+        <div class="token-exchange-table-wrap">
+          <table class="token-exchange-table">
+            <thead><tr>
+              <th scope="col" class="token-exchange-image-head">画像</th>
+              <th scope="col">アイテム名</th>
+              <th scope="col">効果・説明</th>
+              <th scope="col" class="token-exchange-number-head">交換個数</th>
+              <th scope="col" class="token-exchange-number-head">必要トークン</th>
+            </tr></thead>
+            <tbody>${rows}</tbody>
+          </table>
+        </div>
+      </section>`;
+    }).join("");
     const shortcuts = (term._shortcuts || []).filter(x => safeUrl(x.url)).map(x => {
       const href = safeUrl(x.url);
       return `<a class="reference-shortcut" href="${esc(href)}">${esc(x.label)} <span aria-hidden="true">→</span></a>`;
@@ -772,7 +804,7 @@
     const shortcutBlock = shortcuts
       ? `<div class="reference-block reference-shortcut-block"><h3>用語集内ショートカット</h3><div class="reference-shortcuts">${shortcuts}</div></div>`
       : "";
-    return blocks + table + tables + shortcutBlock + (term._links?.length ? `<div class="reference-block reference-source-block"><h3>公式の出典</h3><div class="reference-links">${links(term._links)}</div></div>` : "");
+    return blocks + table + tables + exchangeSections + shortcutBlock + (term._links?.length ? `<div class="reference-block reference-source-block"><h3>公式の出典</h3><div class="reference-links">${links(term._links)}</div></div>` : "");
   }
 
   async function loadShared() {
