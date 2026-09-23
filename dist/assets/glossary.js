@@ -116,6 +116,7 @@
     if (["世界地図", "マップ", "NPC・モンスター"].includes(category)) groups.add("world");
     if (["クエスト", "一般クエスト", "メインクエスト", "転職クエスト", "ペットクエスト", "デイリークエスト", "イベントクエスト"].includes(category)) groups.add("quest");
     if (category === "ダンジョン・ボス") groups.add("dungeon");
+    if (category === "トークン") groups.add("token");
 
     return [...groups];
   }
@@ -231,7 +232,7 @@
     const panel = $("glossary-major-index");
     if (!panel) return;
     const fixed = [["", "すべて"], ["class", "クラス"], ["item", "アイテム"],
-      ["lucky", "ラッキーボール"], ["crafting", "アイテム作成"], ["pets", "ペット・騎乗ペット"], ["world", "世界地図"], ["quest", "クエスト"], ["dungeon", "ダンジョン・ボス"]];
+      ["lucky", "ラッキーボール"], ["crafting", "アイテム作成"], ["pets", "ペット・騎乗ペット"], ["world", "世界地図"], ["quest", "クエスト"], ["dungeon", "ダンジョン・ボス"], ["token", "トークン"]];
     const fixedNames = new Set(fixed.map(x => x[1]));
     const buttons = [...fixed, ...categories.filter(c => !fixedNames.has(c.name)).map(c => [`category:${c.id}`, c.name])];
     panel.innerHTML = buttons.map(([id, name]) => `<button type="button" data-major="${esc(id)}" class="${filters.major === id ? "is-active" : ""}" aria-pressed="${filters.major === id}">${esc(name)}</button>`).join("") +
@@ -730,7 +731,7 @@
   async function loadReferenceCatalog() {
     try {
       if (!referenceCatalog) {
-        const response = await fetch("assets/reference-catalog.json?v=20260923e");
+        const response = await fetch("assets/reference-catalog.json?v=20260923f");
         if (!response.ok) throw new Error("Reference catalogue unavailable");
         referenceCatalog = (await response.json()).terms;
       }
