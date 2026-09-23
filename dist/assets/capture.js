@@ -56,6 +56,8 @@
   let lastLocalMapImageAt=0;
   let lastCenterSample=null;
   let lastCenterBurstAt=0;
+  let centerTransitionPendingAt=0;
+  let centerTransitionStable=0;
   let centerOcrBusy=false;
   let localMapMatchCandidate={name:"",hits:0,at:0};
   let routeCurrentMap="";
@@ -1190,14 +1192,36 @@
   function localMapTick(){
     if(!localMapActive||!stream) return;
     localExpandedMapMatchTick(false);
-    const destination=$("route-destination")?$("route-destination").value:"";
-    if(!destination&&routeCurrentMap) return;
 
     const sample=centerTitleSample();
     if(!sample) return;
     if(lastCenterSample){
       const diff=sampleDifference(lastCenterSample,sample);
-      if(diff>=0.15) scheduleCenterMapOcrBurst();
+      const now=Date.now();
+      const destination=$("route-destination")?$("route-destination").value:"";
+
+      // A large center-screen change followed by a stable frame is treated as
+      // a zone transition. This keeps OCR mostly idle during ordinary play,
+      // while still catching the short-lived map title even when no route is set.
+      if(diff>=0.32){
+        centerTransitionPendingAt=now;
+        centerTransitionStable=0;
+      }else if(centerTransitionPendingAt&&now-centerTransitionPendingAt<=3500){
+        if(diff<=0.08) centerTransitionStable++;
+        else centerTransitionStable=0;
+        if(centerTransitionStable>=2){
+          centerTransitionPendingAt=0;
+          centerTransitionStable=0;
+          scheduleCenterMapOcrBurst();
+        }
+      }else if(centerTransitionPendingAt&&now-centerTransitionPendingAt>3500){
+        centerTransitionPendingAt=0;
+        centerTransitionStable=0;
+      }
+
+      // While navigation is active (or current map is still unknown), be a bit
+      // more eager so a short title is not missed.
+      if((destination||!routeCurrentMap)&&diff>=0.17) scheduleCenterMapOcrBurst();
     }
     lastCenterSample=sample;
   }
