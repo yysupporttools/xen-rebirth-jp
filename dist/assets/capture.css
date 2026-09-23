@@ -691,3 +691,36 @@
 .route-exit-arrow.is-direction .route-exit-arrow-icon{
   background:rgba(255,224,91,.92);
 }
+
+
+/* Black capture guidance */
+.capture-black-warning{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:16px;
+  margin:12px 0 16px;
+  padding:14px 16px;
+  border:1px solid #d8b55c;
+  border-left:5px solid #c98c18;
+  border-radius:8px;
+  background:#fff8e6;
+  color:#4d3a12;
+}
+.capture-black-warning[hidden]{display:none!important}
+.capture-black-warning strong{display:block;margin-bottom:4px;font-size:15px}
+.capture-black-warning p{margin:0 0 4px;line-height:1.55}
+.capture-black-warning small{color:#765f2d;line-height:1.5}
+.capture-black-warning button{
+  flex:0 0 auto;
+  min-height:40px;
+  padding:8px 12px;
+  border:1px solid #b98724;
+  background:#fff;
+  font-weight:700;
+  cursor:pointer;
+}
+@media(max-width:700px){
+  .capture-black-warning{align-items:stretch;flex-direction:column}
+  .capture-black-warning button{width:100%}
+}
