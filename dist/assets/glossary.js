@@ -539,7 +539,11 @@
       ? `<img class="glossary-thumb" src="${esc(imageUrl)}" alt="${esc(term.name_en || term.name_ja || "用語画像")}" loading="lazy">`
       : '<div class="glossary-thumb glossary-thumb-empty" aria-hidden="true">?</div>';
     const jp = term.name_ja ? `<span class="glossary-name-ja">${esc(term.name_ja)}</span>` : "";
-    const alias = term.aliases ? `<span class="glossary-alias">別表記：${esc(term.aliases)}</span>` : "";
+    const isDungeonBoss = category === "ダンジョン・ボス";
+    const alias = term.aliases && !isDungeonBoss ? `<span class="glossary-alias">別表記：${esc(term.aliases)}</span>` : "";
+    const bossNickname = term.aliases && isDungeonBoss
+      ? `<span class="glossary-boss-nickname">通称：${esc(term.aliases)}</span>`
+      : "";
     const details = [
       detail("ドロップ場所", term.drop_location),
       detail("入手方法", term.acquisition),
@@ -563,6 +567,7 @@
             <div class="glossary-title-line">
               <strong class="glossary-name-en">${esc(term.name_en || term.name_ja || "名称未設定")}</strong>
               ${jp}
+              ${bossNickname}
             </div>
             <div class="glossary-summary-bottom">
               <span class="glossary-category-badge">${esc(category || "未分類")}</span>
@@ -585,6 +590,7 @@
             ${guide ? `<a href="${esc(guide)}">関連ガイド</a>` : ""}
             ${source ? `<a href="${esc(source)}" target="_blank" rel="noopener noreferrer">公式の出典 ↗</a>` : ""}
             <a href="#${esc(id)}">この項目へのリンク</a>
+            ${isDungeonBoss && !imageUrl ? `<button type="button" class="glossary-edit-button glossary-image-add-button" data-edit-id="${esc(term.id)}">ボス画像を追加</button>` : ""}
             <button type="button" class="glossary-edit-button" data-edit-id="${esc(term.id)}">編集</button>
           </div>
           ${updated ? `<div class="glossary-updated">更新：${esc(updated)}${term.contributor_name ? " / 投稿：" + esc(term.contributor_name) : ""}</div>` : ""}
