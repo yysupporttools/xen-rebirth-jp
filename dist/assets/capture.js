@@ -64,6 +64,7 @@
   let lastExpandedMapOcrAt=0;
   let lastLocalMapBest=null;
   let localMapMatchCandidate={name:"",hits:0,at:0};
+  let localMapOcrCandidate={name:"",hits:0,at:0};
   let routeCurrentMap="";
   let routeCurrentSource="";
   let routeCurrentConfidence=0;
@@ -169,6 +170,39 @@
     const mean=sum/Math.max(1,count);
     const variance=Math.max(0,sum2/Math.max(1,count)-mean*mean);
     return mean<7&&variance<18&&bright/Math.max(1,count)<0.003;
+  }
+
+  function xenGameFrameEvidence(video){
+    if(!video||!video.videoWidth||video.readyState<2) return {likely:false,score:0};
+    const canvas=document.createElement("canvas");
+    canvas.width=180;canvas.height=90;
+    const ctx=canvas.getContext("2d",{willReadFrequently:true});
+    const sw=Math.max(1,video.videoWidth*0.22);
+    const sh=Math.max(1,video.videoHeight*0.16);
+    ctx.drawImage(video,0,0,sw,sh,0,0,canvas.width,canvas.height);
+    const d=ctx.getImageData(0,0,canvas.width,canvas.height).data;
+    let red=0,green=0,yellow=0,dark=0,count=0;
+    for(let i=0;i<d.length;i+=4){
+      const r=d[i],g=d[i+1],b=d[i+2];
+      const lum=r*0.299+g*0.587+b*0.114;
+      if(lum<78) dark++;
+      if(r>105&&r-g>42&&r-b>36) red++;
+      if(g>90&&g-r>22&&g-b>18) green++;
+      if(r>110&&g>75&&b<95&&r-b>40&&g-b>20) yellow++;
+      count++;
+    }
+    const rr=red/count,gr=green/count,yr=yellow/count,dr=dark/count;
+    let score=0;
+    if(rr>=0.004) score+=0.28;
+    if(gr>=0.004) score+=0.28;
+    if(yr>=0.0012) score+=0.18;
+    if(dr>=0.18) score+=0.16;
+    if(rr>=0.009&&gr>=0.009) score+=0.10;
+    return {likely:score>=0.62,score:score,red:rr,green:gr,yellow:yr,dark:dr};
+  }
+
+  function isLikelyXenGameFrame(){
+    return xenGameFrameEvidence(getCaptureVideo()).likely;
   }
 
   function hideBlackCaptureWarning(){
@@ -920,6 +954,11 @@
       routeCurrentMap=canonicalRouteMapName(saved.map||"");
       routeCurrentSource=String(saved.source||"");
       routeCurrentConfidence=Number(saved.confidence||0);
+      if(routeCurrentSource==="中央マップ名OCR"&&routeCurrentConfidence<90){
+        routeCurrentMap="";
+        routeCurrentSource="";
+        routeCurrentConfidence=0;
+      }
     }catch(_){}
   }
 
@@ -939,6 +978,18 @@
     if(!canonical) return false;
     const conf=Math.max(0,Math.min(100,Math.round(Number(confidence)||0)));
     if(!force&&routeCurrentMap&&canonical!==routeCurrentMap&&conf<72) return false;
+    if(!force&&source==="中央マップ名OCR"&&routeCurrentMap&&canonical!==routeCurrentMap){
+      const now=Date.now();
+      if(localMapOcrCandidate.name===canonical&&now-localMapOcrCandidate.at<5000){
+        localMapOcrCandidate.hits++;
+      }else{
+        localMapOcrCandidate={name:canonical,hits:1,at:now};
+      }
+      localMapOcrCandidate.at=now;
+      if(localMapOcrCandidate.hits<2) return false;
+    }else if(canonical===routeCurrentMap){
+      localMapOcrCandidate={name:"",hits:0,at:0};
+    }
     routeCurrentMap=canonical;
     routeCurrentSource=source||"ローカル認識";
     routeCurrentConfidence=conf;
@@ -1177,6 +1228,7 @@
   }
 
   async function localExpandedMapMatchTick(force){
+    if(!isLikelyXenGameFrame()) return false;
     const now=Date.now();
     if(!force&&now-lastLocalMapImageAt<LOCAL_MAP_IMAGE_INTERVAL_MS) return false;
     lastLocalMapImageAt=now;
@@ -1242,6 +1294,7 @@
   async function runExpandedMapTitleOcrSnapshot(force){
     const now=Date.now();
     if(expandedMapOcrBusy||!window.Tesseract||!stream) return false;
+    if(!isLikelyXenGameFrame()) return false;
     if(!force&&now-lastExpandedMapOcrAt<4500) return false;
     const canvas=expandedMapTitleCanvas();
     if(!canvas) return false;
@@ -1335,6 +1388,7 @@
 
   async function runCenterMapOcrSnapshot(){
     if(centerOcrBusy||!window.Tesseract||!stream) return;
+    if(!isLikelyXenGameFrame()) return;
     const canvas=centerTitleCanvas();
     if(!canvas) return;
     centerOcrBusy=true;
@@ -1363,6 +1417,12 @@
 
   function localMapTick(){
     if(!localMapActive||!stream) return;
+    if(!isLikelyXenGameFrame()){
+      lastCenterSample=null;
+      centerTransitionPendingAt=0;
+      centerTransitionStable=0;
+      return;
+    }
     localExpandedMapMatchTick(false);
     if(!routeCurrentMap) runExpandedMapTitleOcrSnapshot(false);
 
@@ -1401,7 +1461,7 @@
 
   function startLocalMapMonitor(){
     localMapActive=true;
-    lastCenterSample=centerTitleSample();
+    lastCenterSample=isLikelyXenGameFrame()?centerTitleSample():null;
     prepareLocalMapSignatures().then(function(){
       localExpandedMapMatchTick(true).then(function(ok){
         if(!ok) runExpandedMapTitleOcrSnapshot(true);
@@ -1422,6 +1482,10 @@
   async function localMapRescan(){
     if(!stream){
       setStatus("route-status","先に画面共有を開始してください。");
+      return;
+    }
+    if(!isLikelyXenGameFrame()){
+      setStatus("route-status","共有映像にXen RebirthのゲームHUDを確認できません。ゲーム画面を表示してから再認識してください。ブラウザやデスクトップ画面は現在地判定から除外します。");
       return;
     }
     setStatus("route-status","ローカル再認識中… 登録済みマップ画像とマップ名OCRを確認しています。");
@@ -1998,6 +2062,14 @@
     button.disabled=true;
     try{
       if(stream){
+        if(!isLikelyXenGameFrame()){
+          if(source==="auto"){
+            setAutoStatus("watching","ゲーム画面待機");
+            setStatus("capture-status","共有モニター上でXen Rebirthが前面に戻るまで自動解析を待機します。APIは使用していません。");
+            return;
+          }
+          throw new Error("共有映像にXen Rebirthのゲーム画面を確認できません。ゲームを前面に表示してから解析してください。APIは使用していません。");
+        }
         if(source!=="auto") setStatus("capture-status","現在のゲーム画面をキャプチャしています…");
         await captureFrame(true);
       }
@@ -2053,7 +2125,7 @@
       }
 
       let dedicatedMapSaved=false;
-      if(data.screen_type==="expanded_map"||data.screen_type==="other"){
+      if(data.screen_type==="expanded_map"&&isLikelyXenGameFrame()){
         try{
           const mapPack=await analyzeMapCandidate();
           dedicatedMapSaved=await saveDedicatedMapAnalysis(mapPack);
