@@ -2213,6 +2213,11 @@
     const npcsRes=await db.from("map_npcs").select("*,game_maps(map_name,map_image_url)").order("npc_name",{ascending:true}).limit(5000);
     if(!mapsRes.error) gameMaps=mapsRes.data||[];
     if(!npcsRes.error) mapNpcs=npcsRes.data||[];
+    const mapSelect=$("map-db-select");
+    if(mapSelect&&routeCurrentMap){
+      const currentMatch=gameMaps.find(function(m){return canonicalRouteMapName(m.map_name)===routeCurrentMap;});
+      if(currentMatch) mapSelect.value=currentMatch.id;
+    }
     renderMapDatabase();
     refreshRouteDestinationOptions();
     prepareLocalMapSignatures();
