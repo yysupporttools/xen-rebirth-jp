@@ -3530,6 +3530,117 @@
           "url": "bosses.html"
         }
       ]
+    },
+    {
+      "slug": "recycle-girl",
+      "name_en": "Recycle Girl",
+      "name_ja": "リサイクルガール",
+      "source_url": "https://www.xenrebirth.com/lexicon/index.php?entry/84-recycle-girl/",
+      "_section": "ラッキーボール",
+      "_blocks": [
+        {
+          "heading": "Recycle Girlとは",
+          "text": "不要になったShop Cash / Premium Item（永久品・期限付き・期限切れを含む）をLucky Ball Trading Couponへ交換し、集めたクーポンをLucky Ball Rへ交換できるリサイクルショップNPCです。フィールドでは入手しにくいレアアイテムを狙う用途があります。",
+          "images": [
+            {
+              "label": "Recycle Girl（公式掲載画像）",
+              "url": "https://www.xenrebirth.com/index.php?attachment/3980-recycle-girl-png/"
+            }
+          ]
+        },
+        {
+          "heading": "NPCの場所",
+          "text": "公式Lexiconでは Brynhilld（North Gate）と Essene にRecycle Girlがいると案内されています。NPCに話しかけ、Recycle Shopの交換メニューを利用します。"
+        },
+        {
+          "heading": "Mini Game Coupon Trade",
+          "text": "不要なPremium ItemをLucky Ball Trading Couponへ交換します。公式ページの交換表ではShop Cash Itemを1～4個まとめて出した場合に5～20枚のクーポンを受け取る例が掲載されています。さらに、PERMANENT Shop Cash itemは1個につき20枚、期限付きアイテム（期限切れを含む）も20枚受け取れる旨の注記があります。アイテムによって扱いが異なる可能性があるため、最終的な交換枚数はゲーム内画面でも確認してください。"
+        },
+        {
+          "heading": "Lucky Ball Rへの交換",
+          "text": "Lucky Ball Trading Couponを50枚集めると、Blue / Red / Green のLucky Ball R 1個と交換できます。各Lucky Ball Rの獲得アイテム一覧はすでに用語集内に登録しているため、下のショートカットから直接開けます。"
+        },
+        {
+          "heading": "日本語プレイヤーによる補足",
+          "text": "公式ページの日本語コメントでは、交換画面の4枠へ不要品を入れてExchangeする手順が紹介されています。装備中の品は外してから入れる、同じアイテムを同じ交換の4枠へ複数入れられない場合がある、一部アクセサリー等は交換対象外になる場合がある、という補足があります。これは公式本文ではなくプレイヤーコメントによる実用情報です。"
+        }
+      ],
+      "_tables": [
+        {
+          "caption": "Shop Cash ItemとLucky Ball Trading Couponの交換例（公式掲載表）",
+          "headers": [
+            "Shop Cash Item",
+            "Lucky Ball Trading Coupon"
+          ],
+          "rows": [
+            [
+              "1個",
+              "5枚"
+            ],
+            [
+              "2個",
+              "10枚"
+            ],
+            [
+              "3個",
+              "15枚"
+            ],
+            [
+              "4個",
+              "20枚"
+            ],
+            [
+              "PERMANENT Shop Cash item",
+              "1個 → 20枚（公式注記）"
+            ],
+            [
+              "期限付き / 期限切れアイテム",
+              "20枚（公式本文の注記）"
+            ]
+          ]
+        },
+        {
+          "caption": "Lucky Ball R交換",
+          "headers": [
+            "交換先",
+            "必要クーポン"
+          ],
+          "rows": [
+            [
+              "Lucky Ball R (BLUE)",
+              "50枚"
+            ],
+            [
+              "Lucky Ball R (RED)",
+              "50枚"
+            ],
+            [
+              "Lucky Ball R (GREEN)",
+              "50枚"
+            ]
+          ]
+        }
+      ],
+      "_shortcuts": [
+        {
+          "label": "LUCKY BALL R (BLUE) の詳細を見る",
+          "url": "#lucky-ball-blue-lucky-ball-r"
+        },
+        {
+          "label": "LUCKY BALL R (RED) の詳細を見る",
+          "url": "#lucky-ball-red-lucky-ball-r"
+        },
+        {
+          "label": "LUCKY BALL R (GREEN) の詳細を見る",
+          "url": "#lucky-ball-green-lucky-ball-r"
+        }
+      ],
+      "_links": [
+        {
+          "label": "公式Lexicon：Recycle Girl",
+          "url": "https://www.xenrebirth.com/lexicon/index.php?entry/84-recycle-girl/"
+        }
+      ]
     }
   ]
 }
