@@ -12,13 +12,17 @@
     for(let i=0;i<list.length-1;i++) add(list[i],list[i+1],meta);
   }
 
-  // North-west / starter area.
-  chain(["Tramis Mansion","Guild Plaza","Arcarinas Square","Mall Street"]);
-  add("Arcarinas Square","Summer Hill Street");
-  add("Mall Street","Waimea Gorge");
-  chain(["Waimea Gorge","Death Valley","Router Valley","Aquilos Gorge","Mystra Hill","Mystra Basin","Luan Basin","Cyoren Forest","Shalo Forest","Belteranin Forest","Urail Valley","Ashton Basin"]);
+  // North-west / starter area. Connections are explicit: no diagonal movement.
+  add("Tramis Mansion","Guild Plaza",{dirA:"bottom",dirB:"top"});
+  add("Guild Plaza","Arcarinas Square",{dirA:"bottom",dirB:"top"});
+  add("Arcarinas Square","Mall Street",{dirA:"left",dirB:"right",exitA:["Mall Street"],exitB:["Arcarinas Square","Arcanias Square"]});
+  add("Arcarinas Square","Summer Hill Street",{dirA:"right",dirB:"left",exitA:["Summerhill Street","Summer Hill Street"]});
+  add("Arcarinas Square","Brynhildr Trisects",{dirA:"bottom",dirB:"top",exitA:["Brynhild T-sects","Brynhild Trisects","Brynhildr Trisects"]});
+
+  // Mall Street and Summer Hill Street do not have a downward exit.
+  // Guild Plaza's left/right dungeon entrances are intentionally not connected.
   chain(["Waimea Gorge","Brunen Basin","Brynhildr Trisects","Aerial Forest","Linear Forest","Oblique Forest"]);
-  add("Summer Hill Street","Aerial Forest");
+  chain(["Waimea Gorge","Death Valley","Router Valley","Aquilos Gorge","Mystra Hill","Mystra Basin","Luan Basin","Cyoren Forest","Shalo Forest","Belteranin Forest","Urail Valley","Ashton Basin"]);
   add("Brynhildr Trisects","Loem Valley");
   chain(["Loem Valley","Costella Forest","Callisto Gorge","Bernald Forest","Theglia Forest","Othellos Forest","Stout Forest","Felix Forest","Curior Forest","Candy Vault"]);
   add("Oblique Forest","Loren Valley",{minLevel:50,note:"L50+"});
@@ -62,6 +66,11 @@
   add("Eir","Marque Basin");
   add("Marque Basin","Templar Gorge",{minLevel:90,note:"L90+"});
 
+  // Dungeon entrances with a single valid overworld entry.
+  add("Eir","Sleepless Grave",{kind:"dungeon",note:"Eirからのみ入場"});
+  add("Turneit Desert","Sand Desert Dungeon",{kind:"dungeon",note:"Turneit Desertからのみ入場"});
+  add("Shenzhen Waterfall","Temple of Pansidia",{kind:"dungeon",note:"Shenzhen Waterfallからのみ入場"});
+
   // Far east.
   chain(["Amorica Forest","Bangle Valley","Madrigras Valley","Tincrush Valley","Hardina Forest","Lithroid Forest","Big Apple Forest","Odalisque Forest","Premusson Path","Edgelderin Plains","Celephane Gorge"]);
   add("Edgelderin Plains","Village of the Dead",{kind:"special",note:"Ammeroid Chapel"});
@@ -74,12 +83,18 @@
 
   // Dragon area / transport.
   add("Shenzhen Forest","Gefe Camp",{minLevel:125,note:"L125+"});
-  chain(["Gefe Camp","Hidden Dock","Dragons' Dock/Head","Dragons' Village"]);
-  chain(["Dragons' Village","Dragons' Tail"]);
-  chain(["Dragons' Village","Dragons' Right Wing"]);
-  chain(["Dragons' Village","Dragons' Back"]);
-  chain(["Dragons' Village","Dragons' Left Wing"]);
-  add("Essene","Hidden Dock",{kind:"transport",minLevel:100,note:"Airship / L100+"});
+  add("Gefe Camp","Hidden Dock");
+  add("Hidden Dock","Floating Island of Dragons Dock",{kind:"dock"});
+  add("Floating Island of Dragons Dock","Dragons' Head",{kind:"dock"});
+  add("Dragons' Head","Dragons' Village");
+  add("Dragons' Village","Dragons' Tail");
+  add("Dragons' Village","Dragons' Right Wing");
+  add("Dragons' Village","Dragons' Back");
+  add("Dragons' Village","Dragons' Left Wing");
+
+  // Essene NPC transport: Expedition Transporter Garcia, level 100+.
+  add("Essene","Airship Boarding Gate",{kind:"transport",minLevel:100,note:"Expedition Transporter Garcia / L100+"});
+  add("Airship Boarding Gate","Floating Island of Dragons Dock",{kind:"transport",note:"Airship"});
 
   const aliases={
     "arcanias square":"Arcarinas Square",
@@ -96,12 +111,23 @@
     "dragon's right wing":"Dragons' Right Wing",
     "dragon's back":"Dragons' Back",
     "dragon's left wing":"Dragons' Left Wing",
-    "dragon's dock/head":"Dragons' Dock/Head"
+    "dragon's dock/head":"Floating Island of Dragons Dock",
+    "dragons dock/head":"Floating Island of Dragons Dock",
+    "dragons dock":"Floating Island of Dragons Dock",
+    "dragon's dock":"Floating Island of Dragons Dock",
+    "floating island of dragons dock":"Floating Island of Dragons Dock",
+    "air ship boarding gate":"Airship Boarding Gate",
+    "airship boarding gate":"Airship Boarding Gate",
+    "sleepless grave":"Sleepless Grave",
+    "sand desert":"Sand Desert Dungeon",
+    "sand desert dungeon":"Sand Desert Dungeon",
+    "temple of pansidia":"Temple of Pansidia"
   };
 
   window.XEN_WORLD_ROUTES={
-    version:1,
+    version:2,
     source:"Makise Xen Rebirth World Map (user supplied)",
+    movement_rule:"orthogonal-explicit-only",
     nodes:Array.from(nodes).sort(function(a,b){return a.localeCompare(b,"en");}),
     edges:edges,
     aliases:aliases
