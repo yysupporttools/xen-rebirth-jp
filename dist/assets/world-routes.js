@@ -13,7 +13,8 @@
   }
 
   // North-west / starter area.
-  chain(["Tramis Mansion","Guild Plaza","Mall Street","Arcarinas Square","Summer Hill Street"]);
+  chain(["Tramis Mansion","Guild Plaza","Arcarinas Square","Mall Street"]);
+  add("Arcarinas Square","Summer Hill Street");
   add("Mall Street","Waimea Gorge");
   chain(["Waimea Gorge","Death Valley","Router Valley","Aquilos Gorge","Mystra Hill","Mystra Basin","Luan Basin","Cyoren Forest","Shalo Forest","Belteranin Forest","Urail Valley","Ashton Basin"]);
   chain(["Waimea Gorge","Brunen Basin","Brynhildr Trisects","Aerial Forest","Linear Forest","Oblique Forest"]);
