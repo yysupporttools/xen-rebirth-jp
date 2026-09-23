@@ -89,17 +89,34 @@
   }
 
   function getMajorGroups(term) {
-    const text = normalize([
-      getCategoryName(term), term.name_en, term.name_ja, term.aliases,
-      term.description, term.drop_location, term.acquisition,
-      term.related_entity, term.notes
-    ].join(" "));
+    const category = getCategoryName(term);
     const groups = new Set();
-    if (/クラス|職業|転職用装備|アーチャー|クレリック|ナイト|メイジ|ローグ|テンプラー|xenian|archer|cleric|knight|mage|rogue|templar/.test(text)) groups.add("class");
-    if (/アイテム|素材|装備|武器|防具|消耗品|転職素材|stone|orb|tonic|blood|weapon|armor|item|ペット|pet|lucky ball|ラッキーボール/.test(text)) groups.add("item");
-    if (/マップ|地図|世界|町|村|地域|フィールド|npc|モンスター|monster|map/.test(text)) groups.add("world");
-    if (/クエスト|quest|転職/.test(text)) groups.add("quest");
-    if (/ダンジョン|ボス|インスタンス|dungeon|boss|instance/.test(text)) groups.add("dungeon");
+
+    // Major-category buttons must use explicit category metadata.
+    // Do not infer a category from description/notes text: terms such as Artpoly
+    // mention "boss instance" in their explanation but still belong to 転職素材.
+    if (category === "クラス" || classKeyForTerm(term)) groups.add("class");
+
+    const itemCategories = new Set([
+      "アイテム",
+      "転職素材",
+      "転職用装備",
+      "スキル消耗品",
+      "ペットクエスト素材",
+      "アクセサリー",
+      "消耗品",
+      "装備品"
+    ]);
+    if (itemCategories.has(category)) groups.add("item");
+
+    if (term._catalogType === "pets" || category === "ペット・騎乗ペット") groups.add("pets");
+    if (isLuckyBallHub(term) || category === "ラッキーボール") groups.add("lucky");
+    if (term._catalogType === "crafting") groups.add("crafting");
+
+    if (["世界地図", "マップ", "NPC・モンスター"].includes(category)) groups.add("world");
+    if (["クエスト", "一般クエスト", "メインクエスト", "転職クエスト", "ペットクエスト", "デイリークエスト", "イベントクエスト"].includes(category)) groups.add("quest");
+    if (category === "ダンジョン・ボス") groups.add("dungeon");
+
     return [...groups];
   }
 
