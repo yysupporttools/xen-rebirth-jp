@@ -63,6 +63,7 @@
   let routeCurrentMap="";
   let routeCurrentSource="";
   let routeCurrentConfidence=0;
+  let currentRoutePlan=null;
   const LOCAL_MAP_IMAGE_INTERVAL_MS=1300;
   const CENTER_MAP_BURST_COOLDOWN_MS=5000;
   const contributorId=(function(){
@@ -861,7 +862,13 @@
     saveLocalMapState();
     const manual=$("route-current-manual");
     if(manual&&Array.from(manual.options).some(function(o){return o.value===canonical;})) manual.value=canonical;
+    const mapSelect=$("map-db-select");
+    if(mapSelect&&gameMaps.length){
+      const match=gameMaps.find(function(m){return canonicalRouteMapName(m.map_name)===canonical;});
+      if(match) mapSelect.value=match.id;
+    }
     renderRoutePlanner();
+    renderMapDatabase();
     return true;
   }
 
@@ -869,13 +876,14 @@
     const data=routeData();
     const names=(data.nodes||[]).slice().sort(function(a,b){return a.localeCompare(b,"en");});
     const dest=$("route-destination");
+    const destList=$("route-destination-list");
     const manual=$("route-current-manual");
-    if(dest){
+    if(dest&&destList){
       const previous=dest.value||localStorage.getItem(ROUTE_DESTINATION_KEY)||"";
-      dest.innerHTML='<option value="">目的地を選択</option>'+names.map(function(name){
-        return '<option value="'+esc(name)+'">'+esc(name)+'</option>';
+      destList.innerHTML=names.map(function(name){
+        return '<option value="'+esc(name)+'"></option>';
       }).join("");
-      if(names.includes(previous)) dest.value=previous;
+      if(previous) dest.value=previous;
     }
     if(manual){
       const previous=routeCurrentMap;
@@ -942,17 +950,21 @@
         : "拡大マップ画像または中央のマップ名をローカルで待機中";
     }
 
-    const destination=$("route-destination")?$("route-destination").value:"";
-    if(!destination){
+    const destinationRaw=$("route-destination")?$("route-destination").value:"";
+    const destination=canonicalRouteMapName(destinationRaw);
+    currentRoutePlan=null;
+    if(!destinationRaw){
       nextEl.textContent="目的地を選択してください";
       pathEl.innerHTML="";
       if(statusEl) statusEl.textContent="現在地認識はOpenAI APIを使わず、端末内の画像照合とOCRで行います。";
+      renderRouteExitArrow();
       return;
     }
     if(!routeCurrentMap){
       nextEl.textContent="現在地を認識中…";
       pathEl.innerHTML="";
       if(statusEl) statusEl.textContent="拡大マップを開くか、マップ移動時に中央へ表示されるマップ名を待っています。";
+      renderRouteExitArrow();
       return;
     }
 
@@ -968,9 +980,11 @@
       nextEl.textContent="ルート未登録";
       pathEl.innerHTML='<span class="route-warning">'+esc(routeCurrentMap)+' から '+esc(destination)+' までの接続データがまだありません。</span>';
       if(statusEl) statusEl.textContent="現在地の認識自体は継続します。ルート接続データは今後追加できます。";
+      renderRouteExitArrow();
       return;
     }
 
+    currentRoutePlan=route;
     if(route.path.length===1){
       nextEl.textContent="目的地に到着しています";
     }else{
@@ -987,6 +1001,7 @@
         ?"入力Lvでは通れない区間があります。表示経路のLv条件を確認してください。"
         :"あと "+Math.max(0,route.path.length-1)+" マップ / 次は「"+(route.path[1]||destination)+"」です。";
     }
+    renderRouteExitArrow();
   }
 
   function visualSignatureFromSource(source,sx,sy,sw,sh){
@@ -2110,6 +2125,74 @@
     prepareLocalMapSignatures();
   }
 
+  function routeDirectionPoint(direction){
+    const points={
+      top:{x:500,y:70},
+      right:{x:930,y:500},
+      bottom:{x:500,y:930},
+      left:{x:70,y:500}
+    };
+    return points[direction]||{x:500,y:500};
+  }
+
+  function renderRouteExitArrow(){
+    const canvas=$("map-db-canvas");
+    const select=$("map-db-select");
+    if(!canvas||!select) return;
+    canvas.querySelectorAll(".route-exit-arrow").forEach(function(el){el.remove();});
+    if(!currentRoutePlan||currentRoutePlan.path.length<2||!routeCurrentMap) return;
+
+    const shown=gameMaps.find(function(m){return m.id===select.value;});
+    if(!shown||canonicalRouteMapName(shown.map_name)!==routeCurrentMap) return;
+
+    const next=currentRoutePlan.path[1];
+    const edge=currentRoutePlan.edges[0]||null;
+    const rows=mapNpcs.filter(function(n){return n.map_id===shown.id;});
+    let hints=[next];
+    let direction="";
+    if(edge){
+      if(edge.a===routeCurrentMap){
+        hints=hints.concat(Array.isArray(edge.exitA)?edge.exitA:[]);
+        direction=edge.dirA||"";
+      }else if(edge.b===routeCurrentMap){
+        hints=hints.concat(Array.isArray(edge.exitB)?edge.exitB:[]);
+        direction=edge.dirB||"";
+      }
+    }
+
+    let best=null;
+    rows.forEach(function(row){
+      hints.forEach(function(hint){
+        const score=Math.max(
+          mapKey(row.npc_name)===mapKey(hint)?1:0,
+          bigramDice(row.npc_name||"",hint||"")
+        );
+        if(!best||score>best.score) best={row:row,score:score};
+      });
+    });
+
+    let x,y,exact=false;
+    if(best&&best.score>=0.67){
+      x=Math.max(0,Math.min(1000,Number(best.row.x_norm)||0));
+      y=Math.max(0,Math.min(1000,Number(best.row.y_norm)||0));
+      exact=true;
+    }else{
+      const point=routeDirectionPoint(direction);
+      x=point.x;y=point.y;
+    }
+
+    const angle=Math.atan2(y-500,x-500)*180/Math.PI;
+    const left=x/10,top=y/10;
+    const arrow=document.createElement("div");
+    arrow.className="route-exit-arrow"+(exact?" is-exact":" is-direction");
+    arrow.style.left=left+"%";
+    arrow.style.top=top+"%";
+    arrow.innerHTML='<span class="route-exit-arrow-icon" style="transform:rotate('+angle+'deg)">➜</span>'+
+      '<strong>次：'+esc(next)+'</strong>'+
+      (exact?'<small>出口候補を検出</small>':'<small>進行方向の目安</small>');
+    canvas.appendChild(arrow);
+  }
+
   function renderMapDatabase(){
     const select=$("map-db-select");
     const canvas=$("map-db-canvas");
@@ -2141,6 +2224,7 @@
         '<span></span><b>'+esc(n.npc_name)+'</b>'+
       '</button>';
     }).join("");
+    renderRouteExitArrow();
 
     list.innerHTML=rows.map(function(n){
       return '<button type="button" data-map-npc="'+esc(n.npc_name)+'">'+
@@ -2376,7 +2460,12 @@
     }
   }
 
+  $("route-destination").addEventListener("input",function(){
+    renderRoutePlanner();
+  });
   $("route-destination").addEventListener("change",function(){
+    const canonical=canonicalRouteMapName(this.value);
+    if((routeData().nodes||[]).includes(canonical)) this.value=canonical;
     try{localStorage.setItem(ROUTE_DESTINATION_KEY,this.value||"");}catch(_){}
     renderRoutePlanner();
     if(this.value&&stream) scheduleCenterMapOcrBurst();
