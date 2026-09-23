@@ -59,6 +59,9 @@
   let centerTransitionPendingAt=0;
   let centerTransitionStable=0;
   let centerOcrBusy=false;
+  let expandedMapOcrBusy=false;
+  let lastExpandedMapOcrAt=0;
+  let lastLocalMapBest=null;
   let localMapMatchCandidate={name:"",hits:0,at:0};
   let routeCurrentMap="";
   let routeCurrentSource="";
@@ -1074,29 +1077,46 @@
     }
   }
 
-  function currentExpandedMapSignature(){
+  function currentExpandedMapSignatures(){
     const video=getCaptureVideo();
-    if(!stream||!video.videoWidth||video.readyState<2) return "";
+    if(!stream||!video.videoWidth||video.readyState<2) return [];
     const w=video.videoWidth,h=video.videoHeight;
-    return visualSignatureFromSource(video,w*0.42,0,w*0.58,h*0.76);
+    // Actual expanded-map observations are normally in the far-right ~22-27%
+    // of the game window. Try several nearby crops because aspect ratio and UI
+    // scaling move the panel a little.
+    const regions=[
+      [0.72,0.00,0.28,0.50],
+      [0.735,0.00,0.265,0.49],
+      [0.755,0.00,0.245,0.48],
+      [0.70,0.00,0.30,0.53],
+      [0.74,0.01,0.26,0.46]
+    ];
+    return regions.map(function(r){
+      return visualSignatureFromSource(video,w*r[0],h*r[1],w*r[2],h*r[3]);
+    }).filter(Boolean);
   }
 
   async function localExpandedMapMatchTick(force){
     const now=Date.now();
-    if(!force&&now-lastLocalMapImageAt<LOCAL_MAP_IMAGE_INTERVAL_MS) return;
+    if(!force&&now-lastLocalMapImageAt<LOCAL_MAP_IMAGE_INTERVAL_MS) return false;
     lastLocalMapImageAt=now;
     if(!localMapSignatures.length){
-      prepareLocalMapSignatures();
-      return;
+      await prepareLocalMapSignatures();
+      if(!localMapSignatures.length) return false;
     }
-    const sig=currentExpandedMapSignature();
-    if(!sig) return;
+    const sigs=currentExpandedMapSignatures();
+    if(!sigs.length) return false;
     const ranked=localMapSignatures.map(function(item){
-      return {name:item.map_name,distance:visualSignatureDistance(sig,item.bits)};
+      let distance=1;
+      sigs.forEach(function(sig){
+        distance=Math.min(distance,visualSignatureDistance(sig,item.bits));
+      });
+      return {name:item.map_name,distance:distance};
     }).sort(function(a,b){return a.distance-b.distance;});
     const best=ranked[0],second=ranked[1];
-    if(!best||best.distance>0.245) return;
-    if(second&&second.distance-best.distance<0.018) return;
+    lastLocalMapBest=best||null;
+    if(!best||best.distance>0.34) return false;
+    if(second&&second.distance-best.distance<0.012&&best.distance>0.22) return false;
 
     if(localMapMatchCandidate.name===best.name&&now-localMapMatchCandidate.at<5000){
       localMapMatchCandidate.hits++;
@@ -1104,8 +1124,65 @@
       localMapMatchCandidate={name:best.name,hits:1,at:now};
     }
     localMapMatchCandidate.at=now;
-    if(localMapMatchCandidate.hits>=2){
-      setLocalCurrentMap(best.name,"ローカル画像照合",Math.round((1-best.distance)*100));
+    if(force||localMapMatchCandidate.hits>=2){
+      setLocalCurrentMap(best.name,"ローカル拡大マップ照合",Math.round((1-best.distance)*100),!!force);
+      return true;
+    }
+    return false;
+  }
+
+  function expandedMapTitleCanvas(){
+    const video=getCaptureVideo();
+    if(!stream||!video.videoWidth||video.readyState<2) return null;
+    const vw=video.videoWidth,vh=video.videoHeight;
+    // Crop the title/header portion of the far-right expanded map panel.
+    const sx=vw*0.70, sy=0, sw=vw*0.30, sh=vh*0.18;
+    const canvas=document.createElement("canvas");
+    canvas.width=1000;canvas.height=260;
+    const ctx=canvas.getContext("2d",{willReadFrequently:true});
+    ctx.drawImage(video,sx,sy,sw,sh,0,0,canvas.width,canvas.height);
+    const image=ctx.getImageData(0,0,canvas.width,canvas.height);
+    let min=255,max=0;
+    for(let i=0;i<image.data.length;i+=4){
+      const g=image.data[i]*0.299+image.data[i+1]*0.587+image.data[i+2]*0.114;
+      if(g<min) min=g;
+      if(g>max) max=g;
+    }
+    const span=Math.max(28,max-min);
+    for(let i=0;i<image.data.length;i+=4){
+      let g=image.data[i]*0.299+image.data[i+1]*0.587+image.data[i+2]*0.114;
+      g=(g-min)*255/span;
+      g=g>150?255:(g<75?0:g);
+      image.data[i]=image.data[i+1]=image.data[i+2]=g;
+    }
+    ctx.putImageData(image,0,0);
+    return canvas;
+  }
+
+  async function runExpandedMapTitleOcrSnapshot(force){
+    const now=Date.now();
+    if(expandedMapOcrBusy||!window.Tesseract||!stream) return false;
+    if(!force&&now-lastExpandedMapOcrAt<4500) return false;
+    const canvas=expandedMapTitleCanvas();
+    if(!canvas) return false;
+    expandedMapOcrBusy=true;
+    lastExpandedMapOcrAt=now;
+    try{
+      const result=await window.Tesseract.recognize(canvas,"eng",{logger:function(){}});
+      const text=result&&result.data?String(result.data.text||""):"";
+      const best=bestMapNameFromOcr(text);
+      if(best){
+        const ocrConfidence=result&&result.data&&Number.isFinite(Number(result.data.confidence))?Number(result.data.confidence):75;
+        const combined=Math.round(Math.min(99,Math.max(72,best.score*78+ocrConfidence*0.22)));
+        setLocalCurrentMap(best.name,"拡大マップ名OCR",combined,true);
+        setStatus("route-status","拡大マップ上のマップ名をローカルOCRで認識しました。OpenAI APIは使用していません。");
+        return true;
+      }
+      return false;
+    }catch(_){
+      return false;
+    }finally{
+      expandedMapOcrBusy=false;
     }
   }
 
@@ -1207,6 +1284,7 @@
   function localMapTick(){
     if(!localMapActive||!stream) return;
     localExpandedMapMatchTick(false);
+    if(!routeCurrentMap) runExpandedMapTitleOcrSnapshot(false);
 
     const sample=centerTitleSample();
     if(!sample) return;
@@ -1244,10 +1322,13 @@
   function startLocalMapMonitor(){
     localMapActive=true;
     lastCenterSample=centerTitleSample();
-    prepareLocalMapSignatures();
+    prepareLocalMapSignatures().then(function(){
+      localExpandedMapMatchTick(true).then(function(ok){
+        if(!ok) runExpandedMapTitleOcrSnapshot(true);
+      });
+    });
     if(localMapTimer) clearInterval(localMapTimer);
     localMapTimer=setInterval(localMapTick,450);
-    localExpandedMapMatchTick(true);
     renderRoutePlanner();
   }
 
@@ -1258,14 +1339,26 @@
     centerOcrBusy=false;
   }
 
-  function localMapRescan(){
+  async function localMapRescan(){
     if(!stream){
       setStatus("route-status","先に画面共有を開始してください。");
       return;
     }
-    localExpandedMapMatchTick(true);
-    runCenterMapOcrSnapshot();
-    setStatus("route-status","ローカル再認識中です。OpenAI APIは使用しません。");
+    setStatus("route-status","ローカル再認識中… 登録済みマップ画像とマップ名OCRを確認しています。");
+    const matched=await localExpandedMapMatchTick(true);
+    if(matched){
+      setStatus("route-status","登録済み拡大マップ画像とのローカル照合で現在地を認識しました。OpenAI APIは使用していません。");
+      return;
+    }
+    const titleMatched=await runExpandedMapTitleOcrSnapshot(true);
+    if(titleMatched) return;
+    await runCenterMapOcrSnapshot();
+    const best=lastLocalMapBest;
+    setStatus("route-status",
+      "ローカル再認識で確定できませんでした。"+
+      (best?" 画像の最有力候補："+best.name+"（類似 "+Math.round((1-best.distance)*100)+"%）。":"")+
+      " 拡大マップを開いた状態でもう一度押してください。"
+    );
   }
 
   function unitSimilarity(a,b){
