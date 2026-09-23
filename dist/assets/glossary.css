@@ -1675,3 +1675,21 @@ label > span {
   max-height:180px;
   object-fit:contain;
 }
+
+/* World map / dungeon map galleries */
+.map-image-grid{
+  grid-template-columns:repeat(2,minmax(0,1fr));
+  gap:14px;
+}
+.map-image-grid .reference-image img{
+  height:260px;
+  background:#eef3f6;
+}
+.map-image-grid .reference-image span{
+  font-size:12px;
+  font-weight:700;
+}
+@media(max-width:760px){
+  .map-image-grid{grid-template-columns:1fr}
+  .map-image-grid .reference-image img{height:auto;max-height:420px}
+}
