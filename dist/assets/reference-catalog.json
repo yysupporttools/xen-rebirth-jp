@@ -3809,6 +3809,707 @@
           "url": "https://www.xenrebirth.com/lexicon/index.php?entry/159-guild-dungeon-token-rewards/"
         }
       ]
+    },
+    {
+      "slug": "token-exchange-tramis-mansion",
+      "name_en": "Token Exchange - Tramis Mansion",
+      "name_ja": "トークン交換",
+      "source_url": "https://www.xenrebirth.com/lexicon/index.php?entry/19-token-exchange-tramis-mansion/",
+      "_section": "トークン",
+      "_blocks": [
+        {
+          "heading": "概要",
+          "text": "ダンジョン・ボス・ギルドダンジョンなどで入手した各種トークンを、装備・ペット・消耗品・ラッキーボールなどへ交換できるNPCです。交換ラインナップはMinion / Amber / Gold / Platinum / Obsidian / Guild Tokenごとに分かれています。"
+        },
+        {
+          "heading": "NPC情報",
+          "text": "場所：Tramis Mansion（トラミスマンション） / NPC名：Token Exchange。所持トークンに対応した交換メニューを開き、必要数を支払ってアイテムと交換します。"
+        },
+        {
+          "heading": "Minion Token Exchange",
+          "text": "Minion Tokenで便利アイテム・回復アイテムなどを交換できます。Priceは必要なMinion Token数です。",
+          "images": [
+            {
+              "label": "Minion Token",
+              "url": "https://www.xenrebirth.com/index.php?attachment/1798-minion-token-png/"
+            },
+            {
+              "label": "Multi-Location Loader",
+              "url": "https://www.xenrebirth.com/index.php?attachment/1689-multi-location-loader-png/"
+            },
+            {
+              "label": "Anti-Death Penalty Pendant",
+              "url": "https://www.xenrebirth.com/index.php?attachment/1690-anti-death-penalty-pendant-png/"
+            },
+            {
+              "label": "Divine Protection of Jureah",
+              "url": "https://www.xenrebirth.com/index.php?attachment/1691-divine-protection-of-jureah-png/"
+            },
+            {
+              "label": "Large HP Potion",
+              "url": "https://www.xenrebirth.com/index.php?attachment/1692-large-hp-potion-png/"
+            },
+            {
+              "label": "Large MP Potion",
+              "url": "https://www.xenrebirth.com/index.php?attachment/1693-large-mp-potion-png/"
+            },
+            {
+              "label": "Large Elixir",
+              "url": "https://www.xenrebirth.com/index.php?attachment/1694-large-elixir-png/"
+            },
+            {
+              "label": "Mystic Flask of Health",
+              "url": "https://www.xenrebirth.com/index.php?attachment/1695-mystic-flask-of-health-png/"
+            },
+            {
+              "label": "Mystic Flask of Magic",
+              "url": "https://www.xenrebirth.com/index.php?attachment/1696-mystic-flask-of-magic-png/"
+            }
+          ]
+        },
+        {
+          "heading": "Amber Token Exchange",
+          "text": "Amber TokenではEXP補正付き装備、ラッキーボール、リング、騎乗ペットなどを交換できます。",
+          "images": [
+            {
+              "label": "Amber Token",
+              "url": "https://www.xenrebirth.com/index.php?attachment/1796-amber-token-png/"
+            },
+            {
+              "label": "Boost Bag",
+              "url": "https://www.xenrebirth.com/index.php?attachment/1700-boost-bag-png/"
+            },
+            {
+              "label": "Bear Boost Head",
+              "url": "https://www.xenrebirth.com/index.php?attachment/1698-bear-boost-head-png/"
+            },
+            {
+              "label": "Bear Boost Body",
+              "url": "https://www.xenrebirth.com/index.php?attachment/1697-bear-boost-body-png/"
+            },
+            {
+              "label": "Boost Goggles",
+              "url": "https://www.xenrebirth.com/index.php?attachment/1701-boost-goggles-png/"
+            },
+            {
+              "label": "Blue Lucky Ball",
+              "url": "https://www.xenrebirth.com/index.php?attachment/1699-blue-lucky-ball-png/"
+            },
+            {
+              "label": "Red Lucky Ball",
+              "url": "https://www.xenrebirth.com/index.php?attachment/1703-red-lucky-ball-png/"
+            },
+            {
+              "label": "Tree Color Ring",
+              "url": "https://www.xenrebirth.com/index.php?attachment/1704-tree-color-ring-png/"
+            },
+            {
+              "label": "Orange Broom",
+              "url": "https://www.xenrebirth.com/index.php?attachment/1702-orange-broom-png/"
+            }
+          ]
+        },
+        {
+          "heading": "Gold Token Exchange",
+          "text": "Gold Tokenではアクセサリー、時間制バフ、回復アイテム、帽子などを交換できます。",
+          "images": [
+            {
+              "label": "Gold Token",
+              "url": "https://www.xenrebirth.com/index.php?attachment/1797-gold-token-png/"
+            },
+            {
+              "label": "Venomous Snake's Fang",
+              "url": "https://www.xenrebirth.com/index.php?attachment/1709-venomous-snake-s-fang-png/"
+            },
+            {
+              "label": "Ring of Thanks",
+              "url": "https://www.xenrebirth.com/index.php?attachment/1708-ring-of-thanks-png/"
+            },
+            {
+              "label": "Wolf Canine",
+              "url": "https://www.xenrebirth.com/index.php?attachment/1710-wolf-canine-png/"
+            },
+            {
+              "label": "Priest's Pearl",
+              "url": "https://www.xenrebirth.com/index.php?attachment/1707-priest-s-pearl-png/"
+            },
+            {
+              "label": "Lovely Chocolate",
+              "url": "https://www.xenrebirth.com/index.php?attachment/1706-lovely-chocolate-png/"
+            },
+            {
+              "label": "Chocolate Hat",
+              "url": "https://www.xenrebirth.com/index.php?attachment/1705-chocolate-hat-png/"
+            }
+          ]
+        },
+        {
+          "heading": "Platinum Token Exchange",
+          "text": "Platinum Tokenでは騎乗ペット、羽装備、Ring of Compensationなどを交換できます。",
+          "images": [
+            {
+              "label": "Platinum Token",
+              "url": "https://www.xenrebirth.com/index.php?attachment/1800-platinum-token-png/"
+            },
+            {
+              "label": "Husky",
+              "url": "https://www.xenrebirth.com/index.php?attachment/1718-husky-png/"
+            },
+            {
+              "label": "Camel",
+              "url": "https://www.xenrebirth.com/index.php?attachment/1716-camel-png/"
+            },
+            {
+              "label": "Bull",
+              "url": "https://www.xenrebirth.com/index.php?attachment/1712-bull-png/"
+            },
+            {
+              "label": "Afriphant",
+              "url": "https://www.xenrebirth.com/index.php?attachment/1711-afriphant-png/"
+            },
+            {
+              "label": "Fawn",
+              "url": "https://www.xenrebirth.com/index.php?attachment/1717-fawn-png/"
+            },
+            {
+              "label": "Robo Wings",
+              "url": "https://www.xenrebirth.com/index.php?attachment/1720-robo-wings-png/"
+            },
+            {
+              "label": "Butterfly Wings Y",
+              "url": "https://www.xenrebirth.com/index.php?attachment/1715-butterfly-wings-y-png/"
+            },
+            {
+              "label": "Butterfly Wings B",
+              "url": "https://www.xenrebirth.com/index.php?attachment/1713-butterfly-wings-b-png/"
+            },
+            {
+              "label": "Butterfly Wings P",
+              "url": "https://www.xenrebirth.com/index.php?attachment/1714-butterfly-wings-p-png/"
+            },
+            {
+              "label": "Ring of Compensation",
+              "url": "https://www.xenrebirth.com/index.php?attachment/1719-ring-of-compensation-png/"
+            }
+          ]
+        },
+        {
+          "heading": "Obsidian Token Exchange",
+          "text": "Obsidian Tokenでは上位ペット、Soul系バフ、Crystal Potion、Multi-Location Load v2、Dark Lucky Ballなどを交換できます。",
+          "images": [
+            {
+              "label": "Obsidian Token",
+              "url": "https://www.xenrebirth.com/index.php?attachment/1799-obsidian-token-png/"
+            },
+            {
+              "label": "Ark Golem",
+              "url": "https://www.xenrebirth.com/index.php?attachment/1721-ark-golem-png/"
+            },
+            {
+              "label": "Spritz R",
+              "url": "https://www.xenrebirth.com/index.php?attachment/1726-spritz-r-png/"
+            },
+            {
+              "label": "KungFu Lion",
+              "url": "https://www.xenrebirth.com/index.php?attachment/1725-kungfu-lion-png/"
+            },
+            {
+              "label": "Spritz",
+              "url": "https://www.xenrebirth.com/index.php?attachment/1727-spritz-png/"
+            },
+            {
+              "label": "Ifrixion",
+              "url": "https://www.xenrebirth.com/index.php?attachment/1724-ifrixion-png/"
+            },
+            {
+              "label": "Top Physical Attack Soul",
+              "url": "https://www.xenrebirth.com/index.php?attachment/1729-top-physical-attack-soul-png/"
+            },
+            {
+              "label": "Top Magical Attack Soul",
+              "url": "https://www.xenrebirth.com/index.php?attachment/1728-top-magical-attack-soul-png/"
+            },
+            {
+              "label": "Top Physical Defense Soul",
+              "url": "https://www.xenrebirth.com/index.php?attachment/1730-top-physical-defense-soul-png/"
+            },
+            {
+              "label": "Crystal HP Potion",
+              "url": "https://www.xenrebirth.com/index.php?attachment/1722-crystal-hp-potion-png/"
+            },
+            {
+              "label": "Crystal MP Potion",
+              "url": "https://www.xenrebirth.com/index.php?attachment/1723-crystal-mp-potion-png/"
+            },
+            {
+              "label": "Multi-Location Load v2",
+              "url": "https://www.xenrebirth.com/index.php?attachment/7183-screenshot-2021-01-08-202308-jpg/"
+            },
+            {
+              "label": "Dark Lucky Ball",
+              "url": "https://www.xenrebirth.com/index.php?attachment/7182-screenshot-2021-01-08-202323-jpg/"
+            },
+            {
+              "label": "Ring of Compensation",
+              "url": "https://www.xenrebirth.com/index.php?attachment/1719-ring-of-compensation-png/"
+            }
+          ]
+        },
+        {
+          "heading": "Guild Token Exchange",
+          "text": "Guild TokenではLucky Ball、回復アイテム、各種バックパック、ペット・騎乗ペットなどを交換できます。公式ページで画像が掲載されているものは下に引き継いでいます。",
+          "images": [
+            {
+              "label": "Yellow Pig Backpack",
+              "url": "https://www.xenrebirth.com/index.php?attachment/5333-yellow-pig-backpack-png/"
+            },
+            {
+              "label": "Red Pig Backpack",
+              "url": "https://www.xenrebirth.com/index.php?attachment/5705-red-pig-backpack-png/"
+            },
+            {
+              "label": "Blue Pig Backpack",
+              "url": "https://www.xenrebirth.com/index.php?attachment/2287-blue-pig-backpack-png/"
+            },
+            {
+              "label": "Wooden Horse",
+              "url": "https://www.xenrebirth.com/index.php?attachment/10173-wooden-horse-png/"
+            },
+            {
+              "label": "Basilisk",
+              "url": "https://www.xenrebirth.com/index.php?attachment/10154-basilisk-png/"
+            }
+          ]
+        }
+      ],
+      "_tables": [
+        {
+          "caption": "Minion Token Exchange",
+          "headers": [
+            "Item",
+            "Stats / 説明",
+            "Quantity",
+            "Price"
+          ],
+          "rows": [
+            [
+              "Multi-Location Loader",
+              "最後に保存した3地点へワープ可能",
+              "1",
+              "2"
+            ],
+            [
+              "Anti-Death Penalty Pendant",
+              "EXPロストを防止するペンダント（7%）",
+              "1",
+              "5"
+            ],
+            [
+              "Divine Protection of Jureah",
+              "自己復活アイテム",
+              "1",
+              "5"
+            ],
+            [
+              "Large HP Potion",
+              "+300 HP",
+              "5",
+              "2"
+            ],
+            [
+              "Large MP Potion",
+              "+300 MP",
+              "5",
+              "2"
+            ],
+            [
+              "Large Elixir",
+              "+300 HP / +300 MP",
+              "5",
+              "4"
+            ],
+            [
+              "Mystic Flask of Health",
+              "HP全回復",
+              "5",
+              "10"
+            ],
+            [
+              "Mystic Flask of Magic",
+              "MP全回復",
+              "5",
+              "10"
+            ]
+          ]
+        },
+        {
+          "caption": "Amber Token Exchange",
+          "headers": [
+            "Item",
+            "Stats / 説明",
+            "Quantity",
+            "Price"
+          ],
+          "rows": [
+            [
+              "Boost Bag",
+              "+500 WT / +5% EXP",
+              "1",
+              "30"
+            ],
+            [
+              "Bear Boost Head",
+              "+16 Def / +5% EXP",
+              "1",
+              "25"
+            ],
+            [
+              "Bear Boost Body",
+              "+18 Def / +5% EXP",
+              "1",
+              "25"
+            ],
+            [
+              "Boost Goggles",
+              "+2 Crit / +5% EXP",
+              "1",
+              "20"
+            ],
+            [
+              "Blue Lucky Ball",
+              "Lucky Ball Items",
+              "1",
+              "4"
+            ],
+            [
+              "Red Lucky Ball",
+              "Lucky Ball Items",
+              "1",
+              "4"
+            ],
+            [
+              "Tree Color Ring",
+              "+50 WT / +1 Movement Speed",
+              "1",
+              "15"
+            ],
+            [
+              "Orange Broom",
+              "Pets & Mounts",
+              "1",
+              "75"
+            ]
+          ]
+        },
+        {
+          "caption": "Gold Token Exchange",
+          "headers": [
+            "Item",
+            "Stats / 説明",
+            "Quantity",
+            "Price"
+          ],
+          "rows": [
+            [
+              "Venomous Snake's Fang",
+              "+1 POW / +5 AGI / +2 MEN / +50 HP / +30 MP / +10 Attack / -0.1s Attack Rate",
+              "1",
+              "85"
+            ],
+            [
+              "Ring of Thanks",
+              "+2 INT/MEN/WIS / +50 HP/MP / +10 Magic",
+              "1",
+              "70"
+            ],
+            [
+              "Wolf Canine",
+              "+3 POW / +1 STA/AGI / +50 HP / +10 MP / +10 Attack",
+              "1",
+              "70"
+            ],
+            [
+              "Priest's Pearl",
+              "+15 INT",
+              "1",
+              "85"
+            ],
+            [
+              "Lovely Chocolate",
+              "+2 Movement Speed（1時間）",
+              "2",
+              "10"
+            ],
+            [
+              "Heart Chocolate",
+              "+10,000 HP",
+              "2",
+              "10"
+            ],
+            [
+              "Chocolate Hat (HP)",
+              "+18 Def / +100 HP",
+              "1",
+              "30"
+            ],
+            [
+              "Chocolate Hat (MP)",
+              "+18 Def / +100 MP",
+              "1",
+              "30"
+            ]
+          ]
+        },
+        {
+          "caption": "Platinum Token Exchange",
+          "headers": [
+            "Item",
+            "Stats / 説明",
+            "Quantity",
+            "Price"
+          ],
+          "rows": [
+            [
+              "Husky",
+              "Pets & Mounts",
+              "1",
+              "350"
+            ],
+            [
+              "Camel",
+              "Pets & Mounts",
+              "1",
+              "350"
+            ],
+            [
+              "Bull",
+              "Pets & Mounts",
+              "1",
+              "350"
+            ],
+            [
+              "Afriphant",
+              "Pets & Mounts",
+              "1",
+              "350"
+            ],
+            [
+              "Fawn",
+              "Pets & Mounts",
+              "1",
+              "350"
+            ],
+            [
+              "Robo Wings",
+              "Alchemist / Blacksmith Enhancement Guide",
+              "1",
+              "70"
+            ],
+            [
+              "Butterfly Wings Y",
+              "Alchemist / Blacksmith Enhancement Guide",
+              "1",
+              "70"
+            ],
+            [
+              "Butterfly Wings B",
+              "Alchemist / Blacksmith Enhancement Guide",
+              "1",
+              "70"
+            ],
+            [
+              "Butterfly Wings P",
+              "Alchemist / Blacksmith Enhancement Guide",
+              "1",
+              "70"
+            ],
+            [
+              "Ring of Compensation",
+              "+1 All Main Stats / +50 HP/MP / +15 Attack/Magic",
+              "1",
+              "80"
+            ]
+          ]
+        },
+        {
+          "caption": "Obsidian Token Exchange",
+          "headers": [
+            "Item",
+            "Stats / 説明",
+            "Quantity",
+            "Price"
+          ],
+          "rows": [
+            [
+              "Ark Golem",
+              "Pets & Mounts",
+              "1",
+              "500"
+            ],
+            [
+              "Spritz R",
+              "Pets & Mounts",
+              "1",
+              "500"
+            ],
+            [
+              "KungFu Lion",
+              "Pets & Mounts",
+              "1",
+              "500"
+            ],
+            [
+              "Spritz",
+              "Pets & Mounts",
+              "1",
+              "500"
+            ],
+            [
+              "Ifrixion",
+              "Pets & Mounts",
+              "1",
+              "500"
+            ],
+            [
+              "Top Physical Attack Soul (30m)",
+              "+20 Attack",
+              "1",
+              "5"
+            ],
+            [
+              "Top Magical Attack Soul (30m)",
+              "+20 Magic",
+              "1",
+              "5"
+            ],
+            [
+              "Top Physical Defense Soul (30m)",
+              "+10 Defense",
+              "1",
+              "8"
+            ],
+            [
+              "Crystal HP Potion",
+              "+450 HP",
+              "10",
+              "1"
+            ],
+            [
+              "Crystal MP Potion",
+              "+450 MP",
+              "10",
+              "1"
+            ],
+            [
+              "Multi-Location Load v2",
+              "最後に保存した6地点のいずれかへワープ可能",
+              "10",
+              "1"
+            ],
+            [
+              "Dark Lucky Ball",
+              "Lucky Ball Items List",
+              "5",
+              "1"
+            ],
+            [
+              "Ring of Compensation",
+              "+1 All Main Stats / +50 HP/MP / +15 Attack/Magic",
+              "1",
+              "60"
+            ]
+          ]
+        },
+        {
+          "caption": "Guild Token Exchange",
+          "headers": [
+            "Item",
+            "Stats / 説明",
+            "Quantity",
+            "Price"
+          ],
+          "rows": [
+            [
+              "Korean Lucky Ball",
+              "Lucky Ball Item List",
+              "3",
+              "2"
+            ],
+            [
+              "Fantastic Slush",
+              "+300 MP",
+              "5",
+              "2"
+            ],
+            [
+              "Yellow Pig Backpack",
+              "Max HP +50 / Max MP +50 / Max Weight +500",
+              "1",
+              "25"
+            ],
+            [
+              "Red Pig Backpack",
+              "Max MP +100 / Max Weight +500",
+              "1",
+              "25"
+            ],
+            [
+              "Blue Pig Backpack",
+              "Max HP +100 / Max Weight +500",
+              "1",
+              "25"
+            ],
+            [
+              "Wooden Horse",
+              "POW +5 / MEN +5 / Max Weight +100 / Movement Rate +2",
+              "1",
+              "35"
+            ],
+            [
+              "Raccoon's Wisdom",
+              "POW +1 / INT +3 / AGI +1 / WIS +2 / Max HP +10 / Max MP +50 / Magic +5 / DEF +1",
+              "1",
+              "30"
+            ],
+            [
+              "Agility of Snake",
+              "POW +1 / AGI +3 / MEN +1 / Max HP +30 / Max MP +10 / Attack +5 / Attack Rate -0.1s",
+              "1",
+              "30"
+            ],
+            [
+              "Basilisk",
+              "STA +10 / MEN +5 / Max WT +100 / Skill Critical +3 / Movement Rate +2",
+              "1",
+              "300"
+            ]
+          ]
+        }
+      ],
+      "_shortcuts": [
+        {
+          "label": "Blue Lucky Ball の詳細を見る",
+          "url": "#lucky-ball-blue-lucky-ball"
+        },
+        {
+          "label": "Red Lucky Ball の詳細を見る",
+          "url": "#lucky-ball-red-lucky-ball"
+        },
+        {
+          "label": "Dark Lucky Ball の詳細を見る",
+          "url": "#lucky-ball-dark-lucky-ball"
+        },
+        {
+          "label": "Korean Lucky Ball の詳細を見る",
+          "url": "#lucky-ball-korean-lucky-ball"
+        }
+      ],
+      "_links": [
+        {
+          "label": "公式Lexicon：Token Exchange - Tramis Mansion",
+          "url": "https://www.xenrebirth.com/lexicon/index.php?entry/19-token-exchange-tramis-mansion/"
+        }
+      ]
     }
   ]
 }
