@@ -44,6 +44,25 @@
   const AUTO_CHANGE_RATIO=0.018;
   const AUTO_STABLE_RATIO=0.012;
   const AUTO_MAX_PENDING_MS=12000;
+
+  // Local map navigation: no OpenAI API is used for current-location detection.
+  const LOCAL_MAP_STATE_KEY="xen-local-current-map-v1";
+  const LOCAL_MAP_SIGNATURES_KEY="xen-local-map-signatures-v1";
+  const ROUTE_DESTINATION_KEY="xen-route-destination-v1";
+  let localMapTimer=null;
+  let localMapActive=false;
+  let localMapSignatureLoading=false;
+  let localMapSignatures=[];
+  let lastLocalMapImageAt=0;
+  let lastCenterSample=null;
+  let lastCenterBurstAt=0;
+  let centerOcrBusy=false;
+  let localMapMatchCandidate={name:"",hits:0,at:0};
+  let routeCurrentMap="";
+  let routeCurrentSource="";
+  let routeCurrentConfidence=0;
+  const LOCAL_MAP_IMAGE_INTERVAL_MS=1300;
+  const CENTER_MAP_BURST_COOLDOWN_MS=5000;
   const contributorId=(function(){
     const key="xen-game-knowledge-contributor";
     let value=localStorage.getItem(key);
@@ -132,6 +151,7 @@
       if(track) track.addEventListener("ended",stopScreen);
       setStatus("capture-status","共有中です。ページ内で3.登録済み情報を見ている間も、裏側の専用映像から読み取りを継続します。");
       syncMiniCaptureStatus();
+      startLocalMapMonitor();
     }catch(err){
       setStatus("capture-status",err.name==="NotAllowedError"?"画面共有はキャンセルされました。":"画面共有を開始できませんでした："+err.message);
     }
@@ -139,6 +159,7 @@
 
   function stopScreen(){
     stopAutoMonitor(true);
+    stopLocalMapMonitor();
     if(stream) stream.getTracks().forEach(function(t){t.stop();});
     stream=null;
     $("screen-video").srcObject=null;
@@ -770,6 +791,442 @@
       if(n){common++;counts.set(g,n-1);}
     }
     return 2*common/((a.length-1)+(b.length-1));
+  }
+
+  function routeData(){
+    return window.XEN_WORLD_ROUTES||{nodes:[],edges:[],aliases:{}};
+  }
+
+  function mapKey(value){
+    return String(value||"").normalize("NFKC").toLowerCase()
+      .replace(/['’]/g,"")
+      .replace(/[^a-z0-9]+/g," ")
+      .trim();
+  }
+
+  function canonicalRouteMapName(value){
+    const raw=String(value||"").trim();
+    if(!raw) return "";
+    const data=routeData();
+    const key=mapKey(raw);
+    const alias=(data.aliases||{})[key];
+    if(alias) return alias;
+    const exact=(data.nodes||[]).find(function(name){return mapKey(name)===key;});
+    if(exact) return exact;
+
+    const candidates=Array.from(new Set(
+      (data.nodes||[]).concat(gameMaps.map(function(m){return m.map_name||"";})).filter(Boolean)
+    ));
+    let best=null,second=null;
+    candidates.forEach(function(name){
+      const score=bigramDice(raw,name);
+      const item={name:name,score:score};
+      if(!best||score>best.score){second=best;best=item;}
+      else if(!second||score>second.score) second=item;
+    });
+    if(best&&best.score>=0.74&&(!second||best.score-second.score>=0.035)) return best.name;
+    return raw;
+  }
+
+  function loadLocalMapState(){
+    try{
+      const saved=JSON.parse(localStorage.getItem(LOCAL_MAP_STATE_KEY)||"{}");
+      routeCurrentMap=canonicalRouteMapName(saved.map||"");
+      routeCurrentSource=String(saved.source||"");
+      routeCurrentConfidence=Number(saved.confidence||0);
+    }catch(_){}
+  }
+
+  function saveLocalMapState(){
+    try{
+      localStorage.setItem(LOCAL_MAP_STATE_KEY,JSON.stringify({
+        map:routeCurrentMap,
+        source:routeCurrentSource,
+        confidence:routeCurrentConfidence,
+        at:Date.now()
+      }));
+    }catch(_){}
+  }
+
+  function setLocalCurrentMap(name,source,confidence,force){
+    const canonical=canonicalRouteMapName(name);
+    if(!canonical) return false;
+    const conf=Math.max(0,Math.min(100,Math.round(Number(confidence)||0)));
+    if(!force&&routeCurrentMap&&canonical!==routeCurrentMap&&conf<72) return false;
+    routeCurrentMap=canonical;
+    routeCurrentSource=source||"ローカル認識";
+    routeCurrentConfidence=conf;
+    saveLocalMapState();
+    const manual=$("route-current-manual");
+    if(manual&&Array.from(manual.options).some(function(o){return o.value===canonical;})) manual.value=canonical;
+    renderRoutePlanner();
+    return true;
+  }
+
+  function refreshRouteDestinationOptions(){
+    const data=routeData();
+    const names=(data.nodes||[]).slice().sort(function(a,b){return a.localeCompare(b,"en");});
+    const dest=$("route-destination");
+    const manual=$("route-current-manual");
+    if(dest){
+      const previous=dest.value||localStorage.getItem(ROUTE_DESTINATION_KEY)||"";
+      dest.innerHTML='<option value="">目的地を選択</option>'+names.map(function(name){
+        return '<option value="'+esc(name)+'">'+esc(name)+'</option>';
+      }).join("");
+      if(names.includes(previous)) dest.value=previous;
+    }
+    if(manual){
+      const previous=routeCurrentMap;
+      manual.innerHTML='<option value="">自動認識</option>'+names.map(function(name){
+        return '<option value="'+esc(name)+'">'+esc(name)+'</option>';
+      }).join("");
+      if(names.includes(previous)) manual.value=previous;
+    }
+    renderRoutePlanner();
+  }
+
+  function worldRoute(from,to,level,ignoreLevel){
+    from=canonicalRouteMapName(from);
+    to=canonicalRouteMapName(to);
+    if(!from||!to) return null;
+    if(from===to) return {path:[from],edges:[]};
+    const data=routeData();
+    const graph=new Map();
+    (data.edges||[]).forEach(function(edge){
+      if(!ignoreLevel&&Number.isFinite(level)&&edge.minLevel&&level<Number(edge.minLevel)) return;
+      if(!graph.has(edge.a)) graph.set(edge.a,[]);
+      if(!graph.has(edge.b)) graph.set(edge.b,[]);
+      graph.get(edge.a).push({to:edge.b,edge:edge});
+      graph.get(edge.b).push({to:edge.a,edge:edge});
+    });
+    const queue=[from];
+    const prev=new Map();
+    prev.set(from,null);
+    while(queue.length){
+      const here=queue.shift();
+      if(here===to) break;
+      (graph.get(here)||[]).forEach(function(next){
+        if(prev.has(next.to)) return;
+        prev.set(next.to,{from:here,edge:next.edge});
+        queue.push(next.to);
+      });
+    }
+    if(!prev.has(to)) return null;
+    const path=[];
+    const used=[];
+    let cur=to;
+    while(cur){
+      path.unshift(cur);
+      const p=prev.get(cur);
+      if(!p) break;
+      used.unshift(p.edge);
+      cur=p.from;
+    }
+    return {path:path,edges:used};
+  }
+
+  function renderRoutePlanner(){
+    const currentEl=$("route-current-map");
+    const sourceEl=$("route-current-source");
+    const nextEl=$("route-next-map");
+    const pathEl=$("route-path");
+    const statusEl=$("route-status");
+    if(!currentEl||!nextEl||!pathEl) return;
+
+    currentEl.textContent=routeCurrentMap||"未認識";
+    if(sourceEl){
+      sourceEl.textContent=routeCurrentMap
+        ? (routeCurrentSource||"ローカル認識")+(routeCurrentConfidence?" / "+routeCurrentConfidence+"%":"")
+        : "拡大マップ画像または中央のマップ名をローカルで待機中";
+    }
+
+    const destination=$("route-destination")?$("route-destination").value:"";
+    if(!destination){
+      nextEl.textContent="目的地を選択してください";
+      pathEl.innerHTML="";
+      if(statusEl) statusEl.textContent="現在地認識はOpenAI APIを使わず、端末内の画像照合とOCRで行います。";
+      return;
+    }
+    if(!routeCurrentMap){
+      nextEl.textContent="現在地を認識中…";
+      pathEl.innerHTML="";
+      if(statusEl) statusEl.textContent="拡大マップを開くか、マップ移動時に中央へ表示されるマップ名を待っています。";
+      return;
+    }
+
+    const levelInput=$("route-level");
+    const level=levelInput&&levelInput.value!==""?Number(levelInput.value):NaN;
+    let route=worldRoute(routeCurrentMap,destination,level,false);
+    let restricted=false;
+    if(!route&&Number.isFinite(level)){
+      route=worldRoute(routeCurrentMap,destination,level,true);
+      restricted=!!route;
+    }
+    if(!route){
+      nextEl.textContent="ルート未登録";
+      pathEl.innerHTML='<span class="route-warning">'+esc(routeCurrentMap)+' から '+esc(destination)+' までの接続データがまだありません。</span>';
+      if(statusEl) statusEl.textContent="現在地の認識自体は継続します。ルート接続データは今後追加できます。";
+      return;
+    }
+
+    if(route.path.length===1){
+      nextEl.textContent="目的地に到着しています";
+    }else{
+      nextEl.textContent=route.path[1];
+    }
+    pathEl.innerHTML=route.path.map(function(name,i){
+      const edge=i>0?route.edges[i-1]:null;
+      const requirement=edge&&edge.minLevel?'<small>L'+esc(edge.minLevel)+'+</small>':(edge&&edge.note?'<small>'+esc(edge.note)+'</small>':"");
+      return '<span class="'+(i===0?"is-current":(i===route.path.length-1?"is-destination":""))+'">'+esc(name)+requirement+'</span>'+
+        (i<route.path.length-1?'<b>→</b>':"");
+    }).join("");
+    if(statusEl){
+      statusEl.textContent=restricted
+        ?"入力Lvでは通れない区間があります。表示経路のLv条件を確認してください。"
+        :"あと "+Math.max(0,route.path.length-1)+" マップ / 次は「"+(route.path[1]||destination)+"」です。";
+    }
+  }
+
+  function visualSignatureFromSource(source,sx,sy,sw,sh){
+    const w=33,h=24;
+    const canvas=document.createElement("canvas");
+    canvas.width=w;canvas.height=h;
+    const ctx=canvas.getContext("2d",{willReadFrequently:true});
+    ctx.drawImage(source,sx,sy,sw,sh,0,0,w,h);
+    const data=ctx.getImageData(0,0,w,h).data;
+    const gray=[];
+    for(let i=0;i<data.length;i+=4) gray.push(data[i]*0.299+data[i+1]*0.587+data[i+2]*0.114);
+    let bits="";
+    for(let y=0;y<h;y++){
+      for(let x=0;x<w-1;x++){
+        const i=y*w+x;
+        bits+=gray[i]>gray[i+1]?"1":"0";
+      }
+    }
+    for(let y=0;y<h-1;y++){
+      for(let x=0;x<w;x++){
+        const i=y*w+x;
+        bits+=gray[i]>gray[i+w]?"1":"0";
+      }
+    }
+    return bits;
+  }
+
+  function visualSignatureDistance(a,b){
+    if(!a||!b||a.length!==b.length) return 1;
+    let diff=0;
+    for(let i=0;i<a.length;i++) if(a[i]!==b[i]) diff++;
+    return diff/a.length;
+  }
+
+  function readLocalMapSignatureCache(){
+    try{
+      const value=JSON.parse(localStorage.getItem(LOCAL_MAP_SIGNATURES_KEY)||"{}");
+      return value&&typeof value==="object"?value:{};
+    }catch(_){return {};}
+  }
+
+  async function prepareLocalMapSignatures(){
+    if(localMapSignatureLoading) return;
+    localMapSignatureLoading=true;
+    try{
+      const cache=readLocalMapSignatureCache();
+      const nextCache={};
+      const out=[];
+      for(const map of gameMaps){
+        if(!map.map_image_url) continue;
+        const key=String(map.id||map.map_name)+"|"+map.map_image_url;
+        let bits=cache[key]&&cache[key].bits;
+        if(!bits){
+          try{
+            const response=await fetch(map.map_image_url,{cache:"force-cache"});
+            if(!response.ok) continue;
+            const blob=await response.blob();
+            const bitmap=await createImageBitmap(blob);
+            bits=visualSignatureFromSource(bitmap,0,0,bitmap.width,bitmap.height);
+            if(bitmap.close) bitmap.close();
+          }catch(_){continue;}
+        }
+        nextCache[key]={map_name:map.map_name,bits:bits};
+        out.push({map_name:map.map_name,bits:bits});
+      }
+      localMapSignatures=out;
+      try{localStorage.setItem(LOCAL_MAP_SIGNATURES_KEY,JSON.stringify(nextCache));}catch(_){}
+    }finally{
+      localMapSignatureLoading=false;
+    }
+  }
+
+  function currentExpandedMapSignature(){
+    const video=getCaptureVideo();
+    if(!stream||!video.videoWidth||video.readyState<2) return "";
+    const w=video.videoWidth,h=video.videoHeight;
+    return visualSignatureFromSource(video,w*0.42,0,w*0.58,h*0.76);
+  }
+
+  async function localExpandedMapMatchTick(force){
+    const now=Date.now();
+    if(!force&&now-lastLocalMapImageAt<LOCAL_MAP_IMAGE_INTERVAL_MS) return;
+    lastLocalMapImageAt=now;
+    if(!localMapSignatures.length){
+      prepareLocalMapSignatures();
+      return;
+    }
+    const sig=currentExpandedMapSignature();
+    if(!sig) return;
+    const ranked=localMapSignatures.map(function(item){
+      return {name:item.map_name,distance:visualSignatureDistance(sig,item.bits)};
+    }).sort(function(a,b){return a.distance-b.distance;});
+    const best=ranked[0],second=ranked[1];
+    if(!best||best.distance>0.245) return;
+    if(second&&second.distance-best.distance<0.018) return;
+
+    if(localMapMatchCandidate.name===best.name&&now-localMapMatchCandidate.at<5000){
+      localMapMatchCandidate.hits++;
+    }else{
+      localMapMatchCandidate={name:best.name,hits:1,at:now};
+    }
+    localMapMatchCandidate.at=now;
+    if(localMapMatchCandidate.hits>=2){
+      setLocalCurrentMap(best.name,"ローカル画像照合",Math.round((1-best.distance)*100));
+    }
+  }
+
+  function centerTitleSample(){
+    const video=getCaptureVideo();
+    if(!stream||!video.videoWidth||video.readyState<2) return null;
+    const w=64,h=18;
+    const canvas=document.createElement("canvas");
+    canvas.width=w;canvas.height=h;
+    const ctx=canvas.getContext("2d",{willReadFrequently:true});
+    const vw=video.videoWidth,vh=video.videoHeight;
+    ctx.drawImage(video,vw*0.22,vh*0.34,vw*0.56,vh*0.18,0,0,w,h);
+    const data=ctx.getImageData(0,0,w,h).data;
+    const sample=[];
+    for(let i=0;i<data.length;i+=4) sample.push(Math.round(data[i]*0.299+data[i+1]*0.587+data[i+2]*0.114));
+    return new Uint8Array(sample);
+  }
+
+  function centerTitleCanvas(){
+    const video=getCaptureVideo();
+    if(!stream||!video.videoWidth||video.readyState<2) return null;
+    const vw=video.videoWidth,vh=video.videoHeight;
+    const canvas=document.createElement("canvas");
+    canvas.width=900;canvas.height=220;
+    const ctx=canvas.getContext("2d",{willReadFrequently:true});
+    ctx.drawImage(video,vw*0.18,vh*0.29,vw*0.64,vh*0.26,0,0,canvas.width,canvas.height);
+    const image=ctx.getImageData(0,0,canvas.width,canvas.height);
+    let sum=0;
+    for(let i=0;i<image.data.length;i+=4){
+      const g=image.data[i]*0.299+image.data[i+1]*0.587+image.data[i+2]*0.114;
+      sum+=g;
+    }
+    const avg=sum/(image.data.length/4);
+    for(let i=0;i<image.data.length;i+=4){
+      let g=image.data[i]*0.299+image.data[i+1]*0.587+image.data[i+2]*0.114;
+      g=(g-avg)*1.8+128;
+      g=Math.max(0,Math.min(255,g));
+      image.data[i]=image.data[i+1]=image.data[i+2]=g;
+    }
+    ctx.putImageData(image,0,0);
+    return canvas;
+  }
+
+  function bestMapNameFromOcr(text){
+    const raw=String(text||"").trim();
+    if(!raw) return null;
+    const data=routeData();
+    const names=Array.from(new Set(
+      (data.nodes||[]).concat(gameMaps.map(function(m){return m.map_name||"";})).filter(Boolean)
+    ));
+    const lines=raw.split(/\r?\n/).map(function(x){return x.trim();}).filter(Boolean);
+    const whole=mapKey(raw);
+    let best=null,second=null;
+    names.forEach(function(name){
+      const key=mapKey(name);
+      let score=0;
+      if(key&&whole.includes(key)) score=1;
+      else{
+        lines.forEach(function(line){score=Math.max(score,bigramDice(line,name));});
+      }
+      if(key.length<=4&&score<0.88) return;
+      const item={name:name,score:score};
+      if(!best||score>best.score){second=best;best=item;}
+      else if(!second||score>second.score) second=item;
+    });
+    if(!best||best.score<0.66) return null;
+    if(second&&best.score-second.score<0.035&&best.score<0.9) return null;
+    return best;
+  }
+
+  async function runCenterMapOcrSnapshot(){
+    if(centerOcrBusy||!window.Tesseract||!stream) return;
+    const canvas=centerTitleCanvas();
+    if(!canvas) return;
+    centerOcrBusy=true;
+    try{
+      const result=await window.Tesseract.recognize(canvas,"eng",{logger:function(){}});
+      const text=result&&result.data?String(result.data.text||""):"";
+      const best=bestMapNameFromOcr(text);
+      if(best){
+        const ocrConfidence=result&&result.data&&Number.isFinite(Number(result.data.confidence))?Number(result.data.confidence):75;
+        const combined=Math.round(Math.min(99,Math.max(70,best.score*75+ocrConfidence*0.25)));
+        setLocalCurrentMap(best.name,"中央マップ名OCR",combined);
+        setStatus("route-status","中央に表示されたマップ名をローカルOCRで認識しました。OpenAI APIは使用していません。");
+      }
+    }catch(_){}
+    finally{centerOcrBusy=false;}
+  }
+
+  function scheduleCenterMapOcrBurst(){
+    const now=Date.now();
+    if(now-lastCenterBurstAt<CENTER_MAP_BURST_COOLDOWN_MS) return;
+    lastCenterBurstAt=now;
+    [180,650,1250].forEach(function(delay){
+      setTimeout(function(){if(localMapActive&&stream) runCenterMapOcrSnapshot();},delay);
+    });
+  }
+
+  function localMapTick(){
+    if(!localMapActive||!stream) return;
+    localExpandedMapMatchTick(false);
+    const destination=$("route-destination")?$("route-destination").value:"";
+    if(!destination&&routeCurrentMap) return;
+
+    const sample=centerTitleSample();
+    if(!sample) return;
+    if(lastCenterSample){
+      const diff=sampleDifference(lastCenterSample,sample);
+      if(diff>=0.15) scheduleCenterMapOcrBurst();
+    }
+    lastCenterSample=sample;
+  }
+
+  function startLocalMapMonitor(){
+    localMapActive=true;
+    lastCenterSample=centerTitleSample();
+    prepareLocalMapSignatures();
+    if(localMapTimer) clearInterval(localMapTimer);
+    localMapTimer=setInterval(localMapTick,450);
+    localExpandedMapMatchTick(true);
+    renderRoutePlanner();
+  }
+
+  function stopLocalMapMonitor(){
+    localMapActive=false;
+    if(localMapTimer){clearInterval(localMapTimer);localMapTimer=null;}
+    lastCenterSample=null;
+    centerOcrBusy=false;
+  }
+
+  function localMapRescan(){
+    if(!stream){
+      setStatus("route-status","先に画面共有を開始してください。");
+      return;
+    }
+    localExpandedMapMatchTick(true);
+    runCenterMapOcrSnapshot();
+    setStatus("route-status","ローカル再認識中です。OpenAI APIは使用しません。");
   }
 
   function unitSimilarity(a,b){
@@ -1625,6 +2082,8 @@
     if(!mapsRes.error) gameMaps=mapsRes.data||[];
     if(!npcsRes.error) mapNpcs=npcsRes.data||[];
     renderMapDatabase();
+    refreshRouteDestinationOptions();
+    prepareLocalMapSignatures();
   }
 
   function renderMapDatabase(){
@@ -1893,11 +2352,37 @@
     }
   }
 
+  $("route-destination").addEventListener("change",function(){
+    try{localStorage.setItem(ROUTE_DESTINATION_KEY,this.value||"");}catch(_){}
+    renderRoutePlanner();
+    if(this.value&&stream) scheduleCenterMapOcrBurst();
+  });
+  $("route-level").addEventListener("input",renderRoutePlanner);
+  $("route-current-manual").addEventListener("change",function(){
+    if(this.value) setLocalCurrentMap(this.value,"手動補正",100,true);
+    else{
+      routeCurrentMap="";
+      routeCurrentSource="";
+      routeCurrentConfidence=0;
+      saveLocalMapState();
+      renderRoutePlanner();
+      if(stream) localMapRescan();
+    }
+  });
+  $("route-rescan").addEventListener("click",localMapRescan);
+  $("route-clear").addEventListener("click",function(){
+    $("route-destination").value="";
+    try{localStorage.removeItem(ROUTE_DESTINATION_KEY);}catch(_){}
+    renderRoutePlanner();
+  });
+
   $("capture-mini-now").addEventListener("click",function(){runOpenAiAnalysis("manual");});
   $("capture-mini-top").addEventListener("click",function(){
     $("capture-source-section").scrollIntoView({behavior:"smooth",block:"start"});
   });
   syncMiniCaptureStatus();
+  loadLocalMapState();
+  refreshRouteDestinationOptions();
 
     $("map-db-select").addEventListener("change",renderMapDatabase);
   $("map-database").addEventListener("click",function(e){
