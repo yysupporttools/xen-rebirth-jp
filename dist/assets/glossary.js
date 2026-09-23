@@ -730,14 +730,14 @@
   async function loadReferenceCatalog() {
     try {
       if (!referenceCatalog) {
-        const response = await fetch("assets/reference-catalog.json?v=20260923c");
+        const response = await fetch("assets/reference-catalog.json?v=20260923d");
         if (!response.ok) throw new Error("Reference catalogue unavailable");
         referenceCatalog = (await response.json()).terms;
       }
       for (const source of referenceCatalog) {
         const existing = terms.find(t => t.slug === source.slug || normalize(t.name_en) === normalize(source.name_en));
         if (existing) {
-          for (const key of ["_catalogType", "_section", "_blocks", "_table", "_tables", "_links"]) existing[key] = source[key];
+          for (const key of ["_catalogType", "_section", "_blocks", "_table", "_tables", "_links", "_shortcuts"]) existing[key] = source[key];
         } else {
           const category = categories.find(c => c.name === (source._catalogType === "pets" ? "ペット・騎乗ペット" : "アイテム"));
           terms.push({...source, id:"catalog-" + source.slug, category_id:category?.id || "catalog-items", _catalogSeed:true});
@@ -764,7 +764,14 @@
     const makeTable = table => `<div class="reference-table-wrap"><table><caption>${esc(table.caption || "公式掲載値の整理")}</caption><thead><tr>${table.headers.map(h=>`<th scope="col">${esc(h)}</th>`).join("")}</tr></thead><tbody>${table.rows.map(row=>`<tr>${row.map((v,i)=>i===0?`<th scope="row">${esc(v)}</th>`:`<td>${esc(v)}</td>`).join("")}</tr>`).join("")}</tbody></table></div>`;
     const table = term._table ? makeTable(term._table) : "";
     const tables = (term._tables || []).map(makeTable).join("");
-    return blocks + table + tables + (term._links?.length ? `<div class="reference-block reference-source-block"><h3>公式の出典</h3><div class="reference-links">${links(term._links)}</div></div>` : "");
+    const shortcuts = (term._shortcuts || []).filter(x => safeUrl(x.url)).map(x => {
+      const href = safeUrl(x.url);
+      return `<a class="reference-shortcut" href="${esc(href)}">${esc(x.label)} <span aria-hidden="true">→</span></a>`;
+    }).join("");
+    const shortcutBlock = shortcuts
+      ? `<div class="reference-block reference-shortcut-block"><h3>用語集内ショートカット</h3><div class="reference-shortcuts">${shortcuts}</div></div>`
+      : "";
+    return blocks + table + tables + shortcutBlock + (term._links?.length ? `<div class="reference-block reference-source-block"><h3>公式の出典</h3><div class="reference-links">${links(term._links)}</div></div>` : "");
   }
 
   async function loadShared() {
