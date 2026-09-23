@@ -1511,3 +1511,20 @@ label > span {
   border-style:dashed;
   font-weight:800;
 }
+
+.reference-shortcut-block{margin-top:18px}
+.reference-shortcuts{display:flex;flex-wrap:wrap;gap:10px;margin-top:10px}
+.reference-shortcut{
+  display:inline-flex;
+  align-items:center;
+  gap:8px;
+  padding:9px 13px;
+  border:1px solid #8fbad2;
+  border-radius:8px;
+  background:#f4fbff;
+  color:#245f83;
+  font-size:13px;
+  font-weight:800;
+  text-decoration:none;
+}
+.reference-shortcut:hover{background:#e8f6ff;text-decoration:none}
