@@ -98,6 +98,10 @@
 
   const aliases={
     "arcanias square":"Arcarinas Square",
+    "arcarias square":"Arcarinas Square",
+    "arcana square":"Arcarinas Square",
+    "arcana's square":"Arcarinas Square",
+    "arclinas square":"Arcarinas Square",
     "arcarinas square":"Arcarinas Square",
     "summerhill street":"Summer Hill Street",
     "summer hill street":"Summer Hill Street",
