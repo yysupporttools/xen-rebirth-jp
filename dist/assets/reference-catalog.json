@@ -3394,6 +3394,142 @@
           "url": "https://www.xenrebirth.com/lexicon/index.php?entry/90-party-dungeon-instances/"
         }
       ]
+    },
+    {
+      "slug": "world-boss",
+      "name_en": "World Boss",
+      "name_ja": "ワールドボス",
+      "source_url": "https://www.xenrebirth.com/lexicon/index.php?entry/129-world-boss/",
+      "_section": "ダンジョン・ボス",
+      "_blocks": [
+        {
+          "heading": "概要",
+          "text": "毎日、定められたサーバー時刻に出現する多人数参加型のボスコンテンツです。4種類のワールドボスがあり、参加可能レベル・出現場所・報酬・関連クエストがそれぞれ異なります。公式World Boss Timerでは現在と今後48時間の出現予定を確認できます。"
+        },
+        {
+          "heading": "日本から参加するときの時刻",
+          "text": "公式の曜日別表はCentral USのサーバー時間基準です。日本時間へ直す場合、米国夏時間（CDT）は+14時間、標準時間（CST）は+15時間が目安です。日付が翌日に繰り越す場合があるため、実際の参加時刻は公式タイマーまたは本サイトのボスタイマーで確認してください。"
+        },
+        {
+          "heading": "報酬アイテムの種類",
+          "text": "Platinum Token、Obsidian Token、Minion Tokenのほか、ボス固有報酬としてWorld Boss Scroll、Robo Wing Fragment、Dragon Essence、Ragnigata、Dragon Ballがあります。"
+        },
+        {
+          "heading": "日本プレイヤー向け通称",
+          "text": "日本プレイヤー間では Super Hippogras＝「カバ」、Amaranth Wyrm＝「ワーム」、Ra of the Obelisk＝「ラー」、Snake Dragon Hematosou＝「ドラゴン」と呼ばれることがあります。これらは公式名称ではなくプレイヤー間の通称です。"
+        }
+      ],
+      "_tables": [
+        {
+          "caption": "ワールドボス一覧・参加条件・報酬",
+          "headers": [
+            "ボス",
+            "通称",
+            "出現場所",
+            "参加条件 / クエスト",
+            "報酬"
+          ],
+          "rows": [
+            [
+              "Ra of the Obelisk",
+              "ラー",
+              "Hellein Plateau",
+              "Lv110以上で討伐参加可能。Lv125以上でStrange Stoneから「Kill Ra of the Obelisk」を受注可能。World Boss Scrollを受け取るにはTear of the Moonを提出。",
+              "World Boss Scroll×4 / Obsidian Token×5 / Minion Token×4"
+            ],
+            [
+              "Snake Dragon Hematosou",
+              "ドラゴン",
+              "Temple of Pansidia",
+              "Lv125以上。公式Lexiconでは専用クエストなし。",
+              "Dragon Essence×3 / Obsidian Token×3 / Minion Token×3"
+            ],
+            [
+              "Super Hippogras",
+              "カバ",
+              "Essene Shipdock",
+              "Lv100以上。公式Lexiconでは専用クエストなし。",
+              "Robo Wing Fragment×3 / Platinum Token×3 / Minion Token×3"
+            ],
+            [
+              "Amaranth Wyrm",
+              "ワーム",
+              "Amorica Cave",
+              "Lv100以上で討伐参加可能。Lv125以上で「Restoring Balance」クエストを利用可能。",
+              "Ragnigata×1 / Dragon Ball×1 / Platinum Token×3 / Obsidian Token×3 / Minion Token×3"
+            ]
+          ]
+        },
+        {
+          "caption": "曜日別ワールドボス出現時刻（公式掲載のサーバー時間）",
+          "headers": [
+            "ボス",
+            "月",
+            "火",
+            "水",
+            "木",
+            "金",
+            "土",
+            "日"
+          ],
+          "rows": [
+            [
+              "Ra of the Obelisk",
+              "02:00",
+              "20:00",
+              "14:00",
+              "08:00",
+              "02:00",
+              "20:00",
+              "14:00"
+            ],
+            [
+              "Snake Dragon Hematosou",
+              "08:00",
+              "02:00",
+              "20:00",
+              "14:00",
+              "08:00",
+              "02:00",
+              "20:00"
+            ],
+            [
+              "Super Hippogras",
+              "14:00",
+              "08:00",
+              "02:00",
+              "20:00",
+              "14:00",
+              "08:00",
+              "02:00"
+            ],
+            [
+              "Amaranth Wyrm",
+              "20:00",
+              "14:00",
+              "08:00",
+              "02:00",
+              "20:00",
+              "14:00",
+              "08:00"
+            ]
+          ]
+        }
+      ],
+      "_links": [
+        {
+          "label": "公式Lexicon：World Boss",
+          "url": "https://www.xenrebirth.com/lexicon/index.php?entry/129-world-boss/"
+        },
+        {
+          "label": "公式：World Boss Timer",
+          "url": "https://www.xenrebirth.com/index.php?game-bosstimer/"
+        },
+        {
+          "label": "本サイト：ワールドボスタイマー",
+          "url": "bosses.html"
+        }
+      ]
     }
   ]
 }
