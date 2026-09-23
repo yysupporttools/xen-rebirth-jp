@@ -4287,6 +4287,199 @@
           ]
         }
       ]
+    },
+    {
+      "slug": "world-map-level-gates",
+      "name_en": "World Map & Level Gates",
+      "name_ja": "ワールドマップ・レベルゲート",
+      "source_url": "https://www.xenrebirth.com/lexicon/index.php?entry/105-world-map-level-gates/",
+      "_section": "世界地図",
+      "_blocks": [
+        {
+          "heading": "ワールドマップ",
+          "layout": "maps",
+          "text": "Xen Rebirth全体のエリア接続とレベルゲートを確認できるワールドマップです。画像をクリックすると公式掲載画像を拡大できます。",
+          "images": [
+            {
+              "label": "World Map & Level Gates",
+              "url": "https://www.xenrebirth.com/index.php?attachment/6718-xen-rebirth-map-makise-2-png/"
+            }
+          ]
+        },
+        {
+          "heading": "公式ページの更新・訂正",
+          "text": "Alicia Forest / Loren Valley / Chanthery Gorge はレベルゲートなし、Templar GorgeはLv80（旧Lv90）と案内されています。Yellow Gate以降の追加マップについても公式ページに補足があります。"
+        }
+      ],
+      "_links": [
+        {
+          "label": "公式Lexicon：World Map & Level Gates",
+          "url": "https://www.xenrebirth.com/lexicon/index.php?entry/105-world-map-level-gates/"
+        }
+      ]
+    },
+    {
+      "slug": "museidon-library-labyrinth-maps",
+      "name_en": "Museidon Library Labyrinth Maps",
+      "name_ja": "ミュージドン図書館迷宮マップ",
+      "source_url": "https://www.xenrebirth.com/lexicon/index.php?entry/187-museidon-library-labyrinth-maps/",
+      "_section": "世界地図",
+      "_blocks": [
+        {
+          "heading": "全6階層マップ",
+          "layout": "maps",
+          "text": "Museidon Library Labyrinthは全6階層です。各階層の公式掲載マップをまとめています。",
+          "images": [
+            {
+              "label": "1F / First Floor",
+              "url": "https://www.xenrebirth.com/index.php?attachment/15992-libraryf1-jpg/"
+            },
+            {
+              "label": "2F / Second Floor",
+              "url": "https://www.xenrebirth.com/index.php?attachment/15991-libraryf2-jpg/"
+            },
+            {
+              "label": "3F / Third Floor",
+              "url": "https://www.xenrebirth.com/index.php?attachment/15990-library3f-png/"
+            },
+            {
+              "label": "4F / Fourth Floor",
+              "url": "https://www.xenrebirth.com/index.php?attachment/15989-library4f-png/"
+            },
+            {
+              "label": "5F / Fifth Floor",
+              "url": "https://www.xenrebirth.com/index.php?attachment/15988-libraryf5-jpg/"
+            },
+            {
+              "label": "Final Floor",
+              "url": "https://www.xenrebirth.com/index.php?attachment/15987-libraryfinal-jpg/"
+            }
+          ]
+        }
+      ],
+      "_links": [
+        {
+          "label": "公式Lexicon：Museidon Library Labyrinth Maps",
+          "url": "https://www.xenrebirth.com/lexicon/index.php?entry/187-museidon-library-labyrinth-maps/"
+        }
+      ]
+    },
+    {
+      "slug": "mythril-mines-maps",
+      "name_en": "Mythril Mines Maps",
+      "name_ja": "ミスリル鉱山マップ",
+      "source_url": "https://www.xenrebirth.com/lexicon/index.php?entry/184-mythril-mines-maps/",
+      "_section": "世界地図",
+      "_blocks": [
+        {
+          "heading": "Mythril Mines 各階層",
+          "layout": "maps",
+          "text": "公式ページに掲載されているMythril Minesの各階層マップです。2Fは更新版を優先して確認してください。",
+          "images": [
+            {
+              "label": "1F",
+              "url": "https://www.xenrebirth.com/index.php?attachment/15643-secret-of-the-solstice-mythril-mines-f1-png/"
+            },
+            {
+              "label": "2F（更新版）",
+              "url": "https://www.xenrebirth.com/index.php?attachment/15644-mine2updated-png/"
+            },
+            {
+              "label": "2F（旧参考画像）",
+              "url": "https://www.xenrebirth.com/index.php?attachment/4184-mythrilf2-jpg/"
+            },
+            {
+              "label": "3F",
+              "url": "https://www.xenrebirth.com/index.php?attachment/4185-mythrilf3-jpg/"
+            }
+          ]
+        }
+      ],
+      "_links": [
+        {
+          "label": "公式Lexicon：Mythril Mines Maps",
+          "url": "https://www.xenrebirth.com/lexicon/index.php?entry/184-mythril-mines-maps/"
+        }
+      ]
+    },
+    {
+      "slug": "sand-dungeon-map",
+      "name_en": "Sand Dungeon Map",
+      "name_ja": "サンドダンジョンマップ",
+      "source_url": "https://www.xenrebirth.com/lexicon/index.php?entry/188-sand-dungeon-map/",
+      "_section": "世界地図",
+      "_blocks": [
+        {
+          "heading": "Sand Dungeon 攻略マップ",
+          "layout": "maps",
+          "text": "公式Lexiconに掲載されている攻略用画像です。クリスタル位置のラベル付きマップと追加攻略画像を確認できます。",
+          "images": [
+            {
+              "label": "クリスタル位置マップ",
+              "url": "https://www.xenrebirth.com/index.php?attachment/5603-sand-dungeon-crystal-locations-labelled-li-jpg/"
+            },
+            {
+              "label": "Sand Dungeon 追加攻略マップ",
+              "url": "https://www.xenrebirth.com/index.php?attachment/16265-img-3471-png/"
+            }
+          ]
+        },
+        {
+          "heading": "関連情報",
+          "text": "Sand DungeonはParty Dungeonの一つで、公式の別ガイドではLv100～140向けのPlatinum Tokenダンジョンとして案内されています。"
+        }
+      ],
+      "_links": [
+        {
+          "label": "公式Lexicon：Sand Dungeon Map",
+          "url": "https://www.xenrebirth.com/lexicon/index.php?entry/188-sand-dungeon-map/"
+        }
+      ]
+    },
+    {
+      "slug": "brynhilld-sewer-maps",
+      "name_en": "Brynhilld Sewer Maps",
+      "name_ja": "ブリンヒルド地下水路マップ",
+      "source_url": "https://www.xenrebirth.com/lexicon/index.php?entry/178-brynhilld-sewer-maps/",
+      "_section": "世界地図",
+      "_blocks": [
+        {
+          "heading": "地下水路への入口",
+          "layout": "maps",
+          "text": "Mall Streetの右上、Arcarnias Squareへのポータル付近・City Hall隣接地点からSewersへ入ります。",
+          "images": [
+            {
+              "label": "Brynhilld Sewers 入口位置",
+              "url": "https://www.xenrebirth.com/index.php?attachment/15520-screenshot-2024-05-10-230754-png/"
+            }
+          ]
+        },
+        {
+          "heading": "地下水路 1F～3F",
+          "layout": "maps",
+          "text": "Lost Brynhilld方面へ進む際に利用できる、Sewers各階層の公式掲載マップです。",
+          "images": [
+            {
+              "label": "1F",
+              "url": "https://www.xenrebirth.com/index.php?attachment/4186-sewersf1-jpg/"
+            },
+            {
+              "label": "2F",
+              "url": "https://www.xenrebirth.com/index.php?attachment/4187-sewersf2-jpg/"
+            },
+            {
+              "label": "3F",
+              "url": "https://www.xenrebirth.com/index.php?attachment/4188-sewersf3-jpg/"
+            }
+          ]
+        }
+      ],
+      "_links": [
+        {
+          "label": "公式Lexicon：Brynhilld Sewer Maps",
+          "url": "https://www.xenrebirth.com/lexicon/index.php?entry/178-brynhilld-sewer-maps/"
+        }
+      ]
     }
   ]
 }
