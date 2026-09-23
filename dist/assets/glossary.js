@@ -28,6 +28,7 @@
   let luckyBallError = "";
   let usingSharedData = false;
   let referenceCatalog = null;
+  let tokenExchangeImageOverrides = new Map();
   let editingTerm = null;
   let modalOpener = null;
   let previewUrl = null;
@@ -507,6 +508,159 @@
     } finally { button.disabled = false; }
   });
 
+  let tokenImageEditing = null;
+  let tokenImageFile = null;
+  let tokenImagePreview = "";
+  const tokenImageModal = document.createElement("div");
+  tokenImageModal.id = "token-image-modal";
+  tokenImageModal.className = "glossary-modal";
+  tokenImageModal.hidden = true;
+  tokenImageModal.setAttribute("role","dialog");
+  tokenImageModal.setAttribute("aria-modal","true");
+  tokenImageModal.innerHTML = `<div class="glossary-modal-card paper equipment-image-card">
+    <div class="glossary-modal-head"><h2>トークン交換アイテム画像を追加</h2>
+      <button type="button" class="glossary-close" data-token-image-close>閉じる</button></div>
+    <p id="token-image-name"></p>
+    <div class="equipment-image-dropzone token-image-dropzone" tabindex="0">
+      <img id="token-image-preview" alt="画像プレビュー" hidden>
+      <strong>ここを選択して Ctrl+V</strong>
+      <span>または画像を選択 / ドロップ</span>
+      <input id="token-image-file" type="file" accept="image/png,image/jpeg,image/webp,image/gif">
+    </div>
+    <p id="token-image-status" role="status" aria-live="polite"></p>
+    <div class="glossary-modal-actions"><button type="button" data-token-image-close>キャンセル</button>
+      <button type="button" class="glossary-manage-primary" id="token-image-save">画像を保存</button></div>
+  </div>`;
+  document.body.append(tokenImageModal);
+
+  function closeTokenImageEditor() {
+    closeModal(tokenImageModal.id);
+    if (tokenImagePreview) URL.revokeObjectURL(tokenImagePreview);
+    tokenImagePreview = "";
+    tokenImageFile = null;
+    tokenImageEditing = null;
+    const preview = $("token-image-preview");
+    if (preview) {
+      preview.hidden = true;
+      preview.removeAttribute("src");
+    }
+  }
+
+  function setTokenImage(file) {
+    if (!file || !file.type?.startsWith("image/")) return;
+    try {
+      validateImage(file);
+      tokenImageFile = file;
+      if (tokenImagePreview) URL.revokeObjectURL(tokenImagePreview);
+      tokenImagePreview = URL.createObjectURL(file);
+      const preview = $("token-image-preview");
+      preview.src = tokenImagePreview;
+      preview.hidden = false;
+      $("token-image-status").textContent = "画像を貼り付けました。保存すると一覧に反映されます。";
+    } catch (error) {
+      tokenImageFile = null;
+      $("token-image-status").textContent = error.message;
+    }
+  }
+
+  function openTokenImageEditor(button) {
+    tokenImageEditing = {
+      term_slug: button.dataset.tokenImageTerm || "",
+      section_name: button.dataset.tokenImageSection || "",
+      item_name: button.dataset.tokenImageItem || ""
+    };
+    tokenImageFile = null;
+    $("token-image-name").textContent = `${tokenImageEditing.section_name} / ${tokenImageEditing.item_name}`;
+    $("token-image-status").textContent = "画像をコピーして Ctrl+V で貼り付けられます。";
+    const preview = $("token-image-preview");
+    preview.hidden = true;
+    preview.removeAttribute("src");
+    if ($("token-image-file")) $("token-image-file").value = "";
+    openModal(tokenImageModal.id);
+  }
+
+  async function uploadTokenImage(item, file) {
+    validateImage(file);
+    const ext = (file.name?.split(".").pop() || file.type?.split("/")[1] || "png")
+      .replace(/[^a-z0-9]/gi,"").toLowerCase();
+    const objectName = `token-exchange/${crypto.randomUUID()}/${Date.now()}.${ext}`;
+    const response = await fetch(`${CFG.SUPABASE_URL}/storage/v1/object/glossary-images/${objectName}`, {
+      method:"POST",
+      headers:{...authHeaders(),"Content-Type":file.type || "application/octet-stream"},
+      body:file
+    });
+    if (!response.ok) throw new Error("画像をアップロードできませんでした。");
+    return `${CFG.SUPABASE_URL}/storage/v1/object/public/glossary-images/${objectName}`;
+  }
+
+  resultsEl.addEventListener("click", event => {
+    const button = event.target.closest("[data-token-image-item]");
+    if (!button) return;
+    event.preventDefault();
+    openTokenImageEditor(button);
+  });
+
+  tokenImageModal.addEventListener("click", event => {
+    if (event.target.closest("[data-token-image-close]")) closeTokenImageEditor();
+  });
+
+  $("token-image-file")?.addEventListener("change", event => {
+    const file = event.target.files?.[0];
+    if (file) setTokenImage(file);
+  });
+
+  const tokenImageDropzone = tokenImageModal.querySelector(".token-image-dropzone");
+  tokenImageDropzone?.addEventListener("dragover", event => event.preventDefault());
+  tokenImageDropzone?.addEventListener("drop", event => {
+    event.preventDefault();
+    const file = Array.from(event.dataTransfer?.files || []).find(x => x.type?.startsWith("image/"));
+    if (file) setTokenImage(file);
+  });
+  tokenImageDropzone?.addEventListener("click", event => {
+    if (event.target?.matches("input")) return;
+    $("token-image-file")?.click();
+  });
+
+  tokenImageModal.addEventListener("paste", event => {
+    const file = Array.from(event.clipboardData?.files || []).find(x => x.type?.startsWith("image/")) ||
+      Array.from(event.clipboardData?.items || []).find(x => x.type?.startsWith("image/"))?.getAsFile();
+    if (!file) return;
+    event.preventDefault();
+    setTokenImage(file);
+  });
+
+  $("token-image-save")?.addEventListener("click", async () => {
+    if (!tokenImageEditing || !tokenImageFile) {
+      $("token-image-status").textContent = "先に画像をCtrl+Vで貼り付けるか、画像を選択してください。";
+      return;
+    }
+    const button = $("token-image-save");
+    button.disabled = true;
+    $("token-image-status").textContent = "保存中…";
+    try {
+      const imageUrl = await uploadTokenImage(tokenImageEditing,tokenImageFile);
+      const response = await api("/rest/v1/rpc/token_exchange_set_item_image", {
+        method:"POST",
+        body:JSON.stringify({
+          p_term_slug:tokenImageEditing.term_slug,
+          p_section_name:tokenImageEditing.section_name,
+          p_item_name:tokenImageEditing.item_name,
+          p_image_url:imageUrl,
+          p_contributor_name:null
+        })
+      });
+      if (!response.ok) throw new Error(await response.text());
+      closeTokenImageEditor();
+      await loadTokenExchangeImages();
+      renderTerms();
+    } catch (error) {
+      console.error(error);
+      $("token-image-status").textContent = "保存できませんでした：" + error.message;
+    } finally {
+      button.disabled = false;
+    }
+  });
+
   resultsEl.addEventListener("input", event => {
     if (event.target.matches(".class-equipment-search")) {
       const catalog = event.target.closest(".class-equipment-catalog");
@@ -731,7 +885,7 @@
   async function loadReferenceCatalog() {
     try {
       if (!referenceCatalog) {
-        const response = await fetch("assets/reference-catalog.json?v=20260923g");
+        const response = await fetch("assets/reference-catalog.json?v=20260923h");
         if (!response.ok) throw new Error("Reference catalogue unavailable");
         referenceCatalog = (await response.json()).terms;
       }
@@ -768,10 +922,19 @@
     const exchangeSections = (term._exchangeSections || []).map(section => {
       const tokenSrc = referenceImageSrc(section.token_image);
       const rows = (section.rows || []).map(row => {
-        const itemSrc = referenceImageSrc(row.image);
+        const overrideImage = tokenExchangeImageOverrides.get(
+          tokenExchangeImageKey(term.slug, section.heading, row.item)
+        );
+        const itemSrc = referenceImageSrc(overrideImage || row.image);
         const icon = itemSrc
-          ? `<img class="token-exchange-item-icon" src="${esc(itemSrc)}" alt="" loading="lazy" referrerpolicy="no-referrer">`
-          : '<span class="token-exchange-item-icon token-exchange-item-icon-empty" aria-hidden="true">?</span>';
+          ? `<img class="token-exchange-item-icon" src="${esc(itemSrc)}" alt="${esc(row.item || "")}" loading="lazy" referrerpolicy="no-referrer">`
+          : `<button type="button" class="token-exchange-image-add"
+                data-token-image-term="${esc(term.slug || "")}"
+                data-token-image-section="${esc(section.heading || "")}"
+                data-token-image-item="${esc(row.item || "")}"
+                aria-label="${esc(row.item || "アイテム")}の画像を追加">
+              <span>＋</span><small>画像</small>
+            </button>`;
         return `<tr>
           <td class="token-exchange-image-cell">${icon}</td>
           <th scope="row" class="token-exchange-name-cell">${esc(row.item || "")}</th>
@@ -807,6 +970,29 @@
     return blocks + table + tables + exchangeSections + shortcutBlock + (term._links?.length ? `<div class="reference-block reference-source-block"><h3>公式の出典</h3><div class="reference-links">${links(term._links)}</div></div>` : "");
   }
 
+  function tokenExchangeImageKey(termSlug, sectionName, itemName) {
+    return [termSlug || "", sectionName || "", itemName || ""].join("\u001f");
+  }
+
+  async function loadTokenExchangeImages() {
+    tokenExchangeImageOverrides = new Map();
+    if (!configured()) return;
+    try {
+      const response = await api("/rest/v1/token_exchange_item_images?select=term_slug,section_name,item_name,image_url");
+      if (!response.ok) throw new Error(`HTTP ${response.status}`);
+      const rows = await response.json();
+      rows.forEach(row => {
+        const url = safeUrl(row.image_url);
+        if (url) tokenExchangeImageOverrides.set(
+          tokenExchangeImageKey(row.term_slug,row.section_name,row.item_name),
+          url
+        );
+      });
+    } catch (error) {
+      console.error("Token exchange image load error:", error);
+    }
+  }
+
   async function loadShared() {
     if (!configured()) {
       if (syncStatus) syncStatus.textContent = "共同編集の接続設定がありません。";
@@ -827,7 +1013,7 @@
       categories = await cRes.json();
       terms = await tRes.json();
       usingSharedData = true;
-      await Promise.all([loadLuckyBallData(), loadClassEquipmentData(), loadReferenceCatalog()]);
+      await Promise.all([loadLuckyBallData(), loadClassEquipmentData(), loadReferenceCatalog(), loadTokenExchangeImages()]);
       categoryOptions();
       renderTerms();
       if (syncStatus) syncStatus.textContent = `共同編集に接続済み：${terms.length}件・${categories.length}分類（公式カタログを含む）`;
