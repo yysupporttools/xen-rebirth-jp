@@ -588,7 +588,7 @@
   function cleanTranslations(result){
     const copy=Object.assign({},result);
     copy.dialogue_text_en=String(result.dialogue_text_en??result.english_text??"");
-    copy.dialogue_text_ja=acceptedTranslation(copy.dialogue_text_en,result.dialogue_text_ja??result.japanese_text);
+    copy.dialogue_text_ja=collapseRepeatedDialogue(acceptedTranslation(copy.dialogue_text_en,result.dialogue_text_ja??result.japanese_text));
     copy.choices_en=choicesArray(result.choices_en);
     const ja=choicesArray(result.choices_ja);
     copy.choices_ja=copy.choices_en.map(function(en,i){return en?acceptedTranslation(en,ja[i]):"";});
@@ -772,54 +772,156 @@
     return 2*common/((a.length-1)+(b.length-1));
   }
 
-  function unitsMatch(a,b){
+  function unitSimilarity(a,b){
     const na=compactUnit(a),nb=compactUnit(b);
-    if(!na||!nb) return false;
-    if(na===nb) return true;
-    if((na.includes(nb)||nb.includes(na))&&Math.min(na.length,nb.length)>=28) return true;
-    return bigramDice(a,b)>=0.72;
+    if(!na||!nb) return 0;
+    if(na===nb) return 1;
+    if(na.includes(nb)||nb.includes(na)){
+      const ratio=Math.min(na.length,nb.length)/Math.max(na.length,nb.length);
+      if(Math.min(na.length,nb.length)>=12) return Math.max(ratio,bigramDice(a,b));
+    }
+    return bigramDice(a,b);
+  }
+
+  function unitsMatch(a,b){
+    return unitSimilarity(a,b)>=0.72;
+  }
+
+  function overlapSequenceMatches(left,right,k){
+    const scores=[];
+    for(let i=0;i<k;i++) scores.push(unitSimilarity(left[left.length-k+i],right[i]));
+    const avg=scores.reduce(function(sum,x){return sum+x;},0)/Math.max(1,scores.length);
+    if(k===1) return avg>=0.72;
+    if(k===2) return scores.every(function(x){return x>=0.62;})&&avg>=0.72;
+    const strong=scores.filter(function(x){return x>=0.68;}).length;
+    const veryStrong=scores.filter(function(x){return x>=0.84;}).length;
+    return avg>=0.58&&strong>=Math.ceil(k*0.5)&&veryStrong>=1;
+  }
+
+  function collapseRepeatedDialogue(text){
+    const value=String(text||"").replace(/\r/g,"").trim();
+    if(!value) return "";
+    const units=dialogueUnits(value);
+    if(units.length<6) return value;
+
+    let best=null;
+    for(let split=3;split<=units.length-3;split++){
+      const left=units.slice(0,split);
+      const right=units.slice(split);
+      const count=Math.min(left.length,right.length);
+      if(count<3||count/Math.max(left.length,right.length)<0.7) continue;
+
+      const scores=[];
+      for(let i=0;i<count;i++) scores.push(unitSimilarity(left[i],right[i]));
+      const avg=scores.reduce(function(sum,x){return sum+x;},0)/count;
+      const strong=scores.filter(function(x){return x>=0.68;}).length;
+      const veryStrong=scores.filter(function(x){return x>=0.84;}).length;
+      if(avg<0.58||strong<Math.ceil(count*0.5)||veryStrong<1) continue;
+
+      const score=avg+(strong/count)*0.25+(veryStrong/count)*0.15;
+      if(!best||score>best.score) best={left:left,right:right,score:score};
+    }
+
+    if(!best) return value;
+    const leftText=best.left.join("\n");
+    const rightText=best.right.join("\n");
+    return compactUnit(rightText).length>=compactUnit(leftText).length?rightText:leftText;
   }
 
   function mergeDialogueFragments(base,incoming){
     base=String(base||"").trim();
     incoming=String(incoming||"").trim();
-    if(!base) return {text:incoming,overlap:!!incoming,changed:!!incoming};
-    if(!incoming) return {text:base,overlap:false,changed:false};
+    const baseUnits=dialogueUnits(base),incomingUnits=dialogueUnits(incoming);
+    if(!base) return {text:incoming,overlap:!!incoming,changed:!!incoming,mode:"replace",overlapCount:0,baseUnitCount:0,incomingUnitCount:incomingUnits.length};
+    if(!incoming) return {text:base,overlap:false,changed:false,mode:"none",overlapCount:0,baseUnitCount:baseUnits.length,incomingUnitCount:0};
 
     const aKey=compactUnit(base),bKey=compactUnit(incoming);
-    if(aKey===bKey||aKey.includes(bKey)) return {text:base,overlap:true,changed:false};
-    if(bKey.includes(aKey)) return {text:incoming,overlap:true,changed:true};
+    if(aKey===bKey||aKey.includes(bKey)){
+      return {text:base,overlap:true,changed:false,mode:"contained",overlapCount:incomingUnits.length,baseUnitCount:baseUnits.length,incomingUnitCount:incomingUnits.length};
+    }
+    if(bKey.includes(aKey)){
+      return {text:incoming,overlap:true,changed:true,mode:"replace",overlapCount:baseUnits.length,baseUnitCount:baseUnits.length,incomingUnitCount:incomingUnits.length};
+    }
 
-    const a=dialogueUnits(base),b=dialogueUnits(incoming);
+    const a=baseUnits,b=incomingUnits;
     const max=Math.min(a.length,b.length);
 
     function acceptable(k,left,right){
       if(k>=2) return true;
       const x=left[left.length-1],y=right[0];
-      return Math.max(compactUnit(x).length,compactUnit(y).length)>=55&&bigramDice(x,y)>=0.72;
+      return Math.max(compactUnit(x).length,compactUnit(y).length)>=55&&unitSimilarity(x,y)>=0.72;
     }
 
     for(let k=max;k>=1;k--){
-      let good=true;
-      for(let i=0;i<k;i++){
-        if(!unitsMatch(a[a.length-k+i],b[i])){good=false;break;}
-      }
-      if(good&&acceptable(k,a,b)){
-        return {text:a.concat(b.slice(k)).join("\n\n"),overlap:true,changed:true};
+      if(overlapSequenceMatches(a,b,k)&&acceptable(k,a,b)){
+        if(k===b.length){
+          return {text:base,overlap:true,changed:false,mode:"contained",overlapCount:k,baseUnitCount:a.length,incomingUnitCount:b.length};
+        }
+        return {
+          text:a.concat(b.slice(k)).join("\n\n"),
+          overlap:true,
+          changed:true,
+          mode:"append",
+          overlapCount:k,
+          baseUnitCount:a.length,
+          incomingUnitCount:b.length
+        };
       }
     }
 
     for(let k=max;k>=1;k--){
-      let good=true;
-      for(let i=0;i<k;i++){
-        if(!unitsMatch(b[b.length-k+i],a[i])){good=false;break;}
-      }
-      if(good&&acceptable(k,b,a)){
-        return {text:b.concat(a.slice(k)).join("\n\n"),overlap:true,changed:true};
+      if(overlapSequenceMatches(b,a,k)&&acceptable(k,b,a)){
+        if(k===a.length){
+          return {text:incoming,overlap:true,changed:true,mode:"replace",overlapCount:k,baseUnitCount:a.length,incomingUnitCount:b.length};
+        }
+        return {
+          text:b.concat(a.slice(k)).join("\n\n"),
+          overlap:true,
+          changed:true,
+          mode:"prepend",
+          overlapCount:k,
+          baseUnitCount:a.length,
+          incomingUnitCount:b.length
+        };
       }
     }
 
-    return {text:base,overlap:false,changed:false};
+    return {text:base,overlap:false,changed:false,mode:"none",overlapCount:0,baseUnitCount:a.length,incomingUnitCount:b.length};
+  }
+
+  function mergeTranslatedFragments(existing,incoming,enMerge){
+    existing=collapseRepeatedDialogue(existing);
+    incoming=collapseRepeatedDialogue(incoming);
+    if(!existing) return incoming;
+    if(!incoming) return existing;
+
+    if(enMerge&&enMerge.overlap&&!enMerge.changed&&enMerge.mode==="contained") return existing;
+
+    const direct=mergeDialogueFragments(existing,incoming);
+    if(direct.overlap) return collapseRepeatedDialogue(direct.text);
+
+    if(enMerge&&enMerge.mode==="replace") return incoming;
+
+    const jaUnits=dialogueUnits(incoming);
+    const incomingCount=Math.max(1,Number(enMerge&&enMerge.incomingUnitCount)||0);
+    const overlapCount=Math.max(0,Number(enMerge&&enMerge.overlapCount)||0);
+    const newEnglishUnits=Math.max(0,incomingCount-overlapCount);
+
+    if(enMerge&&newEnglishUnits>0&&jaUnits.length){
+      const take=Math.max(1,Math.min(jaUnits.length,Math.round(jaUnits.length*newEnglishUnits/incomingCount)));
+      if(enMerge.mode==="append"){
+        const tail=jaUnits.slice(jaUnits.length-take).join("\n\n");
+        const tailMerge=mergeDialogueFragments(existing,tail);
+        return collapseRepeatedDialogue(tailMerge.overlap?tailMerge.text:[existing,tail].filter(Boolean).join("\n\n"));
+      }
+      if(enMerge.mode==="prepend"){
+        const head=jaUnits.slice(0,take).join("\n\n");
+        const headMerge=mergeDialogueFragments(head,existing);
+        return collapseRepeatedDialogue(headMerge.overlap?headMerge.text:[head,existing].filter(Boolean).join("\n\n"));
+      }
+    }
+
+    return existing;
   }
 
   function choiceSignature(value){
@@ -853,14 +955,9 @@
   async function mergeLongDialogueRecord(match,result,imageHash){
     const record=match.record;
     const en=match.merged.text;
-    const jaMerge=mergeDialogueFragments(record.dialogue_text_ja||record.japanese_text||"",result.dialogue_text_ja||result.japanese_text||"");
-    let ja=jaMerge.overlap?jaMerge.text:String(record.dialogue_text_ja||record.japanese_text||"").trim();
+    const existingJa=String(record.dialogue_text_ja||record.japanese_text||"").trim();
     const incomingJa=String(result.dialogue_text_ja||result.japanese_text||"").trim();
-    if(!ja&&incomingJa) ja=incomingJa;
-    if(!jaMerge.overlap&&incomingJa&&ja&&compactUnit(incomingJa)!==compactUnit(ja)){
-      // If Japanese overlap was too fuzzy to prove, keep both fragments rather than losing translated text.
-      ja=[ja,incomingJa].filter(Boolean).join("\n\n");
-    }
+    const ja=mergeTranslatedFragments(existingJa,incomingJa,match.merged);
 
     const choicesEn=choicesArray(result.choices_en).length?choicesArray(result.choices_en):choicesArray(record.choices_en);
     const choicesJa=choicesArray(result.choices_ja).length?choicesArray(result.choices_ja):choicesArray(record.choices_ja);
