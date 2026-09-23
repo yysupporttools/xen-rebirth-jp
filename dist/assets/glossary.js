@@ -885,7 +885,7 @@
   async function loadReferenceCatalog() {
     try {
       if (!referenceCatalog) {
-        const response = await fetch("assets/reference-catalog.json?v=20260923h");
+        const response = await fetch("assets/reference-catalog.json?v=20260923i");
         if (!response.ok) throw new Error("Reference catalogue unavailable");
         referenceCatalog = (await response.json()).terms;
       }
@@ -915,7 +915,7 @@
       const src = referenceImageSrc(x.url);
       return `<a class="reference-image" href="${esc(href)}" target="_blank" rel="noopener noreferrer"><img src="${esc(src)}" alt="${esc(x.label || "公式掲載画像")}" loading="lazy" referrerpolicy="no-referrer"><span>${esc(x.label || "公式掲載画像")}　拡大 ↗</span></a>`;
     }).join("");
-    const blocks = (term._blocks || []).map(b => `<section class="reference-block"><h3>${esc(b.heading)}</h3>${b.text ? `<p>${esc(b.text).replace(/\n/g,"<br>")}</p>` : ""}${b.images?.length ? `<div class="reference-image-grid">${images(b.images)}</div>` : ""}<div class="reference-links">${links(b.links)}</div></section>`).join("");
+    const blocks = (term._blocks || []).map(b => `<section class="reference-block"><h3>${esc(b.heading)}</h3>${b.text ? `<p>${esc(b.text).replace(/\n/g,"<br>")}</p>` : ""}${b.images?.length ? `<div class="reference-image-grid${b.layout === "maps" ? " map-image-grid" : ""}">${images(b.images)}</div>` : ""}<div class="reference-links">${links(b.links)}</div></section>`).join("");
     const makeTable = table => `<div class="reference-table-wrap"><table><caption>${esc(table.caption || "公式掲載値の整理")}</caption><thead><tr>${table.headers.map(h=>`<th scope="col">${esc(h)}</th>`).join("")}</tr></thead><tbody>${table.rows.map(row=>`<tr>${row.map((v,i)=>i===0?`<th scope="row">${esc(v)}</th>`:`<td>${esc(v)}</td>`).join("")}</tr>`).join("")}</tbody></table></div>`;
     const table = term._table ? makeTable(term._table) : "";
     const tables = (term._tables || []).map(makeTable).join("");
