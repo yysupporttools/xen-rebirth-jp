@@ -3148,6 +3148,252 @@
           ]
         }
       ]
+    },
+    {
+      "slug": "boss-instances",
+      "name_en": "Boss Instances",
+      "name_ja": "ボスインスタンス",
+      "source_url": "https://www.xenrebirth.com/lexicon/index.php?entry/42-boss-instances/",
+      "_section": "ダンジョン・ボス",
+      "_blocks": [
+        {
+          "heading": "参加条件・基本ルール",
+          "text": "Boss Instanceはボスごとに参加人数・対象レベル・入口NPC／場所が異なります。通常は1日最大4回まで挑戦できます。"
+        },
+        {
+          "heading": "死亡ペナルティ",
+          "text": "死亡すると5分間、命中（Successful attack rate）-10、移動速度-4、Attack -30%、Magic -30%のペナルティがあります。ペナルティ中に再び死亡するとクールダウンがリセットされます。"
+        },
+        {
+          "heading": "Fiersavier / Amaranth Wyrmの注意点",
+          "text": "Fiersavierは入場前にNianからクエストを受けると、デイリー報酬としてEXPとTiger Lucky Ballを獲得できます。Amaranth Wyrmは週1回のみで、パーティリーダーが4次転職クエストを所持している必要があります。"
+        }
+      ],
+      "_tables": [
+        {
+          "caption": "ボスインスタンス一覧",
+          "headers": [
+            "ボス",
+            "Minions",
+            "NPC",
+            "場所",
+            "参加人数",
+            "対象Lv",
+            "Boss Token"
+          ],
+          "rows": [
+            [
+              "Houdick",
+              "なし",
+              "Miner Moren",
+              "Mythril Mines - Level 3",
+              "3～8人",
+              "55～80",
+              "Gold"
+            ],
+            [
+              "Bay Kook",
+              "Bone General / Crogon / Mirrorrat / Mairrat",
+              "Captain Dan",
+              "Pirate Ship - Level 3",
+              "3～8人",
+              "66～100",
+              "Gold"
+            ],
+            [
+              "Lizard Griffon（通称：Liz）",
+              "Lizard Griffon Clone",
+              "Boss Portal",
+              "Underground Brynhilld - Tramis Mansion",
+              "3～8人",
+              "70～100",
+              "Gold"
+            ],
+            [
+              "The Clock（通称：時計）",
+              "The Clock Clones",
+              "Librarian Parks",
+              "Museidon Library Archive",
+              "4～8人",
+              "96～135",
+              "Platinum"
+            ],
+            [
+              "Cow Legend（通称：牛）",
+              "Cow Legend Clones",
+              "Boss Portal",
+              "Sleepless Grave floor 2",
+              "4～8人",
+              "105～140",
+              "Platinum"
+            ],
+            [
+              "Fiersavier（通称：虎 / Tiger）",
+              "Chevesavier",
+              "Adventurer Mark",
+              "Ice Maze - Level 2",
+              "4～8人",
+              "120～175",
+              "Obsidian"
+            ],
+            [
+              "Amaranth Wyrm",
+              "Lesser Amaranth",
+              "Nian",
+              "Amorica Cave",
+              "3～8人",
+              "120～175",
+              "Obsidian"
+            ]
+          ]
+        },
+        {
+          "caption": "ボスインスタンス ランク報酬",
+          "headers": [
+            "Rank",
+            "Boss Token",
+            "Minion Token",
+            "Chest"
+          ],
+          "rows": [
+            [
+              "S",
+              "2",
+              "5",
+              "Diamond"
+            ],
+            [
+              "A",
+              "1",
+              "3",
+              "Gold"
+            ],
+            [
+              "B",
+              "1",
+              "2",
+              "Silver"
+            ],
+            [
+              "F",
+              "1",
+              "1",
+              "Wooden"
+            ]
+          ]
+        }
+      ],
+      "_links": [
+        {
+          "label": "公式Lexicon：Boss Instances",
+          "url": "https://www.xenrebirth.com/lexicon/index.php?entry/42-boss-instances/"
+        }
+      ]
+    },
+    {
+      "slug": "party-dungeon-instances",
+      "name_en": "Party Dungeon Instances",
+      "name_ja": "パーティダンジョンインスタンス",
+      "source_url": "https://www.xenrebirth.com/lexicon/index.php?entry/90-party-dungeon-instances/",
+      "_section": "ダンジョン・ボス",
+      "_blocks": [
+        {
+          "heading": "参加条件・基本ルール",
+          "text": "Party Dungeon Instanceは全ダンジョンが4～8人で参加します。各ダンジョンごとに対象レベルとBoss Tokenの種類が異なり、通常は1日最大4回まで挑戦できます。"
+        },
+        {
+          "heading": "死亡ペナルティ",
+          "text": "死亡すると5分間、命中（Successful attack rate）-10、移動速度-4、Attack -30%、Magic -30%のペナルティがあります。ペナルティ中に再び死亡するとクールダウンがリセットされます。"
+        }
+      ],
+      "_tables": [
+        {
+          "caption": "パーティダンジョン一覧",
+          "headers": [
+            "ダンジョン",
+            "NPC",
+            "場所",
+            "参加人数",
+            "対象Lv",
+            "Boss Token"
+          ],
+          "rows": [
+            [
+              "Tramis Dungeon",
+              "Tramis Dungeon Keeper",
+              "Tramis Mansion",
+              "4～8人",
+              "45～65",
+              "Amber"
+            ],
+            [
+              "The Suspicious Factory",
+              "Rusty",
+              "Arcarinas Square",
+              "4～8人",
+              "70～100",
+              "Gold"
+            ],
+            [
+              "Sand Dungeon",
+              "Dungeon Guide",
+              "Turmeit Desert",
+              "4～8人",
+              "100～140",
+              "Platinum"
+            ],
+            [
+              "Secret Altar（通称：祭壇）",
+              "Adventurer Mave",
+              "Shenzhen Canyon",
+              "4～8人",
+              "146～186",
+              "Obsidian"
+            ]
+          ]
+        },
+        {
+          "caption": "パーティダンジョン ランク報酬",
+          "headers": [
+            "Rank",
+            "Boss Token",
+            "Minion Token",
+            "Chest"
+          ],
+          "rows": [
+            [
+              "S",
+              "5",
+              "7",
+              "Diamond"
+            ],
+            [
+              "A",
+              "4",
+              "4",
+              "Gold"
+            ],
+            [
+              "B",
+              "2",
+              "3",
+              "Silver"
+            ],
+            [
+              "F",
+              "1",
+              "1",
+              "Wooden"
+            ]
+          ]
+        }
+      ],
+      "_links": [
+        {
+          "label": "公式Lexicon：Party Dungeon Instances",
+          "url": "https://www.xenrebirth.com/lexicon/index.php?entry/90-party-dungeon-instances/"
+        }
+      ]
     }
   ]
 }
