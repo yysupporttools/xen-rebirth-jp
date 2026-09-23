@@ -662,3 +662,26 @@ footer{border-top-color:#bfced9!important;color:#607486!important}
   .xen-brand-copy strong{font-size:22px}
   .xen-brand-copy small{font-size:10px;letter-spacing:.12em}
 }
+
+  
+/* Individual quest favorite */
+.quest-detail-favorite-row{
+  display:flex;
+  justify-content:flex-end;
+  align-items:center;
+  margin:0 0 12px;
+}
+.quest-detail-favorite-row .saved-star{
+  min-width:158px;
+  font-weight:800;
+  border-color:#8fb5ca;
+  color:#245776;
+}
+.quest-detail-favorite-row .saved-star[aria-pressed=true]{
+  border-color:#c59a3b;
+  color:#72500a;
+}
+@media(max-width:640px){
+  .quest-detail-favorite-row{justify-content:flex-start}
+  .quest-detail-favorite-row .saved-star{width:100%}
+}
