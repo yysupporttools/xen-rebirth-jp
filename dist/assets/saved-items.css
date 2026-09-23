@@ -577,3 +577,88 @@ input:focus,select:focus,textarea:focus{
   .xen-brand-title{width:min(310px,68vw);max-height:68px}
   header .edition{display:none}
 }
+
+
+/* Final Xen fantasy readability tune v5 */
+:root{
+  --bg:#dbe6ee;
+  --ink:#173149;
+  --muted:#5f7385;
+  --line:#c2d1dd;
+  --dark:#183952;
+  --teal:#2b7eab;
+  --gold:#d8c78f;
+}
+body{
+  background:
+    radial-gradient(circle at 12% -8%,rgba(76,170,211,.15),transparent 32rem),
+    radial-gradient(circle at 90% 8%,rgba(104,117,190,.10),transparent 32rem),
+    linear-gradient(180deg,#dce6ee 0%,#e7edf2 42rem,#dce5ec 100%) !important;
+  color:var(--ink);
+}
+body:before{opacity:.10}
+header{
+  background:linear-gradient(180deg,#eef4f7,#e4edf3)!important;
+  border-bottom-color:#b9cbd8!important;
+  box-shadow:0 8px 24px rgba(28,59,82,.12)!important;
+}
+header .brand{
+  min-height:92px!important;
+  padding:12px 28px!important;
+  background:linear-gradient(90deg,rgba(215,231,241,.62),rgba(236,243,247,.35))!important;
+}
+.xen-visual-brand{gap:14px!important}
+.xen-brand-wing{
+  width:68px!important;height:68px!important;flex-basis:68px!important;
+  object-fit:contain!important;
+  filter:drop-shadow(0 6px 10px rgba(35,86,126,.20))!important;
+}
+.xen-brand-copy{
+  display:flex;flex-direction:column;line-height:1.15;color:#173f67;
+  text-shadow:0 1px rgba(255,255,255,.7);
+}
+.xen-brand-copy strong{
+  font-family:Georgia,"Times New Roman",serif;
+  font-size:clamp(24px,2.2vw,34px);
+  letter-spacing:.03em;
+}
+.xen-brand-copy small{
+  margin-top:7px;font-size:12px;letter-spacing:.18em;color:#54718a;
+}
+.xen-brand-title{display:none!important}
+header .edition{
+  color:#5f7690!important;background:rgba(247,250,252,.72)!important;
+  border-color:#b9ccda!important;
+}
+header nav{
+  background:linear-gradient(90deg,#245f9f 0%,#3578b0 48%,#536db7 100%)!important;
+  box-shadow:0 4px 14px rgba(35,69,111,.14)!important;
+}
+.paper,.guide-card,.saved-section,.site-search-panel,.event-dialog,.boss-row,.site-side-rail{
+  background:rgba(241,246,249,.96)!important;
+  border-color:#c3d3df!important;
+  box-shadow:0 10px 28px rgba(28,64,91,.08)!important;
+}
+.site-side-rail section{border-color:#d1dde5!important}
+.page-intro h1,.section-heading h2,.paper h2,.guide-card h3{color:#244a70!important}
+.eyebrow,.card-number{color:#3c79a5!important}
+.welcome{
+  background:linear-gradient(145deg,#173a57 0%,#23546f 55%,#394f83 100%)!important;
+  border-top-color:#71b9d6!important;
+}
+.next-boss{
+  background:linear-gradient(155deg,#193e58,#285970 58%,#465783)!important;
+}
+.button,.capture-controls .primary{
+  background:linear-gradient(135deg,#80c6dd,#92a8d6)!important;
+  color:#173b59!important;
+}
+.secondary{background:linear-gradient(135deg,#214c69,#475a88)!important;color:#fff!important}
+table th{background:#e3ebf1!important;color:#2b557a!important}
+footer{border-top-color:#bfced9!important;color:#607486!important}
+@media(max-width:600px){
+  header .brand{min-height:74px!important;padding:10px 14px!important}
+  .xen-brand-wing{width:50px!important;height:50px!important;flex-basis:50px!important}
+  .xen-brand-copy strong{font-size:22px}
+  .xen-brand-copy small{font-size:10px;letter-spacing:.12em}
+}

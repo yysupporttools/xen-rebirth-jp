@@ -24,8 +24,8 @@
       brandLink.dataset.visualBrandReady = 'true';
       brandLink.classList.add('xen-visual-brand');
       brandLink.innerHTML =
-        '<img class="xen-brand-wing" src="assets/xen-wing-logo.webp?v=1" alt="">' +
-        '<img class="xen-brand-title" src="assets/xen-title-banner.webp?v=1" alt="Xen Rebirth 日本語攻略ガイド">';
+        '<img class="xen-brand-wing" src="assets/xen-wing-logo.webp?v=2" alt="">' +
+        '<span class="xen-brand-copy"><strong>Xen Rebirth</strong><small>日本語攻略ガイド</small></span>';
     }
     const edition = header.querySelector('.edition');
     if (edition) edition.textContent = 'UNOFFICIAL FAN GUIDE';
@@ -36,7 +36,7 @@
       icon.rel = 'icon';
       document.head.appendChild(icon);
     }
-    icon.href = 'assets/xen-wing-logo.webp?v=1';
+    icon.href = 'assets/xen-wing-logo.webp?v=2';
     icon.type = 'image/webp';
 
     const currentFile = location.pathname.split('/').pop() || 'index.html';
