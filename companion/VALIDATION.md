@@ -1,5 +1,7 @@
 # Validation — 2026-09-24
 
+- Launcher fix: removed the PowerShell script dependency after a Restricted execution-policy failure. The native batch launcher discovers a sibling portable runtime or accepts a dragged portable directory. Executed the installed desktop batch with the diagnostic switch; portable imports and OCR path passed without changing execution policy or opening/capturing the game.
+
 - Source: user-provided XenRebirthTranslator v0.14.2beta EirCandyvaultFix Portable.
 - Ported verified graph and measured exit points. Native click-through arrow UI is retained; the website sends destinations through an authenticated loopback API.
 - Six automated Python tests pass: repeated observations, directed learned links, restart persistence, forgotten-area suppression, unstable coordinates, transport opt-in, title normalization, Host/Origin/token checks, CORS preflight and command validation.

@@ -5,8 +5,8 @@
 
 ## 起動
 
-1. ZIPを展開し `START_MAP.bat` をダブルクリックします。
-2. 元の `XenRebirthTranslator_v0.14.2beta_EirCandyvaultFix_Portable` フォルダーを選びます（runtime / tesseract を含むフォルダー）。既存のPythonとOCRを利用します。
+1. ZIPを展開し、`XenMapCompanion`を元の`XenRebirthTranslator_v0.14.2beta_EirCandyvaultFix_Portable`と同じ親フォルダーへ置きます。例えば両方をデスクトップへ置きます。
+2. `START_MAP.bat`をダブルクリックします。元ツールのPythonとOCRを自動で見つけて起動します。別の場所に置く場合は、元ツールのフォルダーを`START_MAP.bat`へドラッグ＆ドロップします。
 3. ゲームをウィンドウまたはボーダーレス表示にし、拡大マップを開きます。
 4. 「マップ範囲を指定」でタイトルを含む正方形の枠全体をドラッグ。「案内を開始」を押します。
 5. Chrome / Edgeで https://yysupporttools.github.io/xen-rebirth-jp/capture.html#map-database を開きます。
@@ -34,7 +34,7 @@
 - β版です。実ゲームの解像度・表示倍率・テーマでOCR精度が変わります。画面位置が変わった場合は範囲を指定し直してください。
 - 最小化したゲーム、排他的フルスクリーン、黒画面では認識できません。
 - 起動中のみ127.0.0.1:18765で連携を受け付けます。接続コードは起動ごとに変わります。攻略サイト以外のOriginとコードなしの要求は拒否します。
-- WindowsのポリシーでPowerShell起動が禁止されている場合、ポリシーを変更せずに管理者へ確認してください。Pythonから起動する場合は XEN_PORTABLE_ROOT を元ツールのフォルダーに設定して start.py を実行します。
+- PowerShellは使用しません。Windowsのスクリプト実行ポリシーの変更や管理者権限は不要です。Pythonから起動する場合は XEN_PORTABLE_ROOT を元ツールのフォルダーに設定して start.py を実行します。
 - 保存先を変える開発用設定：XEN_MAP_DATA。停止後も収集記録は残ります。
 
 元データ：ユーザー提供 XenRebirthTranslator v0.14.2β。元ツールのライセンス表示：This project is provided for personal use without warranty.
