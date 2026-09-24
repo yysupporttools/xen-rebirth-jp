@@ -15,6 +15,8 @@
   <script defer src="https://cdn.jsdelivr.net/npm/tesseract.js@5/dist/tesseract.min.js"></script>
   <script defer src="assets/world-routes.js?v=3"></script>
   <script defer src="assets/capture.js?v=28"></script>
+  <script defer src="assets/map-companion.js?v=1"></script>
+  <link rel="stylesheet" href="assets/map-companion.css?v=1">
   <script defer src="assets/saved-items.js?v=3"></script>
 </head>
 <body>
@@ -193,6 +195,43 @@
   </section>
 
   <section class="paper capture-section" id="map-database">
+    <div class="map-companion" aria-labelledby="companion-title">
+      <p class="eyebrow">GAME MAP NAVIGATION · WINDOWS β</p>
+      <h3 id="companion-title">ゲーム画面に矢印を表示</h3>
+      <p>使い慣れたマップ案内を常駐ツールで利用できます。拡大マップのエリア名を読み取り、次に向かう出口をゲーム画面に重ねます。</p>
+      <details>
+        <summary>初回の準備・使い方</summary>
+        <ol>
+          <li><a href="downloads/XenMapCompanion-beta.zip" download>マップ連携ツール β をダウンロード</a>して展開します。</li>
+          <li>START_MAP.batを開き、既存のXenRebirthTranslator v0.14.2βのフォルダーを選択します。</li>
+          <li>ゲームの拡大マップを開き、ツールで「マップ範囲を指定」→「案内を開始」。タイトルを含む枠全体を囲みます。</li>
+          <li>ツールの接続コードを下へ貼り付けて接続します。Chrome / Edgeでローカル接続の許可が出た場合は許可してください。</li>
+          <li>行先を選んで送信するとゲーム上に案内します。テンキー0で縮小／復元できます。</li>
+        </ol>
+        <p>元ツールのマップ案内はOFFにしてください。ウィンドウ／ボーダーレス表示で使用します。現在地はエリア名で、キャラクターの座標追跡や自動移動ではありません。</p>
+      </details>
+      <div class="companion-fields">
+        <label>接続コード<input id="companion-code" type="password" autocomplete="off" spellcheck="false" placeholder="常駐ツールからコピー"></label>
+        <label>行先（英語・日本語で検索）<input id="companion-destination" type="search" list="companion-destinations" autocomplete="off" placeholder="例：Essene / エスネ"><datalist id="companion-destinations"></datalist></label>
+      </div>
+      <label><input id="companion-transports" type="checkbox"> NPC移動・飛空艇も含める（入場条件はゲームで確認）</label>
+      <div class="companion-actions">
+        <button id="companion-connect" type="button">常駐ツールに接続</button>
+        <button id="companion-send" type="button" disabled>この行先へ案内</button>
+        <button id="companion-clear" type="button" disabled>行先を解除</button>
+      </div>
+      <p>現在地：<strong id="companion-current">未接続</strong></p>
+      <p id="companion-path">行先を選ぶと道順を表示します。</p>
+      <p id="companion-status" role="status">常駐ツールを起動して接続してください。画面読み取りはツールの「案内を開始」で始まります。</p>
+      <img id="companion-preview" alt="常駐ツールが読み取った拡大マップ" hidden>
+      <details>
+        <summary>このPCで収集したマップ：<span id="companion-count">0 エリア</span></summary>
+        <p class="small">未登録エリアは繰り返し認識すると追加します。出口名と位置も収集し、このPCの案内に反映します。全利用者への自動公開は行いません。読み違いは常駐ツールの「現在地を修正」で訂正できます。</p>
+        <ul id="companion-maps"></ul>
+        <button id="companion-export" type="button" disabled>収集した接続情報を書き出す</button>
+      </details>
+      <p class="small">サイトを閉じても案内は続きます。終了は常駐ツールの「停止」を押してください。未確認の出口は矢印を出さず、読み取り待ちになります。</p>
+    </div>
     <div class="section-heading">
       <div><p class="eyebrow">MAP DATABASE</p><h2>4. 自動収集したマップ・NPC位置</h2></div>
       <span id="map-db-count">0 NPC</span>
