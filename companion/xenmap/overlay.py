@@ -18,6 +18,13 @@ from .map_guide import MAP_COORDS, canonical_name, edge_label, graph, is_telepor
 # Coordinates are relative to the 508 x 508 expanded-map captures.  These
 # measured points take priority over OCR and world-map estimates.
 LOCAL_EXITS = {
+    # Confirmed from the user's expanded-map capture (2026-09-24).
+    "Arcarinas Square": {
+        "Guild Plaza": (230, 14),
+        "Mall Street": (16, 216),
+        "Summerhill Street": (488, 222),
+        "Brynhilld Trisects": (270, 488),
+    },
     "Brynhilld Trisects": {
         "Brunen Basin": (18, 345),
         "Aerial Forest": (486, 388),

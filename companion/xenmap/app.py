@@ -24,11 +24,17 @@ from .overlay import LOCAL_EXITS, LocalMapArrowOverlay
 def read_map(image):
     """Use the original tool's title-only crop, normalized for display scaling."""
     image = image.resize((508, 508))
-    crop = ImageOps.grayscale(image.crop((45, 15, 430, 48)))
+    crop = ImageOps.grayscale(image.crop((60, 22, 430, 43)))
     # A closed map (bright scenery in the title slot) must not keep an old arrow.
     if sum(crop.histogram()[:110]) / (crop.width * crop.height) < 0.45:
         return '', {}, image
-    crop = ImageOps.autocontrast(crop).resize((1540, 132))
+    # Try the short title plate before including the neighbouring exit labels.
+    short_crop = ImageOps.autocontrast(crop.crop((0, 0, 150, 21))).resize((600, 84))
+    raw_short = pytesseract.image_to_string(short_crop, lang='eng', config='--psm 7', timeout=5)
+    short_name = title_name(raw_short)
+    if canonical_name(raw_short.strip()) in set(MAP_NAMES) | set(LOCAL_EXITS):
+        return short_name, {}, image
+    crop = ImageOps.autocontrast(crop).resize((1480, 84))
     raw = pytesseract.image_to_string(crop.point(lambda p: 255 if p > 165 else 0),
                                      lang='eng', config='--psm 7', timeout=5)
     name = title_name(raw)

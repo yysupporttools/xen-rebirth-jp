@@ -1,5 +1,7 @@
 # Validation — 2026-09-24
 
+- Title contamination fix: verified both locally collected real Arcarinas Square images now resolve to Arcarinas Square. Route to Alicia Forest begins through Brynhilld Trisects, with the measured south exit available. Added a synthetic title/adjacent Guild Plaza regression and migration test. Existing polluted atlas names merge on next startup with a backup. Real user images are not included in the repository or ZIP.
+
 - Launcher fix: removed the PowerShell script dependency after a Restricted execution-policy failure. The native batch launcher discovers a sibling portable runtime or accepts a dragged portable directory. Executed the installed desktop batch with the diagnostic switch; portable imports and OCR path passed without changing execution policy or opening/capturing the game.
 
 - Source: user-provided XenRebirthTranslator v0.14.2beta EirCandyvaultFix Portable.

@@ -17,6 +17,12 @@ def title_name(raw):
     canonical = guide.canonical_name(text)
     if canonical in guide.graph():
         return canonical
+    # Title OCR may append a nearby exit label. Match a complete known name
+    # at the beginning, longest first; never match an arbitrary interior NPC.
+    names = set(guide.graph()) | set(guide.ALIASES)
+    for known in sorted(names, key=len, reverse=True):
+        if text.casefold().startswith(known.casefold() + ' '):
+            return guide.canonical_name(known)
     short = re.search(r'\b(Eir|Yvel)\b', text, re.IGNORECASE)
     return guide.canonical_name(short.group(1)) if short else canonical
 
@@ -32,6 +38,29 @@ class Atlas:
         except (OSError, ValueError, KeyError):
             self.maps = {}
         self.pending = {}
+        self.repair_titles()
+
+    def repair_titles(self):
+        repaired = {}
+        changed = False
+        for old_name, record in self.maps.items():
+            name = title_name(old_name) or old_name
+            changed |= name != old_name
+            target = repaired.setdefault(name, {'exits': {}, 'visits': 0})
+            target['visits'] += record.get('visits', 0)
+            for old_exit, value in record.get('exits', {}).items():
+                exit_name = title_name(old_exit) or old_exit
+                changed |= exit_name != old_exit
+                if exit_name != name:
+                    existing = target['exits'].get(exit_name)
+                    if not existing or value.get('count', 0) > existing.get('count', 0):
+                        target['exits'][exit_name] = value
+        if changed:
+            backup = self.path.with_name('atlas.before-title-fix.json')
+            if self.path.exists() and not backup.exists():
+                backup.write_bytes(self.path.read_bytes())
+            self.maps = repaired
+            self.save()
 
     def save(self):
         self.path.parent.mkdir(parents=True, exist_ok=True)

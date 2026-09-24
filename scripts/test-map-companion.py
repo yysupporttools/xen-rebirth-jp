@@ -43,10 +43,24 @@ class AtlasTests(unittest.TestCase):
         self.assertNotEqual(walking, ['Candyvault', 'Eir'])
 
     def test_title_normalization(self):
+        self.assertEqual(title_name('Arcarinas Square ag Plaza oa a'), 'Arcarinas Square')
+        self.assertEqual(title_name('Arcarinas Square Guild Plaza'), 'Arcarinas Square')
+        self.assertEqual(title_name('Shenzhen Waterfall Exit extra'), 'Shenzhen Waterfall Exit')
         self.assertEqual(title_name('Eir'), 'Eir')
         self.assertEqual(title_name('   New   Meadow  '), 'New Meadow')
         self.assertEqual(title_name('world map'), '')
         self.assertEqual(title_name('12'), '')
+
+    def test_repair_polluted_titles_on_restart(self):
+        self.path.write_text(json.dumps({'maps': {
+            'Arcarinas Square ag Plaza': {'visits': 19, 'exits': {}},
+            'Arcarinas Square ag Plaza oa a': {'visits': 21, 'exits': {}}
+        }}))
+        atlas = Atlas(self.path)
+        self.assertEqual(list(atlas.maps), ['Arcarinas Square'])
+        self.assertEqual(atlas.maps['Arcarinas Square']['visits'], 40)
+        self.assertTrue(self.path.with_name('atlas.before-title-fix.json').exists())
+        self.assertTrue(atlas.route('Arcarinas Square', 'Alicia Forest', True))
 
 
 class BridgeTests(unittest.TestCase):

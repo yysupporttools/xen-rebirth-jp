@@ -22,6 +22,12 @@ assert name == 'Eir', repr(name)
 exits = read_exits(normalized, {'Eir', 'Essene'})
 assert 'Essene' in exits, exits
 assert read_map(Image.new('RGB', (508, 508), 'white'))[0] == ''
+polluted = Image.new('RGB', (508, 508), '#202020')
+draw = ImageDraw.Draw(polluted)
+small = ImageFont.truetype('C:/Windows/Fonts/arial.ttf', 15)
+draw.text((65, 22), 'Arcarinas Square', fill='white', font=small)
+draw.text((240, 25), 'Guild Plaza', fill='white', font=small)
+assert read_map(polluted)[0] == 'Arcarinas Square'
 with tempfile.TemporaryDirectory() as directory:
     os.environ['XEN_MAP_DATA'] = directory
     root = tk.Tk(); root.withdraw()
