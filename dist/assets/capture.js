@@ -20,6 +20,9 @@
   let fastNpcTimer=null;
   let lastFastNpcName="";
   let lastFastNpcAt=0;
+  let fastDialogueOcrBusy=false;
+  let lastFastDialogueOcrAt=0;
+  let lastFastFallbackAt=0;
   let quests=[];
   let npcProfiles=[];
   let dialogueTransitions=[];
@@ -435,8 +438,12 @@
       autoPending=null;
       autoPendingAt=0;
       lastAutoAnalysisAt=now;
-      setAutoStatus("analyzing","自動解析中");
-      await runOpenAiAnalysis("auto");
+      setAutoStatus("analyzing","保存済み会話を照合中");
+      const localHit=await fastDialogueOcrTick(true);
+      if(!localHit){
+        setAutoStatus("analyzing","自動解析中");
+        await runOpenAiAnalysis("auto");
+      }
       if(autoEnabled&&stream){
         autoBaseline=monitorSample()||autoBaseline;
         setAutoStatus("cooldown","解析完了・待機");
@@ -448,7 +455,18 @@
       autoBaseline=sample;
       autoPending=null;
       autoPendingAt=0;
-      setAutoStatus("watching","動きが大きいため再監視");
+      // Never stay in "stable wait" forever. Try local OCR once, then force the
+      // existing AI path if the saved conversation still cannot be identified.
+      if(now-lastFastFallbackAt>6000){
+        lastFastFallbackAt=now;
+        setAutoStatus("analyzing","保存済み会話を再照合中");
+        const localHit=await fastDialogueOcrTick(true);
+        if(!localHit&&!aiAnalyzing){
+          lastAutoAnalysisAt=now;
+          setAutoStatus("analyzing","AI解析へ切替");
+          await runOpenAiAnalysis("auto");
+        }
+      }else setAutoStatus("watching","再監視");
       return;
     }
 
@@ -652,12 +670,94 @@
   async function fastKnownNpcTick(){
     if(!autoEnabled||!stream) return;
     const signature=npcSignatureFromVideo();
-    if(!signature) return;
-    const match=bestKnownNpcMatch(signature);
-    if(!match) return;
-    const npc=match.entry.npc_name||"";
-    if(npc===lastFastNpcName&&Date.now()-lastFastNpcAt<5000) return;
-    showKnownNpcMatch(match);
+    const match=signature?bestKnownNpcMatch(signature):null;
+    if(match){
+      const npc=match.entry.npc_name||"";
+      if(!(npc===lastFastNpcName&&Date.now()-lastFastNpcAt<1800)){
+        showKnownNpcMatch(match);
+      }
+      return;
+    }
+    // Appearance is only the first hint. If it is ambiguous/missing, identify the
+    // saved dialogue from local OCR using NPC name + English dialogue + choices +
+    // current map. This also handles identical-looking / same-name NPCs.
+    await fastDialogueOcrTick(false);
+  }
+
+  function fastDialogueCanvas(){
+    const video=getCaptureVideo();
+    if(!stream||!video.videoWidth||video.readyState<2) return null;
+    const vw=video.videoWidth,vh=video.videoHeight;
+    const canvas=document.createElement("canvas");
+    canvas.width=1000; canvas.height=430;
+    const ctx=canvas.getContext("2d",{willReadFrequently:true});
+    // Xen NPC dialogue is normally around the centre. OCR a broad centre zone so
+    // different resolutions/window sizes still work; map/name/text/choices can all
+    // contribute to the local match.
+    ctx.drawImage(video,vw*0.18,vh*0.18,vw*0.70,vh*0.68,0,0,canvas.width,canvas.height);
+    return canvas;
+  }
+
+  function tokenSet(value){
+    return new Set(String(value||"").normalize("NFKC").toLowerCase()
+      .replace(/[^a-z0-9' -]+/g," ").split(/\s+/).filter(function(x){return x.length>=2;}));
+  }
+
+  function tokenSimilarity(a,b){
+    const aa=tokenSet(a),bb=tokenSet(b);
+    if(!aa.size||!bb.size) return 0;
+    let hit=0; aa.forEach(function(x){if(bb.has(x)) hit++;});
+    return hit/Math.max(1,Math.min(aa.size,bb.size));
+  }
+
+  function bestSavedDialogueFromOcr(text){
+    const raw=String(text||"").trim();
+    if(!raw) return null;
+    const map=String(routeCurrentMap||"").trim();
+    const scored=records.map(function(r){
+      const dialogue=[r.npc_name,r.dialogue_text_en,r.english_text]
+        .concat(choicesArray(r.choices_en)).filter(Boolean).join(" ");
+      let score=tokenSimilarity(raw,dialogue);
+      if(map&&r.map_name&&normText(map)===normText(r.map_name)) score+=0.12;
+      // NPC name is useful, but never sufficient by itself because duplicate names exist.
+      if(r.npc_name&&normText(raw).includes(normText(r.npc_name))) score+=0.10;
+      return {record:r,score:score};
+    }).sort(function(a,b){return b.score-a.score;});
+    if(!scored.length||scored[0].score<0.34) return null;
+    if(scored[1]&&scored[0].score-scored[1].score<0.045&&scored[0].score<0.62) return null;
+    return scored[0];
+  }
+
+  function showSavedDialogueMatch(hit){
+    if(!hit||!hit.record) return false;
+    const r=hit.record;
+    activeNpcName=r.npc_name||"";
+    activeRecordId=r.id;
+    dialogueNavStacks.clear();
+    if($("knowledge-search").value!==activeNpcName) $("knowledge-search").value=activeNpcName;
+    renderRecords();
+    lastFastNpcName=activeNpcName;
+    lastFastNpcAt=Date.now();
+    setStatus("capture-status","保存済み会話を高速照合しました（NPC名・会話文・選択肢・現在地を照合 / AI解析なし）。");
+    setStatus("form-status",needsTranslation(r)?"未翻訳の項目があります。":"保存済み翻訳を即時表示中（API使用なし）");
+    return true;
+  }
+
+  async function fastDialogueOcrTick(force){
+    const now=Date.now();
+    if(fastDialogueOcrBusy||!autoEnabled||!stream||!window.Tesseract) return false;
+    if(!force&&now-lastFastDialogueOcrAt<1800) return false;
+    const canvas=fastDialogueCanvas();
+    if(!canvas) return false;
+    fastDialogueOcrBusy=true;
+    lastFastDialogueOcrAt=now;
+    try{
+      const result=await window.Tesseract.recognize(canvas,"eng",{logger:function(){}});
+      const text=result&&result.data?String(result.data.text||""):"";
+      const hit=bestSavedDialogueFromOcr(text);
+      return hit?showSavedDialogueMatch(hit):false;
+    }catch(_){return false;}
+    finally{fastDialogueOcrBusy=false;}
   }
 
   function normText(value){
