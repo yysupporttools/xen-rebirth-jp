@@ -724,3 +724,46 @@
   .capture-black-warning{align-items:stretch;flex-direction:column}
   .capture-black-warning button{width:100%}
 }
+
+/* Simple usage guide for NPC search */
+.capture-howto{
+  margin:14px 0 18px;
+  padding:16px 18px;
+  border:1px solid #9fc7df;
+  border-left:5px solid #3f82ad;
+  border-radius:9px;
+  background:#f4faff;
+}
+.capture-howto>strong{
+  display:block;
+  margin-bottom:10px;
+  font-size:17px;
+  color:#173b55;
+}
+.capture-howto-steps{
+  display:flex;
+  gap:8px;
+  flex-wrap:wrap;
+}
+.capture-howto-steps span{
+  display:inline-flex;
+  align-items:center;
+  gap:7px;
+  padding:8px 11px;
+  border-radius:7px;
+  background:#fff;
+  border:1px solid #c8dce9;
+  font-weight:700;
+}
+.capture-howto-steps b{
+  color:#2f78a6;
+  font-size:16px;
+}
+.capture-howto p{
+  margin:11px 0 0;
+  color:var(--muted);
+  line-height:1.65;
+}
+@media(max-width:700px){
+  .capture-howto-steps{display:grid}
+}
