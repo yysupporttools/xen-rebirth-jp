@@ -29,6 +29,8 @@
   let gameMaps=[];
   let mapNpcs=[];
   const dialogueNavStacks=new Map();
+  const dialogueHistory=[];
+  let lastObservedRecordId="";
   let npcImageBlob=null;
   let npcImagePreviewUrl="";
   let aiAnalyzing=false;
@@ -655,9 +657,9 @@
     const npc=match.entry.npc_name||"";
     let root=records.find(function(r){return r.id===match.entry.root_record_id;})||dialogueRootForNpc(npc);
     if(!root) return false;
+    rememberDialogueHistory(root.id);
     activeNpcName=npc;
     activeRecordId=root.id;
-    dialogueNavStacks.clear();
     if($("knowledge-search").value!==npc) $("knowledge-search").value=npc;
     renderRecords();
     lastFastNpcName=npc;
@@ -728,12 +730,69 @@
     return scored[0];
   }
 
+  function inferChoiceIndexBetween(from,to){
+    if(!from||!to||from.id===to.id) return -1;
+    const choices=choicesArray(from.choices_en);
+    if(!choices.length) return -1;
+    const nextText=[to.dialogue_text_en,to.english_text,to.quest_name_en].filter(Boolean).join(" ");
+    let best={index:-1,score:0},second=0;
+    choices.forEach(function(choice,index){
+      let score=tokenSimilarity(choice,nextText);
+      // Existing transition knowledge is strong evidence and lets repeated
+      // observations reinforce the same route.
+      const known=transitionFor(from.id,index);
+      if(known&&known.to_record_id===to.id) score+=1;
+      if(score>best.score){second=best.score;best={index:index,score:score};}
+      else if(score>second) second=score;
+    });
+    if(best.score>=1) return best.index;
+    if(best.score>=0.24&&best.score-second>=0.08) return best.index;
+    // If only one choice can advance and both records belong to the same NPC/map,
+    // it is safe enough to connect it from the observed before/after pair.
+    if(choices.length===1&&from.npc_name===to.npc_name&&
+       (!from.map_name||!to.map_name||normText(from.map_name)===normText(to.map_name))) return 0;
+    return -1;
+  }
+
+  async function rememberObservedDialogueTransition(previousId,nextRecord){
+    if(!previousId||!nextRecord||previousId===nextRecord.id) return;
+    const previous=records.find(function(r){return r.id===previousId;});
+    if(!previous) return;
+    const choiceIndex=inferChoiceIndexBetween(previous,nextRecord);
+    if(choiceIndex<0) return;
+    const exists=transitionFor(previous.id,choiceIndex);
+    if(exists&&exists.to_record_id===nextRecord.id) return;
+    // Persist when the existing RPC is available; otherwise keep a session-local
+    // transition so navigation works immediately without breaking older databases.
+    try{
+      const res=await db.rpc("game_dialogue_transition_save",{
+        p_from_record_id:previous.id,
+        p_choice_index:choiceIndex,
+        p_to_record_id:nextRecord.id,
+        p_choice_text_en:choicesArray(previous.choices_en)[choiceIndex]||"",
+        p_contributor_id:contributorId
+      });
+      if(!res.error) await loadDialogueTransitions();
+      else dialogueTransitions.push({from_record_id:previous.id,choice_index:choiceIndex,to_record_id:nextRecord.id,_local:true});
+    }catch(_){
+      dialogueTransitions.push({from_record_id:previous.id,choice_index:choiceIndex,to_record_id:nextRecord.id,_local:true});
+    }
+  }
+
+  function rememberDialogueHistory(nextId){
+    if(!nextId||nextId===activeRecordId) return;
+    if(activeRecordId) dialogueHistory.push(activeRecordId);
+    if(dialogueHistory.length>40) dialogueHistory.shift();
+  }
+
   function showSavedDialogueMatch(hit){
     if(!hit||!hit.record) return false;
     const r=hit.record;
+    const previousId=activeRecordId;
+    rememberDialogueHistory(r.id);
     activeNpcName=r.npc_name||"";
     activeRecordId=r.id;
-    dialogueNavStacks.clear();
+    rememberObservedDialogueTransition(previousId,r);
     if($("knowledge-search").value!==activeNpcName) $("knowledge-search").value=activeNpcName;
     renderRecords();
     lastFastNpcName=activeNpcName;
@@ -2655,7 +2714,7 @@
         '<span>'+esc(r.map_name||"MAP未登録")+'</span>'+
       '</div>'+
       '<div class="knowledge-meta">'+
-        (stack.length?'<button type="button" class="dialogue-back" data-dialogue-back="1">← 1つ前の会話へ</button>':"")+
+        ((stack.length||dialogueHistory.length)?'<button type="button" class="dialogue-back" data-dialogue-back="1">← 1つ前の会話へ</button>':"")+
         '<span>会話 '+page.index+' / '+page.total+'</span>'+
         (r.required_level!=null?'<span>Lv '+esc(r.required_level)+'</span>':"")+
         (quest?'<span>'+esc(quest)+'</span>':"")+
@@ -2799,6 +2858,8 @@
     const stack=dialogueNavStacks.get(cardKey)||[];
     stack.push(currentId);
     dialogueNavStacks.set(cardKey,stack);
+    dialogueHistory.push(currentId);
+    if(dialogueHistory.length>40) dialogueHistory.shift();
     activeRecordId=target.id;
     activeNpcName=target.npc_name||activeNpcName;
     card.outerHTML=renderDialogueCard(target,cardKey);
@@ -2809,8 +2870,9 @@
     if(!card) return;
     const cardKey=card.dataset.cardKey||card.dataset.recordId;
     const stack=dialogueNavStacks.get(cardKey)||[];
-    const previousId=stack.pop();
+    let previousId=stack.pop();
     dialogueNavStacks.set(cardKey,stack);
+    if(!previousId) previousId=dialogueHistory.pop();
     const previous=records.find(function(r){return r.id===previousId;});
     if(previous){
       activeRecordId=previous.id;
