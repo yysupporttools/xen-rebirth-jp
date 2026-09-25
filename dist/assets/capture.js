@@ -40,7 +40,7 @@
   let autoPending=null;
   let autoPendingAt=0;
   let lastAutoAnalysisAt=0;
-  const AUTO_POLL_MS=2500;
+  const AUTO_POLL_MS=1200;
   const AUTO_COOLDOWN_MS=10000;
   const AUTO_CHANGE_RATIO=0.018;
   const AUTO_STABLE_RATIO=0.012;
@@ -371,15 +371,24 @@
     if(autoTimer) clearInterval(autoTimer);
     autoTimer=setInterval(autoTick,AUTO_POLL_MS);
     if(fastNpcTimer) clearInterval(fastNpcTimer);
-    fastNpcTimer=setInterval(fastKnownNpcTick,900);
+    // Run the local known-NPC matcher immediately, then keep it hot at a light interval.
+    fastKnownNpcTick();
+    fastNpcTimer=setInterval(fastKnownNpcTick,450);
 
     setTimeout(function(){
-      if(autoEnabled&&stream&&!aiAnalyzing&&(Date.now()-lastAutoAnalysisAt>=AUTO_COOLDOWN_MS)){
+      if(!autoEnabled||!stream||aiAnalyzing) return;
+      const signature=npcSignatureFromVideo();
+      const match=bestKnownNpcMatch(signature);
+      if(match&&showKnownNpcMatch(match)){
+        setAutoStatus("watching","保存済みNPCを高速表示");
+        return;
+      }
+      if(Date.now()-lastAutoAnalysisAt>=AUTO_COOLDOWN_MS){
         setAutoStatus("analyzing","初回解析中");
         lastAutoAnalysisAt=Date.now();
         runOpenAiAnalysis("auto");
       }
-    },900);
+    },500);
   }
 
   async function autoTick(){
