@@ -21,7 +21,10 @@
   let lastFastNpcName="";
   let lastFastNpcAt=0;
   let fastDialogueOcrBusy=false;
+  let fastDialogueOcrWorkerPromise=null;
   let lastFastDialogueOcrAt=0;
+  let lastFastDialogueOcrDurationMs=0;
+  const FAST_DIALOGUE_OCR_INTERVAL_MS=650;
   let lastFastFallbackAt=0;
   let quests=[];
   let npcProfiles=[];
@@ -359,6 +362,17 @@
     syncMiniCaptureStatus();
   }
 
+  function ensureFastDialogueOcrWorker(){
+    if(!window.Tesseract||typeof window.Tesseract.createWorker!=="function") return Promise.resolve(null);
+    if(!fastDialogueOcrWorkerPromise){
+      fastDialogueOcrWorkerPromise=window.Tesseract.createWorker("eng",1,{logger:function(){}}).catch(function(err){
+        fastDialogueOcrWorkerPromise=null;
+        throw err;
+      });
+    }
+    return fastDialogueOcrWorkerPromise;
+  }
+
   async function startAutoMonitor(){
     if(!stream){
       $("auto-mode").checked=false;
@@ -368,6 +382,8 @@
     }
     autoEnabled=true;
     syncMiniCaptureStatus();
+    // Load Tesseract once before the next dialogue transition; OCR jobs reuse this worker.
+    ensureFastDialogueOcrWorker().catch(function(){});
     autoBaseline=monitorSample();
     autoPending=null;
     autoPendingAt=0;
@@ -796,7 +812,7 @@
     renderRecords();
     lastFastNpcName=activeNpcName;
     lastFastNpcAt=Date.now();
-    setStatus("capture-status","保存済み会話を高速照合しました（NPC名・会話文・選択肢・現在地を照合 / AI解析なし）。");
+    setStatus("capture-status","保存済み会話を高速表示（OCR "+lastFastDialogueOcrDurationMs+"ms / AI解析なし）。");
     setStatus("form-status",needsTranslation(r)?"未翻訳の項目があります。":"保存済み翻訳を即時表示中（API使用なし）");
     return true;
   }
@@ -804,21 +820,27 @@
   async function fastDialogueOcrTick(force){
     const now=Date.now();
     if(fastDialogueOcrBusy||!autoEnabled||!stream||!window.Tesseract) return false;
-    if(!force&&now-lastFastDialogueOcrAt<1800) return false;
+    if(!force&&now-lastFastDialogueOcrAt<FAST_DIALOGUE_OCR_INTERVAL_MS) return false;
     const canvas=fastDialogueCanvas();
     if(!canvas) return false;
     fastDialogueOcrBusy=true;
     const sourceStream=stream;
     const sourceRecordId=activeRecordId;
     lastFastDialogueOcrAt=now;
+    const ocrStartedAt=performance.now();
     try{
-      const result=await window.Tesseract.recognize(canvas,"eng",{logger:function(){}});
+      const worker=await ensureFastDialogueOcrWorker();
+      if(!worker) return false;
+      const result=await worker.recognize(canvas);
       if(!autoEnabled||stream!==sourceStream||activeRecordId!==sourceRecordId) return false;
       const text=result&&result.data?String(result.data.text||""):"";
       const hit=bestSavedDialogueFromOcr(text);
       return hit?showSavedDialogueMatch(hit):false;
     }catch(_){return false;}
-    finally{fastDialogueOcrBusy=false;}
+    finally{
+      lastFastDialogueOcrDurationMs=Math.round(performance.now()-ocrStartedAt);
+      fastDialogueOcrBusy=false;
+    }
   }
 
   function normText(value){
