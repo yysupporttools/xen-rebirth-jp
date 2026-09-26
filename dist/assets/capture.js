@@ -21,7 +21,11 @@
   let lastFastNpcName="";
   let lastFastNpcAt=0;
   let fastDialogueOcrBusy=false;
+  let fastDialogueOcrPromise=null;
+  let fastDialogueOcrWorkerPromise=null;
   let lastFastDialogueOcrAt=0;
+  let lastFastDialogueOcrDurationMs=0;
+  const FAST_DIALOGUE_OCR_INTERVAL_MS=650;
   let lastFastFallbackAt=0;
   let quests=[];
   let npcProfiles=[];
@@ -359,6 +363,17 @@
     syncMiniCaptureStatus();
   }
 
+  function ensureFastDialogueOcrWorker(){
+    if(!window.Tesseract||typeof window.Tesseract.createWorker!=="function") return Promise.resolve(null);
+    if(!fastDialogueOcrWorkerPromise){
+      fastDialogueOcrWorkerPromise=window.Tesseract.createWorker("eng",1,{logger:function(){}}).catch(function(err){
+        fastDialogueOcrWorkerPromise=null;
+        throw err;
+      });
+    }
+    return fastDialogueOcrWorkerPromise;
+  }
+
   async function startAutoMonitor(){
     if(!stream){
       $("auto-mode").checked=false;
@@ -368,6 +383,8 @@
     }
     autoEnabled=true;
     syncMiniCaptureStatus();
+    // Load Tesseract once before the next dialogue transition; OCR jobs reuse this worker.
+    ensureFastDialogueOcrWorker().catch(function(){});
     autoBaseline=monitorSample();
     autoPending=null;
     autoPendingAt=0;
@@ -679,7 +696,8 @@
     if(!stream||!video.videoWidth||video.readyState<2) return null;
     const vw=video.videoWidth,vh=video.videoHeight;
     const canvas=document.createElement("canvas");
-    canvas.width=1000; canvas.height=430;
+    // Preserve the game's dialogue crop aspect ratio and retain enough pixels for OCR.
+    canvas.width=1100; canvas.height=600;
     const ctx=canvas.getContext("2d",{willReadFrequently:true});
     // Xen NPC dialogue is normally around the centre. OCR a broad centre zone so
     // different resolutions/window sizes still work; map/name/text/choices can all
@@ -796,29 +814,43 @@
     renderRecords();
     lastFastNpcName=activeNpcName;
     lastFastNpcAt=Date.now();
-    setStatus("capture-status","保存済み会話を高速照合しました（NPC名・会話文・選択肢・現在地を照合 / AI解析なし）。");
+    setStatus("capture-status","保存済み会話を高速表示（OCR "+lastFastDialogueOcrDurationMs+"ms / AI解析なし）。");
     setStatus("form-status",needsTranslation(r)?"未翻訳の項目があります。":"保存済み翻訳を即時表示中（API使用なし）");
     return true;
   }
 
   async function fastDialogueOcrTick(force){
     const now=Date.now();
-    if(fastDialogueOcrBusy||!autoEnabled||!stream||!window.Tesseract) return false;
-    if(!force&&now-lastFastDialogueOcrAt<1800) return false;
-    const canvas=fastDialogueCanvas();
-    if(!canvas) return false;
+    if(!autoEnabled||!stream||!window.Tesseract) return false;
+    // A forced lookup waits for the in-flight OCR instead of treating "busy" as
+    // a miss and unnecessarily starting the slower OpenAI path.
+    if(fastDialogueOcrBusy) return force&&fastDialogueOcrPromise?fastDialogueOcrPromise:false;
+    if(!force&&now-lastFastDialogueOcrAt<FAST_DIALOGUE_OCR_INTERVAL_MS) return false;
     fastDialogueOcrBusy=true;
     const sourceStream=stream;
     const sourceRecordId=activeRecordId;
     lastFastDialogueOcrAt=now;
-    try{
-      const result=await window.Tesseract.recognize(canvas,"eng",{logger:function(){}});
-      if(!autoEnabled||stream!==sourceStream||activeRecordId!==sourceRecordId) return false;
-      const text=result&&result.data?String(result.data.text||""):"";
-      const hit=bestSavedDialogueFromOcr(text);
-      return hit?showSavedDialogueMatch(hit):false;
-    }catch(_){return false;}
-    finally{fastDialogueOcrBusy=false;}
+    const ocrStartedAt=performance.now();
+    fastDialogueOcrPromise=(async function(){
+      try{
+        const worker=await ensureFastDialogueOcrWorker();
+        if(!worker||!autoEnabled||stream!==sourceStream) return false;
+        // Capture after worker startup so the first recognition uses the latest frame.
+        const canvas=fastDialogueCanvas();
+        if(!canvas) return false;
+        const result=await worker.recognize(canvas);
+        if(!autoEnabled||stream!==sourceStream||activeRecordId!==sourceRecordId) return false;
+        const text=result&&result.data?String(result.data.text||""):"";
+        const hit=bestSavedDialogueFromOcr(text);
+        return hit?showSavedDialogueMatch(hit):false;
+      }catch(_){return false;}
+      finally{
+        lastFastDialogueOcrDurationMs=Math.round(performance.now()-ocrStartedAt);
+        fastDialogueOcrBusy=false;
+        fastDialogueOcrPromise=null;
+      }
+    })();
+    return await fastDialogueOcrPromise;
   }
 
   function normText(value){
