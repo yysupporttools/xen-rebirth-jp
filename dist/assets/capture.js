@@ -2680,6 +2680,9 @@
   function renderDialogueCard(r,cardKey){
     const quest=[r.quest_name_ja,r.quest_name_en].filter(Boolean).join(" / ");
     const profile=findNpcProfile(r.npc_name,r.map_name);
+    const portraitUrl=normText(r.npc_name)==="guild office guide"
+      ?"assets/guild-office-guide-portrait.svg"
+      :(profile&&profile.image_url||"");
     const dialogueEn=String(r.dialogue_text_en??r.english_text??"");
     const clean=cleanTranslations(r);
     const dialogueJa=clean.dialogue_text_ja;
@@ -2724,7 +2727,7 @@
       '</div>'+
       '<div class="game-dialog-layout">'+
         '<aside class="game-npc-portrait">'+
-          (profile&&profile.image_url?'<img src="'+esc(profile.image_url)+'" alt="'+esc(r.npc_name)+'">':'<div class="portrait-placeholder">NPC<br>IMAGE</div>')+
+          (portraitUrl?'<img src="'+esc(portraitUrl)+'" alt="'+esc(r.npc_name)+'">':'<div class="portrait-placeholder">NPC<br>IMAGE</div>')+
         '</aside>'+
         '<div class="game-dialog-main">'+
           '<section class="game-dialog-upper">'+
