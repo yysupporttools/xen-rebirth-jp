@@ -21,6 +21,7 @@
   let lastFastNpcName="";
   let lastFastNpcAt=0;
   let fastDialogueOcrBusy=false;
+  let fastDialogueOcrPromise=null;
   let fastDialogueOcrWorkerPromise=null;
   let lastFastDialogueOcrAt=0;
   let lastFastDialogueOcrDurationMs=0;
@@ -695,7 +696,8 @@
     if(!stream||!video.videoWidth||video.readyState<2) return null;
     const vw=video.videoWidth,vh=video.videoHeight;
     const canvas=document.createElement("canvas");
-    canvas.width=1000; canvas.height=430;
+    // Preserve the game's dialogue crop aspect ratio and retain enough pixels for OCR.
+    canvas.width=1100; canvas.height=600;
     const ctx=canvas.getContext("2d",{willReadFrequently:true});
     // Xen NPC dialogue is normally around the centre. OCR a broad centre zone so
     // different resolutions/window sizes still work; map/name/text/choices can all
@@ -819,28 +821,36 @@
 
   async function fastDialogueOcrTick(force){
     const now=Date.now();
-    if(fastDialogueOcrBusy||!autoEnabled||!stream||!window.Tesseract) return false;
+    if(!autoEnabled||!stream||!window.Tesseract) return false;
+    // A forced lookup waits for the in-flight OCR instead of treating "busy" as
+    // a miss and unnecessarily starting the slower OpenAI path.
+    if(fastDialogueOcrBusy) return force&&fastDialogueOcrPromise?fastDialogueOcrPromise:false;
     if(!force&&now-lastFastDialogueOcrAt<FAST_DIALOGUE_OCR_INTERVAL_MS) return false;
-    const canvas=fastDialogueCanvas();
-    if(!canvas) return false;
     fastDialogueOcrBusy=true;
     const sourceStream=stream;
     const sourceRecordId=activeRecordId;
     lastFastDialogueOcrAt=now;
     const ocrStartedAt=performance.now();
-    try{
-      const worker=await ensureFastDialogueOcrWorker();
-      if(!worker) return false;
-      const result=await worker.recognize(canvas);
-      if(!autoEnabled||stream!==sourceStream||activeRecordId!==sourceRecordId) return false;
-      const text=result&&result.data?String(result.data.text||""):"";
-      const hit=bestSavedDialogueFromOcr(text);
-      return hit?showSavedDialogueMatch(hit):false;
-    }catch(_){return false;}
-    finally{
-      lastFastDialogueOcrDurationMs=Math.round(performance.now()-ocrStartedAt);
-      fastDialogueOcrBusy=false;
-    }
+    fastDialogueOcrPromise=(async function(){
+      try{
+        const worker=await ensureFastDialogueOcrWorker();
+        if(!worker||!autoEnabled||stream!==sourceStream) return false;
+        // Capture after worker startup so the first recognition uses the latest frame.
+        const canvas=fastDialogueCanvas();
+        if(!canvas) return false;
+        const result=await worker.recognize(canvas);
+        if(!autoEnabled||stream!==sourceStream||activeRecordId!==sourceRecordId) return false;
+        const text=result&&result.data?String(result.data.text||""):"";
+        const hit=bestSavedDialogueFromOcr(text);
+        return hit?showSavedDialogueMatch(hit):false;
+      }catch(_){return false;}
+      finally{
+        lastFastDialogueOcrDurationMs=Math.round(performance.now()-ocrStartedAt);
+        fastDialogueOcrBusy=false;
+        fastDialogueOcrPromise=null;
+      }
+    })();
+    return await fastDialogueOcrPromise;
   }
 
   function normText(value){
