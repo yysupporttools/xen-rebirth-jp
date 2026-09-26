@@ -696,13 +696,13 @@
     if(!stream||!video.videoWidth||video.readyState<2) return null;
     const vw=video.videoWidth,vh=video.videoHeight;
     const canvas=document.createElement("canvas");
-    // Preserve the game's dialogue crop aspect ratio and retain enough pixels for OCR.
-    canvas.width=1100; canvas.height=600;
+    // NPC dialogue and its choices sit in the centered game window. Keep this crop
+    // broad enough for different UI scales, but avoid OCR over the mostly empty map.
+    const cropWidth=vw*0.40,cropHeight=vh*0.52;
+    canvas.width=760;
+    canvas.height=Math.round(canvas.width*cropHeight/cropWidth);
     const ctx=canvas.getContext("2d",{willReadFrequently:true});
-    // Xen NPC dialogue is normally around the centre. OCR a broad centre zone so
-    // different resolutions/window sizes still work; map/name/text/choices can all
-    // contribute to the local match.
-    ctx.drawImage(video,vw*0.18,vh*0.18,vw*0.70,vh*0.68,0,0,canvas.width,canvas.height);
+    ctx.drawImage(video,vw*0.30,vh*0.18,cropWidth,cropHeight,0,0,canvas.width,canvas.height);
     return canvas;
   }
 
