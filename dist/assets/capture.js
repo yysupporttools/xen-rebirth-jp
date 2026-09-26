@@ -380,14 +380,15 @@
     fastKnownNpcTick();
     fastNpcTimer=setInterval(fastKnownNpcTick,450);
 
-    setTimeout(function(){
+    setTimeout(async function(){
       if(!autoEnabled||!stream||aiAnalyzing) return;
       const signature=npcSignatureFromVideo();
       const match=bestKnownNpcMatch(signature);
-      if(match&&showKnownNpcMatch(match)){
+      if(match&&await showKnownNpcMatch(match)){
         setAutoStatus("watching","保存済みNPCを高速表示");
         return;
       }
+      if(!autoEnabled||!stream||aiAnalyzing||fastDialogueOcrBusy) return;
       if(Date.now()-lastAutoAnalysisAt>=AUTO_COOLDOWN_MS){
         setAutoStatus("analyzing","初回解析中");
         lastAutoAnalysisAt=Date.now();
@@ -639,9 +640,8 @@
     const candidates=[];
     Object.keys(db).forEach(function(key){
       const entry=db[key];
-      (entry.signatures||[]).forEach(function(s){
-        candidates.push({entry:entry,distance:signatureDistance(signature,s.bits)});
-      });
+      const distances=(entry.signatures||[]).map(function(s){return signatureDistance(signature,s.bits);});
+      if(distances.length) candidates.push({entry:entry,distance:Math.min.apply(null,distances)});
     });
     candidates.sort(function(a,b){return a.distance-b.distance;});
     if(!candidates.length) return null;
@@ -652,21 +652,10 @@
     return best;
   }
 
-  function showKnownNpcMatch(match){
+  async function showKnownNpcMatch(match){
     if(!match||!match.entry) return false;
-    const npc=match.entry.npc_name||"";
-    let root=records.find(function(r){return r.id===match.entry.root_record_id;})||dialogueRootForNpc(npc);
-    if(!root) return false;
-    rememberDialogueHistory(root.id);
-    activeNpcName=npc;
-    activeRecordId=root.id;
-    if($("knowledge-search").value!==npc) $("knowledge-search").value=npc;
-    renderRecords();
-    lastFastNpcName=npc;
-    lastFastNpcAt=Date.now();
-    setStatus("capture-status","保存済みNPC「"+npc+"」を高速認識しました（AI解析なし・"+Math.round(match.distance*100)+"%差分）。");
-    setStatus("form-status",needsTranslation(root)?"未翻訳の項目を補完中（画像AI解析なし）":"保存済み翻訳を即時表示中（API使用なし）");
-    return true;
+    // Portrait/name hashes cannot identify the current dialogue. Confirm with OCR.
+    return fastDialogueOcrTick(false);
   }
 
   async function fastKnownNpcTick(){
@@ -676,9 +665,8 @@
     if(match){
       const npc=match.entry.npc_name||"";
       if(!(npc===lastFastNpcName&&Date.now()-lastFastNpcAt<1800)){
-        showKnownNpcMatch(match);
+        await showKnownNpcMatch(match);
       }
-      return;
     }
     // Appearance is only the first hint. If it is ambiguous/missing, identify the
     // saved dialogue from local OCR using NPC name + English dialogue + choices +
@@ -716,22 +704,30 @@
     const raw=String(text||"").trim();
     if(!raw) return null;
     const map=String(routeCurrentMap||"").trim();
+    // Location can be stale indoors; use it as supporting evidence, not a gate.
     const scored=records.map(function(r){
-      const dialogue=[r.npc_name,r.dialogue_text_en,r.english_text]
-        .concat(choicesArray(r.choices_en)).filter(Boolean).join(" ");
-      let score=tokenSimilarity(raw,dialogue);
+      const body=r.dialogue_text_en||r.english_text||"";
+      const bodyTokens=tokenSet(body),rawTokens=tokenSet(raw);
+      let hits=0; bodyTokens.forEach(function(token){if(rawTokens.has(token)) hits++;});
+      if(hits<Math.min(3,bodyTokens.size)||!bodyTokens.size) return {record:r,score:0};
+      let score=hits/bodyTokens.size;
+      const choiceTokens=tokenSet(choicesArray(r.choices_en).join(" "));
+      let choiceHits=0; choiceTokens.forEach(function(token){if(rawTokens.has(token)) choiceHits++;});
+      if(choiceTokens.size) score+=0.15*choiceHits/choiceTokens.size;
       if(map&&r.map_name&&normText(map)===normText(r.map_name)) score+=0.12;
       // NPC name is useful, but never sufficient by itself because duplicate names exist.
       if(r.npc_name&&normText(raw).includes(normText(r.npc_name))) score+=0.10;
       return {record:r,score:score};
     }).sort(function(a,b){return b.score-a.score;});
     if(!scored.length||scored[0].score<0.34) return null;
-    if(scored[1]&&scored[0].score-scored[1].score<0.045&&scored[0].score<0.62) return null;
+    if(scored[1]&&scored[0].score-scored[1].score<0.045) return null;
     return scored[0];
   }
 
   function inferChoiceIndexBetween(from,to){
     if(!from||!to||from.id===to.id) return -1;
+    if(!from.npc_name||normText(from.npc_name)!==normText(to.npc_name)) return -1;
+    if(from.map_name&&to.map_name&&normText(from.map_name)!==normText(to.map_name)) return -1;
     const choices=choicesArray(from.choices_en);
     if(!choices.length) return -1;
     const nextText=[to.dialogue_text_en,to.english_text,to.quest_name_en].filter(Boolean).join(" ");
@@ -761,7 +757,7 @@
     const choiceIndex=inferChoiceIndexBetween(previous,nextRecord);
     if(choiceIndex<0) return;
     const exists=transitionFor(previous.id,choiceIndex);
-    if(exists&&exists.to_record_id===nextRecord.id) return;
+    if(exists) return; // Inference must never overwrite an established branch.
     // Persist when the existing RPC is available; otherwise keep a session-local
     // transition so navigation works immediately without breaking older databases.
     try{
@@ -788,12 +784,15 @@
   function showSavedDialogueMatch(hit){
     if(!hit||!hit.record) return false;
     const r=hit.record;
+    if(activeRecordId===r.id&&$("knowledge-search").value===r.npc_name&&
+       (!$("map-filter").value||$("map-filter").value===r.map_name)) return true;
     const previousId=activeRecordId;
     rememberDialogueHistory(r.id);
     activeNpcName=r.npc_name||"";
     activeRecordId=r.id;
     rememberObservedDialogueTransition(previousId,r);
     if($("knowledge-search").value!==activeNpcName) $("knowledge-search").value=activeNpcName;
+    if($("map-filter").value&&$("map-filter").value!==r.map_name) $("map-filter").value="";
     renderRecords();
     lastFastNpcName=activeNpcName;
     lastFastNpcAt=Date.now();
@@ -809,9 +808,12 @@
     const canvas=fastDialogueCanvas();
     if(!canvas) return false;
     fastDialogueOcrBusy=true;
+    const sourceStream=stream;
+    const sourceRecordId=activeRecordId;
     lastFastDialogueOcrAt=now;
     try{
       const result=await window.Tesseract.recognize(canvas,"eng",{logger:function(){}});
+      if(!autoEnabled||stream!==sourceStream||activeRecordId!==sourceRecordId) return false;
       const text=result&&result.data?String(result.data.text||""):"";
       const hit=bestSavedDialogueFromOcr(text);
       return hit?showSavedDialogueMatch(hit):false;
@@ -976,11 +978,7 @@
 
   function findNpcProfile(name,map){
     const exact=profileKey(name,map);
-    const fallback=profileKey(name,"");
-    return npcProfiles.find(function(p){return profileKey(p.npc_name,p.map_name)===exact;})
-      || npcProfiles.find(function(p){return profileKey(p.npc_name,"")===fallback;})
-      || npcProfiles.find(function(p){return normText(p.npc_name)===normText(name);})
-      || null;
+    return npcProfiles.find(function(p){return profileKey(p.npc_name,p.map_name)===exact;})||null;
   }
 
   async function applyAiResult(result){
@@ -1878,8 +1876,11 @@
     });
     if(res.error) throw new Error("長文会話の統合に失敗しました："+res.error.message);
 
+    rememberDialogueHistory(record.id);
     activeRecordId=record.id;
     activeNpcName=record.npc_name||String(result.npc_name||"").trim();
+    $("knowledge-search").value=activeNpcName;
+    if($("map-filter").value&&$("map-filter").value!==String(record.map_name||"")) $("map-filter").value="";
     if(result._client_image_hash&&!needsTranslation(result)) rememberFastScreen(result._client_image_hash,activeRecordId,activeNpcName);
     await loadRecords(true);
     const refreshed=records.find(function(r){return r.id===record.id;});
@@ -1926,11 +1927,16 @@
     if(res.error) throw new Error("自動保存に失敗しました："+res.error.message);
     const info=res.data||{};
     if(info.saved){
+      const previousId=activeRecordId;
+      rememberDialogueHistory(String(info.id||""));
       activeRecordId=String(info.id||"");
       activeNpcName=String(result.npc_name||"").trim();
+      $("knowledge-search").value=activeNpcName;
+      if($("map-filter").value&&$("map-filter").value!==String(result.map_name||"")) $("map-filter").value="";
       if(result._client_image_hash&&!needsTranslation(result)) rememberFastScreen(result._client_image_hash,activeRecordId,activeNpcName);
       setStatus("form-status",info.inserted?"AI解析結果を自動保存しました。現在の会話だけ表示します。":"同じ内容は登録済みのため更新のみ行いました。");
       await loadRecords(true);
+      await rememberObservedDialogueTransition(previousId,records.find(function(r){return r.id===String(info.id||"");}));
       await rememberKnownNpcSignature(result);
       return info;
     }
@@ -2132,15 +2138,13 @@
   }
 
   function portraitFallbackRegion(result){
-    if(validMapRegion(result&&result.npc_portrait_region)) return result.npc_portrait_region;
-    const d=result&&result.dialog_window_region;
-    if(!validMapRegion(d)) return null;
-    return {
-      x:Number(d.x)||0,
-      y:(Number(d.y)||0)+(Number(d.height)||0)*0.07,
-      width:(Number(d.width)||0)*0.24,
-      height:(Number(d.height)||0)*0.58
-    };
+    const r=result&&result.npc_portrait_region;
+    if(!r) return null;
+    const x=Number(r.x),y=Number(r.y),width=Number(r.width),height=Number(r.height);
+    if(![x,y,width,height].every(Number.isFinite)||x<0||y<0||width<=20||height<=20||x+width>1000||y+height>1000) return null;
+    // An estimated slice of the dialogue window can permanently store scenery.
+    // Only persist an explicitly detected, bounded portrait rectangle.
+    return {x:x,y:y,width:width,height:height};
   }
 
   async function autoSaveNpcPortrait(result){
@@ -2250,9 +2254,7 @@
 
       const instant=fastScreenRecord(imageHash);
       if(instant){
-        activeRecordId=instant.id;
-        activeNpcName=instant.npc_name||"";
-        renderRecords();
+        showSavedDialogueMatch({record:instant});
         setStatus("capture-status","保存済みの翻訳を即時表示しました。AI解析は使用していません。");
         setStatus("form-status",needsTranslation(instant)?"未翻訳の項目を補完中（画像AI解析なし）":"保存済みデータを表示中（API使用なし）");
         return;
@@ -2872,6 +2874,7 @@
     const stack=dialogueNavStacks.get(cardKey)||[];
     let previousId=stack.pop();
     dialogueNavStacks.set(cardKey,stack);
+    if(previousId&&dialogueHistory[dialogueHistory.length-1]===previousId) dialogueHistory.pop();
     if(!previousId) previousId=dialogueHistory.pop();
     const previous=records.find(function(r){return r.id===previousId;});
     if(previous){
@@ -3020,3 +3023,4 @@
 
   Promise.all([loadQuests(),loadNpcProfiles(),loadDialogueTransitions(),loadMapData(),loadRecords()]).catch(function(err){setStatus("capture-status",err.message);});
 })();
+
