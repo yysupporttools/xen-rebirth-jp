@@ -13,9 +13,12 @@ function setup(seed=[]){
     document:{querySelectorAll:()=>cards},
     renderDialogueCard:(r,key)=>`${key}:${r.id}:${r.choices_ja.join('|')}`,
     db:{rpc:async(name,args)=>{writes.push({name,args});return {data:{saved:false}};}},
-    contributorId:'test',setStatus(){},
+    contributorId:'test',setStatus(){},findLongDialogueMerge(){return null;},
   });
-  vm.runInContext(section('  function choicesArray(', '  function profileKey(')+
+  vm.runInContext(section('  function dialogueUnits(', '  function routeData(')+
+    section('  function unitSimilarity(', '  function mergeDialogueFragments(')+
+    section('  function choicesArray(', '  function profileKey(')+
+    section('  function rememberDialogueHistory(', '  function showSavedDialogueMatch(')+
     section('  async function autoSaveAiResult(', '  function validMapRegion(')+
     ';globalThis.api={choicesArray,validJapanese,cleanTranslations,needsTranslation,repairTranslations,translateMissingText,repairDisplayedRecord,autoSaveAiResult};',context);
   function translator(fn){context.window.Translator={create:async()=>({translate:async en=>{calls.push(en);return fn(en);},destroy(){}})};}
@@ -60,6 +63,18 @@ async function main(){
   assert.equal(payload.p_dialogue_text_ja,'','No combined-text fallback into dialogue');
   assert.deepEqual(plain(payload.p_choices_ja),['','終了','取引']);
   assert.equal(payload.p_japanese_text,'終了\n取引');
+  const fields={'knowledge-search':{value:'Old NPC'},'map-filter':{value:'Old Map'}};
+  Object.assign(t.context,{
+    activeRecordId:'prior',activeNpcName:'Guide',dialogueHistory:[],
+    records:[{id:'saved',npc_name:'Guide',map_name:''}],
+    $:id=>fields[id],loadRecords:async()=>{},rememberKnownNpcSignature:async()=>{},
+    rememberObservedDialogueTransition:async()=>{},
+  });
+  t.context.db.rpc=async()=>({data:{saved:true,id:'saved'}});
+  await t.api.autoSaveAiResult({npc_name:'Guide',map_name:'',dialogue_text_en:'Welcome',dialogue_text_ja:'ようこそ'},'hash');
+  assert.deepEqual(plain(t.context.dialogueHistory),['prior'],'AI saved conversations must retain the previous dialogue');
+  assert.equal(fields['knowledge-search'].value,'Guide');
+  assert.equal(fields['map-filter'].value,'','An old map filter must not hide an AI saved indoor record');
   t=setup();
   const unsupported=await t.api.repairTranslations(input);
   assert.equal(t.api.needsTranslation(unsupported),true);
@@ -107,11 +122,12 @@ async function main(){
       {id:'b',npc_name:'NPC',created_at:'2026-01-02'}];
     const dialogueTransitions=[{from_record_id:'a',to_record_id:'b',choice_index:1}];
     const dialogueNavStacks=new Map();
+    const dialogueHistory=[];
     let activeRecordId='a',activeNpcName='NPC';
     function renderDialogueCard(r,key){return key+':'+r.id;}
     ${section('  function dialogueRowsForNpc(', '  function readKnownNpcSignatures(')}
     ${section('  function transitionFor(', '  function renderDialogueCard(')}
-    ${section('  function openDialogueTarget(', '  $("capture-mini-now")')}
+    ${section('  function openDialogueTarget(', '  $("route-destination").addEventListener')}
     globalThis.nav={dialogueRootForNpc,dialoguePageInfo,transitionFor,openDialogueTarget,goDialogueBack,dialogueNavStacks,records};
   `,nav);
   assert.equal(nav.nav.dialogueRootForNpc('NPC').id,'a');
@@ -129,3 +145,4 @@ async function main(){
   console.log('PASS: NPC root, page order, choice transition and back navigation');
 }
 main().catch(e=>{console.error(e);process.exitCode=1;});
+
