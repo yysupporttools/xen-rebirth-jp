@@ -1,0 +1,402 @@
+<!DOCTYPE html>
+
+<html lang="ja">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Xen Rebirth 精錬成功率カウンター</title>
+<style>
+  :root {
+    --bg:#15111d; --panel:#251f31; --panel2:#1b1723; --line:#51425f;
+    --text:#f7f2ff; --muted:#b9afc5; --good:#2d8a58; --bad:#a8434d;
+    --accent:#7560a0; --warn:#c6943d;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--bg);color:var(--text);font-family:Arial,"Yu Gothic",sans-serif}
+  .app{width:min(1050px,100%);margin:auto;padding:18px}
+  h1{font-size:25px;margin:0 0 6px}
+  h2{font-size:18px;margin:0 0 12px}
+  .sub,.muted{color:var(--muted);font-size:13px}
+  .panel{background:var(--panel);border:1px solid var(--line);border-radius:13px;padding:16px;margin-bottom:14px}
+  .current{text-align:center}
+  .stage{font-size:36px;font-weight:bold;margin:8px 0}
+  .rule{font-size:13px;color:#ddd2e8;margin-bottom:13px;line-height:1.6}
+  .buttons{display:flex;gap:12px;justify-content:center}
+  button{border:0;border-radius:9px;padding:13px 22px;font-size:16px;font-weight:bold;cursor:pointer;color:white}
+  button:disabled{opacity:.45;cursor:not-allowed}
+  .success{background:var(--good)} .fail{background:var(--bad)}
+  .secondary{background:#564a65} .accent{background:var(--accent)} .danger{background:#743840}
+  .notice{margin-top:12px;padding:10px;border-radius:8px;background:#332b3f;font-size:13px}
+  .lost{background:#582c33;color:#ffc0c5;font-weight:bold}
+  .done{color:#84e5ad;font-weight:bold;margin-bottom:10px}
+  .connection{display:inline-flex;align-items:center;gap:7px;padding:7px 10px;border-radius:999px;background:var(--panel2);font-size:12px}
+  .dot{width:9px;height:9px;border-radius:50%;background:#777}
+  .dot.ok{background:#44c47a} .dot.ng{background:#d85662} .dot.wait{background:#d6a94b}
+  .grid4{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}
+  .stat{background:var(--panel2);border-radius:9px;padding:11px;text-align:center}
+  .stat b{display:block;font-size:20px;margin-top:4px}
+  .compareWrap{overflow-x:auto}
+  table{width:100%;border-collapse:collapse;font-size:14px;min-width:720px}
+  th,td{padding:9px 7px;border-bottom:1px solid #40364a;text-align:center}
+  th{color:#d2c9dc;font-weight:normal;background:var(--panel)}
+  .rate{font-weight:bold}
+  .controls{display:flex;gap:10px;align-items:center;flex-wrap:wrap}
+  select{background:var(--panel2);color:white;border:1px solid #665875;border-radius:7px;padding:10px 12px;font-size:15px}
+  .small{font-size:12px;color:#aaa1b5;line-height:1.6}
+  .tabs{display:flex;gap:8px;margin-bottom:12px;flex-wrap:wrap}
+  .tab{background:#45394f;padding:9px 13px;font-size:13px}
+  .tab.active{background:var(--accent)}
+  .pending{color:#ffd587}
+  .toolbar{display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap}
+  @media(max-width:700px){
+    .grid4{grid-template-columns:repeat(2,1fr)}
+    .buttons button{flex:1;padding:13px 8px}
+    .stage{font-size:30px}
+  }
+</style>
+<style>
+body.smelt-embedded{background:transparent}
+body.smelt-embedded .app{width:100%;max-width:none;margin:0;padding:0}
+body.smelt-embedded .smelt-site-heading,body.smelt-embedded .smelt-site-subtitle{display:none}
+</style></head>
+<body class="smelt-embedded">
+<div class="app">
+<h1 class="smelt-site-heading">Xen Rebirth 精錬成功率カウンター</h1>
+<div class="sub smelt-site-subtitle">自分の記録はこの端末に保存し、共有記録はみんなの集計へ自動反映します。</div>
+<div class="panel toolbar">
+<div>
+<div class="muted">共有データ接続</div>
+<div class="connection"><span class="dot wait" id="connDot"></span><span id="connText">確認中...</span></div>
+</div>
+<div class="controls">
+<div class="small">未送信：<span class="pending" id="pendingCount">0</span>件</div>
+<button class="secondary" onclick="loadShared()">共有データ更新</button>
+</div>
+</div>
+<div class="panel current">
+<div class="muted">現在の精錬段階</div>
+<div class="stage" id="stage">+0 → +1</div>
+<div class="done" id="done" style="display:none">+10到達！精錬完了</div>
+<div class="notice lost" id="lost" style="display:none">装備ロスト。この装備の精錬は終了です。</div>
+<div class="rule" id="rule"></div>
+<div class="buttons">
+<button class="success" id="successBtn" onclick="recordResult('success')">✓ 成功</button>
+<button class="fail" id="failBtn" onclick="recordResult('fail')">✕ 失敗</button>
+</div>
+<div class="notice" id="recordNotice">結果を押すと、自分の記録へ即時保存し、共有データへ送信します。</div>
+</div>
+<div class="panel">
+<h2>現在の強化値を変更</h2>
+<div class="small">別の装備に切り替えるときや、途中の強化値から記録するときに使用します。集計データは消えません。</div>
+<div class="controls" style="margin-top:10px">
+<select id="stageSelect"></select>
+<button class="accent" onclick="changeStage()">現在値を変更</button>
+<button class="secondary" onclick="startNewItem()">新しい装備を+0から開始</button>
+</div>
+</div>
+<div class="panel">
+<div class="tabs">
+<button class="tab active" id="tabMe" onclick="setTab('me')">自分の集計</button>
+<button class="tab" id="tabAll" onclick="setTab('all')">みんなの集計</button>
+<button class="tab" id="tabCompare" onclick="setTab('compare')">自分 vs みんな</button>
+</div>
+<div id="summaryMe">
+<div class="grid4">
+<div class="stat">成功<b id="myTotalSuccess">0</b></div>
+<div class="stat">失敗<b id="myTotalFail">0</b></div>
+<div class="stat">試行<b id="myTotalTry">0</b></div>
+<div class="stat">成功率<b id="myTotalRate">0.0%</b></div>
+</div>
+</div>
+<div id="summaryAll" style="display:none">
+<div class="grid4">
+<div class="stat">成功<b id="allTotalSuccess">0</b></div>
+<div class="stat">失敗<b id="allTotalFail">0</b></div>
+<div class="stat">試行<b id="allTotalTry">0</b></div>
+<div class="stat">成功率<b id="allTotalRate">0.0%</b></div>
+</div>
+</div>
+<div class="compareWrap" style="margin-top:12px">
+<table>
+<thead><tr id="tableHead"></tr></thead>
+<tbody id="rows"></tbody>
+</table>
+</div>
+</div>
+<div class="panel">
+<h2>データ管理</h2>
+<div class="controls">
+<button class="secondary" onclick="exportCsv()">自分のデータをCSV出力</button>
+<button class="secondary" onclick="retryPending()">未送信データを再送信</button>
+<button class="danger" onclick="resetPersonal()">自分のデータをリセット</button>
+</div>
+<div class="small" style="margin-top:10px">
+      自分のデータをリセットしても、みんなの共有データは削除されません。<br/>
+      失敗時ルール：+4→+5は+3、+5→+6は+2、+6→+7は+0、+7→+8以降は装備ロスト。
+    </div>
+</div>
+</div>
+<script>
+const SUPABASE_URL = "https://dzxxjtmpcfsmvdgkcwvn.supabase.co";
+const SUPABASE_KEY = "sb_publishable_yTgQ5bw5pnSkNCTOH4me8Q_YaQhRkQ_";
+const PERSONAL_KEY = "smelting_counter_personal_v4";
+const QUEUE_KEY = "smelting_counter_pending_v4";
+
+function initialPersonal() {
+  return {stage:0,lost:false,rows:Array.from({length:10},()=>({s:0,f:0}))};
+}
+function loadJson(key,fallback) {
+  try { const v=JSON.parse(localStorage.getItem(key)); return v ?? fallback; }
+  catch(e) { return fallback; }
+}
+
+let personal = loadJson(PERSONAL_KEY, initialPersonal());
+if(!personal.rows || personal.rows.length!==10) personal=initialPersonal();
+let pending = loadJson(QUEUE_KEY, []);
+let sharedRows = Array.from({length:10},()=>({s:0,f:0}));
+let activeTab = "me";
+let sending = false;
+
+function savePersonal() { localStorage.setItem(PERSONAL_KEY,JSON.stringify(personal)); }
+function savePending() { localStorage.setItem(QUEUE_KEY,JSON.stringify(pending)); }
+function pct(s,f) { const n=s+f; return n ? (s/n*100).toFixed(1)+"%" : "—"; }
+
+function setConnection(state,text) {
+  document.getElementById("connDot").className="dot "+state;
+  document.getElementById("connText").textContent=text;
+}
+
+async function api(path, options={}) {
+  const headers = Object.assign({
+    "apikey":SUPABASE_KEY,
+    "Authorization":"Bearer "+SUPABASE_KEY,
+    "Content-Type":"application/json"
+  }, options.headers||{});
+  return fetch(SUPABASE_URL+path, {...options, headers});
+}
+
+async function loadShared() {
+  try {
+    setConnection("wait","共有データ取得中...");
+    const res = await api("/rest/v1/smelt_stats?select=stage_from,stage_to,attempts,successes,failures,success_rate&order=stage_from.asc");
+    if(!res.ok) throw new Error(await res.text());
+    const data=await res.json();
+    sharedRows=Array.from({length:10},()=>({s:0,f:0}));
+    data.forEach(r=>{
+      const i=Number(r.stage_from);
+      if(i>=0&&i<=9) sharedRows[i]={s:Number(r.successes)||0,f:Number(r.failures)||0};
+    });
+    setConnection("ok","共有データ接続済み");
+    render();
+  } catch(e) {
+    console.error(e);
+    setConnection("ng","共有データ接続エラー");
+  }
+}
+
+function applyFailureRule(from) {
+  if(from===4) personal.stage=3;
+  else if(from===5) personal.stage=2;
+  else if(from===6) personal.stage=0;
+  else if(from>=7) personal.lost=true;
+}
+
+async function recordResult(result) {
+  if(personal.lost || personal.stage>=10) return;
+
+  const from=personal.stage;
+  if(result==="success") {
+    personal.rows[from].s++;
+    personal.stage++;
+    personal.lost=false;
+  } else {
+    personal.rows[from].f++;
+    applyFailureRule(from);
+  }
+  savePersonal();
+
+  pending.push({
+    stage_from:from,
+    stage_to:from+1,
+    result:result,
+    local_id:(crypto.randomUUID ? crypto.randomUUID() : String(Date.now())+Math.random()),
+    queued_at:new Date().toISOString()
+  });
+  savePending();
+
+  document.getElementById("recordNotice").textContent =
+    `記録しました：+${from} → +${from+1} ${result==="success"?"成功":"失敗"}`;
+
+  render();
+  await flushPending();
+}
+
+async function flushPending() {
+  if(sending || !pending.length) return;
+  sending=true; renderPending();
+
+  try {
+    while(pending.length) {
+      const e=pending[0];
+      const res=await api("/rest/v1/smelt_events",{
+        method:"POST",
+        headers:{"Prefer":"return=minimal"},
+        body:JSON.stringify({
+          stage_from:e.stage_from,
+          stage_to:e.stage_to,
+          result:e.result
+        })
+      });
+      if(!res.ok) throw new Error(await res.text());
+      pending.shift();
+      savePending();
+      renderPending();
+    }
+    setConnection("ok","共有データ接続済み");
+    await loadShared();
+  } catch(e) {
+    console.error(e);
+    setConnection("ng","共有送信エラー（個人記録は保存済み）");
+  } finally {
+    sending=false;
+    renderPending();
+  }
+}
+
+function retryPending() { flushPending(); }
+function changeStage() {
+  personal.stage=Number(document.getElementById("stageSelect").value);
+  personal.lost=false; savePersonal(); render();
+}
+function startNewItem() {
+  personal.stage=0; personal.lost=false; savePersonal(); render();
+}
+function resetPersonal() {
+  if(confirm("自分の記録だけをリセットしますか？共有データは消えません。")) {
+    personal=initialPersonal(); savePersonal(); render();
+  }
+}
+
+function setTab(tab) {
+  activeTab=tab;
+  ["me","all","compare"].forEach(t=>document.getElementById("tab"+t.charAt(0).toUpperCase()+t.slice(1))?.classList.toggle("active",t===tab));
+  document.getElementById("summaryMe").style.display = tab==="all" ? "none":"block";
+  document.getElementById("summaryAll").style.display = tab==="me" ? "none":"block";
+  renderRows();
+}
+
+function renderPending() {
+  document.getElementById("pendingCount").textContent=pending.length;
+}
+
+function renderCurrent() {
+  const stage=document.getElementById("stage");
+  const done=document.getElementById("done");
+  const lost=document.getElementById("lost");
+  const rule=document.getElementById("rule");
+  const sb=document.getElementById("successBtn");
+  const fb=document.getElementById("failBtn");
+
+  if(personal.lost) {
+    stage.textContent="装備ロスト";
+    done.style.display="none"; lost.style.display="block";
+    sb.disabled=fb.disabled=true;
+    rule.textContent="次の装備を始める場合は、強化値変更または「新しい装備を+0から開始」を使用してください。";
+  } else if(personal.stage>=10) {
+    stage.textContent="+10";
+    done.style.display="block"; lost.style.display="none";
+    sb.disabled=fb.disabled=true;
+    rule.textContent="この装備は+10まで強化完了です。";
+  } else {
+    stage.textContent=`+${personal.stage} → +${personal.stage+1}`;
+    done.style.display="none"; lost.style.display="none";
+    sb.disabled=fb.disabled=false;
+    if(personal.stage===4) rule.textContent="失敗すると +3 に戻ります。";
+    else if(personal.stage===5) rule.textContent="失敗すると +2 に戻ります。";
+    else if(personal.stage===6) rule.textContent="失敗すると +0 に戻ります。";
+    else if(personal.stage>=7) rule.textContent="失敗すると装備がロストします。";
+    else rule.textContent="成功すると次の段階へ進みます。失敗時は現在値を維持します。";
+  }
+
+  const sel=document.getElementById("stageSelect");
+  sel.innerHTML="";
+  for(let i=0;i<=10;i++) {
+    const o=document.createElement("option");
+    o.value=i; o.textContent=`+${i}`;
+    if(i===personal.stage && !personal.lost) o.selected=true;
+    sel.appendChild(o);
+  }
+}
+
+function totals(rows) {
+  return rows.reduce((a,r)=>({s:a.s+r.s,f:a.f+r.f}),{s:0,f:0});
+}
+function renderSummary() {
+  const m=totals(personal.rows), a=totals(sharedRows);
+  const mt=m.s+m.f, at=a.s+a.f;
+  document.getElementById("myTotalSuccess").textContent=m.s;
+  document.getElementById("myTotalFail").textContent=m.f;
+  document.getElementById("myTotalTry").textContent=mt;
+  document.getElementById("myTotalRate").textContent=mt?(m.s/mt*100).toFixed(1)+"%":"0.0%";
+  document.getElementById("allTotalSuccess").textContent=a.s;
+  document.getElementById("allTotalFail").textContent=a.f;
+  document.getElementById("allTotalTry").textContent=at;
+  document.getElementById("allTotalRate").textContent=at?(a.s/at*100).toFixed(1)+"%":"0.0%";
+}
+
+function renderRows() {
+  const head=document.getElementById("tableHead");
+  const tbody=document.getElementById("rows");
+  tbody.innerHTML="";
+
+  if(activeTab==="me") {
+    head.innerHTML="<th>精錬</th><th>成功</th><th>失敗</th><th>試行</th><th>成功率</th>";
+  } else if(activeTab==="all") {
+    head.innerHTML="<th>精錬</th><th>みんな 成功</th><th>みんな 失敗</th><th>試行</th><th>成功率</th>";
+  } else {
+    head.innerHTML="<th>精錬</th><th>自分</th><th>みんな</th><th>自分 試行</th><th>みんな 試行</th>";
+  }
+
+  for(let i=0;i<10;i++) {
+    const m=personal.rows[i], a=sharedRows[i];
+    const tr=document.createElement("tr");
+    if(activeTab==="me") {
+      tr.innerHTML=`<td>+${i} → +${i+1}</td><td>${m.s}</td><td>${m.f}</td><td>${m.s+m.f}</td><td class="rate">${pct(m.s,m.f)}</td>`;
+    } else if(activeTab==="all") {
+      tr.innerHTML=`<td>+${i} → +${i+1}</td><td>${a.s}</td><td>${a.f}</td><td>${a.s+a.f}</td><td class="rate">${pct(a.s,a.f)}</td>`;
+    } else {
+      tr.innerHTML=`<td>+${i} → +${i+1}</td><td class="rate">${pct(m.s,m.f)}</td><td class="rate">${pct(a.s,a.f)}</td><td>${m.s+m.f}</td><td>${a.s+a.f}</td>`;
+    }
+    tbody.appendChild(tr);
+  }
+}
+
+function exportCsv() {
+  let csv="精錬段階,成功,失敗,試行回数,成功率\n";
+  personal.rows.forEach((r,i)=>{
+    csv += `+${i}→+${i+1},${r.s},${r.f},${r.s+r.f},${pct(r.s,r.f)}\n`;
+  });
+  const blob=new Blob(["\ufeff"+csv],{type:"text/csv;charset=utf-8"});
+  const a=document.createElement("a");
+  a.href=URL.createObjectURL(blob);
+  a.download="smelt_personal_data.csv";
+  a.click();
+  URL.revokeObjectURL(a.href);
+}
+
+function render() {
+  renderCurrent();
+  renderPending();
+  renderSummary();
+  renderRows();
+}
+
+window.addEventListener("online",()=>{ loadShared(); flushPending(); });
+render();
+setTab("me");
+loadShared();
+flushPending();
+setInterval(loadShared,30000);
+</script>
+</body>
+</html>
