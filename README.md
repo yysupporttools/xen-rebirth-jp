@@ -49,7 +49,8 @@ python scripts/update_bosses.py
 - `dist/class-*.html`：6職業の個別ガイドと共通転職ガイド
 - `dist/systems.html`：ペット・騎乗・パーティ・ギルド・ダンジョン
 - `dist/bosses.html`：日本時間ボスタイマー
-- `dist/tools.html`：精錬サイトへの入口
+- `dist/tools.html`：精錬カウンター統合ページ
+- `dist/smelt-counter.html`：精錬成功率カウンター
 - `dist/sources.html`：出典と編集方針
 - `dist/assets/style.css`：デザイン
 - `dist/assets/app.js`：タイマー
@@ -57,11 +58,9 @@ python scripts/update_bosses.py
 
 文章はHTMLを直接編集できます。ビルド工程はありません。リンクは相対パスです。
 
-## 精錬サイトとの統合範囲
+## 精錬カウンターの統合
 
-`https://yysupporttools.github.io/smelt-counter/` へリンクしています。
-個人記録は既存サイトを使ったブラウザ・端末で引き続き参照できます。
-精錬サイト本体・共有バックエンド・既存データは変更していません。
+`dist/tools.html` にカウンターを埋め込み、本体を `dist/smelt-counter.html` として同じ `https://yysupporttools.github.io` オリジンから配信します。既存の `smelting_counter_personal_v4` と `smelting_counter_pending_v4` を維持するため、同じブラウザ・端末の個人記録と未送信データをそのまま利用できます。共有集計のSupabase接続も維持しています。旧URLと統合後のページはいずれも同じオリジンなので、ブラウザ保存領域を共有します。
 
 ## 情報と素材
 
