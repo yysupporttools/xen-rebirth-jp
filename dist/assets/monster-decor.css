@@ -313,3 +313,13 @@
     height: 78px;
   }
 }
+
+
+/* /05 RULES and /06 STORY home-card illustrations */
+.xen-guide-fox {
+  background-image: url("fox-companion-chibi.png");
+}
+
+.xen-guide-fairy {
+  background-image: url("fairy-adventurer-chibi.png");
+}

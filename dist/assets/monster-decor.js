@@ -102,6 +102,14 @@
       {
         marker: "03 / ADVENTURE",
         className: "xen-guide-poku"
+      },
+      {
+        marker: "05 / RULES",
+        className: "xen-guide-fox"
+      },
+      {
+        marker: "06 / STORY",
+        className: "xen-guide-fairy"
       }
     ];
 
