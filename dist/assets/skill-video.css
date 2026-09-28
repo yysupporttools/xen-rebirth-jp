@@ -1,0 +1,11 @@
+.skill-video-button{display:inline-flex;align-items:center;gap:8px;margin:12px 0 0 46px;padding:7px 13px;border:1px solid #087d76;border-radius:6px;background:#edf7f5;color:#07655f;font:inherit;font-size:13px;font-weight:700;cursor:pointer;text-decoration:none}
+.skill-video-button:hover{background:#d8eeea;color:#064c48}
+.skill-video-dialog{width:min(1100px,calc(100vw - 24px));max-height:94vh;padding:0;border:1px solid #395158;border-radius:12px;background:#0d2630;color:#fff;box-shadow:0 24px 90px #0008;overflow:auto}
+.skill-video-dialog::backdrop{background:rgba(3,14,18,.82)}
+.skill-video-heading{display:flex;align-items:center;justify-content:space-between;gap:16px;padding:16px 20px}
+.skill-video-heading h2{margin:0;font-size:20px;color:#fff;border:0;padding:0}
+.skill-video-close{min-height:44px;padding:8px 14px;border:1px solid #83999f;border-radius:6px;background:transparent;color:white;font:inherit;cursor:pointer}
+.skill-video-dialog video{display:block;width:100%;max-height:70vh;background:#000}
+.skill-video-hint{margin:0;padding:12px 20px;color:#d2dfe2;font-size:13px}
+html.skill-video-open{overflow:hidden}
+@media(max-width:600px){.skill-video-heading{padding:12px}.skill-video-heading h2{font-size:17px}.skill-video-button{margin-left:46px}}
