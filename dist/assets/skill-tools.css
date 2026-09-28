@@ -1,0 +1,11 @@
+.skill-filters{display:flex;flex-wrap:wrap;align-items:end;gap:14px;padding:18px;margin:18px 0;background:#edf4f3;border:1px solid #cbdedb;border-radius:8px}
+.skill-filters label{display:flex;flex-direction:column;gap:5px;font-size:14px;font-weight:700}
+.skill-filters input[type=search]{width:260px;max-width:100%}.skill-filters input[type=number]{width:160px}
+.skill-filters input:not([type=checkbox]),.all-skills select{font:inherit;padding:9px 11px;min-height:44px;border:1px solid #829a9e;border-radius:5px;background:white;color:#17313a}
+.skill-filters .skill-video-filter{flex-direction:row;align-items:center;min-height:44px;gap:8px}.skill-video-filter input{width:18px;height:18px}
+.skill-filters button{min-height:44px;padding:8px 14px;border:1px solid #087d76;border-radius:5px;background:white;color:#07655f;font:inherit;cursor:pointer}
+.skill-filter-help,.skill-filter-count{flex-basis:100%;margin:0;font-size:13px}.skill-filter-count{font-weight:700;color:#07655f}
+.all-skills tr[hidden],.skill-filter-empty[hidden]{display:none!important}.skill-filter-empty{padding:22px;background:#f3f6f7;border-radius:6px}
+.skill-selected-level{font-size:14px;line-height:1.8;margin:10px 0;color:#17313a}.all-skills details{font-size:13px;margin-top:10px}.all-skills summary{cursor:pointer;color:#087d76}
+.skill-filters input:focus-visible,.all-skills select:focus-visible{outline:3px solid #d59535;outline-offset:3px}
+@media(max-width:600px){.skill-filters{padding:14px}.skill-filters label:first-child{width:100%}.skill-filters input[type=search]{width:100%}}
