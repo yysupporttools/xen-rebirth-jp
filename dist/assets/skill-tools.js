@@ -9,6 +9,8 @@
       const levels = [...(cell?.textContent || '').matchAll(/Lv(\d+)\s*[:：]\s*(\d+)/g)].map(m => ({level: Number(m[1]), required: Number(m[2])}));
       const mpLine = row.cells[1]?.innerHTML.match(/消費MP[：:]([^<]+)/)?.[1] || '';
       const mp = new Map([...mpLine.matchAll(/Lv(\d+)\s*[:：]\s*(\d+)/g)].map(m => [Number(m[1]), Number(m[2])]));
+      const defenseLine = row.cells[1]?.innerHTML.match(/防御力上昇[：:]([^<]+)/)?.[1] || '';
+      const defense = new Map([...defenseLine.matchAll(/Lv(\d+)\s*[:：]\s*(\d+)/g)].map(m => [Number(m[1]), Number(m[2])]));
       if (cell && levels.length) {
         const details = document.createElement('details');
         const summary = document.createElement('summary');
@@ -28,7 +30,7 @@
         info.setAttribute('aria-live', 'polite');
         const update = () => {
           const selected = levels.find(item => item.level === Number(select.value));
-          info.textContent = '必要キャラクターLv：' + selected.required + ' ／ 消費MP：' + (mp.has(selected.level) ? mp.get(selected.level) : '未掲載');
+          info.textContent = '必要キャラクターLv：' + selected.required + ' ／ 消費MP：' + (mp.has(selected.level) ? mp.get(selected.level) : '未掲載') + (defense.has(selected.level) ? ' ／ 防御力：+' + defense.get(selected.level) : '');
         };
         select.addEventListener('change', update);
         cell.append(label, info, details);
