@@ -1,0 +1,23 @@
+/* Generated game-inspired chibi decorations. Images occupy reserved space. */
+.xen-random-monster{display:block;width:100%;height:auto;object-fit:contain;pointer-events:none;user-select:none;filter:drop-shadow(0 6px 8px #14374420)}
+.page-intro.xen-has-random-monsters,.xen-monster-heading.xen-has-random-monsters{display:grid;grid-template-columns:minmax(0,1fr) 150px;align-items:center;gap:24px}
+.xen-monster-intro-copy{min-width:0}
+.xen-monster-heading{margin-bottom:24px}
+.xen-random-intro{width:150px;height:150px}
+.welcome .xen-random-welcome-foot{display:grid;grid-template-columns:minmax(0,1fr) 132px;align-items:center;gap:12px;padding-top:10px;margin-top:20px}
+.xen-random-hero{width:132px;height:132px;filter:drop-shadow(0 7px 9px #0005)}
+.xen-has-random-monsters .xen-hero-monsters,.xen-random-guide-card .xen-guide-mascot,.xen-random-guide-card .xen-guide-stack{display:none}
+.guide-card.xen-random-guide-card{display:flex;flex-direction:column}
+.xen-random-guide-footer{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-top:auto;min-height:90px}
+.xen-random-guide-footer .card-link{margin:0;min-width:0}
+.xen-random-card{flex:0 0 84px;width:84px;height:84px}
+@media(max-width:600px){
+ .page-intro.xen-has-random-monsters,.xen-monster-heading.xen-has-random-monsters{grid-template-columns:minmax(0,1fr) 86px;gap:12px}
+ .xen-random-intro{width:86px;height:108px}
+ .welcome .xen-random-welcome-foot{grid-template-columns:minmax(0,1fr) 100px;gap:8px}
+ .xen-random-hero{width:100px;height:100px}
+ .xen-welcome-footer-copy span{padding:0 5px}
+ .xen-random-card{flex-basis:72px;width:72px;height:72px}
+ .xen-random-guide-footer{min-height:78px}
+}
+@media print{.xen-random-monster{display:none}.page-intro.xen-has-random-monsters,.xen-monster-heading.xen-has-random-monsters,.welcome .xen-random-welcome-foot{display:block}}
