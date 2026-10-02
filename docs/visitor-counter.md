@@ -1,0 +1,11 @@
+# サイト訪問者数
+
+2026-10-02設置。全ページ共通。累計はブラウザー内のランダムUUIDにつき1回、今日はAsia/Tokyoの日付ごとに1回。localStorage使用不可のブラウザーは表示のみ。
+
+ブラウザーは公開APIキーでsite-visitor-counter Edge Functionを呼び出す。関数は許可Origin、APIキー、UUID形式を検証し、識別子のSHA-256だけを保存する。IP・閲覧ページ・氏名はカウンターテーブルに保存しない。
+
+visitor_privateスキーマの3テーブルはRLS有効、匿名/ログイン利用者からアクセス不可。site_visitor_counter RPCはSECURITY INVOKERでservice_role専用。Edge Functionのservice_roleキーは環境変数からのみ取得。総数行のロックで同時要求も重複計上を防ぐ。
+
+デプロイ設定: site-visitor-counterのverify_jwt=false。公開APIキーを関数内で検証するため、サインインせず利用できる。GETは表示のみ、POSTは訪問登録。フロントのapp.jsから共通スクリプトを読み込み、app.jsを使わない6ページには直接追加。
+
+スキル動画など既存機能は変更なし。過去のアクセス数は復元不可。別ブラウザー・保存データ削除・シークレットモードは別訪問者になる。サービス障害時は取得失敗を表示し、架空の0は表示しない。
