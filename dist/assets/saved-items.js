@@ -244,8 +244,8 @@
     sideRail.innerHTML =
       '<section class="rail-current"><p class="rail-eyebrow">QUICK ACCESS</p><h2>このページ</h2><div id="rail-current-action"></div></section>'+
       '<section><div class="rail-head"><h2>☆ お気に入り</h2><a href="favorites.html">すべて</a></div><div id="rail-favorites"></div></section>'+
-      '<section><div class="rail-head"><h2>最近見た項目</h2><a href="favorites.html#recent">履歴</a></div><div id="rail-recents"></div></section>'+
-      '<section class="rail-popular"><div class="rail-head"><h2>最も閲覧された記事</h2></div><div id="rail-popular"></div><details class="rail-popular-help"><summary>集計について</summary><p>同じブラウザーから同じ記事への閲覧は、日本時間で1日1回数えます。サイト全体の累計で上位5件を表示します。集計開始前の閲覧は含みません。訪問者カウンターと共通のランダムな識別子を使います。</p><p id="rail-popular-start"></p></details></section>';
+      '<section><div class="rail-head"><h2>最近見た項目</h2><a href="favorites.html#recent">履歴</a></div><div id="rail-recents"></div>'+
+      '<div class="rail-popular"><div class="rail-head"><h2>最も閲覧された記事</h2></div><div id="rail-popular"></div><details class="rail-popular-help"><summary>集計について</summary><p>同じブラウザーから同じ記事への閲覧は、日本時間で1日1回数えます。サイト全体の累計で上位5件を表示します。集計開始前の閲覧は含みません。訪問者カウンターと共通のランダムな識別子を使います。</p><p id="rail-popular-start"></p></details></div></section>';
     const header=document.querySelector('header');
     if (header) header.insertAdjacentElement('afterend',sideRail);
     else document.body.prepend(sideRail);
