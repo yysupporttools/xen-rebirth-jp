@@ -2,10 +2,14 @@
   'use strict';
   const KEY = 'xenRebirthSavedItemsV1';
   const base = new URL('./', location.href);
-  const allowed = new Set(['index.html','start.html','classes.html','class-change.html','class-archer.html','class-cleric.html','class-knight.html','class-mage.html','class-rogue.html','class-templar.html','systems.html','quests.html','events.html','bosses.html','tools.html','glossary.html','board.html','sources.html','search.html','capture.html','favorites.html','rules.html','story.html']);
+  const allowed = new Set(['index.html','start.html','classes.html','class-change.html','class-archer.html','class-cleric.html','class-knight.html','class-mage.html','class-rogue.html','class-templar.html','systems.html','quests.html','events.html','bosses.html','tools.html','glossary.html','board.html','sources.html','search.html','capture.html','favorites.html','rules.html','story.html','level-guide.html']);
   const buttons = new Map();
   let currentPage = null;
   let sideRail = null;
+  let popularRows = [], popularMessage = '読み込み中…', popularStarted = null;
+  const popularSeen = new Set();
+  const popularEndpoint = 'https://dzxxjtmpcfsmvdgkcwvn.supabase.co/functions/v1/site-popular-articles';
+  const popularKey = 'sb_publishable_yTgQ5bw5pnSkNCTOH4me8Q_YaQhRkQ_';
   const main = document.querySelector('main');
   if (!main) return;
   const status = document.createElement('p');
@@ -161,6 +165,7 @@
     catch { status.textContent = '保存できませんでした。ブラウザの保存設定や空き容量をご確認ください。'; return false; }
   }
   function remember(record) {
+    trackPopular(record);
     const data = read();
     data.recent = [{...record,time:Date.now()}, ...data.recent.filter(x => x.url !== record.url)].slice(0,30);
     write(data);
@@ -235,16 +240,71 @@
     if (sideRail?.isConnected) return sideRail;
     sideRail = document.createElement('aside');
     sideRail.className = 'site-side-rail';
-    sideRail.setAttribute('aria-label','お気に入りと最近見た項目');
+    sideRail.setAttribute('aria-label','お気に入り・最近見た項目・人気記事');
     sideRail.innerHTML =
       '<section class="rail-current"><p class="rail-eyebrow">QUICK ACCESS</p><h2>このページ</h2><div id="rail-current-action"></div></section>'+
       '<section><div class="rail-head"><h2>☆ お気に入り</h2><a href="favorites.html">すべて</a></div><div id="rail-favorites"></div></section>'+
-      '<section><div class="rail-head"><h2>最近見た項目</h2><a href="favorites.html#recent">履歴</a></div><div id="rail-recents"></div></section>';
+      '<section><div class="rail-head"><h2>最近見た項目</h2><a href="favorites.html#recent">履歴</a></div><div id="rail-recents"></div></section>'+
+      '<section class="rail-popular"><div class="rail-head"><h2>最も閲覧された記事</h2></div><div id="rail-popular"></div><details class="rail-popular-help"><summary>集計について</summary><p>同じブラウザーから同じ記事への閲覧は、日本時間で1日1回数えます。サイト全体の累計で上位5件を表示します。集計開始前の閲覧は含みません。訪問者カウンターと共通のランダムな識別子を使います。</p><p id="rail-popular-start"></p></details></section>';
     const header=document.querySelector('header');
     if (header) header.insertAdjacentElement('afterend',sideRail);
     else document.body.prepend(sideRail);
     document.body.classList.add('has-site-side-rail');
     return sideRail;
+  }
+
+
+  function renderPopular() {
+    const box=sideRail?.querySelector('#rail-popular');
+    if(!box) return;
+    box.replaceChildren();
+    if(!popularRows.length) {
+      const p=document.createElement('p'); p.className='rail-empty'; p.textContent=popularMessage; box.append(p);
+    } else {
+      const list=document.createElement('ol'); list.className='rail-popular-list';
+      popularRows.slice(0,5).forEach((row,index)=>{
+        const record=clean({url:row.url,title:row.title});
+        if(!record || !Number.isSafeInteger(row.views) || row.views<1) return;
+        const li=document.createElement('li');
+        const rank=document.createElement('span');rank.className='rail-popular-rank';rank.textContent=String(index+1);rank.setAttribute('aria-label',String(index+1)+'位');
+        const a=document.createElement('a');a.href=record.url;a.textContent=record.title;
+        const small=document.createElement('small');small.textContent='閲覧数 '+row.views.toLocaleString('ja-JP');
+        const copy=document.createElement('div');copy.append(a,small);li.append(rank,copy);list.append(li);
+      });
+      box.append(list);
+    }
+    const note=sideRail.querySelector('#rail-popular-start');
+    note.textContent=popularStarted?'集計開始：'+popularStarted:'';
+  }
+  async function requestPopular(article) {
+    const production=location.hostname==='yysupporttools.github.io' && location.pathname.startsWith('/xen-rebirth-jp/');
+    if(!production) {popularMessage='公開サイトで集計・表示します。';renderPopular();return;}
+    let visitor=null;
+    try {
+      visitor=localStorage.getItem('xen-site-visitor-v1');
+      if(!/^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i.test(visitor||'')) {
+        visitor=crypto.randomUUID();localStorage.setItem('xen-site-visitor-v1',visitor);
+      }
+    } catch {visitor=null;}
+    try {
+      const record=Boolean(article&&visitor);
+      const response=await fetch(popularEndpoint,{method:record?'POST':'GET',headers:record?{apikey:popularKey,'Content-Type':'application/json'}:{apikey:popularKey},...(record?{body:JSON.stringify({article,visitor})}:{}),signal:AbortSignal.timeout(10000),cache:'no-store'});
+      if(!response.ok)throw new Error();
+      const data=await response.json();
+      if(!Array.isArray(data.articles))throw new Error();
+      popularRows=data.articles;
+      popularMessage='まだ閲覧データがありません。';
+      popularStarted=/^\d{4}-\d{2}-\d{2}$/.test(data.started||'')?data.started:null;
+      renderPopular();
+    } catch {if(article)popularSeen.delete(article);popularMessage='現在、ランキングを取得できません。';renderPopular();}
+  }
+  function trackPopular(record) {
+    if(!record) return;
+    const url=new URL(record.url,base),file=url.pathname.split('/').pop();
+    const article=file+(['glossary.html','quests.html'].includes(file)?url.hash:'');
+    if(['index.html','search.html','favorites.html','board.html','capture.html','sources.html','tools.html'].includes(file)) return;
+    if(popularSeen.has(article))return;
+    popularSeen.add(article);requestPopular(article);
   }
 
   function renderRailLinks(container,records,empty,limit) {
@@ -287,6 +347,7 @@
     }
     renderRailLinks(rail.querySelector('#rail-favorites'),orderedFavorites(data.favorites),'まだありません。',5);
     renderRailLinks(rail.querySelector('#rail-recents'),data.recent,'まだありません。',6);
+    renderPopular();
   }
   function render() {
     const data=read();
