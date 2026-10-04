@@ -50,17 +50,17 @@ def add(key, title, text, url, kind, page):
         records.append(dict(key=key,title=clean(title),text=clean(text),url=url,kind=kind,page=page))
 
 for file in sorted(ROOT.glob('*.html')):
-    if file.name=='search.html' or file.name.startswith('google'):continue
+    if file.name in {'search.html','reports.html'} or file.name.startswith('google'):continue
     tree=Tree(file.read_text(encoding='utf-8')).root
     main=first(tree,{'main'})
     if not main:continue
     h1=first(main,{'h1'})
     title=clean(h1.text() if h1 else file.stem)
     intro=next((n for n in main.walk() if 'page-intro' in n.attrs.get('class','').split()),None)
-    dynamic=file.stem in {'glossary','quests','events','board'}
+    dynamic=file.stem in {'glossary','quests','events','board','monsters'}
     page_text=(intro or main).text()[:650] if dynamic else main.text()
     add('page:'+file.stem,title,page_text,file.name,'class' if file.stem.startswith('class-') or file.stem=='classes' else 'guide',title)
-    if file.stem in {'glossary','quests','events','board'}:continue
+    if dynamic:continue
     for idx,node in enumerate(main.walk()):
         if node.tag not in {'section','article'}:continue
         # Do not duplicate a parent section's nested chapters.
@@ -94,6 +94,16 @@ for g in catalog['groups']:
     add('ball:'+g['slug'],title,g.get('description','')+' ラッキーボール Lucky Ball',url,'lucky','ラッキーボール')
     for num,item in enumerate(g['items']):
         add(f'ball-item:{g["slug"]}:{num}',' / '.join(filter(None,[item.get('name_ja'),item.get('name_en')])), ' '.join(filter(None,[title,item.get('stats'),item.get('stats_en'),item.get('description')])),url,'lucky',title)
+
+monster_file=ROOT/'assets/monsters-data.json'
+if monster_file.exists():
+    for monster in json.loads(monster_file.read_text(encoding='utf-8'))['monsters']:
+        identity=monster['id']
+        if not re.fullmatch(r'[a-z0-9_-]{1,160}',identity):
+            raise ValueError('Invalid monster identity: '+identity)
+        title=monster['name']+(' Lv'+str(monster['level']) if monster.get('level') is not None else '')
+        text=' '.join(filter(None,[monster.get('region'),monster.get('area'),monster.get('map'),*[d['name'] for d in monster.get('drops',[])],*monster.get('notes',[])]))
+        add('monster:'+identity,title,text,'monsters.html#'+identity,'guide','モンスター図鑑')
 
 out=ROOT/'assets/site-search-index.json'
 out.write_text(json.dumps({'version':1,'records':records},ensure_ascii=False,separators=(',',':')),encoding='utf-8')
