@@ -685,3 +685,6 @@ footer{border-top-color:#bfced9!important;color:#607486!important}
   .quest-detail-favorite-row{justify-content:flex-start}
   .quest-detail-favorite-row .saved-star{width:100%}
 }
+
+/* Site-wide article ranking */
+.rail-popular-list{list-style:none;margin:0;padding:0}.rail-popular-list li{display:flex;align-items:flex-start;gap:9px;margin:14px 0}.rail-popular-rank{display:flex;align-items:center;justify-content:center;flex:0 0 25px;width:25px;height:25px;border-radius:50%;background:#37638a;color:#fff;font-size:12px;font-weight:800}.rail-popular-list li>div{min-width:0}.rail-popular-list a{color:#aa541d;font-weight:600;line-height:1.5;text-decoration:none;overflow-wrap:anywhere}.rail-popular-list a:hover{text-decoration:underline}.rail-popular-list small{display:block;color:#6c8091;font-size:11px;margin-top:3px}.rail-popular-help{font-size:11px;color:#607486;margin-top:12px}.rail-popular-help summary{cursor:pointer}.rail-popular-help p{line-height:1.6;margin:8px 0}.rail-popular .rail-head h2{font-size:15px}
