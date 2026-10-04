@@ -59,7 +59,7 @@
     toolsButton.className = 'site-tools-toggle';
     toolsButton.setAttribute('aria-expanded','false');
     toolsButton.textContent = '便利機能';
-    if (['bosses.html','tools.html','capture.html'].includes(currentFile)) toolsButton.classList.add('is-current');
+    if (['bosses.html','tools.html','capture.html','reports.html'].includes(currentFile)) toolsButton.classList.add('is-current');
 
     const toolsPanel = document.createElement('div');
     toolsPanel.className = 'site-tools-panel';
@@ -303,7 +303,7 @@
     if(!record) return;
     const url=new URL(record.url,base),file=url.pathname.split('/').pop();
     const article=file+(['glossary.html','quests.html'].includes(file)?url.hash:'');
-    if(['index.html','search.html','favorites.html','board.html','capture.html','sources.html','tools.html'].includes(file)) return;
+    if(['index.html','search.html','favorites.html','board.html','capture.html','sources.html','tools.html','reports.html'].includes(file)) return;
     if(popularSeen.has(article))return;
     popularSeen.add(article);requestPopular(article);
   }
