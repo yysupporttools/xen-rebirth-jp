@@ -2,7 +2,7 @@
   'use strict';
   const KEY = 'xenRebirthSavedItemsV1';
   const base = new URL('./', location.href);
-  const allowed = new Set(['index.html','start.html','classes.html','class-change.html','class-archer.html','class-cleric.html','class-knight.html','class-mage.html','class-rogue.html','class-templar.html','systems.html','quests.html','events.html','bosses.html','tools.html','glossary.html','board.html','sources.html','search.html','capture.html','favorites.html','rules.html','story.html','level-guide.html']);
+  const allowed = new Set(['index.html','start.html','classes.html','class-change.html','class-archer.html','class-cleric.html','class-knight.html','class-mage.html','class-rogue.html','class-templar.html','systems.html','quests.html','events.html','bosses.html','tools.html','glossary.html','board.html','sources.html','search.html','capture.html','favorites.html','rules.html','story.html','level-guide.html','monsters.html','reports.html']);
   const buttons = new Map();
   let currentPage = null;
   let sideRail = null;
@@ -67,7 +67,8 @@
     [
       ['bosses.html','ボスタイマー','出現予定を確認'],
       ['tools.html','精錬ツール','精錬データ・計算'],
-      ['capture.html','翻訳・NPC検索','ゲーム画面から検索']
+      ['capture.html','翻訳・NPC検索','ゲーム画面から検索'],
+      ['reports.html','修正報告・投稿管理','送った情報の確認']
     ].forEach(([href,title,sub]) => {
       const a = document.createElement('a');
       a.href = href;

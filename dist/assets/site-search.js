@@ -61,7 +61,7 @@
   window.addEventListener('popstate',()=>{restore();limit=20;render();});
   restore();render();
   try {
-    const response=await fetch('assets/site-search-index.json',{signal:AbortSignal.timeout(12000)});
+    const response=await fetch('assets/site-search-index.json?v=20261005dex',{signal:AbortSignal.timeout(12000)});
     if(!response.ok)throw Error('snapshot');
     const data=await response.json();if(!Array.isArray(data.records))throw Error('snapshot');
     records=core.prepare(data.records);
