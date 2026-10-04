@@ -1,7 +1,7 @@
 (() => {
  "use strict";
  if(window.self!==window.top)return;
- const monsters=["halloween-starbear","gardiant","ice-tiger","snow-shoveler","brown-puppy","blue-rabbit","golden-warrior"];
+ const monsters=["halloween-starbear","gardiant","ice-tiger","snow-shoveler","brown-puppy","blue-rabbit","golden-warrior","para-rabbit","duav","star-bear","hawgs","teethina","armored-dragon","winged-white-beast","blue-deer"];
  const randomIndex = count => Math.floor(Math.random()*count);
  const shuffled = monsters.slice();
  for(let i=shuffled.length-1;i>0;i--){const j=randomIndex(i+1);[shuffled[i],shuffled[j]]=[shuffled[j],shuffled[i]];}
