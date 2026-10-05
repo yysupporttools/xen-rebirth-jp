@@ -1,5 +1,6 @@
 // 更新履歴はここに追加します。日付は日本時間の YYYY-MM-DD、同日は記載順です。
 window.SITE_UPDATES = [
+  { date: "2026-10-06", category: "ゲームシステム", text: "スキルブックの対象Lv別入手場所と行き方を追加しました", href: "systems.html#skill-books" },
   { date: "2026-10-05", category: "モンスター図鑑", text: "ゲーム内画像・Lv・ドロップ・DEFを探せる地域別のモンスター図鑑を追加しました", href: "monsters.html" },
   { date: "2026-10-05", category: "サイト", text: "各記事の修正報告と、モンスター情報の追記機能を追加しました", href: "monsters.html" },
   { date: "2026-09-24", category: "ストーリー", text: "公式ストーリー紹介と創作プロローグを追加しました", href: "story.html" },
