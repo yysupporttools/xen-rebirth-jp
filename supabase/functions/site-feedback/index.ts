@@ -141,10 +141,13 @@ async function addImage(req:Request,data:Record<string,unknown>){
  const image=imageFile(data.monster_image),url=image?'':publicPictureUrl(data.image_url);if(!image&&!url)throw Error('画像を貼り付けるか、ファイルまたは画像URLを指定してください');
  if(image)validateImage(image.bytes,image.type);
  await requireKnownMonster(mid);
- const visitorHash=await hash(`visitor:${data.visitor}`),ip=clientIp(req,data.visitor);
- const ipHash=await hash(`ip:${new Date().toISOString().slice(0,10)}:${service}:${ip}`);
+ // Images have independent quotas; old report counters remain untouched.
+ const visitorHash=await hash(`image-visitor:${data.visitor}`),ip=clientIp(req,data.visitor);
+ // A stable private IP hash keeps the 10-minute window across midnight.
+ // The database resets the separate day count at midnight in Japan.
+ const ipHash=await hash(`image-ip:${service}:${ip}`);
  const input={kind:'monster',article_url:articleUrl(data.article_url),title,monster_id:mid,category:'image',body:title+'のゲーム内画像を追加しました。',details:{},source_url:secureUrl(data.source_url),author_name:string(data.author_name,40)||'匿名',attachment_path:''};
- const id=await rpc('site_feedback_submit',{p_input:input,p_visitor_hash:visitorHash,p_ip_hash:ipHash}) as string;
+ const id=await rpc('site_feedback_submit_image',{p_input:input,p_visitor_hash:visitorHash,p_ip_hash:ipHash}) as string;
  let privateCopy='',publicCopy='',imageUrl=url;
  try{
   if(image){

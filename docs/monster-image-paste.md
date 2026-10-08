@@ -28,7 +28,7 @@ Lv・ドロップ・DEF・出現場所・備考・自由本文はこの操作で
 
 ## 保存・検証・管理
 
-- 既存の投稿回数制限を適用してから、サーバーだけがStorageへ保存します。一般ユーザーのStorage直接書き込み権限はありません。
+- 画像専用の追加枠（10分間に60枚、日本時間の1日に500枚）を判定してから、サーバーだけがStorageへ保存します。Lv・ドロップ・DEFなどの情報追記と記事修正報告は、従来の10分間に5件、1日に30件を維持します。一般ユーザーのStorage直接書き込み権限はありません。
 - 貼り付け・ファイル画像の原本はprivate `article-feedback`、図鑑表示用コピーはpublic `monster-images`に保存します。
 - 即時公開の画像だけに `publication_mode: immediate` を付けます。管理者確認済みの追記と表示を区別します。
 - PNG/JPEG/WebPの構造と寸法を検証します。画像URLは公開HTTPSのホストに限定し、ローカル・プライベートIPを拒否します。
@@ -38,4 +38,4 @@ Lv・ドロップ・DEF・出現場所・備考・自由本文はこの操作で
 
 ## 既存プロジェクトへの反映
 
-最初の貼り付け対応の `monster-image-paste.sql` に続き、今回の差分 `monster-image-immediate.sql` を適用します。`site-feedback/index.ts`を更新し、フロントのキャッシュ番号を変更します。`verify_jwt=false`で公開keyを検証し、管理操作は従来通り実Authユーザーと管理者権限を確認します。初期作成用 `site-feedback.sql` は再適用しません。
+最初の貼り付け対応の `monster-image-paste.sql` に続き、差分 `monster-image-immediate.sql` と画像専用枠の `docs/monster-image-rate.sql` を適用します。`site-feedback/index.ts`を更新し、フロントのキャッシュ番号を変更します。`verify_jwt=false`で公開keyを検証し、管理操作は従来通り実Authユーザーと管理者権限を確認します。初期作成用 `site-feedback.sql` は再適用しません。追加枠の仕様は `docs/monster-image-rate.md` を参照してください。

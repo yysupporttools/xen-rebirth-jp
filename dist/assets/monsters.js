@@ -41,10 +41,58 @@
   }
   function image(monster,detail=false) {
     const url=http(monster.imageUrl);
-    return url ? '<img src="'+esc(url)+'" alt="'+esc(monster.name)+'のゲーム内画像" '+(detail?'':'loading="lazy" ')+'decoding="async" referrerpolicy="no-referrer">' : '<span class="dex-image-missing">ゲーム内画像<br>未登録</span>';
+    return url ? '<button type="button" class="dex-image-zoom-trigger" data-monster-zoom-src="'+esc(url)+'" data-monster-zoom-alt="'+esc(monster.name)+'のゲーム内画像" aria-label="'+esc(monster.name)+'のゲーム内画像を拡大" aria-haspopup="dialog"><img src="'+esc(url)+'" alt="'+esc(monster.name)+'のゲーム内画像" '+(detail?'':'loading="lazy" ')+'decoding="async" referrerpolicy="no-referrer"><span class="dex-image-zoom-hint">画像を拡大</span></button>' : '<span class="dex-image-missing">ゲーム内画像<br>未登録</span>';
   }
   function wireImages(container) {
     container.querySelectorAll('img').forEach(img => img.addEventListener('error',() => {const p=document.createElement('span');p.className='dex-image-missing';p.textContent='画像を取得できません。詳細の出典リンクからご確認ください。';img.replaceWith(p);},{once:true}));
+  }
+  function setupImageViewer() {
+    const viewer=document.createElement('dialog');viewer.className='dex-image-zoom';viewer.setAttribute('aria-labelledby','dex-image-zoom-title');
+    viewer.innerHTML='<div class="dex-image-zoom-head"><h2 id="dex-image-zoom-title">画像を拡大</h2><button type="button" aria-label="拡大画像を閉じる" autofocus>閉じる ×</button></div><div class="dex-image-zoom-stage"><img class="dex-image-zoom-full" alt="" referrerpolicy="no-referrer"><p class="dex-image-zoom-error" role="status" hidden>画像を読み込めませんでした。</p></div><p class="dex-image-zoom-help">画像全体を表示しています。Escキーでも閉じられます。</p>';
+    document.body.append(viewer);
+    const full=viewer.querySelector('img'),error=viewer.querySelector('[role=status]'),closeButton=viewer.querySelector('button');
+    let opener=null,openerDialog=null,previousOverflow='';
+    function originalUrl(value,trigger) {
+      try{
+        const url=new URL(value);
+        if(url.protocol==='blob:' && trigger?.classList.contains('report-preview-zoom'))return url.href;
+        const safe=http(value);if(!safe)return '';
+        if(url.hostname==='www.xenrebirth.com' && url.pathname==='/index.php')url.search=url.search.replace(/&thumbnail=1(?=&|$)/g,'');
+        return url.href;
+      }catch{return '';}
+    }
+    function open(trigger) {
+      if(viewer.open || !trigger || trigger.disabled)return;
+      const url=originalUrl(trigger.dataset.monsterZoomSrc,trigger);if(!url)return;
+      opener=trigger;openerDialog=trigger.closest('dialog');
+      const title=trigger.dataset.monsterZoomAlt || trigger.querySelector('img')?.alt || 'ゲーム内画像';
+      full.hidden=false;error.hidden=true;full.alt=title;viewer.querySelector('h2').textContent=title;full.src=url;
+      previousOverflow=document.body.style.overflow;document.body.style.overflow='hidden';
+      viewer.showModal();closeButton.focus({preventScroll:true});
+    }
+    full.addEventListener('error',()=>{if(viewer.open){full.hidden=true;error.hidden=false;}});
+    document.addEventListener('click',event=>{
+      const trigger=event.target.closest?.('[data-monster-zoom-src]');if(!trigger || trigger.disabled)return;
+      event.preventDefault();event.stopPropagation();open(trigger);
+    },true);
+    document.addEventListener('error',event=>{
+      if(event.target.tagName!=='IMG')return;
+      const trigger=event.target.closest('[data-monster-zoom-src]');if(!trigger)return;
+      trigger.disabled=true;trigger.removeAttribute('data-monster-zoom-src');
+      const hint=trigger.querySelector('.dex-image-zoom-hint');if(hint)hint.textContent='画像を取得できません';
+      if(!hint && !trigger.querySelector('.dex-image-missing')){const placeholder=document.createElement('span');placeholder.className='dex-image-missing';placeholder.textContent='画像を取得できません';trigger.append(placeholder);}
+    },true);
+    closeButton.addEventListener('click',()=>viewer.close());
+    viewer.addEventListener('cancel',event=>{event.preventDefault();event.stopPropagation();viewer.close();});
+    viewer.addEventListener('keydown',event=>{if(event.key==='Escape'){event.preventDefault();event.stopPropagation();viewer.close();}});
+    viewer.addEventListener('click',event=>{if(event.target!==viewer)return;const rect=viewer.getBoundingClientRect();if(event.clientX<rect.left || event.clientX>rect.right || event.clientY<rect.top || event.clientY>rect.bottom)viewer.close();});
+    viewer.addEventListener('close',()=>{
+      document.body.style.overflow=previousOverflow;full.removeAttribute('src');
+      if(opener?.isConnected && !opener.disabled)opener.focus({preventScroll:true});
+      else if(openerDialog?.open){const fallback=openerDialog.querySelector('.report-close,#dex-close,button:not([disabled])');fallback?.focus({preventScroll:true});}
+      else $('dex-results').querySelector('button[data-monster]')?.focus({preventScroll:true});
+      opener=null;openerDialog=null;
+    });
   }
   function card(monster) {
     const drops=dropNames(monster),summary=drops.length?drops.slice(0,3).join('、')+(drops.length>3?' ほか':''):monster.rewards?.length?'未登録／討伐報酬：'+monster.rewards.map(r=>r.name).join('、'):'未登録';
@@ -145,5 +193,5 @@
   $('dex-dialog').addEventListener('cancel',event=>{event.preventDefault();close();});
   $('dex-reset').addEventListener('click',()=>{$('dex-filter').reset();maps();filter();});window.addEventListener('hashchange',()=>{if(location.hash)open(decode(location.hash.slice(1)),false);else if($('dex-dialog').open)$('dex-dialog').close();});
   window.addEventListener('xen-monster-updated',event=>{if(Array.isArray(event.detail?.rows))applyAdditions(event.detail.rows);});
-  init();
+  setupImageViewer();init();
 })();
