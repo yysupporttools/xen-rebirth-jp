@@ -105,7 +105,7 @@
     }
     if(m.levelPost || m.imagePost){const p=document.createElement('p');p.className='dex-source';p.textContent=[m.levelPost?'Lvは承認済み投稿から補完。':'',m.imagePost?'画像は承認済み投稿から補完。':''].filter(Boolean).join(' ');$('dex-detail').querySelector('.dex-detail-main').after(p);}
     wireImages($('dex-detail'));
-    if(window.XenReports)window.XenReports.mountMonster($('dex-contributions'),{id:m.id,name:m.name,url:'monsters.html#'+m.id});
+    if(window.XenReports){window.XenReports.mountMonster($('dex-contributions'),{id:m.id,name:m.name,url:'monsters.html#'+m.id});const register=document.createElement('button');register.type='button';register.className='dex-image-register';register.textContent='画像を貼り付けて登録';register.onclick=()=>window.XenReports.open({kind:'monster',category:'image',title:m.name,monsterId:m.id,url:'monsters.html#'+m.id});$('dex-detail').querySelector('.dex-detail-main>div').append(register);}
     else $('dex-contributions').textContent='追記機能を読み込めませんでした。ページを再読み込みしてください。';
     if(!$('dex-dialog').open)$('dex-dialog').showModal();
     if(save)history.replaceState(null,'',location.pathname+location.search+'#'+encodeURIComponent(m.id));
