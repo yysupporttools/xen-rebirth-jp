@@ -10,15 +10,80 @@ const categories = ['error','outdated','link','other','drop','def','level','map'
 const reply = (data:unknown,status=200) => new Response(JSON.stringify(data),{status,headers:{...cors,'Content-Type':'application/json','Cache-Control':'no-store'}});
 const string = (value:unknown,max:number,required=false) => {if(typeof value!=='string' && value!=null)throw Error('文字列の入力を確認してください'); const v=String(value??'').trim();if(v.length>max||(required&&!v))throw Error('文字数を確認してください');return v;};
 const secureUrl = (value:unknown) => {const v=string(value,1000);if(!v)return '';const u=new URL(v);if(u.protocol!=='https:'||u.username||u.password)throw Error('URLは https:// で入力してください');return u.href;};
+function publicPictureUrl(value:unknown){const raw=string(value,1000);if(!raw)return '';let url:URL;try{url=new URL(raw);}catch{throw Error('画像URLを確認してください');}const host=url.hostname.toLowerCase().replace(/\.$/,'');if(url.protocol!=='https:'||url.username||url.password||/[\s\u0000-\u001f]/.test(raw)||host==='localhost'||host.endsWith('.localhost')||host.endsWith('.local')||host.endsWith('.internal')||!host.includes('.')||host.startsWith('[')||/^(?:0|10|127)\./.test(host)||/^169\.254\./.test(host)||/^192\.168\./.test(host)||/^172\.(?:1[6-9]|2\d|3[01])\./.test(host))throw Error('公開された https:// の画像URLを入力してください');url.hash='';return url.href;}
 const articleUrl = (value:unknown) => {const u=new URL(string(value,1000,true),`${allowedOrigin}/xen-rebirth-jp/`);if(u.origin!==allowedOrigin||!/^\/xen-rebirth-jp\/[a-z0-9-]+\.html$/.test(u.pathname))throw Error('サイトの記事URLを指定してください');u.search='';return u.href;};
 function details(value:unknown){const d=(value&&typeof value==='object'&&!Array.isArray(value)?value:{}) as Record<string,unknown>;const result:Record<string,unknown>={};for(const [key,max]of [['level',300],['min_def',10000],['max_def',10000]] as const){const n=d[key];if(n===''||n==null)result[key]=null;else{const v=Number(n);if(!Number.isInteger(v)||v<0||v>max)throw Error('Lv / DEF の数値を確認してください');result[key]=v;}}if(result.min_def!=null&&result.max_def!=null&&Number(result.min_def)>Number(result.max_def))throw Error('DEF の最小値と最大値を確認してください');result.drop_items=string(d.drop_items,1200);result.map=string(d.map,200);result.image_url=secureUrl(d.image_url);result.notes=string(d.notes,1000);return result;}
 async function rpc(name:string,args:unknown){const r=await fetch(`${project}/rest/v1/rpc/${name}`,{method:'POST',headers:serviceHeaders,body:JSON.stringify(args)});const text=await r.text();let data=null;if(text.trim()){try{data=JSON.parse(text);}catch{throw Error('保存先の応答を読み込めませんでした');}}if(!r.ok)throw Error(data?.message||'保存に失敗しました');return data;}
 async function hash(value:string){const bytes=new Uint8Array(await crypto.subtle.digest('SHA-256',new TextEncoder().encode(value)));return [...bytes].map(b=>b.toString(16).padStart(2,'0')).join('');}
+const clientIp = (req:Request,visitor:unknown) => req.headers.get('cf-connecting-ip')||req.headers.get('x-forwarded-for')?.split(',').map(x=>x.trim()).filter(Boolean).at(-1)||`unknown:${visitor}`;
 async function admin(req:Request){const bearer=req.headers.get('Authorization')||'';if(!/^Bearer [\w.-]+$/.test(bearer))throw Error('管理者ログインが必要です');const headers={apikey:publishable,Authorization:bearer};const r=await fetch(`${project}/auth/v1/user`,{headers});if(!r.ok)throw Error('ログインを確認できません。再度ログインしてください');const user=await r.json();const check=await fetch(`${project}/rest/v1/rpc/board_is_admin`,{method:'POST',headers:{...headers,'Content-Type':'application/json'},body:'{}'});if(!check.ok||await check.json()!==true)throw Error('このアカウントには管理者権限がありません');return user.id as string;}
 type ImageFile={bytes:Uint8Array;type:string;extension:string};
 const privatePath = /^[0-9]{4}-[0-9]{2}-[0-9]{2}\/[a-f0-9-]{36}\.(png|jpg|webp)$/;
 const managedPublicPath = /^[a-f0-9-]{36}\/[a-f0-9-]{36}\.(png|jpg|webp)$/;
 const publicImageUrl = (path:string) => `${project}/storage/v1/object/public/monster-images/${path}`;
+const tag = (bytes: Uint8Array, start: number, count: number) => String.fromCharCode(...bytes.subarray(start, start + count));
+function dimensions(width: number, height: number) {
+  if (width < 1 || height < 1 || width > 4096 || height > 4096 || width * height > 16777216) {
+    throw new Error('画像は縦横4096px以内で選んでください');
+  }
+}
+function validateImage(bytes: Uint8Array, type: string) {
+  if (bytes.length < 20 || bytes.length > 2097152) throw new Error('画像は2MB以内で選んでください');
+  const view = new DataView(bytes.buffer, bytes.byteOffset, bytes.byteLength);
+  if (type === 'image/png') {
+    if (bytes.length < 45 || tag(bytes, 0, 8) !== '\x89PNG\r\n\x1a\n' || view.getUint32(8) !== 13 || tag(bytes, 12, 4) !== 'IHDR') {
+      throw new Error('PNG画像の形式を確認してください');
+    }
+    dimensions(view.getUint32(16), view.getUint32(20));
+    let pos = 8, imageData = false, end = false;
+    while (pos + 12 <= bytes.length) {
+      const len = view.getUint32(pos), chunk = tag(bytes, pos + 4, 4);
+      if (pos + len + 12 > bytes.length) throw new Error('PNG画像が壊れています');
+      if (chunk === 'IDAT' && len > 0) imageData = true;
+      pos += len + 12;
+      if (chunk === 'IEND') { end = len === 0 && pos === bytes.length; break; }
+    }
+    if (!imageData || !end) throw new Error('PNG画像が壊れています');
+  } else if (type === 'image/jpeg') {
+    if (bytes[0] !== 0xff || bytes[1] !== 0xd8 || bytes.at(-2) !== 0xff || bytes.at(-1) !== 0xd9) throw new Error('JPEG画像の形式を確認してください');
+    let pos = 2, frame = false, scan = false;
+    const frames = [0xc0, 0xc1, 0xc2, 0xc3, 0xc5, 0xc6, 0xc7, 0xc9, 0xca, 0xcb, 0xcd, 0xce, 0xcf];
+    while (pos + 4 < bytes.length) {
+      if (bytes[pos++] !== 0xff) throw new Error('JPEG画像が壊れています');
+      while (bytes[pos] === 0xff) pos++;
+      const marker = bytes[pos++];
+      if (marker === 0xda) { scan = true; break; }
+      if (marker >= 0xd0 && marker <= 0xd7) continue;
+      const len = view.getUint16(pos);
+      if (len < 2 || pos + len > bytes.length) throw new Error('JPEG画像が壊れています');
+      if (frames.includes(marker)) {
+        if (len < 8) throw new Error('JPEG画像が壊れています');
+        dimensions(view.getUint16(pos + 5), view.getUint16(pos + 3)); frame = true;
+      }
+      pos += len;
+    }
+    if (!frame || !scan) throw new Error('JPEG画像が壊れています');
+  } else if (type === 'image/webp') {
+    if (tag(bytes, 0, 4) !== 'RIFF' || tag(bytes, 8, 4) !== 'WEBP' || view.getUint32(4, true) + 8 !== bytes.length) throw new Error('WebP画像の形式を確認してください');
+    let pos = 12, imageData = false;
+    while (pos + 8 <= bytes.length) {
+      const chunk = tag(bytes, pos, 4), len = view.getUint32(pos + 4, true), start = pos + 8;
+      if (len < 1 || start + len > bytes.length) throw new Error('WebP画像が壊れています');
+      if (chunk === 'VP8X' && len >= 10) {
+        const read24 = (i: number) => bytes[i] | bytes[i + 1] << 8 | bytes[i + 2] << 16;
+        dimensions(read24(start + 4) + 1, read24(start + 7) + 1);
+      } else if (chunk === 'VP8 ' && len >= 10 && tag(bytes, start + 3, 3) === '\x9d\x01\x2a') {
+        dimensions(view.getUint16(start + 6, true) & 0x3fff, view.getUint16(start + 8, true) & 0x3fff); imageData = true;
+      } else if (chunk === 'VP8L' && len >= 5 && bytes[start] === 0x2f) {
+        const bits = view.getUint32(start + 1, true);
+        dimensions((bits & 0x3fff) + 1, ((bits >>> 14) & 0x3fff) + 1); imageData = true;
+      }
+      pos = start + len + (len % 2);
+    }
+    if (!imageData || pos !== bytes.length) throw new Error('WebP画像が壊れています');
+  } else throw new Error('画像はPNG / JPEG / WebPで選んでください');
+}
+
 function imageFile(value:unknown):ImageFile|null{
  if(!value)return null;const a=value as {data?:string,type?:string};
  if(!['image/png','image/jpeg','image/webp'].includes(a.type||'')||typeof a.data!=='string'||a.data.length>2800000)throw Error('画像は PNG / JPEG / WebP、2MB以内で選んでください');
@@ -49,6 +114,54 @@ async function cleanupPublicImages(){
  const paths=await rpc('site_feedback_image_cleanup_list',{}) as string[];
  for(const path of paths){if(!managedPublicPath.test(path))throw Error('削除対象の画像パスが無効です');await removeImages('monster-images',[path]);await rpc('site_feedback_image_cleanup_done',{p_path:path});}
 }
+// A failed response can follow a committed transaction. Retain any picture
+// already referenced by a published submission instead of compensating blindly.
+async function discardUnpublishedCopy(id:string,path:string){
+ let current:Record<string,unknown>|null=null;
+ try{current=await rpc('site_feedback_get',{p_id:id});}catch{try{await rpc('site_feedback_image_cleanup_queue',{p_path:path});}catch{/* Do not delete an ambiguously committed publication. */}return null;}
+ if(current?.status==='published'&&current.monster_image_public_path===path)return current;
+ try{await removeImages('monster-images',[path]);}catch{await rpc('site_feedback_image_cleanup_queue',{p_path:path});}
+ return false;
+}
+let knownMonsterIds:Set<string>|null=null,knownMonsterIdsAt=0;
+async function requireKnownMonster(id:string){
+ if(!knownMonsterIds||Date.now()-knownMonsterIdsAt>300000){
+  const response=await fetch('https://yysupporttools.github.io/xen-rebirth-jp/assets/monsters-data.json',{signal:AbortSignal.timeout(10000)});
+  if(!response.ok)throw Error('図鑑のデータを確認できませんでした。時間をおいて再度お試しください');
+  const data=await response.json();if(!Array.isArray(data.monsters))throw Error('図鑑のデータを読み込めませんでした');
+  const ids=new Set<string>();for(const monster of data.monsters){if(typeof monster.id==='string'&&/^[a-z0-9_-]{1,160}$/.test(monster.id))ids.add(monster.id);}
+  if(!ids.size)throw Error('図鑑のデータを読み込めませんでした');knownMonsterIds=ids;knownMonsterIdsAt=Date.now();
+ }
+ if(!knownMonsterIds.has(id))throw Error('このモンスターは図鑑に登録されていません。図鑑から追加してください');
+}
+async function addImage(req:Request,data:Record<string,unknown>){
+ if(data.honeypot||data.kind&&data.kind!=='monster')throw Error('入力が無効です');
+ if(!/^[a-f0-9]{8}-[a-f0-9]{4}-4[a-f0-9]{3}-[89ab][a-f0-9]{3}-[a-f0-9]{12}$/i.test(String(data.visitor||'')))throw Error('ブラウザ識別子が無効です');
+ const mid=string(data.monster_id,160,true),title=string(data.title,200,true);if(!/^[a-z0-9_-]{1,160}$/.test(mid))throw Error('モンスターが無効です');
+ const image=imageFile(data.monster_image),url=image?'':publicPictureUrl(data.image_url);if(!image&&!url)throw Error('画像を貼り付けるか、ファイルまたは画像URLを指定してください');
+ if(image)validateImage(image.bytes,image.type);
+ await requireKnownMonster(mid);
+ const visitorHash=await hash(`visitor:${data.visitor}`),ip=clientIp(req,data.visitor);
+ const ipHash=await hash(`ip:${new Date().toISOString().slice(0,10)}:${service}:${ip}`);
+ const input={kind:'monster',article_url:articleUrl(data.article_url),title,monster_id:mid,category:'image',body:title+'のゲーム内画像を追加しました。',details:{},source_url:secureUrl(data.source_url),author_name:string(data.author_name,40)||'匿名',attachment_path:''};
+ const id=await rpc('site_feedback_submit',{p_input:input,p_visitor_hash:visitorHash,p_ip_hash:ipHash}) as string;
+ let privateCopy='',publicCopy='',imageUrl=url;
+ try{
+  if(image){
+   privateCopy=`${new Date().toISOString().slice(0,10)}/${crypto.randomUUID()}.${image.extension}`;await uploadImage('article-feedback',privateCopy,image);
+   await rpc('site_feedback_monster_image_attach',{p_id:id,p_path:privateCopy});
+   publicCopy=`${id}/${crypto.randomUUID()}.${image.extension}`;await uploadImage('monster-images',publicCopy,image);imageUrl=publicImageUrl(publicCopy);
+  }
+  await rpc('site_feedback_publish_image',{p_id:id,p_image_url:imageUrl,p_public_image_path:publicCopy});
+  return reply({ok:true,id,image_url:imageUrl,publication_mode:'immediate'});
+ }catch(error){
+  if(publicCopy){const committed=await discardUnpublishedCopy(id,publicCopy);if(committed)return reply({ok:true,id,image_url:(committed.details as Record<string,unknown>).image_url,publication_mode:'immediate'});}
+  else{try{const current=await rpc('site_feedback_get',{p_id:id});if(current?.status==='published'&&(current.details as Record<string,unknown>)?.image_url===imageUrl)return reply({ok:true,id,image_url:imageUrl,publication_mode:'immediate'});}catch{/* Keep a possibly committed URL addition. */}}
+  let cancelled=false;try{cancelled=await rpc('site_feedback_cancel_image',{p_id:id})===true;}catch{/* Retain private original if its final state is unknown. */}
+  if(cancelled&&privateCopy){try{await removeImages('article-feedback',[privateCopy]);}catch{/* Private file is not displayed. */}}
+  throw error;
+ }
+}
 async function sign(path:string){if(!path)return '';const r=await fetch(`${project}/storage/v1/object/sign/article-feedback/${path}`,{method:'POST',headers:serviceHeaders,body:JSON.stringify({expiresIn:600})});if(!r.ok)return '';const data=await r.json();return data.signedURL?`${project}/storage/v1${data.signedURL}`:'';}
 Deno.serve(async(req:Request)=>{
  const origin=req.headers.get('Origin');if(origin&&origin!==allowedOrigin)return reply({error:'このサイトからご利用ください'},403);
@@ -77,10 +190,11 @@ Deno.serve(async(req:Request)=>{
     }
     if(nextStatus==='published'&&row.category==='image'&&!nextDetails.image_url)throw Error('図鑑に掲載する画像または画像URLを選択してください');
     await rpc('site_feedback_review_with_image',{p_id:data.id,p_status:nextStatus,p_note:string(data.note,500),p_actor:actor,p_body:string(data.body,3000,true),p_details:nextDetails,p_public_image_path:newPath,p_expected_status:row.status,p_expected_reviewed_at:row.reviewed_at});
-   }catch(error){if(createdPath){try{await removeImages('monster-images',[createdPath]);}catch{await rpc('site_feedback_image_cleanup_queue',{p_path:createdPath});}}throw error;}
+   }catch(error){if(!createdPath||!await discardUnpublishedCopy(data.id,createdPath))throw error;}
    try{await cleanupPublicImages();}catch{return reply({ok:true,warning:'変更は保存しました。公開を解除した画像の削除は次の管理者保存時に再試行します。'});}
    return reply({ok:true});
   }
+  if(data.action==='add_image')return await addImage(req,data);
   if(data.action!=='submit'||data.honeypot)throw Error('入力が無効です');if(!/^[a-f0-9]{8}-[a-f0-9]{4}-4[a-f0-9]{3}-[89ab][a-f0-9]{3}-[a-f0-9]{12}$/i.test(data.visitor||''))throw Error('ブラウザ識別子が無効です');
   if(!['article','monster'].includes(data.kind))throw Error('報告の種類が無効です');const mid=string(data.monster_id,160);if(data.kind==='monster'&&!/^[a-z0-9_-]{1,160}$/.test(mid))throw Error('モンスターが無効です');
   const category=string(data.category,20,true);if(!categories.includes(category)||(data.kind==='article'&&!['error','outdated','link','other'].includes(category))||(data.kind==='monster'&&!['drop','def','level','map','image','note'].includes(category)))throw Error('分類を確認してください');
@@ -89,7 +203,7 @@ Deno.serve(async(req:Request)=>{
   const monsterImage=imageFile(data.monster_image),evidenceImage=imageFile(data.attachment);
   if(monsterImage&&data.kind!=='monster')throw Error('図鑑画像はモンスター情報から投稿してください');
   if(category==='image'&&!monsterImage&&!input.details.image_url)throw Error('画像を貼り付けるか、ファイルまたは画像URLを指定してください');
-  const visitorHash=await hash(`visitor:${data.visitor}`);const ip=req.headers.get('x-forwarded-for')?.split(',')[0].trim()||req.headers.get('cf-connecting-ip')||`unknown:${data.visitor}`;const ipHash=await hash(`ip:${new Date().toISOString().slice(0,10)}:${service}:${ip}`);
+  const visitorHash=await hash(`visitor:${data.visitor}`);const ip=clientIp(req,data.visitor);const ipHash=await hash(`ip:${new Date().toISOString().slice(0,10)}:${service}:${ip}`);
   // Rate check and insert run atomically; attachments are uploaded only after a
   // valid receipt, so random callers cannot bypass submission limits via files.
   const id=await rpc('site_feedback_submit',{p_input:input,p_visitor_hash:visitorHash,p_ip_hash:ipHash}) as string;
