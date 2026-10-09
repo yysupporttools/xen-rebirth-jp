@@ -322,6 +322,7 @@
     }catch(error){$("map-upload-status").textContent="保存できませんでした："+error.message;$("map-upload-status").classList.add("map-error");}
     finally{uploadSaving=false;$("map-upload-save").disabled=false;$("map-upload-cancel").disabled=false;$("map-upload-close").disabled=false;$("map-upload-file").disabled=false;}
   }
+  $("map-show-npcs").checked=false;
   readPersonal();
   $("map-plan-form").addEventListener("submit",event=>{event.preventDefault();target=null;compute(true);});
   $("map-current").addEventListener("change",()=>{$("map-follow").checked=false;currentPoint=null;location.publish({map:canon($("map-current").value),source:"manual",confidence:100});writePersonal();compute(true);});

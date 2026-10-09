@@ -12,7 +12,7 @@
 <script defer src="assets/world-routes.js?v=3"></script><script defer src="assets/map-registry.js?v=1"></script>
 <script defer src="assets/map-transports.js?v=1"></script><script defer src="assets/map-navigation.js?v=1"></script>
 <script defer src="assets/map-location.js?v=1"></script><script defer src="assets/map-navigation-data.js?v=1"></script>
-<script defer src="assets/map-navigator.js?v=1"></script><script defer src="assets/saved-items.js?v=8"></script>
+<script defer src="assets/map-navigator.js?v=2"></script><script defer src="assets/saved-items.js?v=8"></script>
 <script defer src="assets/visitor-counter.js?v=1"></script><script defer src="assets/report-issues.js?v=6"></script>
 </head>
 <body>
@@ -51,7 +51,7 @@
 <p id="map-guidance" class="map-guidance" aria-live="polite">マップを選ぶとゲーム内画像を表示します。</p>
 <div class="map-toolbar" aria-label="地図の操作">
 <button id="map-zoom-out" type="button" aria-label="地図を縮小">−</button><output id="map-zoom-label" aria-live="polite">100%</output><button id="map-zoom-in" type="button" aria-label="地図を拡大">＋</button><button id="map-reset-view" type="button">全体表示</button>
-<label class="map-check"><input id="map-show-npcs" type="checkbox" checked>NPCの目印</label>
+<label class="map-check"><input id="map-show-npcs" type="checkbox">NPCの緑の目印を表示</label>
 </div>
 <div id="map-viewport" class="map-viewport" tabindex="0" aria-label="拡大マップ。矢印キーで移動できます。">
 <div id="map-stage" class="map-stage" hidden><img id="map-image" alt="" draggable="false"><svg id="map-arrows" class="map-arrows" viewBox="0 0 1000 1000" preserveAspectRatio="none" aria-hidden="true"></svg><div id="map-pins" class="map-pins"></div></div>
