@@ -335,4 +335,71 @@ check("Culvert uses only exact registered exit alias, never ambiguous Quarter OC
   assert.equal(nav.selectExit(step,map,[{map_id:"mall",npc_name:"Brynhild Quarter",x_norm:915,y_norm:217}]),null);
 });
 
+check("game-confirmed Bradlely Forest replaces prior typo without altering known routes or floors",()=>{
+  const graph=nav.buildGraph(world,[],{includeTransports:false});
+  assert.equal(nav.canonicalMapName("Bradley Forest"),"Bradlely Forest");
+  assert(graph.nodes.includes("Bradlely Forest"));assert(!graph.nodes.includes("Bradley Forest"));
+  const route=nav.findRoute(graph,"Bradley Forest","Kryston Forest");
+  assert.deepEqual(Array.from(route.path),["Bradlely Forest","Kryston Forest"]);
+  assert.deepEqual(Array.from(nav.findRoute(graph,"Bradlely Forest","Belpharen Forest").path),["Bradlely Forest","Belpharen Forest"]);
+  assert.equal(nav.canonicalMapName("Bradley Forest B1F"),"Bradley Forest B1F");
+  const maps=[{id:"old-bradley-id",map_name:"Bradley Forest",map_image_url:"old-photo"},{id:"new-bradlely-id",map_name:"Bradlely Forest",map_image_url:"new-photo"}];
+  const grouped=nav.groupMaps(maps);assert.equal(grouped.length,1);
+  assert(grouped[0].map_variants.some(row=>row.id==="old-bradley-id"&&row.map_image_url==="old-photo"));
+});
+
+check("game-confirmed Theglaia Forest resolves prior typo with original IDs and route links",()=>{
+  const graph=nav.buildGraph(world,[],{includeTransports:false});
+  assert.equal(nav.canonicalMapName("Theglia Forest"),"Theglaia Forest");
+  assert(graph.nodes.includes("Theglaia Forest"));assert(!graph.nodes.includes("Theglia Forest"));
+  assert.deepEqual(Array.from(nav.findRoute(graph,"Theglia Forest","Bernald Forest").path),["Theglaia Forest","Bernald Forest"]);
+  assert.deepEqual(Array.from(nav.findRoute(graph,"Theglaia Forest","Othellos Forest").path),["Theglaia Forest","Othellos Forest"]);
+  assert.equal(nav.canonicalMapName("Theglia Forest B1F"),"Theglia Forest B1F");
+  const maps=[{id:"raw-theglia-id",map_name:"Theglia Forest",map_image_url:"original-photo"},{id:"game-theglaia-id",map_name:"Theglaia Forest",map_image_url:"game-photo"}];
+  const grouped=nav.groupMaps(maps);assert.equal(grouped.length,1);
+  assert(grouped[0].map_variants.some(row=>row.id==="raw-theglia-id"&&row.map_image_url==="original-photo"));
+});
+
+check("game-confirmed Castella Forest and old Japanese names preserve route nodes and raw IDs",()=>{
+  const graph=nav.buildGraph(world,[],{includeTransports:false});
+  assert.equal(nav.canonicalMapName("Costella Forest"),"Castella Forest");assert(graph.nodes.includes("Castella Forest"));assert(!graph.nodes.includes("Costella Forest"));
+  assert.deepEqual(Array.from(nav.findRoute(graph,"ロエムの谷","カステルラの森").path),["Loem Valley","Castella Forest"]);
+  assert.deepEqual(Array.from(nav.findRoute(graph,"Castella Forest","Callisto Gorge").path),["Castella Forest","Callisto Gorge"]);
+  assert.equal(nav.canonicalMapName("Costella Forest B1F"),"Costella Forest B1F");assert.equal(nav.canonicalMapName("カステルラの森 B1F"),"カステルラの森 B1F");
+  const grouped=nav.groupMaps([{id:"raw-costella-id",map_name:"Costella Forest",map_image_url:"original-photo"},{id:"game-castella-id",map_name:"Castella Forest",map_image_url:"game-photo"}]);assert.equal(grouped.length,1);
+  assert(grouped[0].map_variants.some(row=>row.id==="raw-costella-id"&&row.map_image_url==="original-photo"));
+});
+check("reviewed old Japanese labels keep English primary and leave unknown names unchanged",()=>{
+  vm.runInContext(fs.readFileSync(path.join(__dirname,"../dist/assets/map-japanese-names.js"),"utf8"),context);
+  assert.equal(context.XEN_MAP_JAPANESE_NAME_META.label,"旧日本語名");
+  assert.equal(context.XEN_MAP_JAPANESE_NAME_META.source.kind,"user-provided-old-japanese-map");
+  assert.equal(context.XEN_MAP_JAPANESE_NAMES["Kryston Forest"],"クリスタンの森");
+  assert.equal(context.XenMapJapaneseNames.get("Costella Forest"),"カステルラの森");
+  assert.equal(context.XenMapJapaneseNames.mapLabel("カステルラの森"),"Castella Forest（旧日本語名：カステルラの森）");
+  assert.equal(context.XenMapJapaneseNames.get("Unknown Floor"),"");assert.equal(context.XenMapJapaneseNames.mapLabel("Unknown Floor"),"Unknown Floor");
+  assert.equal(nav.canonicalMapName("氷の迷宮"),"氷の迷宮");
+});
+check("all curated Japanese map aliases are unique and source reviewed",()=>{
+  const data=JSON.parse(fs.readFileSync(path.join(__dirname,"../dist/assets/map-japanese-names.json"),"utf8"));
+  assert.equal(Object.keys(data.names).length,100);
+  assert.equal(new Set(Object.values(data.names)).size,100);
+  for(const [english,japanese] of Object.entries(data.names)){assert.equal(nav.canonicalMapName(japanese),english);assert(world.nodes.includes(english));}
+  assert.equal(nav.canonicalMapName("北ブリンヒルド"),"Guild Plaza");
+  assert.equal(nav.canonicalMapName("南ブリンヒルド"),"Arcarinas Square");
+  assert.equal(nav.canonicalMapName("西ブリンヒルド"),"Mall Street");
+  assert.equal(nav.canonicalMapName("東ブリンヒルド"),"Summer Hill Street");
+});
+
+check("game-confirmed Taisen Plains preserves Toisen records, routes and reviewed Japanese name",()=>{
+  const graph=nav.buildGraph(world,[],{includeTransports:false});
+  assert.equal(nav.canonicalMapName("Toisen Plains"),"Taisen Plains");assert.equal(nav.canonicalMapName("タイセン沼地"),"Taisen Plains");
+  assert(graph.nodes.includes("Taisen Plains"));assert(!graph.nodes.includes("Toisen Plains"));
+  assert.deepEqual(Array.from(nav.findRoute(graph,"Toisen Plains","Realto Plains").path),["Taisen Plains","Realto Plains"]);
+  assert.deepEqual(Array.from(nav.findRoute(graph,"タイセン沼地","Lombard Plains").path),["Taisen Plains","Lombard Plains"]);
+  assert.equal(nav.canonicalMapName("Toisen Plains B1F"),"Toisen Plains B1F");
+  const grouped=nav.groupMaps([{id:"raw-toisen-id",map_name:"Toisen Plains",map_image_url:"retained-photo"},{id:"game-taisen-id",map_name:"Taisen Plains",map_image_url:"game-photo"}]);assert.equal(grouped.length,1);
+  assert(grouped[0].map_variants.some(row=>row.id==="raw-toisen-id"&&row.map_image_url==="retained-photo"));
+  assert.equal(context.XEN_MAP_JAPANESE_NAMES["Taisen Plains"],"タイセン沼地");assert.equal(context.XEN_MAP_JAPANESE_NAMES["Toisen Plains"],undefined);
+});
+
 console.log("PASS: "+checks+" route, transport, level, canonical map and exact-coordinate checks.");

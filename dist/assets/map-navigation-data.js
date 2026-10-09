@@ -16,6 +16,19 @@
     return client;
   }
   function record(row){return registry?registry.record(row):Object.assign({},row,{map_name:canonical(row.map_name)});}
+  function groupMaps(rows){
+    const groups=registry?registry.groups(rows):rows.map(row=>Object.assign({},row,{map_variants:[row]}));
+    return groups.map(group=>{
+      const variants=group.map_variants.slice();
+      variants.sort((a,b)=>{
+        const manualA=a.image_source==="manual"&&!!a.map_image_url,manualB=b.image_source==="manual"&&!!b.map_image_url;
+        if(manualA!==manualB)return manualA?-1:1;
+        if(manualA&&manualB)return (Date.parse(b.updated_at)||0)-(Date.parse(a.updated_at)||0);
+        return 0;
+      });
+      return {...variants[0],map_variants:variants};
+    });
+  }
   async function readAll(table,columns,order){
     const rows=[],size=500;
     for(let start=0;;start+=size){
@@ -62,19 +75,19 @@
   async function load(){
     const warnings=[];
     async function optional(label,promise){try{return await promise;}catch(error){warnings.push(label);return [];}}
-    const catalogPromise=fetch("assets/monsters-data.json?v=1").then(response=>{if(!response.ok)throw Error("モンスター図鑑を読み込めませんでした。");return response.json();});
+    const catalogPromise=fetch("assets/monsters-data.json?v=2").then(response=>{if(!response.ok)throw Error("モンスター図鑑を読み込めませんでした。");return response.json();});
     const [maps,mapNpcs,npcProfiles,knowledge,catalog,monsterUpdates]=await Promise.all([
-      readAll("game_maps","id,map_name,map_image_url,source_image_hash,confidence,created_at,updated_at"),
+      readAll("game_maps","*"),
       readAll("map_npcs","id,map_id,npc_name,x_norm,y_norm,confidence,sighting_count,last_seen_at"),
       optional("NPCの紹介画像を取得できませんでした。",readAll("npc_profiles","id,npc_name,map_name,image_url")),
       optional("NPC会話のマップ情報を取得できませんでした。",readAll("game_knowledge","id,npc_name,map_name")),
       catalogPromise,
       optional("モンスターの投稿情報を取得できませんでした。",readAll("monster_updates","id,monster_id,details,source_url,created_at,updated_at"))
     ]);
-    const normalized=maps.map(record);
+    const normalized=maps.map(record),manualMaps=new Set(maps.filter(map=>map.image_source==="manual").map(map=>map.id));
     return {
-      maps:normalized,mapGroups:registry?registry.groups(normalized):normalized.map(row=>Object.assign({},row,{map_variants:[row]})),
-      mapNpcs:mapNpcs.map(row=>Object.assign({},row,{x_norm:coordinate(row.x_norm),y_norm:coordinate(row.y_norm),confidence:Number(row.confidence)})),
+      maps:normalized,mapGroups:groupMaps(normalized),
+      mapNpcs:mapNpcs.map(row=>Object.assign({},row,{x_norm:manualMaps.has(row.map_id)?null:coordinate(row.x_norm),y_norm:manualMaps.has(row.map_id)?null:coordinate(row.y_norm),confidence:Number(row.confidence),position_unconfirmed:manualMaps.has(row.map_id)})),
       npcProfiles:npcProfiles.map(record),knowledge:knowledge.map(record),
       transitions:[],monsters:projectMonsters(catalog,monsterUpdates),monsterUpdates,warnings
     };
@@ -96,9 +109,10 @@
       const canvas=document.createElement("canvas");
       canvas.width=bitmap.width;canvas.height=bitmap.height;
       canvas.getContext("2d").drawImage(bitmap,0,0);
-      const blob=await new Promise(resolve=>canvas.toBlob(resolve,"image/webp",0.9));
+      let blob=await new Promise(resolve=>canvas.toBlob(resolve,"image/webp",0.96));
+      if(blob?.size>2097152)blob=await new Promise(resolve=>canvas.toBlob(resolve,"image/webp",0.9));
       if(!blob||blob.type!=="image/webp"||blob.size>2097152)throw Error("画像を保存できる大きさに変換できませんでした。");
-      return blob;
+      return {blob,width:bitmap.width,height:bitmap.height};
     }finally{if(bitmap.close)bitmap.close();}
   }
   async function saveMap(options){
@@ -115,7 +129,7 @@
       const points=await readAll("map_npcs","id,map_id");
       if(points.some(row=>variants.some(map=>map.id===row.map_id)))throw Error("このマップには既存の座標があります。翻訳・NPC検索から、座標と同じマップ画像を登録してください。");
     }
-    const blob=await mapBlob(options.file),hash=await sha(blob);
+    const encoded=await mapBlob(options.file),blob=encoded.blob,hash=await sha(blob);
     const safe=name.toLowerCase().replace(/[^a-z0-9]+/g,"-").replace(/^-+|-+$/g,"")||"map";
     const path=safe+"/"+Date.now()+"-"+crypto.randomUUID()+".webp";
     const up=await db().storage.from("map-images").upload(path,blob,{contentType:"image/webp",upsert:false});
@@ -138,6 +152,46 @@
     if(result.error||result.data?.saved!==true)throw Error("マップ情報を保存できませんでした。再度お試しください。");
     return Object.assign({},result.data,{map_name:name,map_image_url:url,source_image_hash:hash});
   }
-  root.XenMapNavigationData={load,saveMap,projectMonsters,canonical};
+  async function updateMap(options){
+    options=options||{};
+    if(options.cropped!==true)throw Error("拡大マップ全体だけに切り抜いた画像を選んでください。");
+    const mapId=String(options.mapId||"");
+    if(!/^[a-f0-9]{8}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{12}$/i.test(mapId))throw Error("更新するマップを選び直してください。");
+    const expectedUrl=String(options.expectedImageUrl||""),expectedHash=options.expectedImageHash||null;
+    const revision=options.expectedRevision==null?0:Number(options.expectedRevision);
+    if(!expectedUrl||!Number.isInteger(revision)||revision<0||expectedHash&&!/^[a-f0-9]{64}$/i.test(expectedHash))throw Error("現在のマップ情報を再読み込みしてから更新してください。");
+    const maps=await readAll("game_maps","*"),current=maps.find(map=>map.id===mapId);
+    if(!current||current.map_image_url!==expectedUrl||(current.source_image_hash||null)!==expectedHash||(Number(current.image_revision)||0)!==revision){
+      const error=Error("この画像はほかの画面で更新されました。再読み込みして、現在の画像を確認してから更新してください。");
+      error.code="image_conflict";throw error;
+    }
+    const encoded=await mapBlob(options.file),hash=await sha(encoded.blob);
+    const path="manual-updates/"+mapId+"/"+crypto.randomUUID()+".webp";
+    const uploaded=await db().storage.from("map-images").upload(path,encoded.blob,{contentType:"image/webp",upsert:false});
+    if(uploaded.error)throw Error("新しいマップ画像を保存できませんでした。時間をおいて再度お試しください。");
+    const imageUrl=db().storage.from("map-images").getPublicUrl(path).data.publicUrl;
+    if(!imageUrl)throw Error("新しい画像のURLを取得できませんでした。");
+    let response;
+    try{
+      response=await fetch(cfg.SUPABASE_URL+"/functions/v1/map-image",{
+        method:"POST",headers:{"Content-Type":"application/json",apikey:cfg.SUPABASE_ANON_KEY,"x-xen-client":"map-nav-v1"},
+        body:JSON.stringify({action:"replace_image",visitor_id:contributor(),map_id:mapId,expected_image_url:expectedUrl,expected_image_hash:expectedHash,expected_revision:revision,
+          image_url:imageUrl,image_hash:hash,width:encoded.width,height:encoded.height}),signal:AbortSignal.timeout(60000)
+      });
+    }catch(_){const error=Error("更新結果を確認できませんでした。再読み込みして、画像が更新されているか確認してください。");error.code="update_uncertain";throw error;}
+    let result={};
+    try{result=await response.json();}catch(_){}
+    if(response.status===409){
+      const error=Error("この画像はほかの画面で更新されました。再読み込みして、現在の画像を確認してから更新してください。");
+      error.code="image_conflict";throw error;
+    }
+    if(!response.ok||result.saved!==true)throw Error(result.error||"画像を更新できませんでした。時間をおいて再度お試しください。");
+    if(result.map_id!==mapId||result.image_url!==imageUrl||result.source_image_hash!==hash||result.image_source!=="manual"||Number(result.image_revision)!==revision+1||
+       Number(result.image_width)!==encoded.width||Number(result.image_height)!==encoded.height){
+      const error=Error("更新結果を確認できませんでした。再読み込みして現在の画像を確認してください。");error.code="update_uncertain";throw error;
+    }
+    return result;
+  }
+  root.XenMapNavigationData={load,saveMap,updateMap,projectMonsters,canonical,groupMaps};
 })(typeof window!=="undefined"?window:globalThis);
 

@@ -24,7 +24,7 @@
   chain(["Waimea Gorge","Brunen Basin","Brynhildr Trisects","Aerial Forest","Linear Forest","Oblique Forest"]);
   chain(["Waimea Gorge","Death Valley","Router Valley","Aquilos Gorge","Mystra Hill","Mystra Basin","Luan Basin","Cyoren Forest","Shalo Forest","Belteranin Forest","Urail Valley","Ashton Basin"]);
   add("Brynhildr Trisects","Loem Valley");
-  chain(["Loem Valley","Costella Forest","Callisto Gorge","Bernald Forest","Theglia Forest","Othellos Forest","Stout Forest","Felix Forest","Curior Forest","Candy Vault"]);
+  chain(["Loem Valley","Castella Forest","Callisto Gorge","Bernald Forest","Theglaia Forest","Othellos Forest","Stout Forest","Felix Forest","Curior Forest","Candy Vault"]);
   add("Oblique Forest","Loren Valley",{minLevel:50,note:"L50+"});
 
   // Jotunheim / Yvel routes.
@@ -40,9 +40,9 @@
   add("Metapolis","Big Apple Forest",{minLevel:100,note:"L100+"});
 
   // Central blue route.
-  chain(["Bradley Forest","Kryston Forest","Sheriff Forest","Telling Denver Lake","Gaudy Forest","Harrington Forest","Candy Vault","Alicia Forest","Realto Plains","Toisen Plains","Lombard Plains","Scorging Plains","Rudwork Path","Proteron Gorge","Skitchy Gorge","Titanus Plains","Eir"]);
+  chain(["Bradlely Forest","Kryston Forest","Sheriff Forest","Telling Denver Lake","Gaudy Forest","Harrington Forest","Candy Vault","Alicia Forest","Realto Plains","Taisen Plains","Lombard Plains","Scorging Plains","Rudwork Path","Proteron Gorge","Skitchy Gorge","Titanus Plains","Eir"]);
   add("Candy Vault","Alicia Forest",{minLevel:30,note:"L30+"});
-  chain(["Bradley Forest","Belpharen Forest","Salem Valley","Witchwood Forest","Fraunden Forest"]);
+  chain(["Bradlely Forest","Belpharen Forest","Salem Valley","Witchwood Forest","Fraunden Forest"]);
   chain(["Grudin Forest","Vargas Forest","Fraunden Forest","Abundance Town"]);
   add("Witchwood Forest","Grudin Forest");
 
@@ -54,7 +54,7 @@
   chain(["Essene","Evergal Grove","Crossevon Path","Vriely Grove","Meryle Wood","Wavin Plains","Crosby Plains","Aristone Plains","Harquil Plains","Albatross City"]);
 
   // Oasis / desert.
-  add("Toisen Plains","Oasis");
+  add("Taisen Plains","Oasis");
   chain(["Oasis","Turneit Desert","Cretino Desert","Asherphel Desert","Emporanie Plateau","Taquestrim Plateau","Phildyeit Plateau","Alison Gorge","Heather Basin","Tanline Gorge"]);
   chain(["Tanline Gorge","Acidbath Valley","Chanthery Gorge"]);
   add("Chanthery Gorge","Clipper Plains",{minLevel:66,note:"L66+"});
@@ -97,6 +97,14 @@
   add("Airship Boarding Gate","Floating Island of Dragons Dock",{kind:"transport",note:"Airship"});
 
   const aliases={
+    "toisen plains":"Taisen Plains",
+    "taisen plains":"Taisen Plains",
+    "costella forest":"Castella Forest",
+    "castella forest":"Castella Forest",
+    "theglia forest":"Theglaia Forest",
+    "theglaia forest":"Theglaia Forest",
+    "bradley forest":"Bradlely Forest",
+    "bradlely forest":"Bradlely Forest",
     "arcanias square":"Arcarinas Square",
     "arcarias square":"Arcarinas Square",
     "arcana square":"Arcarinas Square",
@@ -129,7 +137,7 @@
   };
 
   window.XEN_WORLD_ROUTES={
-    version:2,
+    version:3,
     source:"Makise Xen Rebirth World Map (user supplied)",
     movement_rule:"orthogonal-explicit-only",
     nodes:Array.from(nodes).sort(function(a,b){return a.localeCompare(b,"en");}),

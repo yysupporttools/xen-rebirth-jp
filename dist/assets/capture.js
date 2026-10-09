@@ -35,13 +35,23 @@
   const mapRegistry=window.XEN_MAP_REGISTRY;
   const canonicalMapName=function(value){return mapRegistry?mapRegistry.resolve(value):String(value||"").trim();};
   const canonicalMapRecord=function(row){return mapRegistry?mapRegistry.record(row):row;};
-  const mapGroups=function(){return mapRegistry?mapRegistry.groups(gameMaps):gameMaps.map(function(row){return Object.assign({},row,{map_variants:[row]});});};
+
+  const mapGroups=function(){
+    const groups=mapRegistry?mapRegistry.groups(gameMaps):gameMaps.map(function(row){return Object.assign({},row,{map_variants:[row]});});
+    return groups.map(function(group){
+      const preferred=group.map_variants.filter(function(row){return row.image_source==="manual";}).sort(function(a,b){return String(b.updated_at||"").localeCompare(String(a.updated_at||""));})[0];
+      return preferred?Object.assign({},preferred,{map_variants:group.map_variants}):group;
+    });
+  };
   function rawMapName(row){
     return String(row.map_name_original||row.map_name||"").trim();
   }
   function mapWriteName(value){
     const canonical=canonicalMapName(value);
     const existing=gameMaps.filter(function(row){return row.map_name===canonical;}).sort(function(a,b){
+      const aManual=a.image_source==="manual",bManual=b.image_source==="manual";
+      if(aManual!==bManual) return aManual?-1:1;
+      if(aManual&&bManual) return String(b.updated_at||"").localeCompare(String(a.updated_at||""));
       const aExact=rawMapName(a)===canonical,bExact=rawMapName(b)===canonical;
       if(aExact!==bExact) return aExact?-1:1;
       return String(b.updated_at||"").localeCompare(String(a.updated_at||""));
@@ -2117,7 +2127,7 @@
 
   function inferKnownMapFromNpcPattern(detected){
     if(!Array.isArray(detected)||detected.length<2||!gameMaps.length||!mapNpcs.length) return null;
-    const results=gameMaps.map(function(map){
+    const results=gameMaps.filter(function(map){return map.image_source!=="manual";}).map(function(map){
       const known=mapNpcs.filter(function(n){return n.map_id===map.id;});
       const used=new Set();
       let score=0,matches=0;
@@ -2160,7 +2170,8 @@
     const existingByName=gameMaps.find(function(m){return normText(m.map_name)===normText(mapName);});
     const inferred=inferKnownMapFromNpcPattern(npcs);
     let inferredByPattern=false;
-    if(inferred&&(!existingByName||normText(existingByName.map_name)!==normText(inferred.map.map_name))){
+    const preferredManual=gameMaps.filter(function(m){return normText(m.map_name)===normText(mapName)&&m.image_source==="manual";}).sort(function(a,b){return String(b.updated_at||"").localeCompare(String(a.updated_at||""));})[0];
+    if(!preferredManual&&inferred&&(!existingByName||normText(existingByName.map_name)!==normText(inferred.map.map_name))){
       mapName=inferred.map.map_name;
       inferredByPattern=true;
     }
@@ -2168,8 +2179,11 @@
     if(!mapName||/^(?:unknown|unidentified|none|null|undefined|map|map name|未認識|不明|マップ名不明)$/i.test(mapName)||!Number.isFinite(confidence)||confidence<70) return false;
 
     let mapImageUrl="";
-    const existing=gameMaps.find(function(m){return normText(m.map_name)===normText(mapName)&&m.source_image_hash===pack.hash;})||gameMaps.find(function(m){return normText(m.map_name)===normText(mapName);});
-    if(existing&&existing.map_image_url&&existing.source_image_hash===pack.hash){
+    const existing=preferredManual||gameMaps.find(function(m){return normText(m.map_name)===normText(mapName)&&m.source_image_hash===pack.hash;})||gameMaps.find(function(m){return normText(m.map_name)===normText(mapName);});
+    if(existing&&existing.image_source==="manual"){
+      // The preferred image stays unchanged; keep this AI observation as a candidate.
+      mapImageUrl="";
+    }else if(existing&&existing.map_image_url&&existing.source_image_hash===pack.hash){
       mapImageUrl=existing.map_image_url;
     }else{
       const panel=await cropBlobNormalized(pack.blob,savedRegion,0.9);
@@ -2182,7 +2196,7 @@
     }
 
     const res=await db.rpc("map_analysis_save",{
-      p_map_name:existing&&existing.source_image_hash===pack.hash?rawMapName(existing):mapWriteName(mapName),
+      p_map_name:existing&&(existing.image_source==="manual"||existing.source_image_hash===pack.hash)?rawMapName(existing):mapWriteName(mapName),
       p_npcs:npcs,
       p_image_hash:pack.hash,
       p_map_image_url:mapImageUrl,
@@ -2197,6 +2211,8 @@
       mapName+" の拡大マップを保存：NPC "+npcs.length+"件 / 新規観測 "+(info.new_sightings||0)+"件"
     );
     await loadMapData();
+    const savedMap=gameMaps.find(function(m){return m.id===info.map_id;});
+    if(savedMap&&savedMap.image_source==="manual") setStatus("map-collect-status",mapName+" の観測を保存しました。手動で更新した画像を優先し、未確認のNPC位置は重ねません。");
     // Uploaded historical screenshots collect data without becoming live location.
     if(stream&&isLikelyXenGameFrame()) setLocalCurrentMap(mapName,"拡大マップの保存",confidence,true,info.map_id);
     return true;
@@ -2632,7 +2648,7 @@
 
     const next=currentRoutePlan.path[1];
     const edge=currentRoutePlan.edges[0]||null;
-    const rows=mapNpcs.filter(function(n){return n.map_id===shown.id;});
+    const rows=shown.image_source==="manual"?[]:mapNpcs.filter(function(n){return n.map_id===shown.id;});
     let hints=[next];
     let direction="";
     if(edge){
@@ -2702,7 +2718,7 @@
       return;
     }
 
-    const rows=mapNpcs.filter(function(n){return n.map_id===map.id;});
+    const rows=map.image_source==="manual"?[]:mapNpcs.filter(function(n){return n.map_id===map.id;});
     $("map-db-count").textContent=rows.length+" NPC";
     canvas.style.backgroundImage=map.map_image_url?'url("'+String(map.map_image_url).replace(/"/g,"%22")+'")':"none";
     canvas.innerHTML=rows.map(function(n){

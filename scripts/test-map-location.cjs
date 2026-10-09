@@ -45,8 +45,8 @@ console.log("PASS: map aliases, validated auto/manual state, normalized coordina
 
 (async()=>{
   storage.clear();const context=makeContext(),elements={},rpcCalls=[];let uploads=0,fail=false;
-  const element=id=>elements[id]||(elements[id]={value:"",textContent:"",innerHTML:"",style:{},options:[],querySelectorAll(){return[];},appendChild(){},classList:{toggle(){}},setAttribute(){},handlers:{},addEventListener(name,fn){this.handlers[name]=fn;}});
-  context.document={getElementById:element};
+  const element=id=>elements[id]||(elements[id]={value:"",textContent:"",innerHTML:"",style:{},options:[],children:[],querySelectorAll(){return[];},appendChild(child){this.children.push(child);},classList:{toggle(){}},setAttribute(){},handlers:{},addEventListener(name,fn){this.handlers[name]=fn;}});
+  context.document={getElementById:element,createElement(){return {style:{}};}};
   context.URL=URL;context.window.location={href:"https://example.test/capture.html"};
   context.window.XEN_GLOSSARY_CONFIG={};
   context.window.supabase={createClient(){return{async rpc(name,args){rpcCalls.push({name,args});return fail?{error:{message:"failed"}}:{data:{saved:true,map_id:"original-variant",new_sightings:0}};},storage:{from(){return{async upload(){uploads++;return{};},getPublicUrl(){return{data:{publicUrl:"new-upload"}};}};}}};}};
@@ -55,7 +55,8 @@ console.log("PASS: map aliases, validated auto/manual state, normalized coordina
   const currentHandlerAt=source.indexOf('  $("route-current-manual").addEventListener');
   source=source.slice(0,handlersAt)+source.slice(handlersAt,currentHandlerAt)+`
   window.captureTest={
-    saveDedicatedMapAnalysis,setLocalCurrentMap,loadLocalMapState,applyRequestedNpcSearch,
+    saveDedicatedMapAnalysis,setLocalCurrentMap,loadLocalMapState,applyRequestedNpcSearch,renderMapDatabase,renderRouteExitArrow,mapWriteName,
+    setMapNpcs(rows){mapNpcs=rows;},setRoute(map,plan){routeCurrentMap=map;currentRoutePlan=plan;},
     setRecords(rows){records=rows.map(canonicalMapRecord);},
     state(){return {map:routeCurrentMap,source:routeCurrentSource,confidence:routeCurrentConfidence};},
     setup(input,live){gameMaps=input.map(canonicalMapRecord);stream=live?{}:null;},
@@ -82,6 +83,13 @@ console.log("PASS: map aliases, validated auto/manual state, normalized coordina
   context.window.location.href="https://example.test/capture.html?npc="+encodeURIComponent("Guard\u0000");
   assert.equal(test.applyRequestedNpcSearch(),false);assert.equal(element("knowledge-search").value,"Event Guide");
   context.window.location.href="https://example.test/capture.html?nav=1";assert.equal(test.applyRequestedNpcSearch(),false);
+
+  const manualMaps=[{id:"preferred-main",map_name:"Brunen Basin",map_image_url:"photo-a",source_image_hash:"other-hash",image_source:"capture"},{id:"original-variant",map_name:"Brunnen Basin",map_image_url:"photo-b",source_image_hash:"manual-hash",image_source:"manual",updated_at:"2026-10-10T00:00:00Z"}];
+  test.setup(manualMaps,false);test.setMapNpcs([{id:"old-npc",map_id:"original-variant",npc_name:"Seiran",x_norm:700,y_norm:800,confidence:99,sighting_count:10}]);element("map-db-select").value="original-variant";
+  test.renderMapDatabase();assert(element("map-db-canvas").style.backgroundImage.includes("photo-b"));assert(!element("map-db-canvas").innerHTML.includes("data-map-npc"));assert(!element("map-db-list").innerHTML.includes("X 700"));assert.equal(test.mapWriteName("Brunen Basin"),"Brunnen Basin");
+  const previousUploads=uploads;await test.saveDedicatedMapAnalysis({...pack,hash:"next-ai-hash",data:{...pack.data,npcs:[{name:"Seiran",x:200,y:300,confidence:95}]}});assert.equal(uploads,previousUploads);assert.equal(rpcCalls.at(-1).args.p_map_name,"Brunnen Basin");assert.equal(rpcCalls.at(-1).args.p_map_image_url,"");assert.equal(rpcCalls.at(-1).args.p_npcs.length,1);
+  test.setRoute("Brunen Basin",{path:["Brunen Basin","Next Map"],edges:[{a:"Brunen Basin",b:"Next Map",exitA:["Seiran"],dirA:"right"}]});test.renderRouteExitArrow();assert(element("map-db-canvas").children.at(-1).className.includes("is-direction"));assert(!element("map-db-canvas").children.at(-1).className.includes("is-exact"));
   context.window.XenMapLocation.publish({map:"Brynnhild",source:"manual"});test.loadLocalMapState();assert.equal(test.state().map,"Brynhilld");
+  console.log("PASS: manual alias image preference, no redundant AI upload, retained observation candidates, hidden old NPC markers/list and suppressed exact exit coordinates.");
   console.log("PASS: real capture dedicated-save path reuses original hash, map variant and raw key; failed/low-confidence saves do not publish current position; live recognized maps publish; historical uploads and destinations do not.");
 })().catch(error=>{console.error(error);process.exitCode=1;});

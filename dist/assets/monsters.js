@@ -238,7 +238,7 @@
     if($('dex-dialog').open && location.hash)open(decode(location.hash.slice(1)),false,false);
   }
   async function init() {
-    try {const response=await fetch('assets/monsters-data.json?v=1');if(!response.ok)throw new Error('load');data=await response.json();
+    try {const response=await fetch('assets/monsters-data.json?v=2');if(!response.ok)throw new Error('load');data=await response.json();
       for(const monster of data.monsters)originalValues.set(monster.id,{level:monster.level,imageUrl:monster.imageUrl,map:monster.map,notes:monster.notes});
       if(innerWidth<600)$('dex-region-panel').open=false;
       $('dex-total').textContent=data.regions.length+'地域・'+data.monsters.length+'件の出現情報';

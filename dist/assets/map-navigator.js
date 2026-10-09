@@ -2,11 +2,23 @@
 (function(root){
   const nav=root.XenMapNavigation,repo=root.XenMapNavigationData,location=root.XenMapLocation;
   const esc=value=>String(value??"").replace(/[&<>"']/g,ch=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[ch]));
-  const canonicalMemo=new Map();
-  const canon=value=>{const raw=String(value??"");if(!canonicalMemo.has(raw)){if(canonicalMemo.size>4096)canonicalMemo.clear();canonicalMemo.set(raw,nav.canonicalMapName(raw));}return canonicalMemo.get(raw);},key=value=>nav.searchKey(value);
+  const canonicalMemo=new Map(),labelMemo=new Map();
+  let memoRegistry=root.XEN_MAP_REGISTRY,memoDictionary=root.XEN_MAP_JAPANESE_NAMES;
+  const canon=value=>{const raw=String(value??"");if(memoRegistry!==root.XEN_MAP_REGISTRY){memoRegistry=root.XEN_MAP_REGISTRY;canonicalMemo.clear();labelMemo.clear();}if(!canonicalMemo.has(raw)){if(canonicalMemo.size>4096)canonicalMemo.clear();canonicalMemo.set(raw,nav.canonicalMapName(raw));}return canonicalMemo.get(raw);},key=value=>nav.searchKey(value);
+  function mapLabel(value){
+    const name=canon(value);
+    if(memoDictionary!==root.XEN_MAP_JAPANESE_NAMES){memoDictionary=root.XEN_MAP_JAPANESE_NAMES;labelMemo.clear();}
+    if(!labelMemo.has(name)){
+      if(labelMemo.size>4096)labelMemo.clear();
+      const old=Object.prototype.hasOwnProperty.call(memoDictionary||{},name)&&typeof memoDictionary[name]==="string"?memoDictionary[name]:"";
+      labelMemo.set(name,old?name+"（旧日本語名："+old+"）":name);
+    }
+    return labelMemo.get(name);
+  }
   const imageKey=map=>String(map?.id||"")+"|"+String(map?.map_image_url||"")+"|"+String(map?.source_image_hash||"");
   function pointOnImage(point,map){
     if(!point||!map||String(point.map_id||point.mapId)!==String(map.id))return null;
+    if(map.image_source==="manual"&&!point.personal)return null;
     if(point.image_key && point.image_key!==imageKey(map))return null;
     const x=nav.validCoordinate(point.x??point.x_norm),y=nav.validCoordinate(point.y??point.y_norm);
     return x===null||y===null?null:{x,y,map_id:map.id,name:point.npc_name||point.name||"",personal:!!point.personal};
@@ -28,7 +40,8 @@
   function search(entries,query){
     const q=key(query);
     if(!q)return [];
-    return entries.filter(entry=>key(entry.name).includes(q)).sort((a,b)=>{
+    const mapQuery=key(canon(query));
+    return entries.filter(entry=>key(entry.name).includes(q)||key(mapLabel(entry.map)).includes(q)||key(entry.map)===mapQuery).sort((a,b)=>{
       const exactA=key(a.name)===q?0:1,exactB=key(b.name)===q?0:1;
       return exactA-exactB||a.name.localeCompare(b.name,"en")||a.map.localeCompare(b.map,"en");
     });
@@ -46,10 +59,10 @@
     if(!map)return {point:null,step:null,text:"マップを選んでください。"};
     const step=plan?.steps.find(step=>canon(step.from)===canon(map.map_name));
     if(step){
-      const registered=nav.selectExit(step,map,personal.mapNpcs||[]);
+      const registered=map.image_source==="manual"?null:nav.selectExit(step,map,personal.mapNpcs||[]);
       const local=personal.markers?.[markerKey(map,step,target)];
       return {point:registered||pointOnImage(local,map),step,
-        text:["transporter","transport","npc-transport","event-transport"].includes(step.kind)?"ここから "+step.to+" へ移動します。":"次のマップは "+step.to+" です。",
+        text:["transporter","transport","npc-transport","event-transport"].includes(step.kind)?"ここから "+mapLabel(step.to)+" へ移動します。":"次のマップは "+mapLabel(step.to)+" です。",
         missing:registered?"":"出口・案内NPCの位置は未登録です。方向の目安は行き方欄をご確認ください。"};
     }
     if(target&&!target.regionOnly&&canon(target.map)===canon(map.map_name)){
@@ -65,14 +78,14 @@
     }
     return {point:null,step:null,text:plan?.path.includes(canon(map.map_name))?"目的地のマップです。":"保存されたマップを表示しています。",missing:""};
   }
-  root.XenMapNavigator={searchEntries,search,planRoute,pointOnImage,imageKey,markerKey,guidance,esc};
+  root.XenMapNavigator={searchEntries,search,planRoute,pointOnImage,imageKey,markerKey,guidance,esc,mapLabel};
   if(!root.document?.getElementById("map-current"))return;
   const $=id=>root.document.getElementById(id);
   const storeKey="xen-map-personal-markers-v1";
   let data={maps:[],mapNpcs:[],npcProfiles:[],knowledge:[],monsters:[],mapGroups:[],transitions:[],warnings:[]};
   let graph,entries=[],target=null,plan=null,shown="",variantId="",zoom=1,pointMode="",loaded=false,reloading=false;
   let markers={},currentPoint=null;
-  let uploadFile=null,uploadUrl="",uploadSaving=false,uploadName="";
+  let uploadFile=null,uploadUrl="",uploadSaving=false,uploadName="",uploadMode="add",uploadMap=null;
   function readPersonal(){
     try{
       const stored=JSON.parse(localStorage.getItem(storeKey)||"null");
@@ -97,15 +110,15 @@
   }
   function renderOptions(){
     const all=names();
-    $("map-names").innerHTML=all.map(name=>'<option value="'+esc(name)+'"></option>').join("");
-    $("map-view-select").innerHTML='<option value="">マップを選ぶ</option>'+all.map(name=>'<option value="'+esc(name)+'">'+esc(name)+(noExpandedMap(name)?"（拡大マップなし）":data.maps.some(map=>map.map_name===name&&map.map_image_url)?"":"（画像未登録）")+'</option>').join("");
+    $("map-names").innerHTML=all.map(name=>'<option value="'+esc(name)+'" label="'+esc(mapLabel(name))+'">'+esc(mapLabel(name))+'</option>').join("");
+    $("map-view-select").innerHTML='<option value="">マップを選ぶ</option>'+all.map(name=>'<option value="'+esc(name)+'">'+esc(mapLabel(name))+(noExpandedMap(name)?"（拡大マップなし）":data.maps.some(map=>map.map_name===name&&map.map_image_url)?"":"（画像未登録）")+'</option>').join("");
     $("map-view-select").value=shown;
   }
   function currentStatus(state){
     const current=$("map-current").value.trim();
     if(!current){$("map-current-status").textContent="現在のマップを選んでください。";return;}
     const matching=state&&canon(state.map)===canon(current);
-    $("map-current-status").textContent=matching?(state.source==="capture"?"画面から把握":"手動指定")+" · "+new Date(state.at).toLocaleString("ja-JP"):"手動で選んだ現在のマップです。";
+    $("map-current-status").textContent="現在地："+mapLabel(current)+" · "+(matching?(state.source==="capture"?"画面から把握":"手動指定")+" · "+new Date(state.at).toLocaleString("ja-JP"):"手動で選んだ現在のマップです。");
     const blocked=(root.XEN_MAP_TRANSPORTS?.noTransporterTowns||[]).map(canon).includes(canon(current));
     $("map-town-note").textContent=blocked?"この町にはトランスポーターがありません。":$("map-transports").checked?"トランスポーターは確認された行き先だけを案内します。到着位置は未登録です。":"徒歩経路を中心に案内します。";
   }
@@ -121,20 +134,28 @@
     if(entry.regionOnly){
       plan=null;$("map-destination").value="";renderRoute();renderMap();
       $("map-route-status").textContent="地域のみ登録されています。詳細な出現マップを図鑑で確認・登録してください。";
-      $("map-target-info").innerHTML='<strong>'+esc(entry.name)+'</strong><span>'+esc(entry.map||entry.region)+'（地域情報）</span><a href="monsters.html#'+encodeURIComponent(entry.monsterId)+'">モンスター図鑑で詳細を見る</a>';
+      $("map-target-info").innerHTML='<strong>'+esc(entry.name)+'</strong><span>'+esc(mapLabel(entry.map||entry.region))+'（地域情報）</span><a href="monsters.html#'+encodeURIComponent(entry.monsterId)+'">モンスター図鑑で詳細を見る</a>';
       return;
     }
-    const preferred=entry.points.slice().sort((a,b)=>Number(b.confidence)-Number(a.confidence))[0];
+    const group=data.mapGroups.find(map=>map.map_name===entry.map);
+    const candidates=!entry.explicitPoint&&group?.image_source==="manual"?entry.points.filter(point=>point.map_id===group.id):entry.points;
+    const preferred=candidates.filter(point=>pointOnImage(point,data.maps.find(map=>map.id===point.map_id))).sort((a,b)=>Number(b.confidence)-Number(a.confidence))[0];
     if(preferred)target.point=preferred;
     $("map-destination").value=entry.map;
     compute(true);
     if(entry.map)setView(entry.map,preferred?.map_id||"");
     renderTarget();
   }
+  function npcLocationLabel(entry){
+    if(entry.kind!=="npc")return "";
+    const group=data.mapGroups.find(map=>map.map_name===entry.map);
+    if(group?.image_source==="manual")return " · 新しい画像の位置は未確認";
+    return entry.points.some(point=>pointOnImage(point,data.maps.find(map=>map.id===point.map_id)))?"":" · 位置未登録";
+  }
   function renderSearch(){
     const matches=search(entries,$("map-search-input").value);
     $("map-search-status").textContent=key($("map-search-input").value)?matches.length+"件"+(matches.length>60?" · 名前を絞り込むと探しやすくなります":""):"NPC名・モンスター名を入力してください。";
-    $("map-search-results").innerHTML=matches.slice(0,60).map(entry=>'<button type="button" data-search-entry="'+esc(entry.id)+'"><span class="map-result-kind">'+(entry.kind==="npc"?"NPC":"モンスター")+'</span><strong>'+esc(entry.name)+(entry.level!=null?' · Lv '+esc(entry.level):"")+'</strong><small>'+esc(entry.map||entry.region||"出現場所未登録")+(entry.regionOnly?" · 地域のみ":"")+(entry.kind==="npc"&&!entry.points.length?" · 位置未登録":"")+'</small></button>').join("");
+    $("map-search-results").innerHTML=matches.slice(0,60).map(entry=>'<button type="button" data-search-entry="'+esc(entry.id)+'"><span class="map-result-kind">'+(entry.kind==="npc"?"NPC":"モンスター")+'</span><strong>'+esc(entry.name)+(entry.level!=null?' · Lv '+esc(entry.level):"")+'</strong><small>'+esc(mapLabel(entry.map||entry.region||"出現場所未登録"))+(entry.regionOnly?" · 地域のみ":"")+npcLocationLabel(entry)+'</small></button>').join("");
   }
   function compute(changeView){
     buildGraph();
@@ -150,6 +171,7 @@
   }
   function renderRoute(){
     const current=canon($("map-current").value),destination=canon($("map-destination").value);
+    $("map-destination-display").textContent=destination?"行き先："+mapLabel(destination):"";
     let text="";
     if(target?.regionOnly)text="地域のみ登録されています。詳細な出現マップを図鑑で確認・登録してください。";
     else if(!current||!destination)text="現在のマップと行き先を選んでください。";
@@ -164,12 +186,12 @@
       const step=plan.steps[i],transport=step&&["transporter","transport","npc-transport","event-transport"].includes(step.kind);
       const type=step?(transport?(step.npcName||"トランスポーター・飛行船"):"マップ移動"):"到着";
       const direction=step&&({top:"北側",bottom:"南側",left:"西側",right:"東側","top-right":"右上","top-left":"左上","bottom-right":"右下","bottom-left":"左下"}[step.direction]||"");
-      return '<li><button type="button" data-route-map="'+esc(name)+'" aria-current="'+(name===shown?"true":"false")+'"><span class="map-route-step-count">'+(i+1)+'</span><strong>'+esc(name)+'</strong><small>'+esc(type)+(step?' → '+esc(step.to):"")+'</small>'+(step?.condition?'<small>'+esc(step.condition)+'</small>':"")+(step?.source?'<small>出典：'+esc(step.source)+'</small>':"")+(direction?'<small>出口方向の目安：'+esc(direction)+'</small>':"")+(transport?'<small>到着先の区画・座標は未確認です。</small>':"")+'</button></li>';
+      return '<li><button type="button" data-route-map="'+esc(name)+'" aria-current="'+(name===shown?"true":"false")+'"><span class="map-route-step-count">'+(i+1)+'</span><strong>'+esc(mapLabel(name))+'</strong><small>'+esc(type)+(step?' → '+esc(mapLabel(step.to)):"")+'</small>'+(step?.condition?'<small>'+esc(step.condition)+'</small>':"")+(step?.source?'<small>出典：'+esc(step.source)+'</small>':"")+(direction?'<small>出口方向の目安：'+esc(direction)+'</small>':"")+(transport?'<small>到着先の区画・座標は未確認です。</small>':"")+'</button></li>';
     }).join("");
   }
   function renderTarget(){
     if(!target){$("map-target-info").innerHTML=plan?.steps.some(step=>step.kind==="event-transport")?'<a href="glossary.html#four-seasons-event">Four Seasons Eventの概要・アイテム交換を見る</a>':"";return;}
-    $("map-target-info").innerHTML='<strong>'+(target.kind==="npc"?"NPC":"モンスター")+'：'+esc(target.name)+'</strong><span>'+esc(target.map||target.region||"出現場所未登録")+(target.regionOnly?"（地域情報・詳細マップ未登録）":target.mapSource==="player"?"（投稿情報）":"")+'</span>'+(target.kind==="monster"?'<a href="monsters.html#'+encodeURIComponent(target.monsterId)+'">図鑑の詳細・ドロップ・必要DEFを見る</a>':'<a href="capture.html?npc='+encodeURIComponent(target.name)+'&amp;map='+encodeURIComponent(target.map)+'#npc-database" target="_blank" rel="noopener">NPCの会話を確認 ↗</a>');
+    $("map-target-info").innerHTML='<strong>'+(target.kind==="npc"?"NPC":"モンスター")+'：'+esc(target.name)+'</strong><span>'+esc(mapLabel(target.map||target.region||"出現場所未登録"))+(target.regionOnly?"（地域情報・詳細マップ未登録）":target.mapSource==="player"?"（投稿情報）":"")+'</span>'+(target.kind==="monster"?'<a href="monsters.html#'+encodeURIComponent(target.monsterId)+'">図鑑の詳細・ドロップ・必要DEFを見る</a>':'<a href="capture.html?npc='+encodeURIComponent(target.name)+'&amp;map='+encodeURIComponent(target.map)+'#npc-database" target="_blank" rel="noopener">NPCの会話を確認 ↗</a>');
   }
   function activeGuidance(map){return guidance(map,plan,target,{mapNpcs:data.mapNpcs,markers});}
   function position(map){
@@ -184,7 +206,7 @@
   }
   function renderPins(){
     const map=selectedMap();if(!map||!safeImage(map.map_image_url))return;
-    const own=data.mapNpcs.filter(row=>row.map_id===map.id);
+    const own=data.mapNpcs.filter(row=>row.map_id===map.id&&map.image_source!=="manual");
     const info=activeGuidance(map),start=position(map),end=info.point;
     let markup=$("map-show-npcs").checked?own.map(row=>{const p=pointOnImage(row,map);return p?pin(p,row.npc_name,"npc",row.id):"";}).join(""):"";
     if(end)markup+=pin(end,(end.personal?"自分用の目印：":"")+(end.npc_name||end.name||target?.name||info.step?.to||"目的地"),"target");
@@ -207,24 +229,27 @@
   }
   function renderMap(){
     const map=selectedMap(),image=map?safeImage(map.map_image_url):"";
-    $("map-view-title").textContent=shown||"保存された拡大マップ";
+    $("map-view-title").textContent=mapLabel(shown)||"保存された拡大マップ";
     $("map-view-select").value=shown;
     const group=data.mapGroups.find(row=>canon(row.map_name)===shown);
     const variants=group?.map_variants||[];
     $("map-variant-label").hidden=variants.length<2;
-    $("map-variant-select").innerHTML=variants.map((row,i)=>'<option value="'+esc(row.id)+'">画像 '+(i+1)+' · '+esc(row.map_name_original||row.map_name)+'</option>').join("");
+    $("map-variant-select").innerHTML=variants.map((row,i)=>'<option value="'+esc(row.id)+'">画像 '+(i+1)+' · '+esc(mapLabel(row.map_name))+'</option>').join("");
     $("map-variant-select").value=map?.id||"";
     $("map-stage").hidden=!image;$("map-empty").hidden=!!image;$("map-add-image").hidden=!shown||!!map?.map_image_url||noExpandedMap(shown);
+    $("map-update-image").hidden=!image;
+    $("map-update-image").disabled=reloading||uploadSaving;
     $("map-set-position").disabled=!image;$("map-set-marker").disabled=!image;
     for(const id of ["map-zoom-in","map-zoom-out","map-reset-view"])$(id).disabled=!image;
-    $("map-image-status").textContent=map?.updated_at?"画像・マップ情報の保存："+new Date(map.updated_at).toLocaleString("ja-JP"):"";
+    $("map-image-status").textContent=(map?.image_source==="manual"?"手動更新の画像を優先表示しています。画像更新後のNPC位置は確認中です。 ":"")+(map?.updated_at?"画像・マップ情報の保存："+new Date(map.updated_at).toLocaleString("ja-JP"):"");
+    $("map-image-status").classList.toggle("map-image-review",map?.image_source==="manual");
     if(image){
-      $("map-image").alt=shown+" のゲーム内拡大マップ";
+      $("map-image").alt=mapLabel(shown)+" のゲーム内拡大マップ";
       if($("map-image").getAttribute("src")!==image)$("map-image").src=image;
       $("map-stage").style.width=(zoom*100)+"%";renderPins();
     }else{
       $("map-image").removeAttribute("src");$("map-arrows").innerHTML="";$("map-pins").innerHTML="";
-      $("map-empty-text").textContent=noExpandedMap(shown)?"この場所には拡大マップがありません。移動手順と出発NPCで案内します。":shown?shown+" の拡大マップ画像は未登録です。画像を追加するか、翻訳・NPC検索で収集できます。":"マップを選んでください。";
+      $("map-empty-text").textContent=noExpandedMap(shown)?"この場所には拡大マップがありません。移動手順と出発NPCで案内します。":shown?mapLabel(shown)+" の拡大マップ画像は未登録です。画像を追加するか、翻訳・NPC検索で収集できます。":"マップを選んでください。";
       $("map-guidance").textContent=shown?activeGuidance(map||{map_name:shown}).text:"マップを選ぶとゲーム内画像を表示します。";
       $("map-clear-marker").hidden=true;
     }
@@ -282,7 +307,7 @@
     }else{
       const info=activeGuidance(map),mkey=markerKey(map,info.step,target);
       if(!mkey)return;
-      point.name=info.step?.to||target?.name||"案内先";markers[mkey]=point;
+      point.name=info.step?mapLabel(info.step.to):target?.name||"案内先";markers[mkey]=point;
     }
     writePersonal();cancelPoint();compute(false);renderMap();
   }
@@ -292,8 +317,18 @@
     $("map-upload-file").value="";$("map-upload-cropped").checked=false;$("map-upload-preview").hidden=true;$("map-upload-preview-image").removeAttribute("src");
     $("map-upload-status").textContent="";$("map-upload-status").classList.remove("map-error");
   }
-  function openUpload(){
-    if(!shown||noExpandedMap(shown))return;uploadReset();uploadName=shown;$("map-upload-name").textContent="登録先："+uploadName;
+  function openUpload(mode){
+    const map=selectedMap(),updating=mode==="update";
+    if(!shown||updating&&!map?.map_image_url||!updating&&noExpandedMap(shown))return;
+    uploadReset();uploadMode=updating?"update":"add";uploadName=shown;
+    uploadMap=updating?{id:map.id,map_name:map.map_name,map_image_url:map.map_image_url,source_image_hash:map.source_image_hash||"",image_revision:Number(map.image_revision)||0}:null;
+    $("map-upload-title").textContent=updating?"拡大マップ画像を更新":"拡大マップ画像を追加";
+    $("map-upload-name").textContent=(updating?"更新するマップ：":"登録先：")+mapLabel(uploadName);
+    $("map-upload-mode-note").textContent=updating?"選択中の画像を、見やすい画像に更新します。手動で更新した画像を優先して表示します。NPCの目印は新しい画像で確認できるまで非表示になります。":"拡大マップ全体が見える画像を追加できます。";
+    $("map-upload-original").hidden=!updating;
+    if(updating)$("map-upload-original-image").src=safeImage(map.map_image_url);
+    else $("map-upload-original-image").removeAttribute("src");
+    $("map-upload-save").textContent=updating?"画像を更新":"保存";
     $("map-upload-dialog").showModal();$("map-upload-paste").focus();
   }
   function selectUpload(file){
@@ -306,20 +341,39 @@
     $("map-upload-caption").textContent=(file.name||"貼り付けた画像")+" / "+Math.ceil(file.size/1024)+"KB";
     $("map-upload-status").textContent="登録先の拡大マップ全体が写っていることを確認してください。";$("map-upload-status").classList.remove("map-error");
   }
+  function applyImageUpdate(saved,original){
+    const index=data.maps.findIndex(map=>map.id===original.id);
+    if(index<0)return;
+    data.maps[index]={...data.maps[index],map_image_url:saved.image_url,source_image_hash:saved.source_image_hash,image_source:"manual",
+      image_revision:saved.image_revision,image_width:saved.image_width,image_height:saved.image_height,updated_at:saved.updated_at||new Date().toISOString()};
+    data.mapGroups=repo.groupMaps(data.maps);
+    data.mapNpcs=data.mapNpcs.map(row=>row.map_id===original.id?{...row,x_norm:null,y_norm:null,position_unconfirmed:true}:row);
+    entries=searchEntries(data);
+    buildGraph();setView(data.maps[index].map_name,original.id);renderSearch();
+  }
   async function saveUpload(event){
     event.preventDefault();if(uploadSaving)return;
     if(!uploadFile){$("map-upload-status").textContent="先に画像を貼り付けるかファイルを選んでください。";return;}
     if(!$("map-upload-cropped").checked){$("map-upload-status").textContent="拡大マップ全体だけに切り抜いた画像であることを確認してください。";return;}
-    uploadSaving=true;const selectedFile=uploadFile,name=uploadName;
+    uploadSaving=true;const selectedFile=uploadFile,name=uploadName,mode=uploadMode,original=uploadMap;
     $("map-upload-save").disabled=true;$("map-upload-cancel").disabled=true;$("map-upload-close").disabled=true;$("map-upload-file").disabled=true;
     $("map-upload-status").textContent="画像を保存しています…";
     try{
-      await repo.saveMap({name,file:selectedFile,cropped:true});
+      const saved=mode==="update"?await repo.updateMap({mapId:original.id,expectedImageUrl:original.map_image_url,expectedImageHash:original.source_image_hash,expectedRevision:original.image_revision,file:selectedFile,cropped:true}):await repo.saveMap({name,file:selectedFile,cropped:true});
+      if(mode==="update")applyImageUpdate(saved,original);
       uploadFile=null;$("map-upload-status").textContent="保存しました。表示を更新しています…";
       $("map-upload-dialog").close();
-      try{await reload();setView(name);$("map-image-status").textContent="拡大マップ画像を保存しました。";}
+      try{await reload();setView(name,mode==="update"?original.id:"");$("map-image-status").textContent=mode==="update"?"画像を更新しました。NPC位置は新しい画像で確認できるまで非表示になります。":"拡大マップ画像を保存しました。";}
       catch(_){$("map-load-status").textContent="画像の保存は完了しました。表示の更新だけ失敗しました。「再読み込み」を押してください。";}
-    }catch(error){$("map-upload-status").textContent="保存できませんでした："+error.message;$("map-upload-status").classList.add("map-error");}
+     }catch(error){
+      $("map-upload-status").textContent="保存できませんでした："+error.message;
+      $("map-upload-status").classList.add("map-error");
+      if(error.code==="image_conflict"||error.code==="update_uncertain"){
+        uploadFile=null;$("map-upload-preview").hidden=true;$("map-upload-file").value="";
+        try{await reload();}catch(_){}
+        $("map-upload-status").textContent=error.code==="image_conflict"?"画像が更新されていたため、保存しませんでした。いったん閉じて現在の画像を確認し、「画像を更新」を押し直してください。":"更新結果を確認できませんでした。いったん閉じて現在の画像を確認してください。";
+      }
+    }
     finally{uploadSaving=false;$("map-upload-save").disabled=false;$("map-upload-cancel").disabled=false;$("map-upload-close").disabled=false;$("map-upload-file").disabled=false;}
   }
   $("map-show-npcs").checked=false;
@@ -349,14 +403,15 @@
   $("map-set-marker").addEventListener("click",()=>pointAction("target"));
   $("map-cancel-point").addEventListener("click",cancelPoint);
   $("map-clear-marker").addEventListener("click",()=>{const map=selectedMap(),info=activeGuidance(map);delete markers[markerKey(map,info.step,target)];writePersonal();renderMap();});
-  $("map-viewport").addEventListener("click",event=>{if(pointMode){setPoint(event);return;}const pin=event.target.closest("button[data-npc-pin]");if(pin){const point=data.mapNpcs.find(row=>row.id===pin.dataset.npcPin),map=selectedMap();if(point&&map)choose({kind:"npc",id:"npc|"+key(point.npc_name)+"|"+map.map_name,name:point.npc_name,map:map.map_name,points:[point]});}});
+  $("map-viewport").addEventListener("click",event=>{if(pointMode){setPoint(event);return;}const pin=event.target.closest("button[data-npc-pin]");if(pin){const point=data.mapNpcs.find(row=>row.id===pin.dataset.npcPin),map=selectedMap();if(point&&map)choose({kind:"npc",id:"npc|"+key(point.npc_name)+"|"+map.map_name,name:point.npc_name,map:map.map_name,points:[point],explicitPoint:true});}});
   $("map-viewport").addEventListener("keydown",event=>{
     if(event.key==="Escape"){cancelPoint();return;}
     if(event.target!==$("map-viewport"))return;
     const directions={ArrowLeft:[-60,0],ArrowRight:[60,0],ArrowUp:[0,-60],ArrowDown:[0,60]};
     if(directions[event.key]){event.preventDefault();$("map-viewport").scrollBy({left:directions[event.key][0],top:directions[event.key][1]});}
   });
-  $("map-add-image").addEventListener("click",openUpload);
+  $("map-add-image").addEventListener("click",()=>openUpload("add"));
+  $("map-update-image").addEventListener("click",()=>openUpload("update"));
   $("map-upload-paste").addEventListener("click",()=>$("map-upload-paste").focus());
   $("map-upload-paste").addEventListener("paste",event=>{const file=[...(event.clipboardData?.items||[])].find(item=>item.kind==="file"&&item.type.startsWith("image/"))?.getAsFile();if(file){event.preventDefault();selectUpload(file);}});
   $("map-upload-file").addEventListener("change",()=>selectUpload($("map-upload-file").files[0]));
