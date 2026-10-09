@@ -31,15 +31,62 @@
     catch(e){if(preview)URL.revokeObjectURL(preview);if(version===imageSelectionVersion){monsterImageLoading=false;status.textContent=e.message;}}
   }
   function wireImagePicker(){const panel=dialog.querySelector('.report-image-upload');if(!panel)return;panel.querySelector('.report-image-paste').addEventListener('paste',event=>{const files=Array.from(event.clipboardData?.files||[]);const file=files.find(f=>f.type.startsWith('image/'))||Array.from(event.clipboardData?.items||[]).find(x=>x.kind==='file'&&x.type.startsWith('image/'))?.getAsFile();if(!file){panel.querySelector('.report-image-status').textContent='コピーした画像が見つかりません。画像をコピーし直すか、ファイルを選んでください。';return;}event.preventDefault();selectMonsterImage(file);});panel.querySelector('[name=monster_image]').onchange=event=>selectMonsterImage(event.target.files[0]);panel.querySelector('.report-image-remove').onclick=clearMonsterImage;}
-  function open(options={}){if(options.kind==='monster'&&options.category==='image')return openImage(options);active={kind:options.kind==='monster'?'monster':'article',title:String(options.title||options.monsterName||document.querySelector('main h1')?.textContent||document.title).trim().slice(0,200),url:productionUrl(options.url),monsterId:options.monsterId||''};
-    const monster=active.kind==='monster';const el=makeDialog();clearMonsterImage();el.innerHTML=`<div class="report-heading"><h2 id="xen-report-title">${monster?'モンスター情報を追記':'記事の修正を報告'}</h2><button type="button" class="report-close" aria-label="閉じる">×</button></div><p class="report-target">${esc(active.title)}</p><p class="report-help">${monster?'投稿は管理者の確認後、図鑑の「追加された情報」に掲載されます。':'報告は管理者に届きます。記事へは自動反映されません。'}</p><form class="report-form"><label>分類<select name="category">${(monster?['drop','def','level','map','image','note']:['error','outdated','link','other']).map(k=>`<option value="${k}" ${options.category===k?'selected':''}>${labels[k]}</option>`).join('')}</select></label>${monster?fields(options.details).replace('ゲーム内画像のURL','画像URLの修正（管理者確認後）'):''}<label>${monster?'追記の要点':'間違っている箇所と正しい内容'}<textarea name="body" maxlength="3000" required placeholder="${monster?'例：このマップで○○のドロップを確認しました。':'どの箇所を、どのように修正するとよいか記載してください。'}"></textarea></label><label>出典・参考URL（任意）<input name="source_url" type="url" maxlength="1000" placeholder="https://..."></label><label>表示名（任意）<input name="author_name" maxlength="40" placeholder="匿名"></label><label>確認用画像（任意・公開されません）<input name="attachment" type="file" accept="image/png,image/jpeg,image/webp"></label><p class="report-help">PNG / JPEG / WebP、2MB以内。確認用画像は管理者のみ閲覧できます。個人情報やパスワードを含む画像は添付しないでください。</p><label class="report-honeypot" aria-hidden="true">ウェブサイト<input name="website" tabindex="-1" autocomplete="off"></label><p class="report-form-status" role="status" aria-live="polite"></p><div class="report-actions"><button type="button" class="report-cancel">キャンセル</button><button type="submit" class="primary">${monster?'確認用に送信':'報告を送信'}</button></div></form>`;
-    el.querySelectorAll('.report-close,.report-cancel').forEach(b=>b.onclick=()=>el.close());el.querySelector('form').onsubmit=send;if(monster)el.querySelector('[name=category]').addEventListener('change',event=>{if(event.target.value==='image')openImage({kind:'monster',title:active.title,monsterId:active.monsterId,url:active.url});});el.showModal();
+  function editableDetails(details={}) {
+    const result={};
+    for(const [field,max] of [['level',300],['min_def',10000],['max_def',10000]])result[field]=numberValue(details[field],max);
+    for(const field of ['drop_items','map','notes'])result[field]=String(details[field]??'').replace(/\r\n/g,'\n').trim();
+    return result;
+  }
+  function detailPatch(form,baseline) {
+    const data=new FormData(form),current={};
+    for(const [field,max] of [['level',300],['min_def',10000],['max_def',10000]]) {
+      const value=String(data.get(field)??'').trim();
+      if(value!==''&&(!Number.isInteger(Number(value))||Number(value)<0||Number(value)>max))throw Error('Lv・必要DEFには範囲内の整数を入力してください');
+      current[field]=value===''?null:Number(value);
+    }
+    for(const field of ['drop_items','map','notes'])current[field]=String(data.get(field)??'').replace(/\r\n/g,'\n').trim();
+    if(current.min_def!==null&&current.max_def!==null&&current.min_def>current.max_def)throw Error('必要DEFの最大値は、最小値以上にしてください');
+    const patch={};for(const field of Object.keys(current))if(current[field]!==baseline[field])patch[field]=current[field];
+    if(!Object.keys(patch).length)throw Error('変更したい項目を入力してください');
+    return patch;
+  }
+  function openDetails(options={}) {
+    const baseline=editableDetails(options.details);
+    active={kind:'monster',detailOnly:true,title:String(options.title||options.monsterName||'モンスター').trim().slice(0,200),url:productionUrl(options.url),monsterId:options.monsterId||'',baseline};
+    const el=makeDialog();clearMonsterImage();
+    const detailFields=fields(baseline).replace(/<label>ゲーム内画像のURL<input[\s\S]*?<\/label>/,'');
+    el.innerHTML=`<div class="report-heading"><h2 id="xen-report-title">モンスター情報を編集</h2><button type="button" class="report-close" aria-label="閉じる">×</button></div><p class="report-target">${esc(active.title)}</p><p class="report-help report-immediate-note">変更したい項目だけ編集して保存してください。保存後、すぐ図鑑に反映されます。</p><form class="report-form report-details-form">${detailFields}<details class="report-optional-fields"><summary>出典・表示名を追加する（任意）</summary><label>出典・参考URL<input name="source_url" type="url" maxlength="1000" placeholder="https://..."></label><label>表示名<input name="author_name" maxlength="40" placeholder="匿名"></label></details><label class="report-honeypot" aria-hidden="true">ウェブサイト<input name="website" tabindex="-1" autocomplete="off"></label><p class="report-form-status" role="status" aria-live="polite"></p><div class="report-actions"><button type="button" class="report-cancel">キャンセル</button><button type="submit" class="primary">保存</button></div></form>`;
+    el.querySelectorAll('.report-close,.report-cancel').forEach(button=>button.onclick=()=>el.close());
+    el.querySelector('form').onsubmit=sendDetails;el.showModal();
+  }
+  async function sendDetails(event) {
+    event.preventDefault();
+    const form=event.target,status=form.querySelector('.report-form-status'),button=form.querySelector('[type=submit]'),operation=active,target={...active};
+    button.disabled=true;status.textContent='保存しています…';
+    try {
+      const details=detailPatch(form,target.baseline),data=new FormData(form),source=String(data.get('source_url')||'').trim();
+      if(source&&!safeImageUrl(source))throw Error('出典には公開されたHTTPSのURLを入力してください');
+      await request('save_details',{monster_id:target.monsterId,details,source_url:source,author_name:String(data.get('author_name')||'').trim(),visitor:visitor(),honeypot:String(data.get('website')||'')});
+      if(active!==operation||!form.isConnected){refreshMonsterImages(target.monsterId).catch(()=>{});return;}
+      form.innerHTML='<div class="report-success"><strong>保存しました</strong><p>図鑑に公開しました。</p><p class="report-details-refresh-status" role="status">図鑑の表示を更新しています…</p><div class="report-actions"><button type="button" class="report-details-done">図鑑を確認</button><button type="button" class="report-details-reload" hidden>表示を再読み込み</button></div></div>';
+      form.querySelector('.report-details-done').onclick=()=>dialog.close();
+      const refreshStatus=form.querySelector('.report-details-refresh-status'),reload=form.querySelector('.report-details-reload');
+      const refresh=async()=>{reload.disabled=true;try{await refreshMonsterImages(target.monsterId);if(refreshStatus.isConnected)refreshStatus.textContent='保存内容を図鑑に反映しました。';reload.hidden=true;}catch{if(refreshStatus.isConnected)refreshStatus.textContent='保存は完了しました。表示を再読み込みしてください。';reload.hidden=false;}finally{reload.disabled=false;}};
+      reload.onclick=refresh;await refresh();
+    } catch(error){if(active===operation&&form.isConnected){status.textContent='保存できませんでした：'+error.message;button.disabled=false;}}
+  }
+  function open(options={}) {
+    if(options.kind==='monster')return options.category==='image'?openImage(options):openDetails(options);
+    active={kind:'article',title:String(options.title||document.querySelector('main h1')?.textContent||document.title).trim().slice(0,200),url:productionUrl(options.url),monsterId:''};
+    const el=makeDialog();clearMonsterImage();
+    el.innerHTML=`<div class="report-heading"><h2 id="xen-report-title">記事の修正を報告</h2><button type="button" class="report-close" aria-label="閉じる">×</button></div><p class="report-target">${esc(active.title)}</p><p class="report-help">報告は管理者に届きます。記事へは自動反映されません。</p><form class="report-form"><label>分類<select name="category">${['error','outdated','link','other'].map(key=>`<option value="${key}" ${options.category===key?'selected':''}>${labels[key]}</option>`).join('')}</select></label><label>間違っている箇所と正しい内容<textarea name="body" maxlength="3000" required placeholder="どの箇所を、どのように修正するとよいか記載してください。"></textarea></label><label>出典・参考URL（任意）<input name="source_url" type="url" maxlength="1000" placeholder="https://..."></label><label>表示名（任意）<input name="author_name" maxlength="40" placeholder="匿名"></label><label>確認用画像（任意・公開されません）<input name="attachment" type="file" accept="image/png,image/jpeg,image/webp"></label><p class="report-help">PNG / JPEG / WebP、2MB以内。確認用画像は管理者のみ閲覧できます。個人情報やパスワードを含む画像は添付しないでください。</p><label class="report-honeypot" aria-hidden="true">ウェブサイト<input name="website" tabindex="-1" autocomplete="off"></label><p class="report-form-status" role="status" aria-live="polite"></p><div class="report-actions"><button type="button" class="report-cancel">キャンセル</button><button type="submit" class="primary">報告を送信</button></div></form>`;
+    el.querySelectorAll('.report-close,.report-cancel').forEach(button=>button.onclick=()=>el.close());el.querySelector('form').onsubmit=send;el.showModal();
   }
   async function readAttachment(file){if(!file?.size)return null;if(file.size>2097152||!['image/png','image/jpeg','image/webp'].includes(file.type))throw Error('画像は PNG / JPEG / WebP、2MB以内で選んでください');const encoded=await new Promise((resolve,reject)=>{const reader=new FileReader();reader.onload=()=>resolve(String(reader.result).split(',')[1]);reader.onerror=()=>reject(Error('画像を読み込めませんでした'));reader.readAsDataURL(file);});return {type:file.type,data:encoded};}
   function openImage(options={}) {
     active={kind:'monster',imageOnly:true,title:String(options.title||options.monsterName||'モンスター').trim().slice(0,200),url:productionUrl(options.url),monsterId:options.monsterId||''};
     const el=makeDialog();clearMonsterImage();
-    el.innerHTML=`<div class="report-heading"><h2 id="xen-report-title">ゲーム内画像を追加</h2><button type="button" class="report-close" aria-label="閉じる">×</button></div><p class="report-target">${esc(active.title)}</p><p class="report-help report-immediate-note">画像は追加後、すぐ図鑑に公開されます。Lv・ドロップ・DEFなどの追記は、別の情報追記フォームから送信できます。</p><form class="report-form report-image-only-form">${imagePicker()}<details class="report-image-url-choice"><summary>画像URLから追加する</summary><label>公開されたHTTPS画像のURL<input name="image_url" type="url" maxlength="1000" placeholder="https://..."></label><p class="report-help">画像URLもすぐ公開されます。貼り付け・ファイルを選んだ場合は、選んだ画像を優先します。</p></details><label>出典・参考URL（任意）<input name="source_url" type="url" maxlength="1000" placeholder="https://..."></label><label>表示名（任意）<input name="author_name" maxlength="40" placeholder="匿名"></label><label class="report-honeypot" aria-hidden="true">ウェブサイト<input name="website" tabindex="-1" autocomplete="off"></label><p class="report-form-status" role="status" aria-live="polite"></p><div class="report-actions"><button type="button" class="report-cancel">キャンセル</button><button type="submit" class="primary">画像を追加</button></div></form>`;
+    el.innerHTML=`<div class="report-heading"><h2 id="xen-report-title">ゲーム内画像を追加</h2><button type="button" class="report-close" aria-label="閉じる">×</button></div><p class="report-target">${esc(active.title)}</p><p class="report-help report-immediate-note">画像は追加後、すぐ図鑑に公開されます。Lv・ドロップ・DEFなどの追記は、「情報を編集」から、そのまま保存できます。</p><form class="report-form report-image-only-form">${imagePicker()}<details class="report-image-url-choice"><summary>画像URLから追加する</summary><label>公開されたHTTPS画像のURL<input name="image_url" type="url" maxlength="1000" placeholder="https://..."></label><p class="report-help">画像URLもすぐ公開されます。貼り付け・ファイルを選んだ場合は、選んだ画像を優先します。</p></details><label>出典・参考URL（任意）<input name="source_url" type="url" maxlength="1000" placeholder="https://..."></label><label>表示名（任意）<input name="author_name" maxlength="40" placeholder="匿名"></label><label class="report-honeypot" aria-hidden="true">ウェブサイト<input name="website" tabindex="-1" autocomplete="off"></label><p class="report-form-status" role="status" aria-live="polite"></p><div class="report-actions"><button type="button" class="report-cancel">キャンセル</button><button type="submit" class="primary">画像を追加</button></div></form>`;
     el.querySelectorAll('.report-close,.report-cancel').forEach(b=>b.onclick=()=>el.close());
     el.querySelector('form').onsubmit=sendImage;wireImagePicker();el.showModal();el.querySelector('.report-image-paste').focus();
   }
@@ -70,28 +117,41 @@
       reload.onclick=refresh;await refresh();
     }catch(e){if(active===operation&&form.isConnected){status.textContent='追加できませんでした：'+e.message;button.disabled=false;}}
   }
-  async function send(event){event.preventDefault();const form=event.target,status=form.querySelector('.report-form-status'),button=form.querySelector('[type=submit]');button.disabled=true;status.textContent='送信しています…';
-    try{const f=new FormData(form),target={...active},postedDetails=target.kind==='monster'?readDetails(form):{};if(target.kind==='monster'&&f.get('category')==='image'){openImage({kind:'monster',title:target.title,monsterId:target.monsterId,url:target.url});return;}const attachment=await readAttachment(f.get('attachment'));const result=await request('submit',{kind:target.kind,article_url:target.url,title:target.title,monster_id:target.monsterId,category:f.get('category'),body:f.get('body'),details:postedDetails,source_url:f.get('source_url'),author_name:f.get('author_name'),attachment,visitor:visitor(),honeypot:f.get('website')});
-      form.innerHTML=`<div class="report-success"><strong>送信しました</strong><p>${target.kind==='monster'?'管理者の確認後、追加情報として掲載します。':'管理者が内容を確認します。報告ありがとうございます。'}</p>${result.warning?`<p>${esc(result.warning)}</p>`:''}<p class="report-help">受付番号：${esc(result.id)}</p><button type="button">閉じる</button></div>`;form.querySelector('button').onclick=()=>dialog.close();
-    }catch(e){status.textContent='送信できませんでした：'+e.message;button.disabled=false;}
+  async function send(event) {
+    event.preventDefault();const form=event.target,status=form.querySelector('.report-form-status'),button=form.querySelector('[type=submit]');button.disabled=true;status.textContent='送信しています…';
+    try{const data=new FormData(form),target={...active},attachment=await readAttachment(data.get('attachment'));const result=await request('submit',{kind:'article',article_url:target.url,title:target.title,monster_id:'',category:data.get('category'),body:data.get('body'),details:{},source_url:data.get('source_url'),author_name:data.get('author_name'),attachment,visitor:visitor(),honeypot:data.get('website')});
+      form.innerHTML=`<div class="report-success"><strong>送信しました</strong><p>管理者が内容を確認します。報告ありがとうございます。</p>${result.warning?`<p>${esc(result.warning)}</p>`:''}<p class="report-help">受付番号：${esc(result.id)}</p><button type="button">閉じる</button></div>`;form.querySelector('button').onclick=()=>dialog.close();
+    }catch(error){status.textContent='送信できませんでした：'+error.message;button.disabled=false;}
   }
-  async function loadAllMonsters(force=false){if(!force&&allCache&&Date.now()-cacheTime<30000)return allCache;const version=++monsterFetchVersion,r=await fetch(project+'/rest/v1/monster_updates?select=*&order=updated_at.desc&limit=1000',{headers:{apikey:key},signal:AbortSignal.timeout(15000)});if(!r.ok)throw Error('追加情報を読み込めませんでした');const rows=await r.json();if(version===monsterFetchVersion){allCache=rows;cacheTime=Date.now();}return allCache||rows;}
+  async function loadAllMonsters(force=false) {
+    if(!force&&allCache&&Date.now()-cacheTime<30000)return allCache;
+    const version=++monsterFetchVersion,rows=[],pageSize=1000;
+    for(let offset=0;;offset+=pageSize) {
+      const response=await fetch(project+'/rest/v1/monster_updates?select=*&order=updated_at.desc,id.desc&limit='+pageSize+'&offset='+offset,{headers:{apikey:key},signal:AbortSignal.timeout(15000)});
+      if(!response.ok)throw Error('追加情報を読み込めませんでした');
+      const page=await response.json();if(!Array.isArray(page))throw Error('追加情報を読み込めませんでした');
+      rows.push(...page);if(page.length<pageSize)break;
+    }
+    const unique=Array.from(new Map(rows.map(row=>[row.id,row])).values());
+    if(version===monsterFetchVersion){allCache=unique;cacheTime=Date.now();}
+    return allCache||unique;
+  }
   async function loadMonster(id){return (await loadAllMonsters()).filter(row=>row.monster_id===id);}
   function detailHtml(d={}){const rows=[];if(d.level!=null)rows.push(['モンスターLv',d.level]);if(d.drop_items)rows.push(['ドロップアイテム',d.drop_items]);if(d.min_def!=null||d.max_def!=null)rows.push(['必要DEF',d.min_def!=null&&d.max_def!=null?`${d.min_def}～${d.max_def}`:d.min_def??d.max_def]);if(d.map)rows.push(['出現場所',d.map]);if(d.notes)rows.push(['備考・確認条件',d.notes]);return rows.length?`<dl class="report-published-fields">${rows.map(([k,v])=>`<div><dt>${k}</dt><dd>${esc(v)}</dd></div>`).join('')}</dl>`:'';}
-  async function mountMonster(container,monster){
+  async function mountMonster(container,monster) {
     if(typeof container==='string')container=document.querySelector(container);if(!container)return;
-    container.classList.add('monster-community');container.innerHTML='<div class="report-community-heading"><h3>追加された情報・画像</h3><div class="report-community-actions"><button type="button" class="report-info-add">情報を追記する</button><button type="button" class="report-image-add">画像を追加</button></div></div><p class="report-community-status" role="status">読み込み中…</p><div class="report-community-list"></div>';
-    const options={kind:'monster',title:monster.name,monsterId:monster.id,url:monster.url||'monsters.html#'+monster.id};
-    container.querySelector('.report-info-add').onclick=()=>open(options);container.querySelector('.report-image-add').onclick=()=>openImage(options);
+    container.classList.add('monster-community');container.innerHTML='<div class="report-community-heading"><h3>情報の編集・追加画像</h3><div class="report-community-actions"><button type="button" class="report-info-add">情報を編集</button><button type="button" class="report-image-add">画像を追加</button></div></div><p class="report-community-status" role="status">読み込み中…</p><div class="report-community-list"></div>';
+    const options={kind:'monster',title:monster.name,monsterId:monster.id,url:monster.url||'monsters.html#'+monster.id,details:monster.details||{}};
+    container.querySelector('.report-info-add').onclick=()=>openDetails(options);container.querySelector('.report-image-add').onclick=()=>openImage(options);
     try{
       const rows=await loadMonster(monster.id);if(!container.isConnected)return;
-      const immediate=rows.some(r=>r.details?.publication_mode==='immediate');
-      container.querySelector('.report-community-status').textContent=rows.length?(immediate?'プレイヤーが追加した画像と、管理者が確認した追記情報です。公式出典の情報とは区別して表示しています。':'管理者が掲載を確認した投稿情報です。公式出典の情報とは区別して表示しています。'):'追加情報・画像はまだありません。画像はすぐ追加できます。ドロップやDEFなどの追記は、管理者の確認後に掲載します。';
-      container.querySelector('.report-community-list').innerHTML=rows.map(r=>{
-        const image=safeImageUrl(r.details?.image_url),source=safeUrl(r.source_url),direct=r.details?.publication_mode==='immediate';
-        return `<article class="report-published ${direct?'report-player-image':''}"><span class="report-tag">${direct?'プレイヤー追加画像':esc(labels[r.category]||'追加情報')}</span><p>${esc(r.body)}</p>${direct?'':detailHtml(r.details)}${image?`<button type="button" class="report-image-zoom" data-monster-zoom-src="${esc(image)}" data-monster-zoom-alt="${esc(monster.name)}の追加ゲーム内画像" aria-label="${esc(monster.name)}の追加ゲーム内画像を拡大" aria-haspopup="dialog"><img class="report-monster-image" src="${esc(image)}" alt="${esc(monster.name)}のゲーム内画像" loading="lazy" referrerpolicy="no-referrer"><span class="report-image-zoom-hint">画像を拡大</span></button>`:''}${direct?'<p class="report-help">追加後すぐ公開された画像です。管理者による事前確認は行っていません。</p>':''}<p class="report-help">${esc(r.author_name)} · ${date(r.updated_at)}${source?` · <a href="${esc(source)}" target="_blank" rel="noopener noreferrer">出典を確認 ↗</a>`:''}</p></article>`;
+      const edits=rows.filter(row=>row.details?.publication_mode==='immediate_details').sort((a,b)=>String(b.created_at||b.updated_at).localeCompare(String(a.created_at||a.updated_at))||String(b.id).localeCompare(String(a.id)));
+      container.querySelector('.report-community-status').textContent=edits.length?'情報は '+date(edits[0].created_at||edits[0].updated_at)+' に更新されました。':'情報・画像は、保存後すぐ公開されます。';
+      container.querySelector('.report-community-list').innerHTML=rows.filter(row=>row.details?.publication_mode!=='immediate_details').map(row=>{
+        const image=safeImageUrl(row.details?.image_url),source=safeUrl(row.source_url),direct=row.details?.publication_mode==='immediate';
+        return `<article class="report-published ${direct?'report-player-image':''}">${direct?'':`<p>${esc(row.body)}</p>${detailHtml(row.details)}`}${image?`<button type="button" class="report-image-zoom" data-monster-zoom-src="${esc(image)}" data-monster-zoom-alt="${esc(monster.name)}の追加ゲーム内画像" aria-label="${esc(monster.name)}の追加ゲーム内画像を拡大" aria-haspopup="dialog"><img class="report-monster-image" src="${esc(image)}" alt="${esc(monster.name)}のゲーム内画像" loading="lazy" referrerpolicy="no-referrer"><span class="report-image-zoom-hint">画像を拡大</span></button>`:''}<p class="report-help">${esc(row.author_name)} · ${date(row.updated_at)}${source?` · <a href="${esc(source)}" target="_blank" rel="noopener noreferrer">出典を確認 ↗</a>`:''}</p></article>`;
       }).join('');
-    }catch(e){container.querySelector('.report-community-status').textContent=e.message+'。画像の追加・情報の追記は各ボタンから行えます。';}
+    }catch(error){container.querySelector('.report-community-status').textContent=error.message+'。編集・画像追加は各ボタンから行えます。';}
   }
   function button(options,label='修正を報告'){const b=document.createElement('button');b.type='button';b.className='xen-report-button';b.textContent=label;b.onclick=()=>open(typeof options==='function'?options():options);return b;}
   function ensureArticleButtons(){if(document.querySelector('#reports-admin'))return;const main=document.querySelector('main');if(!main)return;if(!main.querySelector('.article-report-tools')){const bar=document.createElement('div');bar.className='article-report-tools';bar.append(button(()=>({title:document.querySelector('#quest-detail h1')?.textContent||main.querySelector('h1')?.textContent||document.title}),'この記事の修正を報告'));const h=main.querySelector('h1');(h?.closest('.page-intro')||h)?.insertAdjacentElement('afterend',bar);if(!bar.isConnected)main.prepend(bar);}

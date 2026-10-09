@@ -13,6 +13,41 @@ const secureUrl = (value:unknown) => {const v=string(value,1000);if(!v)return ''
 function publicPictureUrl(value:unknown){const raw=string(value,1000);if(!raw)return '';let url:URL;try{url=new URL(raw);}catch{throw Error('画像URLを確認してください');}const host=url.hostname.toLowerCase().replace(/\.$/,'');if(url.protocol!=='https:'||url.username||url.password||/[\s\u0000-\u001f]/.test(raw)||host==='localhost'||host.endsWith('.localhost')||host.endsWith('.local')||host.endsWith('.internal')||!host.includes('.')||host.startsWith('[')||/^(?:0|10|127)\./.test(host)||/^169\.254\./.test(host)||/^192\.168\./.test(host)||/^172\.(?:1[6-9]|2\d|3[01])\./.test(host))throw Error('公開された https:// の画像URLを入力してください');url.hash='';return url.href;}
 const articleUrl = (value:unknown) => {const u=new URL(string(value,1000,true),`${allowedOrigin}/xen-rebirth-jp/`);if(u.origin!==allowedOrigin||!/^\/xen-rebirth-jp\/[a-z0-9-]+\.html$/.test(u.pathname))throw Error('サイトの記事URLを指定してください');u.search='';return u.href;};
 function details(value:unknown){const d=(value&&typeof value==='object'&&!Array.isArray(value)?value:{}) as Record<string,unknown>;const result:Record<string,unknown>={};for(const [key,max]of [['level',300],['min_def',10000],['max_def',10000]] as const){const n=d[key];if(n===''||n==null)result[key]=null;else{const v=Number(n);if(!Number.isInteger(v)||v<0||v>max)throw Error('Lv / DEF の数値を確認してください');result[key]=v;}}if(result.min_def!=null&&result.max_def!=null&&Number(result.min_def)>Number(result.max_def))throw Error('DEF の最小値と最大値を確認してください');result.drop_items=string(d.drop_items,1200);result.map=string(d.map,200);result.image_url=secureUrl(d.image_url);result.notes=string(d.notes,1000);return result;}
+
+const detailFields=['level','min_def','max_def','drop_items','map','notes'] as const;
+function detailPatch(value:unknown,allowEmpty=false){
+ if(!value||typeof value!=='object'||Array.isArray(value))throw Error('モンスター情報の入力を確認してください');
+ const input=value as Record<string,unknown>,keys=Object.keys(input),result:Record<string,unknown>={};
+ if(!allowEmpty&&!keys.length)throw Error('変更する項目を入力してください');
+ if(keys.some(key=>!detailFields.includes(key as typeof detailFields[number])))throw Error('編集できない項目が含まれています');
+ for(const key of keys){
+  const value=input[key];
+  if(['level','min_def','max_def'].includes(key)){
+   if(value===null){result[key]=null;continue;}
+   const max=key==='level'?300:10000;
+   if(typeof value!=='number'||!Number.isInteger(value)||value<0||value>max)throw Error('Lv / DEF の数値を確認してください');
+   result[key]=value;
+  }else{
+   if(typeof value!=='string')throw Error('文字列の入力を確認してください');
+   result[key]=string(value,key==='drop_items'?1200:key==='map'?200:1000);
+  }
+ }
+ if(result.min_def!=null&&result.max_def!=null&&Number(result.min_def)>Number(result.max_def))throw Error('DEF の最小値と最大値を確認してください');
+ return result;
+}
+
+
+function reviewDetailPatch(value:unknown,previous:Record<string,unknown>){
+ const incoming=value&&typeof value==='object'&&!Array.isArray(value)?value as Record<string,unknown>:{};
+ const allowed=Object.fromEntries(Object.entries(incoming).filter(([key])=>detailFields.includes(key as typeof detailFields[number])));
+ const validated=detailPatch(allowed,true),result:Record<string,unknown>={};
+ for(const key of detailFields){
+  if(Object.prototype.hasOwnProperty.call(previous,key))result[key]=previous[key];
+  if(Object.prototype.hasOwnProperty.call(validated,key)&&(Object.prototype.hasOwnProperty.call(previous,key)||validated[key]!==null&&validated[key]!==''))result[key]=validated[key];
+ }
+ return {...detailPatch(result,true),publication_mode:'immediate_details'};
+}
+
 async function rpc(name:string,args:unknown){const r=await fetch(`${project}/rest/v1/rpc/${name}`,{method:'POST',headers:serviceHeaders,body:JSON.stringify(args)});const text=await r.text();let data=null;if(text.trim()){try{data=JSON.parse(text);}catch{throw Error('保存先の応答を読み込めませんでした');}}if(!r.ok)throw Error(data?.message||'保存に失敗しました');return data;}
 async function hash(value:string){const bytes=new Uint8Array(await crypto.subtle.digest('SHA-256',new TextEncoder().encode(value)));return [...bytes].map(b=>b.toString(16).padStart(2,'0')).join('');}
 const clientIp = (req:Request,visitor:unknown) => req.headers.get('cf-connecting-ip')||req.headers.get('x-forwarded-for')?.split(',').map(x=>x.trim()).filter(Boolean).at(-1)||`unknown:${visitor}`;
@@ -124,13 +159,14 @@ async function discardUnpublishedCopy(id:string,path:string){
  return false;
 }
 let knownMonsterIds:Set<string>|null=null,knownMonsterIdsAt=0;
+const knownMonsterNames=new Map<string,string>();
 async function requireKnownMonster(id:string){
  if(!knownMonsterIds||Date.now()-knownMonsterIdsAt>300000){
   const response=await fetch('https://yysupporttools.github.io/xen-rebirth-jp/assets/monsters-data.json',{signal:AbortSignal.timeout(10000)});
   if(!response.ok)throw Error('図鑑のデータを確認できませんでした。時間をおいて再度お試しください');
   const data=await response.json();if(!Array.isArray(data.monsters))throw Error('図鑑のデータを読み込めませんでした');
-  const ids=new Set<string>();for(const monster of data.monsters){if(typeof monster.id==='string'&&/^[a-z0-9_-]{1,160}$/.test(monster.id))ids.add(monster.id);}
-  if(!ids.size)throw Error('図鑑のデータを読み込めませんでした');knownMonsterIds=ids;knownMonsterIdsAt=Date.now();
+  const ids=new Set<string>(),names=new Map<string,string>();for(const monster of data.monsters){if(typeof monster.id==='string'&&/^[a-z0-9_-]{1,160}$/.test(monster.id)){ids.add(monster.id);if(typeof monster.name==='string'&&monster.name.trim()&&monster.name.length<=200)names.set(monster.id,monster.name.trim());}}
+  if(!ids.size)throw Error('図鑑のデータを読み込めませんでした');knownMonsterIds=ids;knownMonsterIdsAt=Date.now();knownMonsterNames.clear();for(const [mid,name]of names)knownMonsterNames.set(mid,name);
  }
  if(!knownMonsterIds.has(id))throw Error('このモンスターは図鑑に登録されていません。図鑑から追加してください');
 }
@@ -165,6 +201,25 @@ async function addImage(req:Request,data:Record<string,unknown>){
   throw error;
  }
 }
+
+async function saveDetails(req:Request,data:Record<string,unknown>){
+ if(data.honeypot||data.kind&&data.kind!=='monster')throw Error('入力が無効です');
+ if(!/^[a-f0-9]{8}-[a-f0-9]{4}-4[a-f0-9]{3}-[89ab][a-f0-9]{3}-[a-f0-9]{12}$/i.test(String(data.visitor||'')))throw Error('ブラウザ識別子が無効です');
+ const mid=string(data.monster_id,160,true);if(!/^[a-z0-9_-]{1,160}$/.test(mid))throw Error('モンスターが無効です');
+ const patch=detailPatch(data.details);
+ await requireKnownMonster(mid);
+ const title=knownMonsterNames.get(mid)||mid;
+ const labels:Record<string,string>={level:'Lv',min_def:'必要DEF（最小）',max_def:'必要DEF（最大）',drop_items:'ドロップアイテム',map:'出現場所',notes:'備考'};
+ const body=title+'の'+Object.keys(patch).map(key=>labels[key]).join('・')+'を更新しました。';
+ // Detail edits use separate counters. Neither old reports nor image additions
+ // consume their allowance, and omitted fields are never added to the patch.
+ const visitorHash=await hash(`details-visitor:${data.visitor}`);
+ const ipHash=await hash(`details-ip:${service}:${clientIp(req,data.visitor)}`);
+ const input={kind:'monster',article_url:articleUrl(`monsters.html#${mid}`),title,monster_id:mid,category:'note',body,details:{...patch,publication_mode:'immediate_details'},source_url:secureUrl(data.source_url),author_name:string(data.author_name,40)||'匿名',attachment_path:''};
+ const id=await rpc('site_feedback_save_details',{p_input:input,p_visitor_hash:visitorHash,p_ip_hash:ipHash}) as string;
+ return reply({ok:true,id,publication_mode:'immediate_details',details:patch});
+}
+
 async function sign(path:string){if(!path)return '';const r=await fetch(`${project}/storage/v1/object/sign/article-feedback/${path}`,{method:'POST',headers:serviceHeaders,body:JSON.stringify({expiresIn:600})});if(!r.ok)return '';const data=await r.json();return data.signedURL?`${project}/storage/v1${data.signedURL}`:'';}
 Deno.serve(async(req:Request)=>{
  const origin=req.headers.get('Origin');if(origin&&origin!==allowedOrigin)return reply({error:'このサイトからご利用ください'},403);
@@ -183,7 +238,7 @@ Deno.serve(async(req:Request)=>{
   if(data.action==='review'){
    const actor=await admin(req);if(typeof data.id!=='string'||!/^[a-f0-9-]{36}$/.test(data.id))throw Error('IDが無効です');
    const row=await rpc('site_feedback_get',{p_id:data.id}) as Record<string,unknown>|null;if(!row)throw Error('報告が見つかりません');
-   const nextStatus=string(data.status,20,true),nextDetails=details(data.details),oldPath=String(row.monster_image_public_path||'');let newPath='',createdPath='';
+   const nextStatus=string(data.status,20,true),isDetailEdit=(row.details as Record<string,unknown>)?.publication_mode==='immediate_details',nextDetails=isDetailEdit?reviewDetailPatch(data.details,row.details as Record<string,unknown>):details(data.details),oldPath=String(row.monster_image_public_path||'');let newPath='',createdPath='';
    if(oldPath&&nextDetails.image_url===publicImageUrl(oldPath)){nextDetails.image_url='';}
    try{
     if(nextStatus==='published'&&row.kind==='monster'&&row.monster_image_path&&data.use_uploaded_image!==false){
@@ -198,6 +253,7 @@ Deno.serve(async(req:Request)=>{
    return reply({ok:true});
   }
   if(data.action==='add_image')return await addImage(req,data);
+  if(data.action==='save_details')return await saveDetails(req,data);
   if(data.action!=='submit'||data.honeypot)throw Error('入力が無効です');if(!/^[a-f0-9]{8}-[a-f0-9]{4}-4[a-f0-9]{3}-[89ab][a-f0-9]{3}-[a-f0-9]{12}$/i.test(data.visitor||''))throw Error('ブラウザ識別子が無効です');
   if(!['article','monster'].includes(data.kind))throw Error('報告の種類が無効です');const mid=string(data.monster_id,160);if(data.kind==='monster'&&!/^[a-z0-9_-]{1,160}$/.test(mid))throw Error('モンスターが無効です');
   const category=string(data.category,20,true);if(!categories.includes(category)||(data.kind==='article'&&!['error','outdated','link','other'].includes(category))||(data.kind==='monster'&&!['drop','def','level','map','image','note'].includes(category)))throw Error('分類を確認してください');
@@ -216,3 +272,4 @@ Deno.serve(async(req:Request)=>{
   return reply({ok:true,id,...(warnings.length?{warning:warnings.join(' ')}:{})});
  }catch(e){const message=e instanceof Error?e.message:'操作に失敗しました';return reply({error:message},message.includes('管理者')||message.includes('ログイン')||message.includes('権限')?403:400);}
 });
+
