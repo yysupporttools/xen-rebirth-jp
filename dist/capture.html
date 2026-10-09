@@ -3,8 +3,8 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width,initial-scale=1">
-  <title>ゲーム画面読み取り・NPCクエストDB | Xen Rebirth 日本語攻略</title>
-  <meta name="description" content="Xen Rebirthのゲーム画面をブラウザでキャプチャし、NPC・マップ・クエストの英文と日本語訳を共有・検索できます。">
+  <title>NPC会話の自動翻訳・検索｜Xen Rebirth 日本語攻略</title>
+  <meta name="description" content="NPCとの英語の会話を日本語に自動翻訳。ゲーム画面を共有して訳文を確認し、保存した会話やクエストをNPC名・マップ名から検索できます。">
   <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='6' fill='%230d2630'/%3E%3Cpath d='M8 7L24 25M24 7L8 25' stroke='%23e5bd77' stroke-width='4'/%3E%3C/svg%3E">
   <link rel="stylesheet" href="assets/style.css">
   <link rel="stylesheet" href="assets/capture.css?v=11">
@@ -15,10 +15,11 @@
   <script defer src="https://cdn.jsdelivr.net/npm/tesseract.js@5/dist/tesseract.min.js"></script>
   <script defer src="assets/world-routes.js?v=3"></script>
   <script defer src="assets/map-registry.js?v=1"></script>
-  <script defer src="assets/capture.js?v=32"></script>
+  <script defer src="assets/map-location.js?v=1"></script>
+  <script defer src="assets/capture.js?v=33"></script>
   <script defer src="assets/map-companion.js?v=1"></script>
   <link rel="stylesheet" href="assets/map-companion.css?v=1">
-  <script defer src="assets/saved-items.js?v=7"></script>
+  <script defer src="assets/saved-items.js?v=8"></script>
 <script defer src="assets/visitor-counter.js?v=1"></script><link rel="stylesheet" href="assets/random-monsters.css?v=1"/><script defer src="assets/random-monsters.js?v=2"></script><link rel="stylesheet" href="assets/report-issues.css?v=5"></head>
 <body>
 <a class="skip" href="#main">本文へ移動</a>
@@ -34,10 +35,12 @@
 
 <main id="main">
   <div class="page-intro">
-    <p class="eyebrow">SCREEN CAPTURE / COMMUNITY DATABASE</p>
-    <h1>ゲーム画面読み取り・NPCクエストDB</h1>
-    <p>Xen Rebirthの画面をブラウザから共有して、NPC名・マップ名・クエスト英文・日本語訳・報酬を蓄積できます。専用ツールのインストールは不要です。</p>
+    <p class="eyebrow">NPC DIALOGUE TRANSLATION</p>
+    <h1>NPC会話の自動翻訳・検索</h1>
+    <p>ゲーム画面を共有して自動解析をONにすると、NPCとの英語の会話を日本語に自動翻訳します。翻訳した会話やクエスト情報は保存でき、あとからNPC名やマップ名で検索できます。</p>
   </div>
+
+  <p class="note" id="capture-nav-link"><a class="button" href="map.html">マップナビを開く</a>　認識した現在マップをナビへ共有します。画面共有と自動解析を有効にして拡大マップを開くと、画像とNPC座標も収集します。NPCの会話を閉じて地図を表示してください。</p>
 
   <section class="paper capture-section" id="capture-source-section">
     <div class="section-heading"><div><p class="eyebrow">CAPTURE</p><h2>1. ゲーム画面を取り込む</h2></div><span>PC推奨</span></div>

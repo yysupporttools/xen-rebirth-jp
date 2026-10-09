@@ -2,7 +2,7 @@
   'use strict';
   const KEY = 'xenRebirthSavedItemsV1';
   const base = new URL('./', location.href);
-  const allowed = new Set(['index.html','start.html','classes.html','class-change.html','class-archer.html','class-cleric.html','class-knight.html','class-mage.html','class-rogue.html','class-templar.html','systems.html','quests.html','events.html','bosses.html','tools.html','glossary.html','board.html','sources.html','search.html','capture.html','favorites.html','rules.html','story.html','level-guide.html','monsters.html']);
+  const allowed = new Set(['index.html','start.html','classes.html','class-change.html','class-archer.html','class-cleric.html','class-knight.html','class-mage.html','class-rogue.html','class-templar.html','systems.html','quests.html','events.html','bosses.html','tools.html','glossary.html','board.html','sources.html','search.html','capture.html','favorites.html','rules.html','story.html','level-guide.html','monsters.html','map.html']);
   const buttons = new Map();
   let currentPage = null;
   let sideRail = null;
@@ -44,7 +44,7 @@
     icon.type = 'image/webp';
 
     const currentFile = location.pathname.split('/').pop() || 'index.html';
-    const removeFiles = new Set(['search.html','bosses.html','tools.html','capture.html','favorites.html','rules.html','reports.html','guild.html','admin.html']);
+    const removeFiles = new Set(['search.html','bosses.html','tools.html','capture.html','favorites.html','rules.html','reports.html','guild.html','admin.html','map.html']);
     [...nav.querySelectorAll('a')].forEach(link => {
       try {
         const file = new URL(link.href, location.href).pathname.split('/').pop();
@@ -59,7 +59,7 @@
     toolsButton.className = 'site-tools-toggle';
     toolsButton.setAttribute('aria-expanded','false');
     toolsButton.textContent = '便利機能';
-    if (['bosses.html','tools.html','capture.html'].includes(currentFile)) toolsButton.classList.add('is-current');
+    if (['bosses.html','tools.html','capture.html','map.html'].includes(currentFile)) toolsButton.classList.add('is-current');
 
     const toolsPanel = document.createElement('div');
     toolsPanel.className = 'site-tools-panel';
@@ -67,7 +67,8 @@
     [
       ['bosses.html','ボスタイマー','出現予定を確認'],
       ['tools.html','精錬ツール','精錬データ・計算'],
-      ['capture.html','翻訳・NPC検索','ゲーム画面から検索'],    ].forEach(([href,title,sub]) => {
+      ['capture.html','翻訳・NPC検索','NPCの会話を自動翻訳・検索'],
+      ['map.html','マップナビ','行先・NPC・モンスターへ案内'],    ].forEach(([href,title,sub]) => {
       const a = document.createElement('a');
       a.href = href;
       a.innerHTML = '<strong>'+title+'</strong><small>'+sub+'</small>';
@@ -138,7 +139,7 @@
   }
 
   setupSiteHeader();
-  if (['admin.html','reports.html','guild.html'].includes(location.pathname.split('/').pop())) return;
+  if (['admin.html','reports.html','guild.html','map.html'].includes(location.pathname.split('/').pop())) return;
 
   function clean(record) {
     if (!record || typeof record.url !== 'string' || typeof record.title !== 'string') return null;
@@ -302,7 +303,7 @@
     if(!record) return;
     const url=new URL(record.url,base),file=url.pathname.split('/').pop();
     const article=file+(['glossary.html','quests.html'].includes(file)?url.hash:'');
-    if(['index.html','search.html','favorites.html','board.html','capture.html','sources.html','tools.html','reports.html','guild.html','admin.html'].includes(file)) return;
+    if(['index.html','search.html','favorites.html','board.html','capture.html','sources.html','tools.html','reports.html','guild.html','admin.html','map.html'].includes(file)) return;
     if(popularSeen.has(article))return;
     popularSeen.add(article);requestPopular(article);
   }

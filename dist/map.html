@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>マップナビ | Xen Rebirth 日本語攻略</title>
+<meta name="description" content="現在のマップから目的地やNPC、モンスターの出現マップまで案内。保存されたゲーム内拡大マップに目印を表示できます。">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='6' fill='%230d2630'/%3E%3Cpath d='M8 7L24 25M24 7L8 25' stroke='%23e5bd77' stroke-width='4'/%3E%3C/svg%3E">
+<link rel="stylesheet" href="assets/style.css"><link rel="stylesheet" href="assets/saved-items.css?v=5">
+<link rel="stylesheet" href="assets/map-navigator.css?v=1"><link rel="stylesheet" href="assets/report-issues.css?v=5">
+<script defer src="assets/vendor/supabase.js"></script><script defer src="assets/glossary-config.js"></script>
+<script defer src="assets/world-routes.js?v=3"></script><script defer src="assets/map-registry.js?v=1"></script>
+<script defer src="assets/map-transports.js?v=1"></script><script defer src="assets/map-navigation.js?v=1"></script>
+<script defer src="assets/map-location.js?v=1"></script><script defer src="assets/map-navigation-data.js?v=1"></script>
+<script defer src="assets/map-navigator.js?v=1"></script><script defer src="assets/saved-items.js?v=8"></script>
+<script defer src="assets/visitor-counter.js?v=1"></script><script defer src="assets/report-issues.js?v=6"></script>
+</head>
+<body>
+<a class="skip" href="#main">本文へ移動</a>
+<header><div class="brand"><a href="index.html"><span class="mark">X</span><span>XEN REBIRTH<small>日本語攻略ガイド</small></span></a><span class="edition">UNOFFICIAL · VER.3</span></div>
+<nav aria-label="メインナビゲーション"><a href="index.html">ホーム</a><a href="start.html">初心者ガイド</a><a href="classes.html">職業・スキル</a><a href="systems.html">ゲームシステム</a><a href="quests.html">クエスト</a><a href="events.html">イベント</a><a href="glossary.html">用語集</a><a href="monsters.html">モンスター図鑑</a><a href="board.html">質問掲示板</a><a aria-current="page" href="map.html">マップナビ</a><a href="bosses.html">ボスタイマー</a><a href="tools.html">精錬ツール</a><a href="capture.html">翻訳・NPC検索</a></nav></header>
+<main id="main" class="map-page">
+<div class="page-intro"><p class="eyebrow">MAP NAVIGATION</p><h1>マップナビ</h1><p>行き先を選ぶと、移動するマップと目印を表示します。NPC名やモンスター名からも目的地を探せます。</p></div>
+<p id="map-load-status" class="map-load-status" role="status" aria-live="polite">保存されたマップを読み込んでいます…</p>
+<div class="map-layout">
+<div class="map-planner">
+<section class="paper map-controls" aria-labelledby="map-plan-title"><h2 id="map-plan-title">どこへ行きますか？</h2>
+<form id="map-plan-form">
+<label>現在のマップ<input id="map-current" list="map-names" maxlength="120" placeholder="例：Essene" autocomplete="off"></label>
+<p id="map-current-status" class="map-help" aria-live="polite">現在のマップを選んでください。</p>
+<label class="map-check"><input id="map-follow" type="checkbox" checked>翻訳・NPC検索で把握した現在地を使う</label>
+<a class="map-capture-link" href="capture.html?nav=1#capture-source-section" target="_blank" rel="noopener">画面共有で現在地を把握 ↗</a>
+<label>行き先のマップ<input id="map-destination" list="map-names" maxlength="120" placeholder="例：Evergal Grove" autocomplete="off"></label>
+<div class="map-level-row"><label>キャラクターLv（任意）<input id="map-level" type="number" min="1" max="300" inputmode="numeric" placeholder="例：80"></label></div>
+<label class="map-check"><input id="map-transports" type="checkbox" checked>トランスポーター・移動NPCを利用する</label>
+<details class="map-extra-conditions"><summary>移動NPCの利用条件</summary><label class="map-check"><input id="map-library-card" type="checkbox">Library Cardを所持している</label><label class="map-check"><input id="map-garcia-quest" type="checkbox">Garciaの前提クエストを完了している</label><label class="map-check"><input id="map-event-weekend" type="checkbox">サーバー時間が土日（Four Seasons Event）</label><p class="map-help">LogatherはLv70以上・Library Card、GarciaはLv100以上・前提クエスト完了が必要です。Four Seasons Eventはサーバー時間の土日限定です。移動料金は行き方欄に表示します。</p></details><button class="map-primary" type="submit">行き方を表示</button>
+</form>
+<datalist id="map-names"></datalist>
+<p id="map-town-note" class="map-help"></p>
+</section>
+<section class="paper map-search" aria-labelledby="map-search-title"><h2 id="map-search-title">NPC・モンスターを探す</h2>
+<label>名前で検索<input id="map-search-input" type="search" placeholder="例：Jarika、Star Bear" autocomplete="off"></label>
+<p id="map-search-status" class="map-help" role="status"></p><div id="map-search-results" class="map-search-results"></div>
+</section>
+<section class="paper map-itinerary" aria-labelledby="map-route-title"><h2 id="map-route-title">行き方</h2><p id="map-route-status" class="map-help" role="status" aria-live="polite">現在のマップと行き先を選んでください。</p><ol id="map-route-steps" class="map-route-steps"></ol></section>
+</div>
+<div class="map-view-column">
+<section class="paper map-view" aria-labelledby="map-view-title">
+<div class="map-view-heading"><div><p class="eyebrow">SAVED GAME MAP</p><h2 id="map-view-title">保存された拡大マップ</h2></div><button id="map-reload" type="button">再読み込み</button></div>
+<div class="map-view-selects"><label>表示するマップ<select id="map-view-select"><option value="">マップを選ぶ</option></select></label><label id="map-variant-label" hidden>画像を切り替える<select id="map-variant-select"></select></label></div>
+<p id="map-guidance" class="map-guidance" aria-live="polite">マップを選ぶとゲーム内画像を表示します。</p>
+<div class="map-toolbar" aria-label="地図の操作">
+<button id="map-zoom-out" type="button" aria-label="地図を縮小">−</button><output id="map-zoom-label" aria-live="polite">100%</output><button id="map-zoom-in" type="button" aria-label="地図を拡大">＋</button><button id="map-reset-view" type="button">全体表示</button>
+<label class="map-check"><input id="map-show-npcs" type="checkbox" checked>NPCの目印</label>
+</div>
+<div id="map-viewport" class="map-viewport" tabindex="0" aria-label="拡大マップ。矢印キーで移動できます。">
+<div id="map-stage" class="map-stage" hidden><img id="map-image" alt="" draggable="false"><svg id="map-arrows" class="map-arrows" viewBox="0 0 1000 1000" preserveAspectRatio="none" aria-hidden="true"></svg><div id="map-pins" class="map-pins"></div></div>
+<div id="map-empty" class="map-empty"><span aria-hidden="true">⌖</span><p id="map-empty-text">マップを選んでください。</p><button id="map-add-image" class="map-primary" type="button" hidden>拡大マップ画像を追加</button></div>
+</div>
+<p id="map-image-status" class="map-help" role="status"></p>
+<div class="map-point-actions"><button id="map-set-position" type="button">地図で現在位置を指定</button><button id="map-set-marker" type="button">案内先の目印を補う</button><button id="map-cancel-point" type="button" hidden>位置指定をやめる</button><button id="map-clear-marker" type="button" hidden>補った目印を削除</button></div>
+<p id="map-point-status" class="map-help" role="status">位置の指定・補った目印は、この端末だけに保存します。</p>
+<div class="map-legend"><span><i class="map-dot current"></i>現在位置</span><span><i class="map-dot destination"></i>目的地・出口</span><span><i class="map-dot npc"></i>NPC</span></div>
+<p class="map-help">矢印は目印までの方向です。壁・通行可否を判定した歩行経路ではありません。NPCの位置は収集した情報に基づく目安です。</p>
+<div id="map-target-info" class="map-target-info"></div>
+</section>
+<section class="paper map-help-panel"><h2>足りないマップを増やす</h2>
+<details><summary>画像を手動で追加する</summary><p>表示するマップを選び、「拡大マップ画像を追加」から、画像を貼り付けるかファイルを選びます。拡大マップ全体だけに切り抜いた画像をご用意ください。登録済みの画像は引き続き利用します。</p></details>
+<details><summary>翻訳・NPC検索を使いながら収集する</summary><ol><li><a href="capture.html?nav=1#capture-source-section" target="_blank" rel="noopener">翻訳・NPC検索を別タブで開く</a>。</li><li>ゲーム画面の共有と自動解析を開始する。</li><li>ゲーム内の拡大マップを開き、NPCの会話ウィンドウを閉じる。</li><li>保存されたら、このページの「再読み込み」で追加情報を確認する。</li></ol><p>共有する画面は翻訳・NPC検索で選択してください。</p></details>
+<details><summary>案内できる範囲について</summary><p>登録済みのマップ接続と、確認されたトランスポーターの行き先を使います。Lvを入力すると、そのLvで利用できる経路に絞ります。未確認の接続や出口位置は推測して表示しません。</p><p>モンスターは出現マップまで案内します。トランスポーターの到着位置やモンスターの座標は未登録です。地図に補った目印は、自分用の目印としてこの端末にだけ保存します。</p></details>
+</section>
+</div>
+</div>
+</main>
+<footer><span>XEN REBIRTH / 日本語攻略ガイド</span><p>プレイヤー向け非公式サイト。ゲームの名称・画像等の権利は各権利者に帰属します。</p><a href="sources.html">出典・更新方針</a></footer>
+<dialog id="map-upload-dialog" class="map-upload-dialog" aria-labelledby="map-upload-title">
+<form id="map-upload-form"><div class="map-dialog-heading"><h2 id="map-upload-title">拡大マップ画像を追加</h2><button id="map-upload-close" type="button" aria-label="閉じる">×</button></div>
+<p id="map-upload-name"></p><div id="map-upload-paste" class="map-upload-paste" tabindex="0"><strong>ここをクリックして Ctrl＋V</strong><span>コピーした画像を貼り付けられます</span></div>
+<label>画像ファイルから選ぶ<input id="map-upload-file" type="file" accept="image/png,image/jpeg,image/webp"></label>
+<figure id="map-upload-preview" hidden><img id="map-upload-preview-image" alt="追加する拡大マップのプレビュー"><figcaption id="map-upload-caption"></figcaption></figure>
+<label class="map-check"><input id="map-upload-cropped" type="checkbox" required>拡大マップ全体だけに切り抜いた画像です</label>
+<p class="map-help">PNG / JPEG / WebP、2MB以内。NPCの名前や各出入口が見えるマップ全体を使用してください。名前に対応した場所か確認して保存します。</p>
+<p id="map-upload-status" role="status" aria-live="polite"></p><div class="map-upload-actions"><button id="map-upload-cancel" type="button">キャンセル</button><button id="map-upload-save" class="map-primary" type="submit">保存</button></div></form>
+</dialog>
+</body></html>
+

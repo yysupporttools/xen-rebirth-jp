@@ -1162,12 +1162,20 @@
   }
 
   function loadLocalMapState(){
+    const shared=window.XenMapLocation&&window.XenMapLocation.read();
+    if(shared){
+      routeCurrentMap=canonicalRouteMapName(shared.map);
+      routeCurrentSource=shared.method||(shared.source==="manual"?"手動補正":"翻訳・NPC検索");
+      routeCurrentConfidence=shared.confidence;
+      if(shared.mapId) activeMapVariantId=shared.mapId;
+      return;
+    }
     try{
       const saved=JSON.parse(localStorage.getItem(LOCAL_MAP_STATE_KEY)||"{}");
       routeCurrentMap=canonicalRouteMapName(saved.map||"");
       routeCurrentSource=String(saved.source||"");
       routeCurrentConfidence=Number(saved.confidence||0);
-      if(routeCurrentSource==="中央マップ名OCR"&&routeCurrentConfidence<90){
+      if(routeCurrentSource!=="手動補正"&&(routeCurrentConfidence<70||(/OCR/i.test(routeCurrentSource)&&routeCurrentConfidence<90))){
         routeCurrentMap="";
         routeCurrentSource="";
         routeCurrentConfidence=0;
@@ -1186,10 +1194,12 @@
     }catch(_){}
   }
 
-  function setLocalCurrentMap(name,source,confidence,force){
+  function setLocalCurrentMap(name,source,confidence,force,mapId){
     const canonical=canonicalRouteMapName(name);
-    if(!canonical) return false;
+    if(!canonical||canonical.length>150||/^(?:unknown|unidentified|none|null|undefined|map|map name|未認識|不明|マップ名不明)$/i.test(canonical)||!Number.isFinite(Number(confidence))) return false;
     const conf=Math.max(0,Math.min(100,Math.round(Number(confidence)||0)));
+    const manualSource=source==="手動補正";
+    if(!manualSource&&(conf<70||(/OCR/i.test(source||"")&&conf<90))) return false;
     if(!force&&routeCurrentMap&&canonical!==routeCurrentMap&&conf<72) return false;
     if(!force&&source==="中央マップ名OCR"&&routeCurrentMap&&canonical!==routeCurrentMap){
       const now=Date.now();
@@ -1207,12 +1217,16 @@
     routeCurrentSource=source||"ローカル認識";
     routeCurrentConfidence=conf;
     saveLocalMapState();
+    if(window.XenMapLocation){
+      const found=gameMaps.find(function(m){return mapId?m.id===mapId:canonicalRouteMapName(m.map_name)===canonical;});
+      window.XenMapLocation.publish({map:canonical,mapId:found?found.id:(mapId||undefined),confidence:conf,source:manualSource?"manual":"capture",method:routeCurrentSource});
+    }
     const manual=$("route-current-manual");
     if(manual&&Array.from(manual.options).some(function(o){return o.value===canonical;})) manual.value=canonical;
     const mapSelect=$("map-db-select");
     if(mapSelect&&gameMaps.length){
       const match=gameMaps.find(function(m){return canonicalRouteMapName(m.map_name)===canonical;});
-      if(match) mapSelect.value=match.id;
+      if(match){mapSelect.value=match.id;if(mapId) activeMapVariantId=mapId;}
     }
     renderRoutePlanner();
     renderMapDatabase();
@@ -1412,7 +1426,7 @@
           }catch(_){continue;}
         }
         nextCache[key]={map_name:map.map_name,bits:bits};
-        out.push({map_name:map.map_name,bits:bits});
+        out.push({map_name:map.map_name,map_id:map.id,bits:bits});
       }
       localMapSignatures=out;
       try{localStorage.setItem(LOCAL_MAP_SIGNATURES_KEY,JSON.stringify(nextCache));}catch(_){}
@@ -1456,7 +1470,7 @@
       sigs.forEach(function(sig){
         distance=Math.min(distance,visualSignatureDistance(sig,item.bits));
       });
-      return {name:item.map_name,distance:distance};
+      return {name:item.map_name,mapId:item.map_id,distance:distance};
     }).sort(function(a,b){return a.distance-b.distance;});
     const best=ranked[0],second=ranked[1];
     lastLocalMapBest=best||null;
@@ -1470,8 +1484,7 @@
     }
     localMapMatchCandidate.at=now;
     if(force||localMapMatchCandidate.hits>=2){
-      setLocalCurrentMap(best.name,"ローカル拡大マップ照合",Math.round((1-best.distance)*100),!!force);
-      return true;
+      return setLocalCurrentMap(best.name,"ローカル拡大マップ照合",Math.round((1-best.distance)*100),!!force,best.mapId);
     }
     return false;
   }
@@ -1520,7 +1533,7 @@
       if(best){
         const ocrConfidence=result&&result.data&&Number.isFinite(Number(result.data.confidence))?Number(result.data.confidence):75;
         const combined=Math.round(Math.min(99,Math.max(72,best.score*78+ocrConfidence*0.22)));
-        setLocalCurrentMap(best.name,"拡大マップ名OCR",combined,true);
+        if(!setLocalCurrentMap(best.name,"拡大マップ名OCR",combined,true)) return false;
         setStatus("route-status","拡大マップ上のマップ名をローカルOCRで認識しました。OpenAI APIは使用していません。");
         return true;
       }
@@ -1612,7 +1625,7 @@
       if(best){
         const ocrConfidence=result&&result.data&&Number.isFinite(Number(result.data.confidence))?Number(result.data.confidence):75;
         const combined=Math.round(Math.min(99,Math.max(70,best.score*75+ocrConfidence*0.25)));
-        setLocalCurrentMap(best.name,"中央マップ名OCR",combined);
+        if(!setLocalCurrentMap(best.name,"中央マップ名OCR",combined)) return;
         setStatus("route-status","中央に表示されたマップ名をローカルOCRで認識しました。OpenAI APIは使用していません。");
       }
     }catch(_){}
@@ -2152,10 +2165,10 @@
       inferredByPattern=true;
     }
 
-    if(!mapName||confidence<70) return false;
+    if(!mapName||/^(?:unknown|unidentified|none|null|undefined|map|map name|未認識|不明|マップ名不明)$/i.test(mapName)||!Number.isFinite(confidence)||confidence<70) return false;
 
     let mapImageUrl="";
-    const existing=gameMaps.find(function(m){return normText(m.map_name)===normText(mapName);});
+    const existing=gameMaps.find(function(m){return normText(m.map_name)===normText(mapName)&&m.source_image_hash===pack.hash;})||gameMaps.find(function(m){return normText(m.map_name)===normText(mapName);});
     if(existing&&existing.map_image_url&&existing.source_image_hash===pack.hash){
       mapImageUrl=existing.map_image_url;
     }else{
@@ -2169,7 +2182,7 @@
     }
 
     const res=await db.rpc("map_analysis_save",{
-      p_map_name:mapWriteName(mapName),
+      p_map_name:existing&&existing.source_image_hash===pack.hash?rawMapName(existing):mapWriteName(mapName),
       p_npcs:npcs,
       p_image_hash:pack.hash,
       p_map_image_url:mapImageUrl,
@@ -2184,6 +2197,8 @@
       mapName+" の拡大マップを保存：NPC "+npcs.length+"件 / 新規観測 "+(info.new_sightings||0)+"件"
     );
     await loadMapData();
+    // Uploaded historical screenshots collect data without becoming live location.
+    if(stream&&isLikelyXenGameFrame()) setLocalCurrentMap(mapName,"拡大マップの保存",confidence,true,info.map_id);
     return true;
   }
 
@@ -2864,6 +2879,30 @@
     applyNpcIndexState();
   }
 
+  function applyRequestedNpcSearch(){
+    let params;
+    try{params=new URL(window.location.href).searchParams;}catch(_){return false;}
+    if(!params.has("npc")&&!params.has("map")) return false;
+    const requestedNpc=String(params.get("npc")||"").trim();
+    const requestedMap=String(params.get("map")||"").trim();
+    if(requestedNpc.length>150||requestedMap.length>150||/[\u0000-\u001f\u007f]/.test(requestedNpc+requestedMap)) return false;
+    const map=canonicalMapName(requestedMap);
+    activeRecordId="";
+    activeNpcName=requestedNpc;
+    dialogueNavStacks.clear();
+    $("knowledge-search").value=requestedNpc;
+    const select=$("map-filter");
+    // A route target with no dialogue must show no result, not another town's NPC.
+    if(map&&!records.some(function(row){return row.map_name===map;})){
+      select.innerHTML+='<option value="'+esc(map)+'">'+esc(map)+'（会話未登録）</option>';
+    }
+    select.value=map;
+    renderRecords();
+    const section=$("npc-database");
+    if(section&&section.scrollIntoView) section.scrollIntoView({behavior:"auto",block:"start"});
+    return true;
+  }
+
   function renderRecords(){
     const word=$("knowledge-search").value.trim().toLowerCase();
     const map=canonicalMapName($("map-filter").value);
@@ -2962,6 +3001,7 @@
       routeCurrentSource="";
       routeCurrentConfidence=0;
       saveLocalMapState();
+      if(window.XenMapLocation) window.XenMapLocation.clear();
       renderRoutePlanner();
       if(stream) localMapRescan();
     }
@@ -2983,6 +3023,20 @@
   syncMiniCaptureStatus();
   loadLocalMapState();
   refreshRouteDestinationOptions();
+  if(window.XenMapLocation) window.XenMapLocation.subscribe(function(current){
+    routeCurrentMap=current?canonicalRouteMapName(current.map):"";
+    routeCurrentSource=current?(current.method||(current.source==="manual"?"手動補正":"翻訳・NPC検索")):"";
+    routeCurrentConfidence=current?current.confidence:0;
+    if(current&&current.mapId) activeMapVariantId=current.mapId;
+    if(current){
+      const map=gameMaps.find(function(m){return current.mapId?m.id===current.mapId:canonicalRouteMapName(m.map_name)===routeCurrentMap;});
+      const select=$("map-db-select");
+      if(map&&select) select.value=map.id;
+    }
+    saveLocalMapState();
+    refreshRouteDestinationOptions();
+    renderMapDatabase();
+  });
 
     $("map-db-select").addEventListener("change",renderMapDatabase);
   $("map-database").addEventListener("click",function(e){
@@ -3086,6 +3140,6 @@
   });
   window.addEventListener("beforeunload",stopScreen);
 
-  Promise.all([loadQuests(),loadNpcProfiles(),loadDialogueTransitions(),loadMapData(),loadRecords()]).catch(function(err){setStatus("capture-status",err.message);});
+  Promise.all([loadQuests(),loadNpcProfiles(),loadDialogueTransitions(),loadMapData(),loadRecords()]).then(applyRequestedNpcSearch).catch(function(err){setStatus("capture-status",err.message);});
 })();
 
