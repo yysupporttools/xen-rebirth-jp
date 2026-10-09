@@ -110,7 +110,6 @@
       show(0);
     }
     publicRoot.append(area);
-    const link = node('a','guild-manage-link','紹介を管理（サイト管理者）'); link.href = 'guild.html'; publicRoot.append(link);
   }
   async function loadPublic() {
     try { renderShowcase(await request('public')); }
@@ -123,9 +122,10 @@
   }
   if (publicRoot) loadPublic();
   if (!adminRoot) return;
-  if (!window.supabase) { $('guild-auth-status').textContent = 'ログイン機能を読み込めませんでした。ページを再読み込みしてください。'; return; }
-  const db = window.supabase.createClient(project,key,{auth:{storageKey:'xen-board-admin',detectSessionInUrl:true}});
-  let session = null, admin = false, authRun = 0, members = [], editingId = null, selectedPhoto = null, previewUrl = '', imageClear = false, photoReadRun = 0, pendingDelete = '';
+  const access=window.XenAdminAccess;
+  if (!access) { $('guild-auth-status').textContent = 'ログイン機能を読み込めませんでした。ページを再読み込みしてください。'; return; }
+  let owner=null,hasData=false,dataRun=0,members=[],editingId=null,selectedPhoto=null,previewUrl='',imageClear=false,photoReadRun=0,pendingDelete='';
+  const current=(run,authEpoch,userId)=>run===dataRun&&access.epoch===authEpoch&&access.state.admin&&access.state.verified&&access.state.user?.id===userId;
   function status(id,message,error=false) { const el=$(id); el.textContent=message; el.classList.toggle('is-error',error); }
   function busy(form,state) { form.querySelectorAll('button,input,textarea').forEach(el => { el.disabled=state; }); }
   function clearPreview() { if (previewUrl) URL.revokeObjectURL(previewUrl); previewUrl=''; }
@@ -167,27 +167,30 @@
     } catch(e) { if(run===photoReadRun)status('guild-member-status',e.message,true); }
     finally { if(run===photoReadRun)$('guild-member-save').disabled=false; }
   }
-  async function sessionChanged() {
-    const run=++authRun; admin=false; $('guild-editor-panel').hidden=true;
-    try {
-      const {data,error}=await db.auth.getSession(); if(error)throw error; if(run!==authRun)return;
-      session=data.session; $('guild-admin-login').hidden=!!session; $('guild-admin-code').hidden=!!session; $('guild-admin-logout').hidden=!session;
-      if(!session){$('guild-auth-status').textContent='サイト管理者としてログインすると編集できます。'; $('guild-member-editor').hidden=true; resetLocalPhoto(); return;}
-      const result=await db.rpc('board_is_admin'); if(result.error)throw result.error; if(run!==authRun)return;
-      admin=result.data===true;
-      $('guild-auth-status').textContent=admin?'サイト管理者としてログイン中':'このアカウントには管理者権限がありません。';
-      if(admin){await loadAdmin();if(run===authRun)$('guild-editor-panel').hidden=false;}
-    }catch(e){if(run===authRun)status('guild-auth-status','ログイン状態を確認できませんでした：'+e.message,true);}
-  }
   function resetLocalPhoto(){photoReadRun++;selectedPhoto=null;clearPreview();}
-  async function token() { if(!admin)throw Error('サイト管理者としてログインしてください。'); const {data,error}=await db.auth.getSession();if(error||!data.session)throw Error('ログインの有効期限が切れました。再ログインしてください。');return data.session.access_token; }
-  async function mutate(action,payload){return request(action,payload,await token());}
+  function clearPrivate(){
+    dataRun++;owner=null;hasData=false;members=[];editingId=null;pendingDelete='';imageClear=false;resetLocalPhoto();
+    $('guild-form').reset();$('guild-member-form').reset();$('guild-member-list').replaceChildren();$('guild-member-count').textContent='';
+    $('guild-photo-preview').hidden=true;$('guild-photo-preview').removeAttribute('src');$('guild-photo-note').textContent='写真はまだ選択されていません。';
+    $('guild-member-editor').hidden=true;$('guild-editor-panel').hidden=true;$('guild-management').hidden=true;
+    if($('guild-delete-dialog').open)$('guild-delete-dialog').close();
+    $('guild-delete-name').textContent='';['guild-auth-status','guild-form-status','guild-list-status','guild-member-status','guild-delete-status'].forEach(id=>status(id,''));
+  }
+  async function mutate(action,payload){
+    const authEpoch=access.epoch,userId=access.state.user?.id,token=await access.getToken();
+    if(access.epoch!==authEpoch||access.state.user?.id!==userId)throw Error('ログイン状態が変わりました。再確認してください。');
+    const data=await request(action,payload,token);
+    if(access.epoch!==authEpoch||!access.state.admin||access.state.user?.id!==userId)throw Error('ログイン状態が変わりました。再確認してください。');
+    return data;
+  }
   async function loadAdmin() {
-    const data=await request('admin',null,await token());
-    if(!admin)return;
+    if(!access.state.admin||!access.state.verified)return;
+    const run=++dataRun,authEpoch=access.epoch,userId=access.state.user.id,token=await access.getToken();
+    if(!current(run,authEpoch,userId))return;
+    const data=await request('admin',null,token);if(!current(run,authEpoch,userId))return;
     const guild=data.guild || {}; members=Array.isArray(data.members)?data.members:[];
     const form=$('guild-form'); form.elements.name.value=guild.name || '';form.elements.intro.value=guild.intro || '';form.elements.guild_level.value=guild.guild_level ?? '';form.elements.member_count.value=guild.member_count ?? '';form.elements.slide_seconds.value=guild.slide_seconds || 8;form.elements.is_published.checked=guild.is_published ?? false;
-    renderMembers();
+    hasData=true;renderMembers();$('guild-management').hidden=false;$('guild-editor-panel').hidden=false;
   }
   function actionButton(label,action){const b=node('button','',label);b.type='button';b.addEventListener('click',action);return b;}
   function renderMembers() {
@@ -210,14 +213,6 @@
     try{await mutate('reorder',{ids});await loadAdmin();status('guild-list-status','表示順を保存しました。');}
     catch(e){status('guild-list-status',e.message,true);renderMembers();}
   }
-  $('guild-admin-login').addEventListener('submit',async e=>{
-    e.preventDefault();busy(e.currentTarget,true);
-    try{const {error}=await db.auth.signInWithOtp({email:$('guild-admin-email').value.trim(),options:{shouldCreateUser:false,emailRedirectTo:new URL('guild.html',location.href).href}});if(error)throw error;status('guild-auth-status','ログインメールを送信しました。メール内のリンクを開くか、確認コードが届いた場合は下の欄に入力してください。');$('guild-admin-code').hidden=false;}
-    catch(error){status('guild-auth-status','メールを送信できませんでした：'+error.message,true);}
-    finally{busy($('guild-admin-login'),false);}
-  });
-  $('guild-admin-code').addEventListener('submit',async e=>{e.preventDefault();busy(e.currentTarget,true);try{const {error}=await db.auth.verifyOtp({email:$('guild-admin-email').value.trim(),token:$('guild-admin-token').value.trim(),type:'email'});if(error)throw error;await sessionChanged();}catch(error){status('guild-auth-status','確認できませんでした：'+error.message,true);}finally{busy($('guild-admin-code'),false);}});
-  $('guild-admin-logout').addEventListener('click',async()=>{await db.auth.signOut();await sessionChanged();});
   $('guild-admin-reload').addEventListener('click',async()=>{try{await loadAdmin();status('guild-list-status','最新の内容を読み込みました。');}catch(e){status('guild-list-status',e.message,true);}});
   $('guild-form').addEventListener('submit',async e=>{
     e.preventDefault();const form=e.currentTarget;const value=new FormData(form);
@@ -251,6 +246,13 @@
   $('guild-member-form').elements.image_url.addEventListener('change',event=>{const url=safeImageUrl(event.target.value);if(url && !selectedPhoto){$('guild-photo-preview').src=url;$('guild-photo-preview').hidden=false;imageClear=false;}});
   $('guild-delete-cancel').addEventListener('click',()=>$('guild-delete-dialog').close());
   $('guild-delete-confirm').addEventListener('click',async()=>{const button=$('guild-delete-confirm');button.disabled=true;try{await mutate('delete_member',{id:pendingDelete});$('guild-delete-dialog').close();if(editingId===pendingDelete){$('guild-member-editor').hidden=true;resetLocalPhoto();}await loadAdmin();status('guild-list-status','メンバー紹介を削除しました。');}catch(e){status('guild-delete-status',e.message,true);}finally{button.disabled=false;}});
-  db.auth.onAuthStateChange((event,nextSession)=>{session=nextSession;if(event!=='TOKEN_REFRESHED')setTimeout(sessionChanged,0);});
-  sessionChanged();
+  access.subscribe(next=>{
+    const id=next.session?.user?.id;
+    if(next.kind==='anonymous'||next.kind==='forbidden'||owner&&id&&owner!==id)clearPrivate();
+    if(!next.admin||!next.verified){dataRun++;$('guild-management').hidden=true;$('guild-editor-panel').hidden=true;if($('guild-delete-dialog').open)$('guild-delete-dialog').close();return;}
+    if(owner!==next.user.id){clearPrivate();owner=next.user.id;}
+    if(hasData){$('guild-management').hidden=false;$('guild-editor-panel').hidden=false;return;}
+    status('guild-auth-status','紹介情報を読み込んでいます…');
+    loadAdmin().then(()=>{if(access.state.admin&&access.state.user?.id===owner)status('guild-auth-status','');}).catch(e=>{if(access.state.admin&&access.state.user?.id===owner)status('guild-auth-status','読み込めませんでした：'+e.message,true);});
+  });
 })();

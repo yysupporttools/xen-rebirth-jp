@@ -31,6 +31,40 @@
   let npcProfiles=[];
   let dialogueTransitions=[];
   let gameMaps=[];
+  let activeMapVariantId="";
+  const mapRegistry=window.XEN_MAP_REGISTRY;
+  const canonicalMapName=function(value){return mapRegistry?mapRegistry.resolve(value):String(value||"").trim();};
+  const canonicalMapRecord=function(row){return mapRegistry?mapRegistry.record(row):row;};
+  const mapGroups=function(){return mapRegistry?mapRegistry.groups(gameMaps):gameMaps.map(function(row){return Object.assign({},row,{map_variants:[row]});});};
+  function rawMapName(row){
+    return String(row.map_name_original||row.map_name||"").trim();
+  }
+  function mapWriteName(value){
+    const canonical=canonicalMapName(value);
+    const existing=gameMaps.filter(function(row){return row.map_name===canonical;}).sort(function(a,b){
+      const aExact=rawMapName(a)===canonical,bExact=rawMapName(b)===canonical;
+      if(aExact!==bExact) return aExact?-1:1;
+      return String(b.updated_at||"").localeCompare(String(a.updated_at||""));
+    })[0];
+    return existing?rawMapName(existing):canonical;
+  }
+  function profileWriteMapName(npc,value){
+    const canonical=canonicalMapName(value);
+    const existing=npcProfiles.find(function(row){return normText(row.npc_name)===normText(npc)&&row.map_name===canonical;});
+    return existing?rawMapName(existing):canonical;
+  }
+  function dialogueReplayRecord(result){
+    const same=function(a,b){return String(a||"").trim().toLowerCase().replace(/\s+/g," ")===String(b||"").trim().toLowerCase().replace(/\s+/g," ");};
+    return records.find(function(row){
+      return row.map_name===canonicalMapName(result.map_name)&&same(row.npc_name,result.npc_name)&&same(row.quest_name_en,result.quest_name_en)&&same(row.english_text,result.english_text);
+    })||null;
+  }
+  function selectedGameMap(){
+    const group=mapGroups().find(function(row){return row.id===$("map-db-select").value;});
+    if(!group) return null;
+    return group.map_variants.find(function(row){return row.id===activeMapVariantId;})||group;
+  }
+
   let mapNpcs=[];
   const dialogueNavStacks=new Map();
   const dialogueHistory=[];
@@ -1005,7 +1039,7 @@
   }
 
   function profileKey(name,map){
-    return normText(name)+"|"+normText(map);
+    return normText(name)+"|"+normText(canonicalMapName(map));
   }
 
   function findNpcProfile(name,map){
@@ -1015,6 +1049,7 @@
 
   async function applyAiResult(result){
     result=cleanTranslations(result);
+    result.map_name=canonicalMapName(result.map_name);
     const f=$("capture-form").elements;
     if(result.screen_type==="expanded_map"){
       if(result.map_name) f.map_name.value=String(result.map_name);
@@ -1023,7 +1058,7 @@
       return;
     }
     const npc=String(result.npc_name||"").trim();
-    let map=String(result.map_name||"").trim();
+    let map=canonicalMapName(result.map_name);
     if(!map&&npc&&lastAiContext.npc_name===npc&&Date.now()-lastAiContext.at<300000){
       map=lastAiContext.map_name||"";
       result.map_name=map;
@@ -1123,27 +1158,7 @@
   }
 
   function canonicalRouteMapName(value){
-    const raw=String(value||"").trim();
-    if(!raw) return "";
-    const data=routeData();
-    const key=mapKey(raw);
-    const alias=(data.aliases||{})[key];
-    if(alias) return alias;
-    const exact=(data.nodes||[]).find(function(name){return mapKey(name)===key;});
-    if(exact) return exact;
-
-    const candidates=Array.from(new Set(
-      (data.nodes||[]).concat(gameMaps.map(function(m){return m.map_name||"";})).filter(Boolean)
-    ));
-    let best=null,second=null;
-    candidates.forEach(function(name){
-      const score=bigramDice(raw,name);
-      const item={name:name,score:score};
-      if(!best||score>best.score){second=best;best=item;}
-      else if(!second||score>second.score) second=item;
-    });
-    if(best&&best.score>=0.74&&(!second||best.score-second.score>=0.035)) return best.name;
-    return raw;
+    return canonicalMapName(value);
   }
 
   function loadLocalMapState(){
@@ -1861,6 +1876,7 @@
 
   function sameDialogueContext(record,result){
     if(normText(record.npc_name)!==normText(result.npc_name)) return false;
+    if(record.map_name&&result.map_name&&canonicalMapName(record.map_name)!==canonicalMapName(result.map_name)) return false;
     const rq=compactUnit(record.quest_name_en||"");
     const nq=compactUnit(result.quest_name_en||"");
     if(rq&&nq&&rq!==nq) return false;
@@ -1897,7 +1913,7 @@
 
     const res=await db.rpc("game_knowledge_merge_fragment",{
       p_record_id:record.id,
-      p_map_name:String(result.map_name||record.map_name||""),
+      p_map_name:rawMapName(record)||canonicalMapName(result.map_name),
       p_dialogue_text_en:en,
       p_dialogue_text_ja:ja,
       p_english_text:fullEn,
@@ -1928,14 +1944,16 @@
 
   async function autoSaveAiResult(result,imageHash){
     result=cleanTranslations(result);
+    result.map_name=canonicalMapName(result.map_name);
 
-    const longMerge=findLongDialogueMerge(result);
+    const replay=dialogueReplayRecord(result);
+    const longMerge=replay?{record:replay,merged:mergeDialogueFragments(replay.dialogue_text_en||replay.english_text||"",result.dialogue_text_en||result.english_text||"")}:findLongDialogueMerge(result);
     if(longMerge){
       return await mergeLongDialogueRecord(longMerge,result,imageHash);
     }
 
     const res=await db.rpc("game_knowledge_auto_save_v2",{
-      p_map_name:String(result.map_name||""),
+      p_map_name:canonicalMapName(result.map_name),
       p_npc_name:String(result.npc_name||""),
       p_quest_name_en:String(result.quest_name_en||""),
       p_quest_name_ja:String(result.quest_name_ja||""),
@@ -2117,7 +2135,7 @@
   async function saveDedicatedMapAnalysis(pack){
     if(!pack||!pack.data||!pack.data.map_visible) return false;
     const result=pack.data;
-    let mapName=String(result.map_name||"").trim();
+    let mapName=canonicalMapName(result.map_name);
     const confidence=Number(result.confidence||0);
     const sourceRegion=validMapRegion(result.panel_region)?result.panel_region:{x:420,y:0,width:580,height:760};
     const savedRegion=canonicalMapRegion(sourceRegion);
@@ -2151,7 +2169,7 @@
     }
 
     const res=await db.rpc("map_analysis_save",{
-      p_map_name:mapName,
+      p_map_name:mapWriteName(mapName),
       p_npcs:npcs,
       p_image_hash:pack.hash,
       p_map_image_url:mapImageUrl,
@@ -2182,7 +2200,7 @@
   async function autoSaveNpcPortrait(result){
     if(!result||result.screen_type!=="npc_dialog") return false;
     const npc=String(result.npc_name||"").trim();
-    const map=String(result.map_name||"").trim();
+    const map=canonicalMapName(result.map_name);
     const region=portraitFallbackRegion(result);
     if(!npc||!validMapRegion(region)||!imageBlob) return false;
     if(findNpcProfile(npc,map)) return false;
@@ -2196,7 +2214,7 @@
     const url=db.storage.from("npc-images").getPublicUrl(path).data.publicUrl||"";
     const saved=await db.rpc("npc_profile_save_image",{
       p_npc_name:npc,
-      p_map_name:map,
+      p_map_name:profileWriteMapName(npc,map),
       p_image_url:url,
       p_contributor_id:contributorId
     });
@@ -2220,7 +2238,7 @@
 
   async function saveMapAnalysis(result,imageHash){
     if(result.screen_type!=="expanded_map") return null;
-    const mapName=String(result.map_name||"").trim();
+    const mapName=canonicalMapName(result.map_name);
     const confidence=Number(result.map_confidence||result.confidence||0);
     const npcs=Array.isArray(result.map_npcs)?result.map_npcs.filter(function(n){
       return n&&String(n.name||"").trim()&&Number(n.confidence||0)>=70;
@@ -2239,7 +2257,7 @@
     }
 
     const res=await db.rpc("map_analysis_save",{
-      p_map_name:mapName,
+      p_map_name:mapWriteName(mapName),
       p_npcs:npcs,
       p_image_hash:imageHash||"",
       p_map_image_url:mapImageUrl,
@@ -2464,7 +2482,7 @@
   async function saveNpcImage(){
     const f=$("capture-form").elements;
     const npc=String(f.npc_name.value||"").trim();
-    const map=String(f.map_name.value||"").trim();
+    const map=canonicalMapName(f.map_name.value);
     if(!npc){setStatus("npc-image-status","先にNPC名を入力してください。");return;}
     if(!npcImageBlob){setStatus("npc-image-status","NPC画像を選択してください。");return;}
     const button=$("npc-image-save");
@@ -2479,7 +2497,7 @@
       const url=db.storage.from("npc-images").getPublicUrl(path).data.publicUrl||"";
       const saved=await db.rpc("npc_profile_save_image",{
         p_npc_name:npc,
-        p_map_name:map,
+        p_map_name:profileWriteMapName(npc,map),
         p_image_url:url,
         p_contributor_id:contributorId
       });
@@ -2517,7 +2535,7 @@
       const fullEn=[dialogEn].concat(choiceEn).filter(Boolean).join("\n");
       const fullJa=[dialogJa].concat(choiceJa).filter(Boolean).join("\n");
       const args={
-        p_map_name:String(fd.get("map_name")||""),
+        p_map_name:canonicalMapName(fd.get("map_name")),
         p_npc_name:String(fd.get("npc_name")||""),
         p_quest_name_en:String(fd.get("quest_name_en")||""),
         p_quest_name_ja:String(fd.get("quest_name_ja")||""),
@@ -2565,7 +2583,7 @@
   async function loadMapData(){
     const mapsRes=await db.from("game_maps").select("*").order("map_name",{ascending:true}).limit(1000);
     const npcsRes=await db.from("map_npcs").select("*,game_maps(map_name,map_image_url)").order("npc_name",{ascending:true}).limit(5000);
-    if(!mapsRes.error) gameMaps=mapsRes.data||[];
+    if(!mapsRes.error) gameMaps=(mapsRes.data||[]).map(canonicalMapRecord);
     if(!npcsRes.error) mapNpcs=npcsRes.data||[];
     const mapSelect=$("map-db-select");
     if(mapSelect&&routeCurrentMap){
@@ -2594,7 +2612,7 @@
     canvas.querySelectorAll(".route-exit-arrow").forEach(function(el){el.remove();});
     if(!currentRoutePlan||currentRoutePlan.path.length<2||!routeCurrentMap) return;
 
-    const shown=gameMaps.find(function(m){return m.id===select.value;});
+    const shown=selectedGameMap();
     if(!shown||canonicalRouteMapName(shown.map_name)!==routeCurrentMap) return;
 
     const next=currentRoutePlan.path[1];
@@ -2652,13 +2670,16 @@
     if(!select||!canvas||!list) return;
 
     const current=select.value;
-    select.innerHTML='<option value="">マップを選択</option>'+gameMaps.map(function(m){
+    const groups=mapGroups();
+    select.innerHTML='<option value="">マップを選択</option>'+groups.map(function(m){
       return '<option value="'+esc(m.id)+'">'+esc(m.map_name)+'</option>';
     }).join("");
-    if(gameMaps.some(function(m){return m.id===current;})) select.value=current;
-    if(!select.value&&gameMaps.length) select.value=gameMaps[0].id;
+    const selectedGroup=groups.find(function(m){return m.map_variants.some(function(v){return v.id===current;});});
+    if(selectedGroup) select.value=selectedGroup.id;
+    if(!select.value&&groups.length) select.value=groups[0].id;
 
-    const map=gameMaps.find(function(m){return m.id===select.value;});
+    const map=selectedGameMap();
+    const group=groups.find(function(m){return m.id===select.value;});
     if(!map){
       canvas.innerHTML='<div class="map-db-empty">まだマップ情報がありません。</div>';
       list.innerHTML="";
@@ -2678,7 +2699,10 @@
     }).join("");
     renderRouteExitArrow();
 
-    list.innerHTML=rows.map(function(n){
+    const variants=group&&group.map_variants.length>1?'<div class="map-capture-variants"><strong>保存済みのマップ画像</strong><p class="small">同じマップの画像を切り替えて確認できます。</p>'+group.map_variants.map(function(v,i){
+      return '<button type="button" data-map-variant="'+esc(v.id)+'" aria-pressed="'+(v.id===map.id?'true':'false')+'">画像 '+(i+1)+(v.id===map.id?'（表示中）':'')+'</button>';
+    }).join("")+'</div>':"";
+    list.innerHTML=variants+rows.map(function(n){
       return '<button type="button" data-map-npc="'+esc(n.npc_name)+'">'+
         '<strong>'+esc(n.npc_name)+'</strong>'+
         '<span>X '+Math.round(Number(n.x_norm))+' / Y '+Math.round(Number(n.y_norm))+'</span>'+
@@ -2690,7 +2714,7 @@
   async function loadNpcProfiles(){
     const res=await db.from("npc_profiles").select("*").order("updated_at",{ascending:false}).limit(1000);
     if(!res.error){
-      npcProfiles=res.data||[];
+      npcProfiles=(res.data||[]).map(canonicalMapRecord);
       if(records.length) renderRecords();
     }
   }
@@ -2787,7 +2811,7 @@
       $("knowledge-results").innerHTML='<p class="notice">データを読み込めませんでした：'+esc(res.error.message)+'</p>';
       return;
     }
-    records=res.data||[];
+    records=(res.data||[]).map(canonicalMapRecord);
     buildFilters();
     renderRecords();
     if(!silent) setStatus("capture-status","");
@@ -2795,7 +2819,7 @@
 
   function buildFilters(){
     const maps=Array.from(new Set(records.map(function(r){return r.map_name||"";}).filter(Boolean))).sort(function(a,b){return a.localeCompare(b,"ja");});
-    const current=$("map-filter").value;
+    const current=canonicalMapName($("map-filter").value);
     $("map-filter").innerHTML='<option value="">すべてのマップ</option>'+maps.map(function(x){return '<option value="'+esc(x)+'">'+esc(x)+'</option>';}).join("");
     $("map-filter").value=maps.includes(current)?current:"";
 
@@ -2842,11 +2866,12 @@
 
   function renderRecords(){
     const word=$("knowledge-search").value.trim().toLowerCase();
-    const map=$("map-filter").value;
+    const map=canonicalMapName($("map-filter").value);
+    const mapWord=canonicalMapName(word).toLowerCase();
     const rows=records.filter(function(r){
       const choices=[].concat(choicesArray(r.choices_en),choicesArray(r.choices_ja)).join(" ");
-      const hay=[r.npc_name,r.map_name,r.quest_name_en,r.quest_name_ja,r.english_text,r.japanese_text,r.dialogue_text_en,r.dialogue_text_ja,choices,r.requirements,r.targets,r.rewards,r.notes].join(" ").toLowerCase();
-      return (!word||hay.includes(word))&&(!map||r.map_name===map);
+      const hay=[r.npc_name,r.map_name,r.map_name_original,r.quest_name_en,r.quest_name_ja,r.english_text,r.japanese_text,r.dialogue_text_en,r.dialogue_text_ja,choices,r.requirements,r.targets,r.rewards,r.notes].join(" ").toLowerCase();
+      return (!word||hay.includes(word)||hay.includes(mapWord))&&(!map||r.map_name===map);
     });
 
     if(!rows.length){
@@ -2952,12 +2977,17 @@
   $("capture-mini-top").addEventListener("click",function(){
     $("capture-source-section").scrollIntoView({behavior:"smooth",block:"start"});
   });
+  const registeredMapNames=$("registered-map-names");
+  if(registeredMapNames&&mapRegistry) registeredMapNames.innerHTML=mapRegistry.names.map(function(name){return '<option value="'+esc(name)+'"></option>';}).join("");
+  $("capture-form").elements.map_name.addEventListener("change",function(){this.value=canonicalMapName(this.value);});
   syncMiniCaptureStatus();
   loadLocalMapState();
   refreshRouteDestinationOptions();
 
     $("map-db-select").addEventListener("change",renderMapDatabase);
   $("map-database").addEventListener("click",function(e){
+    const variant=e.target.closest("[data-map-variant]");
+    if(variant){activeMapVariantId=variant.dataset.mapVariant||"";renderMapDatabase();return;}
     const target=e.target.closest("[data-map-npc]");
     if(!target) return;
     const npc=target.dataset.mapNpc;

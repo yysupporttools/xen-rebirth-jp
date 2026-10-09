@@ -1,5 +1,22 @@
 "use strict";
 (() => {
+ // Supabase already allows this callback path. Forward only to the fixed
+ // management entry before board authentication or thread hash parsing starts.
+ const adminReturnPrefix='#xen-admin-return';
+ const adminReturnKey='xen-admin-login-return-v1';
+ const markedAdminReturn=location.hash===adminReturnPrefix||location.hash.startsWith(adminReturnPrefix+'#');
+ const adminCallbackHash=markedAdminReturn?location.hash.slice(adminReturnPrefix.length).replace(/^#/,''):location.hash.slice(1);
+ const adminCallbackParams=new URLSearchParams(adminCallbackHash);
+ const isAuthCallback=(adminCallbackParams.has('access_token')&&adminCallbackParams.has('refresh_token'))||adminCallbackParams.has('error')||adminCallbackParams.has('error_code');
+ let recentAdminIntent=false;
+ try{const stamp=Number(localStorage.getItem(adminReturnKey));const age=Date.now()-stamp;recentAdminIntent=stamp>0&&age>=0&&age<15*60*1000;if(!recentAdminIntent)localStorage.removeItem(adminReturnKey);}catch{}
+ if((markedAdminReturn&&(isAuthCallback||!adminCallbackHash))||(recentAdminIntent&&isAuthCallback)){
+   try{localStorage.removeItem(adminReturnKey);}catch{}
+   const target=new URL('admin.html',location.href);target.hash=adminCallbackHash;
+   location.replace(target.href);
+   return;
+ }
+
  const $=id=>document.getElementById(id), esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
  const cfg=window.XEN_GLOSSARY_CONFIG, db=window.supabase.createClient(cfg.SUPABASE_URL,cfg.SUPABASE_ANON_KEY,{auth:{storageKey:'xen-board-admin',detectSessionInUrl:true}});
  const keygen=()=>Array.from(crypto.getRandomValues(new Uint8Array(32)),b=>b.toString(16).padStart(2,'0')).join('');

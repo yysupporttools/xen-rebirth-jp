@@ -50,7 +50,7 @@ def add(key, title, text, url, kind, page):
         records.append(dict(key=key,title=clean(title),text=clean(text),url=url,kind=kind,page=page))
 
 for file in sorted(ROOT.glob('*.html')):
-    if file.name in {'search.html','reports.html','guild.html'} or file.name.startswith('google'):continue
+    if file.name in {'search.html','reports.html','guild.html','admin.html'} or file.name.startswith('google'):continue
     tree=Tree(file.read_text(encoding='utf-8')).root
     main=first(tree,{'main'})
     if not main:continue

@@ -14,10 +14,11 @@
   <script defer src="assets/vendor/supabase.js"></script>
   <script defer src="https://cdn.jsdelivr.net/npm/tesseract.js@5/dist/tesseract.min.js"></script>
   <script defer src="assets/world-routes.js?v=3"></script>
-  <script defer src="assets/capture.js?v=31"></script>
+  <script defer src="assets/map-registry.js?v=1"></script>
+  <script defer src="assets/capture.js?v=32"></script>
   <script defer src="assets/map-companion.js?v=1"></script>
   <link rel="stylesheet" href="assets/map-companion.css?v=1">
-  <script defer src="assets/saved-items.js?v=6"></script>
+  <script defer src="assets/saved-items.js?v=7"></script>
 <script defer src="assets/visitor-counter.js?v=1"></script><link rel="stylesheet" href="assets/random-monsters.css?v=1"/><script defer src="assets/random-monsters.js?v=2"></script><link rel="stylesheet" href="assets/report-issues.css?v=4"></head>
 <body>
 <a class="skip" href="#main">本文へ移動</a>
@@ -101,7 +102,7 @@
 
     <form id="capture-form" class="capture-form">
       <div class="two">
-        <label>マップ名<input name="map_name" maxlength="150" placeholder="例：Essene"></label>
+        <label>マップ名<input name="map_name" list="registered-map-names" maxlength="150" placeholder="例：Essene"></label><datalist id="registered-map-names"></datalist>
         <label>NPC名<input name="npc_name" maxlength="150" required placeholder="例：Miracle Researcher"></label>
       </div>
 
@@ -290,5 +291,5 @@
   <a href="sources.html">出典・更新方針</a>
 </footer>
 <script src="assets/bgm-player.js?v=2"></script>
-<script defer src="assets/report-issues.js?v=4"></script></body>
+<script defer src="assets/report-issues.js?v=5"></script></body>
 </html>
