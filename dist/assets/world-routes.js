@@ -17,7 +17,7 @@
   add("Guild Plaza","Arcarinas Square",{dirA:"bottom",dirB:"top"});
   add("Arcarinas Square","Mall Street",{dirA:"left",dirB:"right",exitA:["Mall Street"],exitB:["Arcarinas Square","Arcanias Square"]});
   add("Arcarinas Square","Summer Hill Street",{dirA:"right",dirB:"left",exitA:["Summerhill Street","Summer Hill Street"]});
-  add("Arcarinas Square","Brynhildr Trisects",{dirA:"bottom",dirB:"top",exitA:["Brynhild T-sects","Brynhild Trisects","Brynhildr Trisects"]});
+  add("Arcarinas Square","Brynhildr Trisects",{dirA:"bottom",dirB:"top",exitA:["Brynhild T-sects","Brynhild Trisects","Brynhildr Trisects"],exitB:["Brinhilld","Brynhilld","Brynhild","Arcarinas Square"]});
 
   // Mall Street and Summer Hill Street do not have a downward exit.
   // Guild Plaza's left/right dungeon entrances are intentionally not connected.
@@ -97,6 +97,11 @@
   add("Airship Boarding Gate","Floating Island of Dragons Dock",{kind:"transport",note:"Airship"});
 
   const aliases={
+    "brynhilld":"Arcarinas Square",
+    "brynhild":"Arcarinas Square",
+    "brinhilld":"Arcarinas Square",
+    "brynnhild":"Arcarinas Square",
+    "brynhildr":"Arcarinas Square",
     "toisen plains":"Taisen Plains",
     "taisen plains":"Taisen Plains",
     "costella forest":"Castella Forest",
@@ -137,7 +142,7 @@
   };
 
   window.XEN_WORLD_ROUTES={
-    version:3,
+    version:4,
     source:"Makise Xen Rebirth World Map (user supplied)",
     movement_rule:"orthogonal-explicit-only",
     nodes:Array.from(nodes).sort(function(a,b){return a.localeCompare(b,"en");}),

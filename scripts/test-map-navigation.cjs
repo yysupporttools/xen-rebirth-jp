@@ -16,14 +16,14 @@ check("verified transport lists have exactly 50 directed edges and eight origins
 });
 check("all explicitly provided destination level gates are preserved",()=>{
   const expected={
-    "Essene":{"Brynhilld":1,"Midori Spa":55,"Jotunheim":60,"Abundance Town":30,"Albatross City":35,"Eir":40,"Candy Vault":25},
-    "Brynhilld":{"Essene":16,"Midori Spa":55,"Jotunheim":60,"Abundance Town":30,"Albatross City":35,"Eir":40,"Candy Vault":25},
-    "Abundance Town":{"Essene":16,"Brynhilld":1,"Midori Spa":55,"Jotunheim":60,"Eir":40,"Candy Vault":25},
-    "Midori Spa":{"Essene":16,"Brynhilld":1,"Jotunheim":60,"Yvel":100,"Eir":40,"Candy Vault":25,"Abundance Town":30},
-    "Jotunheim":{"Essene":16,"Brynhilld":1,"Midori Spa":55,"Yvel":100,"Eir":40,"Candy Vault":25,"Abundance Town":30},
+    "Essene":{"Arcarinas Square":1,"Midori Spa":55,"Jotunheim":60,"Abundance Town":30,"Albatross City":35,"Eir":40,"Candy Vault":25},
+    "Arcarinas Square":{"Essene":16,"Midori Spa":55,"Jotunheim":60,"Abundance Town":30,"Albatross City":35,"Eir":40,"Candy Vault":25},
+    "Abundance Town":{"Essene":16,"Arcarinas Square":1,"Midori Spa":55,"Jotunheim":60,"Eir":40,"Candy Vault":25},
+    "Midori Spa":{"Essene":16,"Arcarinas Square":1,"Jotunheim":60,"Yvel":100,"Eir":40,"Candy Vault":25,"Abundance Town":30},
+    "Jotunheim":{"Essene":16,"Arcarinas Square":1,"Midori Spa":55,"Yvel":100,"Eir":40,"Candy Vault":25,"Abundance Town":30},
     "Yvel":{"Jotunheim":60},
-    "Candy Vault":{"Essene":16,"Brynhilld":1,"Midori Spa":55,"Jotunheim":60,"Eir":40,"Abundance Town":30},
-    "Eir":{"Essene":16,"Brynhilld":1,"Midori Spa":55,"Town of Deceased":100,"Jotunheim":60,"Candy Vault":25,"Abundance Town":30,"Albatross City":35,"Oasis":80}
+    "Candy Vault":{"Essene":16,"Arcarinas Square":1,"Midori Spa":55,"Jotunheim":60,"Eir":40,"Abundance Town":30},
+    "Eir":{"Essene":16,"Arcarinas Square":1,"Midori Spa":55,"Town of Deceased":100,"Jotunheim":60,"Candy Vault":25,"Abundance Town":30,"Albatross City":35,"Oasis":80}
   };
   for(const [origin,destinations] of Object.entries(expected)){
     const actual=Object.fromEntries(transports.edges.filter(e=>e.a===origin).map(e=>[e.b,e.minLevel]));
@@ -67,7 +67,7 @@ check("canonical aliases support Japanese and different spellings without floor 
   assert.equal(nav.canonicalMapName("Village of Abundance"),"Abundance Town");
   assert.equal(nav.canonicalMapName("Albatross Village"),"Albatross City");
   assert.equal(nav.canonicalMapName("candyvault"),"Candy Vault");
-  assert.equal(nav.canonicalMapName("Brynhild"),"Brynhilld");
+  assert.equal(nav.canonicalMapName("Brynhild"),"Arcarinas Square");
   assert.notEqual(nav.canonicalMapName("Brynhilld Culvert B1F"),nav.canonicalMapName("Brynhilld Culvert B2F"));
 });
 check("normal world graph retains explicit edges and has no guessed unknown connection",()=>{
@@ -92,14 +92,18 @@ check("optional level retains condition in every step",()=>{
   assert.equal(route.steps[0].minLevel,100);assert.match(route.steps[0].condition,/100/);
   assert.equal(route.steps[0].source,"利用者のゲーム内確認");assert.equal(route.steps[0].landingPointKnown,false);
 });
-check("confirmed source city expansion adds no destination district walking edges",()=>{
+check("merged city aliases retain distinct districts and confirmed Summer Hill departures",()=>{
   const graph=nav.buildGraph(world,[],{transports});
   const edge=graph.get("Arcarinas Square").find(e=>e.to==="Eir"&&e.kind==="transporter");
-  assert.equal(edge.sourceTown,"Brynhilld");assert.equal(edge.minLevel,40);
-  assert.equal(nav.findRoute(graph,"Arcarinas Square","Eir",{level:40}).steps[0].kind,"transporter");
-  assert(!graph.get("Brynhilld").some(e=>e.to==="Arcarinas Square"||e.to==="Summer Hill Street"));
-  assert.equal(nav.findRoute(graph,"Brynhilld","Arcarinas Square",{level:1}),null);
+  assert.equal(edge.sourceTown,"Arcarinas Square");assert.equal(edge.minLevel,40);
+  assert.equal(nav.findRoute(graph,"Brynhilld","Eir",{level:40}).steps[0].kind,"transporter");
+  assert.deepEqual(Array.from(nav.findRoute(graph,"Brinhilld","Arcarinas Square",{level:1}).path),["Arcarinas Square"]);
+  assert(!graph.nodes.includes("Brynhilld"));assert(!graph.get("Arcarinas Square").some(e=>e.to==="Arcarinas Square"));
+  assert(graph.get("Arcarinas Square").some(e=>e.to==="Summer Hill Street"&&e.kind==="normal"));
+  assert(graph.get("Summer Hill Street").some(e=>e.to==="Eir"&&e.kind==="transporter"));
+  assert.deepEqual(Array.from(transports.cityOriginMaps["Arcarinas Square"]),["Summer Hill Street"]);
 });
+
 check("source city transporter uses only exact saved point on Summer Hill variant",()=>{
   const maps=[{id:"summer",map_name:"Summerhill Street",map_image_url:"summer.webp"}];
   const rows=[{id:"npc",map_id:"summer",npc_name:"Transporter",x_norm:"223",y_norm:"340"}];
@@ -400,6 +404,34 @@ check("game-confirmed Taisen Plains preserves Toisen records, routes and reviewe
   const grouped=nav.groupMaps([{id:"raw-toisen-id",map_name:"Toisen Plains",map_image_url:"retained-photo"},{id:"game-taisen-id",map_name:"Taisen Plains",map_image_url:"game-photo"}]);assert.equal(grouped.length,1);
   assert(grouped[0].map_variants.some(row=>row.id==="raw-toisen-id"&&row.map_image_url==="retained-photo"));
   assert.equal(context.XEN_MAP_JAPANESE_NAMES["Taisen Plains"],"タイセン沼地");assert.equal(context.XEN_MAP_JAPANESE_NAMES["Toisen Plains"],undefined);
+});
+
+check("all standalone city spellings resolve directly to the expanded Arcarinas map",()=>{
+  for(const name of ["Brynhilld","Brynhild","Brinhilld","Brynnhild","Brynhildr","ブリンヒルド"]){
+    assert.equal(nav.canonicalMapName(name),"Arcarinas Square");
+    assert.equal(context.XEN_MAP_REGISTRY.aliases[context.XEN_MAP_REGISTRY.key(name)],"Arcarinas Square");
+  }
+  assert(!context.XEN_MAP_REGISTRY.names.includes("Brynhilld"));
+  for(const name of ["Guild Plaza","Mall Street","Summer Hill Street","Lost Brynhilld","Brynhilld Culvert B1F","Brynhildr Trisects"])assert.equal(nav.canonicalMapName(name),name);
+});
+check("merged map default retains the existing Arcarinas image and every original ID",()=>{
+  const rows=[{id:"old-city-id",map_name:"Brynhilld",map_image_url:null,updated_at:"2030-01-01"},{id:"expanded-id",map_name:"Arcarinas Square",map_image_url:"arcarinas-photo",updated_at:"2020-01-01"}];
+  const groups=nav.groupMaps(rows);assert.equal(groups.length,1);assert.equal(groups[0].id,"expanded-id");
+  assert.equal(groups[0].map_image_url,"arcarinas-photo");assert.equal(groups[0].map_variants.length,2);
+  const markers=[{id:"old-npc",map_id:"old-city-id",npc_name:"Guard",x_norm:100,y_norm:200},{id:"expanded-npc",map_id:"expanded-id",npc_name:"Guard",x_norm:800,y_norm:900}];
+  assert.equal(nav.linkedNpcRows(groups[0],markers).length,2);
+  const step={from:"Arcarinas Square",to:"Guard"};
+  assert.equal(nav.selectExit(step,rows[1],markers).x,800);
+});
+check("Trisects entry aliases point to Arcarinas without inventing an exit position",()=>{
+  const graph=nav.buildGraph(world,[],{includeTransports:false});
+  const route=nav.findRoute(graph,"Brynhild Trisects","Brinhilld");
+  assert.deepEqual(Array.from(route.path),["Brynhildr Trisects","Arcarinas Square"]);
+  assert.equal(route.steps[0].direction,"top");
+  const map={id:"trisects",map_name:"Brynhild Trisects"};
+  assert.equal(nav.selectExit(route.steps[0],map,[]),null);
+  const point=nav.selectExit(route.steps[0],map,[{id:"verified-exit",map_id:"trisects",npc_name:"Brinhilld",x_norm:510,y_norm:40}]);
+  assert.equal(point.x,510);assert.equal(point.map_id,"trisects");
 });
 
 console.log("PASS: "+checks+" route, transport, level, canonical map and exact-coordinate checks.");

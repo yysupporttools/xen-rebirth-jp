@@ -1,22 +1,21 @@
 "use strict";
-// Only destinations explicitly confirmed by the owner are registered.
-// Town service origins are supported by stored NPC dialogue, not map-name aliases.
-// No return route, arrival district or landing coordinate is inferred.
-// Event weekends use a manual server-calendar confirmation; no timezone is assumed.
+// Explicit user-confirmed connections only. Brynhilld city labels identify Arcarinas Square.
+// Summer Hill Street remains a distinct map with the confirmed same town departure service.
+// No return route or landing coordinates are inferred.
 (function(root){root.XEN_MAP_TRANSPORTS={
   "version": 1,
   "source": "利用者のゲーム内確認",
   "edges": [
     {
       "a": "Essene",
-      "b": "Brynhilld",
+      "b": "Arcarinas Square",
       "kind": "transporter",
       "directed": true,
       "verified": true,
       "minLevel": 1,
       "condition": "Transporter / Lv1以上",
       "source": "利用者のゲーム内確認",
-      "destinationLabel": "Brynhild",
+      "destinationLabel": "Arcarinas Square",
       "landingPointKnown": false,
       "exitA": []
     },
@@ -99,7 +98,7 @@
       "exitA": []
     },
     {
-      "a": "Brynhilld",
+      "a": "Arcarinas Square",
       "b": "Essene",
       "kind": "transporter",
       "directed": true,
@@ -109,10 +108,11 @@
       "source": "利用者のゲーム内確認",
       "destinationLabel": "Essene",
       "landingPointKnown": false,
-      "exitA": []
+      "exitA": [],
+      "sourceTown": "Arcarinas Square"
     },
     {
-      "a": "Brynhilld",
+      "a": "Arcarinas Square",
       "b": "Midori Spa",
       "kind": "transporter",
       "directed": true,
@@ -122,10 +122,11 @@
       "source": "利用者のゲーム内確認",
       "destinationLabel": "Midori Spa",
       "landingPointKnown": false,
-      "exitA": []
+      "exitA": [],
+      "sourceTown": "Arcarinas Square"
     },
     {
-      "a": "Brynhilld",
+      "a": "Arcarinas Square",
       "b": "Jotunheim",
       "kind": "transporter",
       "directed": true,
@@ -135,10 +136,11 @@
       "source": "利用者のゲーム内確認",
       "destinationLabel": "Jotunheim",
       "landingPointKnown": false,
-      "exitA": []
+      "exitA": [],
+      "sourceTown": "Arcarinas Square"
     },
     {
-      "a": "Brynhilld",
+      "a": "Arcarinas Square",
       "b": "Abundance Town",
       "kind": "transporter",
       "directed": true,
@@ -148,10 +150,11 @@
       "source": "利用者のゲーム内確認",
       "destinationLabel": "Village of Abundance",
       "landingPointKnown": false,
-      "exitA": []
+      "exitA": [],
+      "sourceTown": "Arcarinas Square"
     },
     {
-      "a": "Brynhilld",
+      "a": "Arcarinas Square",
       "b": "Albatross City",
       "kind": "transporter",
       "directed": true,
@@ -161,10 +164,11 @@
       "source": "利用者のゲーム内確認",
       "destinationLabel": "Albatross Village",
       "landingPointKnown": false,
-      "exitA": []
+      "exitA": [],
+      "sourceTown": "Arcarinas Square"
     },
     {
-      "a": "Brynhilld",
+      "a": "Arcarinas Square",
       "b": "Eir",
       "kind": "transporter",
       "directed": true,
@@ -174,10 +178,11 @@
       "source": "利用者のゲーム内確認",
       "destinationLabel": "Eir",
       "landingPointKnown": false,
-      "exitA": []
+      "exitA": [],
+      "sourceTown": "Arcarinas Square"
     },
     {
-      "a": "Brynhilld",
+      "a": "Arcarinas Square",
       "b": "Candy Vault",
       "kind": "transporter",
       "directed": true,
@@ -187,7 +192,8 @@
       "source": "利用者のゲーム内確認",
       "destinationLabel": "Candy Vault",
       "landingPointKnown": false,
-      "exitA": []
+      "exitA": [],
+      "sourceTown": "Arcarinas Square"
     },
     {
       "a": "Abundance Town",
@@ -204,14 +210,14 @@
     },
     {
       "a": "Abundance Town",
-      "b": "Brynhilld",
+      "b": "Arcarinas Square",
       "kind": "transporter",
       "directed": true,
       "verified": true,
       "minLevel": 1,
       "condition": "Transporter / Lv1以上",
       "source": "利用者のゲーム内確認",
-      "destinationLabel": "Brynhild",
+      "destinationLabel": "Arcarinas Square",
       "landingPointKnown": false,
       "exitA": []
     },
@@ -282,14 +288,14 @@
     },
     {
       "a": "Midori Spa",
-      "b": "Brynhilld",
+      "b": "Arcarinas Square",
       "kind": "transporter",
       "directed": true,
       "verified": true,
       "minLevel": 1,
       "condition": "Transporter / Lv1以上",
       "source": "利用者のゲーム内確認",
-      "destinationLabel": "Brynhild",
+      "destinationLabel": "Arcarinas Square",
       "landingPointKnown": false,
       "exitA": []
     },
@@ -373,14 +379,14 @@
     },
     {
       "a": "Jotunheim",
-      "b": "Brynhilld",
+      "b": "Arcarinas Square",
       "kind": "transporter",
       "directed": true,
       "verified": true,
       "minLevel": 1,
       "condition": "Transporter / Lv1以上",
       "source": "利用者のゲーム内確認",
-      "destinationLabel": "Brynhild",
+      "destinationLabel": "Arcarinas Square",
       "landingPointKnown": false,
       "exitA": []
     },
@@ -478,14 +484,14 @@
     },
     {
       "a": "Eir",
-      "b": "Brynhilld",
+      "b": "Arcarinas Square",
       "kind": "transporter",
       "directed": true,
       "verified": true,
       "minLevel": 1,
       "condition": "Transporter / Lv1以上",
       "source": "利用者のゲーム内確認",
-      "destinationLabel": "Brynhild",
+      "destinationLabel": "Arcarinas Square",
       "landingPointKnown": false,
       "levelConfirmation": "確認済み",
       "exitA": []
@@ -603,14 +609,14 @@
     },
     {
       "a": "Candy Vault",
-      "b": "Brynhilld",
+      "b": "Arcarinas Square",
       "kind": "transporter",
       "directed": true,
       "verified": true,
       "minLevel": 1,
       "condition": "Transporter / Lv1以上",
       "source": "利用者のゲーム内確認",
-      "destinationLabel": "Brynhild",
+      "destinationLabel": "Arcarinas Square",
       "landingPointKnown": false,
       "exitA": []
     },
@@ -668,13 +674,12 @@
     }
   ],
   "cityOriginMaps": {
-    "Brynhilld": [
-      "Arcarinas Square",
+    "Arcarinas Square": [
       "Summer Hill Street"
     ]
   },
   "cityOriginEvidence": {
-    "Brynhilld": "登録済みTransporter会話：Arcarinas SquareのTransport service of Brynhild、Summerhill StreetのTransporter Service at Brynhill。到着先区画は未確認。"
+    "Arcarinas Square": "利用者のゲーム内確認：Brynhild Trisects側のBrinhilld入口はArcarinas Squareへ接続。Summer Hill Streetは別地区を維持し、登録済みTransporter会話による同じ行先の出発サービスだけ参照します。到着位置は未確認。"
   },
   "noTransporterTowns": [
     "Oasis",

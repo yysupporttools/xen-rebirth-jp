@@ -26,6 +26,12 @@
 
 同日に提示されたゲーム内MAP画像の「Taisen Plains」も優先し、以前の「Toisen Plains」は別名として保持します。確認済みの旧日本語名「タイセン沼地」の辞書キーはTaisen Plainsへ引き継ぎ、新しい日本語名は推測追加していません。
 
+## BrynhilldとArcarinas Squareの表示統合
+
+2026-10-10の利用者のゲーム内確認で、Brynhild TrisectsからBrinhilldの入口へ入るとArcarinas Squareに接続することを確認しました。独立した仮の町名Brynhilldを一覧から外し、Brynhilld / Brynhild / Brinhilld / Brynnhild / Brynhildr / ブリンヒルドはArcarinas Squareへ直接対応させます。Guild Plaza・Mall Street・Summer Hill Street、Culvert各階層・Lost Brynhilld・Trisectsは別マップとして維持します。
+
+既存のArcarinas Square拡大画像を標準表示にし、元の町名で保存したマップ・NPC写真・座標・会話IDは別画像の登録先も含めて保持します。50件の確認済み片方向転送とLv条件は維持し、Summer Hill Streetは別地区の同じ行先の出発サービスだけを参照します。到着座標・未登録の入口座標は推測していません。データベース上の物理的な行統合・削除・地名変更は行いません。
+
 ## 旧日本語名の補助表示
 
 管理者が提示した旧日本語版の地図から、文字と経路・固有名詞の対応を確認できた100地点の旧日本語名を登録しました。英語のゲーム内マップ名を主表示にし、旧日本語名を補助表示・検索用に使います。現在の公式日本語名や英語名の直訳ではありません。対応や文字が不確かな地点は登録せず、NPC名も翻訳していません。

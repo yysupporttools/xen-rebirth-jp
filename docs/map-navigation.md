@@ -17,7 +17,7 @@
 - Oasis・Albatross Cityにはトランスポーターからの出発経路を設定していません。
 - LogatherのLibrary/B2/B4/roomはLv70以上・Library Card、GarciaのShipdockはLv100以上・前提クエスト完了、Event GuideのAisenはサーバー時間の土日のみです。サーバーの時差を推測しません。
 - Pirates Ship dock・Brynhilld Culvertは拡大マップなしとして、出発NPCや入口・手順を表示します。
-- Brynhilldの転送サービスの出発区画は、保存済み会話で確認できたArcarinas SquareとSummer Hill Streetに限って関連付けています。到着区画・到着座標は未確認です。
+- Arcarinas Square（Brynhilldの別表記を含む）の転送サービスの出発区画は、保存済み会話で確認できたArcarinas SquareとSummer Hill Streetに限って関連付けています。到着区画・到着座標は未確認です。
 - Town of Deceasedは登録済みのVillage of the Deadとの同一性が未確認のため、別の行先として保持しています。
 - 座標は元の地図画像IDに結び付け、未登録の位置や別画像の座標を推測しません。モンスターは出現マップまでの案内です。
 
@@ -30,3 +30,5 @@
 四季イベントの日本語要約は用語集の `four-seasons-event` に登録済みです。参加方法・季節マップ・Sign・交換概要・公式出典を記載しています。
 
 英語のマップ名はゲーム内表記を正とし、確認済みの旧日本語名を併記・検索に使います。旧表記や元の保存IDを保持したまま同じ場所へ統一します。NPCの緑の目印は初期状態OFFで、チェックボックスから表示できます。
+
+Brynhilld・BrinhilldなどはArcarinas Squareへ統一し、Trisects側の入口から既存のArcarinas画像を参照します。Summer Hill Street・Mall Street・Guild Plazaは別地区として保持します。

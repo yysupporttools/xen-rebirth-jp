@@ -75,7 +75,7 @@
   async function load(){
     const warnings=[];
     async function optional(label,promise){try{return await promise;}catch(error){warnings.push(label);return [];}}
-    const catalogPromise=fetch("assets/monsters-data.json?v=2").then(response=>{if(!response.ok)throw Error("モンスター図鑑を読み込めませんでした。");return response.json();});
+    const catalogPromise=fetch("assets/monsters-data.json?v=3").then(response=>{if(!response.ok)throw Error("モンスター図鑑を読み込めませんでした。");return response.json();});
     const [maps,mapNpcs,npcProfiles,knowledge,catalog,monsterUpdates]=await Promise.all([
       readAll("game_maps","*"),
       readAll("map_npcs","id,map_id,npc_name,x_norm,y_norm,confidence,sighting_count,last_seen_at"),
