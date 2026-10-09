@@ -103,6 +103,11 @@
     if(!group)return null;
     return group.map_variants.find(map=>map.id===variantId)||group.map_variants[0];
   }
+  function syncImageActions(){
+    const busy=reloading||uploadSaving;
+    $("map-reload").disabled=busy;
+    $("map-update-image").disabled=busy||!safeImage(selectedMap()?.map_image_url);
+  }
   function buildGraph(){graph=nav.buildGraph(root.XEN_WORLD_ROUTES,data.transitions,{maps:data.maps,mapNpcs:data.mapNpcs,includeTransports:$("map-transports").checked});}
   function noExpandedMap(name){return (root.XEN_MAP_TRANSPORTS?.noExpandedMapMaps||[]).map(canon).includes(canon(name));}
   function names(){
@@ -238,7 +243,7 @@
     $("map-variant-select").value=map?.id||"";
     $("map-stage").hidden=!image;$("map-empty").hidden=!!image;$("map-add-image").hidden=!shown||!!map?.map_image_url||noExpandedMap(shown);
     $("map-update-image").hidden=!image;
-    $("map-update-image").disabled=reloading||uploadSaving;
+    syncImageActions();
     $("map-set-position").disabled=!image;$("map-set-marker").disabled=!image;
     for(const id of ["map-zoom-in","map-zoom-out","map-reset-view"])$(id).disabled=!image;
     $("map-image-status").textContent=(map?.image_source==="manual"?"手動更新の画像を優先表示しています。画像更新後のNPC位置は確認中です。 ":"")+(map?.updated_at?"画像・マップ情報の保存："+new Date(map.updated_at).toLocaleString("ja-JP"):"");
@@ -257,7 +262,7 @@
   }
   async function reload(){
     if(reloading)return;
-    reloading=true;$("map-reload").disabled=true;$("map-load-status").textContent="保存されたマップを読み込んでいます…";
+    reloading=true;syncImageActions();$("map-load-status").textContent="保存されたマップを読み込んでいます…";
     try{
       const fresh=await repo.load();data=fresh;loaded=true;entries=searchEntries(data);buildGraph();
       if(target){const latest=entries.find(entry=>entry.id===target.id);if(latest){const oldPoint=target.point;target={...latest};if(oldPoint)target.point=latest.points.find(row=>row.id===oldPoint.id)||null;$("map-destination").value=target.regionOnly?"":target.map;}}
@@ -273,7 +278,7 @@
       $("map-load-status").classList.add("map-error");
       if(!loaded){buildGraph();renderOptions();renderMap();}
       throw error;
-    }finally{reloading=false;$("map-reload").disabled=false;}
+    }finally{reloading=false;syncImageActions();}
   }
   function sync(state){
     if(!$("map-follow").checked||!state)return;
@@ -355,7 +360,7 @@
     event.preventDefault();if(uploadSaving)return;
     if(!uploadFile){$("map-upload-status").textContent="先に画像を貼り付けるかファイルを選んでください。";return;}
     if(!$("map-upload-cropped").checked){$("map-upload-status").textContent="拡大マップ全体だけに切り抜いた画像であることを確認してください。";return;}
-    uploadSaving=true;const selectedFile=uploadFile,name=uploadName,mode=uploadMode,original=uploadMap;
+    uploadSaving=true;syncImageActions();const selectedFile=uploadFile,name=uploadName,mode=uploadMode,original=uploadMap;
     $("map-upload-save").disabled=true;$("map-upload-cancel").disabled=true;$("map-upload-close").disabled=true;$("map-upload-file").disabled=true;
     $("map-upload-status").textContent="画像を保存しています…";
     try{
@@ -374,7 +379,7 @@
         $("map-upload-status").textContent=error.code==="image_conflict"?"画像が更新されていたため、保存しませんでした。いったん閉じて現在の画像を確認し、「画像を更新」を押し直してください。":"更新結果を確認できませんでした。いったん閉じて現在の画像を確認してください。";
       }
     }
-    finally{uploadSaving=false;$("map-upload-save").disabled=false;$("map-upload-cancel").disabled=false;$("map-upload-close").disabled=false;$("map-upload-file").disabled=false;}
+    finally{uploadSaving=false;syncImageActions();$("map-upload-save").disabled=false;$("map-upload-cancel").disabled=false;$("map-upload-close").disabled=false;$("map-upload-file").disabled=false;}
   }
   $("map-show-npcs").checked=false;
   readPersonal();
