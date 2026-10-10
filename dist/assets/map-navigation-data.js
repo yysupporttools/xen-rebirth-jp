@@ -26,7 +26,18 @@
         if(manualA&&manualB)return (Date.parse(b.updated_at)||0)-(Date.parse(a.updated_at)||0);
         return 0;
       });
-      return {...variants[0],map_variants:variants};
+      // Identical source images do not need separate choices in the navigator.
+      // Keep different images (including same-name maps with different layouts)
+      // separate. Database records and map_id-bound coordinates remain untouched.
+      const seenImages=new Set();
+      const unique=variants.filter(map=>{
+        const fingerprint=String(map.source_image_hash||"").trim().toLowerCase();
+        const identity=fingerprint?"hash:"+fingerprint:map.map_image_url?"url:"+map.map_image_url:"id:"+map.id;
+        if(seenImages.has(identity))return false;
+        seenImages.add(identity);
+        return true;
+      });
+      return {...unique[0],map_variants:unique};
     });
   }
   async function readAll(table,columns,order){
