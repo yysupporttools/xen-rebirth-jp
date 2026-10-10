@@ -243,6 +243,7 @@
     $("map-variant-label").hidden=variants.length<2;
     $("map-variant-select").innerHTML=variants.map((row,i)=>'<option value="'+esc(row.id)+'">画像 '+(i+1)+' · '+esc(mapLabel(row.map_name))+'</option>').join("");
     $("map-variant-select").value=map?.id||"";
+    $("map-add-variant").hidden=!shown||noExpandedMap(shown);
     $("map-stage").hidden=!image;$("map-empty").hidden=!!image;$("map-add-image").hidden=!shown||!!map?.map_image_url||noExpandedMap(shown);
     $("map-update-image").hidden=!actual;
     syncImageActions();
@@ -332,13 +333,13 @@
     $("map-upload-status").textContent="";$("map-upload-status").classList.remove("map-error");
   }
   function openUpload(mode){
-    const map=selectedMap(),updating=mode==="update";
+    const map=selectedMap(),updating=mode==="update",variant=mode==="variant";
     if(!shown||updating&&!map?.map_image_url||!updating&&noExpandedMap(shown))return;
-    uploadReset();uploadMode=updating?"update":"add";uploadName=shown;
+    uploadReset();uploadMode=updating?"update":variant?"variant":"add";uploadName=shown;
     uploadMap=updating?{id:map.id,map_name:map.map_name,map_image_url:map.map_image_url,source_image_hash:map.source_image_hash||"",image_revision:Number(map.image_revision)||0}:null;
-    $("map-upload-title").textContent=updating?"拡大マップ画像を更新":"拡大マップ画像を追加";
+    $("map-upload-title").textContent=updating?"拡大マップ画像を更新":variant?"別マップとして画像を追加":"拡大マップ画像を追加";
     $("map-upload-name").textContent=(updating?"更新するマップ：":"登録先：")+mapLabel(uploadName);
-    $("map-upload-mode-note").textContent=updating?"選択中の画像を、見やすい画像に更新します。手動で更新した画像を優先して表示します。NPCの目印は新しい画像で確認できるまで非表示になります。":"拡大マップ全体が見える画像を追加できます。";
+    $("map-upload-mode-note").textContent=updating?"選択中の画像を、見やすい画像に更新します。手動で更新した画像を優先して表示します。NPCの目印は新しい画像で確認できるまで非表示になります。":variant?"同じ名称の別の場所として登録します。元の画像・NPC位置・入口と出口は変更しません。":"拡大マップ全体が見える画像を追加できます。";
     $("map-upload-original").hidden=!updating;
     if(updating)$("map-upload-original-image").src=safeImage(map.map_image_url);
     else $("map-upload-original-image").removeAttribute("src");
@@ -373,11 +374,11 @@
     $("map-upload-save").disabled=true;$("map-upload-cancel").disabled=true;$("map-upload-close").disabled=true;$("map-upload-file").disabled=true;
     $("map-upload-status").textContent="画像を保存しています…";
     try{
-      const saved=mode==="update"?await repo.updateMap({mapId:original.id,expectedImageUrl:original.map_image_url,expectedImageHash:original.source_image_hash,expectedRevision:original.image_revision,file:selectedFile,cropped:true}):await repo.saveMap({name,file:selectedFile,cropped:true});
+      const saved=mode==="update"?await repo.updateMap({mapId:original.id,expectedImageUrl:original.map_image_url,expectedImageHash:original.source_image_hash,expectedRevision:original.image_revision,file:selectedFile,cropped:true}):await repo.saveMap({name,file:selectedFile,cropped:true,allowVariant:mode==="variant"});
       if(mode==="update")applyImageUpdate(saved,original);
       uploadFile=null;$("map-upload-status").textContent="保存しました。表示を更新しています…";
       $("map-upload-dialog").close();
-      try{await reload();setView(name,mode==="update"?original.id:"");$("map-image-status").textContent=mode==="update"?"画像を更新しました。NPC位置は新しい画像で確認できるまで非表示になります。":"拡大マップ画像を保存しました。";}
+      try{await reload();setView(name,mode==="update"?original.id:saved.map_id||"");$("map-image-status").textContent=mode==="update"?"画像を更新しました。NPC位置は新しい画像で確認できるまで非表示になります。":"拡大マップ画像を保存しました。";}
       catch(_){$("map-load-status").textContent="画像の保存は完了しました。表示の更新だけ失敗しました。「再読み込み」を押してください。";}
      }catch(error){
       $("map-upload-status").textContent="保存できませんでした："+error.message;
@@ -425,6 +426,7 @@
     if(directions[event.key]){event.preventDefault();$("map-viewport").scrollBy({left:directions[event.key][0],top:directions[event.key][1]});}
   });
   $("map-add-image").addEventListener("click",()=>openUpload("add"));
+  $("map-add-variant").addEventListener("click",()=>openUpload("variant"));
   $("map-schematic-add").addEventListener("click",()=>openUpload("add"));
   $("map-update-image").addEventListener("click",()=>openUpload("update"));
   $("map-upload-paste").addEventListener("click",()=>$("map-upload-paste").focus());
