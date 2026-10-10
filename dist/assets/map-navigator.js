@@ -181,6 +181,7 @@
     let text="";
     if(target?.regionOnly)text="地域のみ登録されています。詳細な出現マップを図鑑で確認・登録してください。";
     else if(!current||!destination)text="現在のマップと行き先を選んでください。";
+    else if(ambiguousVariant(current))text="現在地に同名マップが複数あります。画像を選んでください。経路情報はマップ名単位のため、接続が確認されるまで案内を確定できません。";
     else if(!plan){
       const ignoring=nav.findRoute(graph,current,destination,{level:$("map-level").value||null,items:$("map-library-card").checked?["Library Card"]:[],flags:[...($("map-garcia-quest").checked?["garciaQuest"]:[]),...($("map-event-weekend").checked?["fourSeasonsWeekend"]:[])],ignoreLevel:true,ignoreConditions:true});
       text=ignoring?"選択した条件では利用できる経路がありません。"+(ignoring.requiredLevel?" 必要Lv "+ignoring.requiredLevel+"以上。":"")+(ignoring.requiredItems?.length?" 必要アイテム："+ignoring.requiredItems.join("、")+"。":"")+(ignoring.requiredFlags?.includes("garciaQuest")?" Garciaの前提クエスト完了が必要です。":"")+(ignoring.requiredFlags?.includes("fourSeasonsWeekend")?" Four Seasons Eventはサーバー時間の土日限定です。":""):"マップ間の接続が未登録のため、移動経路を案内できません。目的地の画像やNPC位置は確認できます。";
@@ -188,7 +189,7 @@
     else text=plan.steps.length+"区間の移動です。"+($("map-level").value===""&&plan.requiredLevel?" この経路にはLv "+plan.requiredLevel+" 以上の条件があります。":"");
     $("map-route-status").textContent=text;
     $("map-route-status").classList.toggle("map-route-warning",!!plan?.requiredLevel&&$("map-level").value===""||!plan&&!!current&&!!destination);
-    $("map-route-steps").innerHTML=(plan?.path||[]).map((name,i)=>{
+    $("map-route-steps").innerHTML=(ambiguousVariant(current)?[]:plan?.path||[]).map((name,i)=>{
       const step=plan.steps[i],transport=step&&["transporter","transport","npc-transport","event-transport"].includes(step.kind);
       const type=step?(transport?(step.npcName||"トランスポーター・飛行船"):"マップ移動"):"到着";
       const direction=step&&({top:"北側",bottom:"南側",left:"西側",right:"東側","top-right":"右上","top-left":"左上","bottom-right":"右下","bottom-left":"左下"}[step.direction]||"");
@@ -199,7 +200,16 @@
     if(!target){$("map-target-info").innerHTML=plan?.steps.some(step=>step.kind==="event-transport")?'<a href="glossary.html#four-seasons-event">Four Seasons Eventの概要・アイテム交換を見る</a>':"";return;}
     $("map-target-info").innerHTML='<strong>'+(target.kind==="npc"?"NPC":"モンスター")+'：'+esc(target.name)+'</strong><span>'+esc(mapLabel(target.map||target.region||"出現場所未登録"))+(target.regionOnly?"（地域情報・詳細マップ未登録）":target.mapSource==="player"?"（投稿情報）":"")+'</span>'+(target.kind==="monster"?'<a href="monsters.html#'+encodeURIComponent(target.monsterId)+'">図鑑の詳細・ドロップ・必要DEFを見る</a>':'<a href="capture.html?npc='+encodeURIComponent(target.name)+'&amp;map='+encodeURIComponent(target.map)+'#npc-database" target="_blank" rel="noopener">NPCの会話を確認 ↗</a>');
   }
-  function activeGuidance(map){return guidance(map,plan,target,{mapNpcs:data.mapNpcs,markers});}
+  function ambiguousVariant(name){
+    return data.maps.filter(item=>canon(item.map_name)===canon(name)&&!!item.map_image_url).length>1;
+  }
+  function activeGuidance(map){
+    // A name-based route cannot establish which separate image owns the exit.
+    if(map&&ambiguousVariant(map.map_name)&&plan?.steps.some(step=>canon(step.from)===canon(map.map_name))){
+      return {point:null,step:null,text:"同名マップが複数あります。画像を切り替えて現在地を確認してください。接続先がマップIDで検証されるまで出口は案内しません。",missing:""};
+    }
+    return guidance(map,plan,target,{mapNpcs:data.mapNpcs,markers});
+  }
   function position(map){
     const shared=location.read();
     // Persisted coordinates require the exact image context and current map.
@@ -293,7 +303,17 @@
   function sync(state){
     if(!$("map-follow").checked||!state)return;
     $("map-current").value=state.map;currentStatus(state);
-    if(loaded){compute(false);if(!pointMode)setView(state.map,state.mapId||"");}
+    if(loaded){
+      compute(false);
+      if(!pointMode){
+        const candidate=state.mapId&&data.maps.find(map=>map.id===state.mapId&&canon(map.map_name)===canon(state.map));
+        if(candidate)setView(state.map,candidate.id);
+        else if(ambiguousVariant(state.map)){
+          if(canon(shown)!==canon(state.map))setView(state.map);
+          $("map-current-status").textContent="同名の画像が複数あります。現在地は未確定です。「画像を切り替える」で正しい画像を指定してください。";
+        }else setView(state.map);
+      }
+    }
   }
   function pointAction(mode){
     const map=selectedMap();if(!map?.map_image_url)return;
@@ -406,7 +426,14 @@
   $("map-search-results").addEventListener("click",event=>{const button=event.target.closest("button[data-search-entry]");if(button){const entry=entries.find(item=>item.id===button.dataset.searchEntry);if(entry)choose(entry);}});
   $("map-route-steps").addEventListener("click",event=>{const button=event.target.closest("button[data-route-map]");if(button)setView(button.dataset.routeMap);});
   $("map-view-select").addEventListener("change",()=>setView($("map-view-select").value));
-  $("map-variant-select").addEventListener("change",()=>{variantId=$("map-variant-select").value;zoom=1;cancelPoint();renderMap();});
+  $("map-variant-select").addEventListener("change",()=>{
+    variantId=$("map-variant-select").value;zoom=1;cancelPoint();
+    const map=selectedMap();
+    if(map&&canon($("map-current").value)===canon(map.map_name)){
+      location.publish({map:map.map_name,mapId:map.id,source:"manual",confidence:100,method:"map-variant-selection"});
+    }
+    renderMap();renderRoute();
+  });
   $("map-reload").addEventListener("click",()=>reload().catch(()=>{}));
   $("map-image").addEventListener("error",()=>{$("map-stage").hidden=true;$("map-empty").hidden=false;$("map-empty-text").textContent="マップ画像を読み込めませんでした。再読み込みで再度お試しください。";$("map-add-image").hidden=true;$("map-set-position").disabled=true;$("map-set-marker").disabled=true;});
   $("map-image").addEventListener("load",()=>{$("map-stage").hidden=false;$("map-empty").hidden=true;renderPins();});
