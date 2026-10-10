@@ -465,6 +465,18 @@ check("complete Shylphaen MAP connects north Baskerville and east Corlona only",
  const map={id:'shyl-map',map_name:'Sylphaen Forest'};assert.equal(nav.selectExit(north,map,[]),null);assert.equal(nav.selectExit(east,map,[]),null);const point=nav.selectExit(east,map,[{id:'verified-east',map_id:'shyl-map',npc_name:'Corlona Forest',x_norm:980,y_norm:390}]);assert.equal(point.x,980);assert.equal(nav.selectExit(east,{id:'different-crop',map_name:'Shylphaen Forest'},[{map_id:'shyl-map',npc_name:'Corlona Forest',x_norm:980,y_norm:390}]),null);
  assert.equal(context.XenMapJapaneseNames.get('Sylphaen Forest'),'シルバエンの森');assert.equal(context.XenMapJapaneseNames.get('Corlona Forest'),'コルロナの森');assert.equal(nav.canonicalMapName('Sylphaen Forest B1F'),'Sylphaen Forest B1F');assert.equal(world.edges.length,211);assert.equal(transports.edges.length,50);const d=JSON.parse(fs.readFileSync(path.join(__dirname,'../dist/assets/monsters-data.json'),'utf8'));assert.equal(d.monsters.filter(m=>m.map==='Shylphaen Forest').length,6);const refs=d.references.filter(r=>r.map==='Shylphaen Forest');assert.equal(refs.length,2);assert(refs.every(r=>r.name==='Shylphaen Forest'&&r.originalMap==='Sylphaen Forest'));
 });
+check("generic Grave and Entrance are one node without guessed return route",()=>{
+ const graph=nav.buildGraph(world,[],{includeTransports:false});
+ assert.equal(nav.canonicalMapName('Sleepless Grave'),'Sleepless Grave (Entrance)');
+ assert(!graph.nodes.includes('Sleepless Grave'));
+ assert.deepEqual(Array.from(nav.findRoute(graph,'Eir','Sleepless Grave').path),['Eir','Sleepless Grave (Entrance)']);
+ assert(!graph.get('Sleepless Grave (Entrance)').some(e=>e.to==='Eir'));
+ const grouped=nav.groupMaps([{id:'generic-photo',map_name:'Sleepless Grave',map_image_url:'old-photo'},{id:'entrance-photo',map_name:'Sleepless Grave (Entrance)',map_image_url:'entrance-photo'}]);
+ assert.equal(grouped.length,1);assert.equal(grouped[0].map_variants.length,2);assert(grouped[0].map_variants.some(m=>m.id==='generic-photo'));
+ const v={window:{}};vm.runInNewContext(fs.readFileSync(path.join(__dirname,'../dist/assets/map-schematics.js'),'utf8'),v);
+ assert.equal(v.window.XEN_MAP_SCHEMATICS['Sleepless Grave'],undefined);
+ assert(v.window.XEN_MAP_SCHEMATICS['Sleepless Grave (Entrance)'].path.includes('entrance-clean'));
+});
 check("video-confirmed Grave floors stay separate with only observed transitions",()=>{
  const graph=nav.buildGraph(world,[],{includeTransports:false});
  assert.equal(nav.canonicalMapName('Turneit Desert'),'Turmeit Desert');

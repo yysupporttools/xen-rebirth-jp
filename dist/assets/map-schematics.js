@@ -1,15 +1,9 @@
 "use strict";
 window.XEN_MAP_SCHEMATICS={
-  "Sleepless Grave": {
-    "path": "assets/schematics/sleepless-grave.svg?v=1",
-    "label": "Sleepless Grave：入口と最初の到着地点",
-    "scope": "入口の構造図です。Level 1・Level 2の部分構造図は「表示するマップ」で各階層を選べます。",
-    "source": "bandicam 2026-10-10 11-49-23-978.mp4"
-  },
   "Sleepless Grave (Entrance)": {
-    "path": "assets/schematics/sleepless-grave.svg?v=1",
-    "label": "Sleepless Grave：入口の構造図",
-    "scope": "左側が入口の部屋、右側がLevel 1到着地点付近です。奥の門からLevel 1へ進む移動を確認しています。",
+    "path": "assets/schematics/sleepless-grave-entrance-clean.svg?v=1",
+    "label": "Sleepless Grave：EntranceのAI補完地図",
+    "scope": "動画で確認した入口の部屋・奥の門・到着側の通路を、Level 1と同じ見た目で整えた試作です。未撮影の床・壁の細部は推定補完を含みます。入口・出口の印は管理者が手動で配置できます。",
     "source": "bandicam 2026-10-10 11-49-23-978.mp4"
   },
   "Sleepless Grave (Level 1)": {

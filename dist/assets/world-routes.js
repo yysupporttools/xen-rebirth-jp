@@ -72,7 +72,7 @@
   add("Marque Basin","Templar Gorge",{minLevel:90,note:"L90+"});
 
   // Dungeon entrances with a single valid overworld entry.
-  add("Eir","Sleepless Grave",{kind:"dungeon",note:"Eirからのみ入場"});
+  // Generic Sleepless Grave is an alias of Entrance; keep the filmed directed entry only.
   // 2026-10-10 video: observed entry and Level 1 round trip; no unobserved Eir return.
   add("Eir","Sleepless Grave (Entrance)",{kind:"dungeon",directed:true,exitA:["Sleepless Grave"],note:"動画で確認：Sleepless Graveの入口へ移動"});
   add("Sleepless Grave (Entrance)","Sleepless Grave (Level 1)",{kind:"dungeon",dirA:"top",dirB:"bottom",note:"動画で確認：入口の奥の門とLevel 1の戻りポータル"});
@@ -163,7 +163,7 @@
     "turmeit desert":"Turmeit Desert",
     "sleepless grave entrance":"Sleepless Grave (Entrance)",
     "sleepless grave level 1":"Sleepless Grave (Level 1)",
-    "sleepless grave":"Sleepless Grave",
+    "sleepless grave":"Sleepless Grave (Entrance)",
     "sand desert":"Sand Desert Dungeon",
     "sand desert dungeon":"Sand Desert Dungeon",
     "temple of pansidia":"Temple of Pansidia"
