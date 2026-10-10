@@ -90,6 +90,9 @@
   chain(["Shenzhen Canyon","Shenzhen Canyon Entrance","Prophet of Shenzhen","Xiamen Exit","Xiamen Main Gate","Xiamen","Ibarra Canyon Exit","Thorn Basin","Thorny Canyon","Corridor of Thorns","Ibarra Canyon Entrance","Craving Basin Exit","Corridor of Craving","Craving Canyon","Craving Basin Entrance","Yellow Gate"]);
   add("Yellow Gate","Albatross City");
 
+  // User-confirmed: Lava Valley southwest gate leads to Lava Mountain Exit. Return passage not yet verified.
+  add("Lava Valley","Lava Mountain Exit",{verified:true,directed:true,bidirectional:false,dirA:"bottom-left",exitA:["Lava Mountain -Exit-","Lava Mountain Exit"],source:"利用者のゲーム内確認"});
+
   // Dragon area / transport.
   add("Shenzhen Forest","Gefe Camp",{minLevel:125,note:"L125+"});
   add("Gefe Camp","Hidden Dock");
@@ -167,7 +170,7 @@
   };
 
   window.XEN_WORLD_ROUTES={
-    version:7,
+    version:8,
     source:"Makise Xen Rebirth World Map (user supplied)",
     movement_rule:"orthogonal-explicit-only",
     nodes:Array.from(nodes).sort(function(a,b){return a.localeCompare(b,"en");}),

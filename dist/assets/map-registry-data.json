@@ -1,5 +1,5 @@
 {
-  "version": 6,
+  "version": 7,
   "source": "Pre-registered world routes, game-confirmed names, verified capture spelling aliases and reviewed old Japanese map names",
   "names": [
     "Abundance Town",
@@ -108,6 +108,8 @@
     "Kramer Forest",
     "Kryston Forest",
     "Labyrinth",
+    "Lava Mountain Exit",
+    "Lava Valley",
     "Lavy Basin",
     "Lifeline Basin",
     "Linear Forest",
@@ -576,6 +578,8 @@
     "ワイメア峡谷": "Waimea Gorge",
     "ワビン平原": "Wavin Plains",
     "シルバエンの森": "Shylphaen Forest",
-    "コルロナの森": "Corlona Forest"
+    "コルロナの森": "Corlona Forest",
+    "lavavalley": "Lava Valley",
+    "lavamountainexit": "Lava Mountain Exit"
   }
 }
