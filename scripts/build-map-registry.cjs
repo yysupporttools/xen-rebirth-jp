@@ -21,6 +21,7 @@ const verified = {
   'Chingon Plains': 'Clingon Plains',
   'Rosestar Basin': 'Rosetar Basin',
   'Pladino Grove': 'Paladino Grove',
+  'Colrona Forest': 'Corlona Forest',
   'Ashley Forest': 'Ashely Forest',
   'Sylphaen Forest': 'Shylphaen Forest',
   'Arcana Square': 'Arcarinas Square', "Arcana's Square": 'Arcarinas Square', 'Arcania Square': 'Arcarinas Square', "Arcania's Square": 'Arcarinas Square',
