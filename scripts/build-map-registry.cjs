@@ -11,6 +11,10 @@ const aliases = Object.create(null);
 for (const name of names) aliases[key(name)] = name;
 for (const [alias, canonical] of Object.entries(routes.aliases)) aliases[key(alias)] = canonical;
 const verified = {
+  'Pagment Plateau': 'Pamament Plateau',
+  'Vergzium Plateau': 'Verazium Plateau',
+  'Nocefin Plateau': 'Noctein Plateau',
+  'Rekiel Plateau': 'Rekiell Plateau',
   'Arobac Plateau': 'Arobec Plateau',
   'Hellin Plateau': 'Hellein Plateau',
   // Game MAP titles supplied by the site owner take precedence over website spelling.

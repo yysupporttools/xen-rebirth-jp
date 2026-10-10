@@ -32,7 +32,7 @@
   add("Morpheus Forest","Midori Spa",{kind:"special",note:"Midori Spa"});
   chain(["Morpheus Forest","Blackmail Forest","Shudbee Forest","Pindown Valley","Simpson Valley","Sheryle Forest","Nordis Valley","Lost Wedge Valley","Parade Valley","Sherwood Valley","Yvel"]);
   chain(["Bombile Plateau","Anzers Plateau","Siberas Plateau"]);
-  chain(["Bombile Plateau","Monoroby Plateau","Mute Basin","Fies Plateau","Nocefin Plateau","Rekiel Plateau","Vergzium Plateau","Pagment Plateau","Ramia Plateau","Metapolis"]);
+  chain(["Bombile Plateau","Monoroby Plateau","Mute Basin","Fies Plateau","Noctein Plateau","Rekiell Plateau","Verazium Plateau","Pamament Plateau","Ramia Plateau","Metapolis"]);
   add("Yvel","Siberas Plateau",{minLevel:100,note:"L100+"});
   add("Siberas Plateau","Fies Plateau");
   add("Amelia Forest","Mute Basin");
