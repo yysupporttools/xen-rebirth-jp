@@ -13,9 +13,9 @@ window.XEN_MAP_SCHEMATICS={
     "source": "bandicam 2026-10-10 11-57-18-215.mp4"
   },
   "Sand Desert Dungeon": {
-    "path": "assets/schematics/sand-desert-entrance.svg?v=1",
-    "label": "Sand Desert Dungeon：入口待機室",
-    "scope": "Turmeit Desert側から入った部屋とDungeon Guideまでの通路です。ダンジョン本体は動画に映っていません。",
+    "path": "assets/schematics/sand-desert-dungeon-gate-clean.svg?v=1",
+    "label": "Sand Desert Dungeon Gate：動画からの概略図",
+    "scope": "ゲーム内のSand Desert Dungeon Gateの入口待機室です。南側の到着通路から北側の門まで、動画で確認できた範囲を参考に生成しています。門の先のダンジョン内部は未確認で、未撮影の細部は推定補完を含みます。入口・出口の印は管理者が手動で配置できます。",
     "source": "bandicam 2026-10-10 11-54-57-866.mp4"
   },
   "Sleepless Grave (Level 2)": {
