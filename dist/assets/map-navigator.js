@@ -120,6 +120,22 @@
     $("map-view-select").innerHTML='<option value="">マップを選ぶ</option>'+all.map(name=>'<option value="'+esc(name)+'">'+esc(mapLabel(name))+(noExpandedMap(name)?"（拡大マップなし）":data.maps.some(map=>map.map_name===name&&map.map_image_url)?"":schematic(name)?"（動画の部分構造図）":"（画像未登録）")+'</option>').join("");
     $("map-view-select").value=shown;
   }
+  function renderMissingMaps(){
+    const registered=[...new Set((root.XEN_MAP_REGISTRY?.names||[]).map(canon).filter(Boolean))];
+    const existingImages=new Set(data.maps.filter(map=>!!safeImage(map.map_image_url)).map(map=>canon(map.map_name)));
+    const noExpanded=new Set((root.XEN_MAP_TRANSPORTS?.noExpandedMapMaps||[]).map(canon));
+    const eligible=registered.filter(name=>!noExpanded.has(name)).sort((a,b)=>a.localeCompare(b,"ja"));
+    const unregistered=eligible.filter(name=>!existingImages.has(name));
+    const query=key($("map-missing-search").value);
+    const found=unregistered.filter(name=>!query||key(name).includes(query)||key(mapLabel(name)).includes(query));
+    const finished=eligible.length-unregistered.length;
+    const rate=eligible.length?Math.round(finished/eligible.length*100):0;
+    $("map-missing-count").textContent=unregistered.length+"件";
+    $("map-missing-summary").textContent="画像登録済み "+finished+" / "+eligible.length+" 件 · 残り "+unregistered.length+" 件 · "+rate+"%";
+    $("map-missing-progress").value=rate;
+    $("map-missing-results").innerHTML=found.length?found.map(name=>'<button type="button" data-missing-map="'+esc(name)+'"><span>'+esc(mapLabel(name))+'</span><small>画像を追加 ›</small></button>').join(""):'<p class="map-help">'+(query?"一致する未登録マップはありません。":"未登録マップはありません。")+'</p>';
+    $("map-missing-note").textContent="集計は登録対象リストにあるマップ名称単位。別画像・同名マップは重複計上しません。表記違い・ゲーム内に拡大マップがない場所は確認が必要です。";
+  }
   function currentStatus(state){
     const current=$("map-current").value.trim();
     if(!current){$("map-current-status").textContent="現在のマップを選んでください。";return;}
@@ -290,7 +306,7 @@
       if($("map-follow").checked&&state)$("map-current").value=state.map;
       if(!shown)shown=canon($("map-current").value||data.mapGroups.find(map=>map.map_name==="Essene")?.map_name||data.mapGroups[0]?.map_name||"");
       const selected=selectedMap();if(selected)variantId=selected.id;
-      compute(false);renderSearch();
+      compute(false);renderSearch();renderMissingMaps();
       $("map-load-status").textContent=data.mapGroups.length+"マップの画像情報・"+data.mapNpcs.length+"件の位置情報を読み込みました。"+(data.warnings.length?" "+data.warnings.join(" "):"");
       $("map-load-status").classList.remove("map-error");
     }catch(error){
@@ -423,6 +439,13 @@
   $("map-event-weekend").addEventListener("change",()=>compute(false));
   $("map-destination").addEventListener("change",()=>{target=null;compute(false);});
   $("map-search-input").addEventListener("input",renderSearch);
+  $("map-missing-search").addEventListener("input",renderMissingMaps);
+  $("map-missing-results").addEventListener("click",event=>{
+    const button=event.target.closest("button[data-missing-map]");
+    if(!button)return;
+    setView(button.dataset.missingMap);
+    openUpload("add");
+  });
   $("map-search-results").addEventListener("click",event=>{const button=event.target.closest("button[data-search-entry]");if(button){const entry=entries.find(item=>item.id===button.dataset.searchEntry);if(entry)choose(entry);}});
   $("map-route-steps").addEventListener("click",event=>{const button=event.target.closest("button[data-route-map]");if(button)setView(button.dataset.routeMap);});
   $("map-view-select").addEventListener("change",()=>setView($("map-view-select").value));

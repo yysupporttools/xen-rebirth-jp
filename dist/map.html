@@ -7,12 +7,12 @@
 <meta name="description" content="現在のマップから目的地やNPC、モンスターの出現マップまで案内。保存されたゲーム内拡大マップに目印を表示できます。">
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='6' fill='%230d2630'/%3E%3Cpath d='M8 7L24 25M24 7L8 25' stroke='%23e5bd77' stroke-width='4'/%3E%3C/svg%3E">
 <link rel="stylesheet" href="assets/style.css"><link rel="stylesheet" href="assets/saved-items.css?v=5">
-<link rel="stylesheet" href="assets/map-navigator.css?v=4"><link rel="stylesheet" href="assets/report-issues.css?v=5">
+<link rel="stylesheet" href="assets/map-navigator.css?v=5"><link rel="stylesheet" href="assets/report-issues.css?v=5">
 <script defer src="assets/vendor/supabase.js"></script><script defer src="assets/glossary-config.js"></script>
 <script defer src="assets/world-routes.js?v=8"></script><script defer src="assets/map-registry.js?v=6"></script><script defer src="assets/map-japanese-names.js?v=2"></script>
 <script defer src="assets/map-transports.js?v=2"></script><script defer src="assets/map-navigation.js?v=1"></script>
 <script defer src="assets/map-schematics.js?v=2"></script><script defer src="assets/map-name-corrections.js?v=1"></script><script defer src="assets/map-location.js?v=1"></script><script defer src="assets/map-navigation-data.js?v=6"></script>
-<script defer src="assets/map-navigator.js?v=10"></script><script defer src="assets/map-portals.js?v=1"></script><script defer src="assets/saved-items.js?v=8"></script>
+<script defer src="assets/map-navigator.js?v=11"></script><script defer src="assets/map-portals.js?v=1"></script><script defer src="assets/saved-items.js?v=8"></script>
 <script defer src="assets/visitor-counter.js?v=1"></script><script defer src="assets/report-issues.js?v=6"></script>
 </head>
 <body>
@@ -20,7 +20,7 @@
 <header><div class="brand"><a href="index.html"><span class="mark">X</span><span>XEN REBIRTH<small>日本語攻略ガイド</small></span></a><span class="edition">UNOFFICIAL · VER.3</span></div>
 <nav aria-label="メインナビゲーション"><a href="index.html">ホーム</a><a href="start.html">初心者ガイド</a><a href="classes.html">職業・スキル</a><a href="systems.html">ゲームシステム</a><a href="quests.html">クエスト</a><a href="events.html">イベント</a><a href="glossary.html">用語集</a><a href="monsters.html">モンスター図鑑</a><a href="board.html">質問掲示板</a><a aria-current="page" href="map.html">マップナビ</a><a href="bosses.html">ボスタイマー</a><a href="tools.html">精錬ツール</a><a href="capture.html">翻訳・NPC検索</a></nav></header>
 <main id="main" class="map-page">
-<div class="page-intro"><p class="eyebrow">MAP NAVIGATION</p><h1>マップナビ</h1><p>行き先を選ぶと、移動するマップと目印を表示します。NPC名やモンスター名からも目的地を探せます。</p><p class="map-help">確認できた地名には、旧版の資料にある日本語名を「旧日本語名」として併記しています。</p></div>
+<div class="page-intro"><p class="eyebrow">MAP NAVIGATION</p><h1>マップナビ</h1><p>行き先を選ぶと、移動するマップと目印を表示します。NPC名やモンスター名からも目的地を探せます。</p><p class="map-help">確認できた地名には、旧版の資料にある日本語名を括弧内に併記しています。</p></div>
 <p id="map-load-status" class="map-load-status" role="status" aria-live="polite">保存されたマップを読み込んでいます…</p>
 <div class="map-layout">
 <div class="map-planner">
@@ -41,6 +41,19 @@
 <section class="paper map-search" aria-labelledby="map-search-title"><h2 id="map-search-title">NPC・モンスターを探す</h2>
 <label>名前・地名で検索<input id="map-search-input" type="search" placeholder="例：Jarika、Star Bear、エスネ" autocomplete="off"></label>
 <p id="map-search-status" class="map-help" role="status"></p><div id="map-search-results" class="map-search-results"></div>
+</section>
+<section class="paper map-missing" aria-labelledby="map-missing-heading">
+<details id="map-missing-details">
+<summary id="map-missing-heading"><strong>未登録マップ一覧</strong><span id="map-missing-count">読み込み中…</span></summary>
+<div class="map-missing-body">
+<p id="map-missing-summary" class="map-help" aria-live="polite">登録状況を確認しています…</p>
+<progress id="map-missing-progress" value="0" max="100" aria-label="マップ画像の登録率"></progress>
+<label for="map-missing-search">未登録のマップを検索</label>
+<input id="map-missing-search" type="search" placeholder="英語名・日本語名で検索" autocomplete="off">
+<div id="map-missing-results" class="map-missing-results" aria-live="polite"></div>
+<p id="map-missing-note" class="map-help">登録対象マップを読み込み中です。</p>
+</div>
+</details>
 </section>
 <section class="paper map-itinerary" aria-labelledby="map-route-title"><h2 id="map-route-title">行き方</h2><p id="map-route-status" class="map-help" role="status" aria-live="polite">現在のマップと行き先を選んでください。</p><ol id="map-route-steps" class="map-route-steps"></ol></section>
 </div>
