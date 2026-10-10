@@ -11,7 +11,7 @@
     if(!labelMemo.has(name)){
       if(labelMemo.size>4096)labelMemo.clear();
       const old=Object.prototype.hasOwnProperty.call(memoDictionary||{},name)&&typeof memoDictionary[name]==="string"?memoDictionary[name]:"";
-      labelMemo.set(name,old?name+"（旧日本語名："+old+"）":name);
+      labelMemo.set(name,old?name+"（"+old+"）":name);
     }
     return labelMemo.get(name);
   }
