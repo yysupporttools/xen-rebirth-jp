@@ -47,8 +47,13 @@
   add("Witchwood Forest","Grudin Forest");
 
   // Central green routes into Essene.
-  chain(["Gaudy Forest","Baskerville Forest","Sylphaen Forest","Berdena Forest","Colorado Forest","Engrave Path","Essene"]);
-  chain(["Baskerville Forest","Lavy Basin","Ashley Forest","Onix Hill","Pladino Grove","Engrave Path"]);
+  add("Gaudy Forest","Baskerville Forest");
+  // Complete game MAP confirms north Baskerville and east Corlona only.
+  add("Baskerville Forest","Shylphaen Forest",{dirB:"top",exitB:["Baskerville Forest"],verified:true,source:"利用者のゲーム内MAP確認（2026-10-10）"});
+  add("Shylphaen Forest","Corlona Forest",{dirA:"right",exitA:["Corlona Forest"],exitB:["Shylphaen Forest","Sylphaen Forest"],verified:true,source:"利用者のゲーム内MAP確認（2026-10-10）"});
+  // Prior Sylphaen–Berdena connection is omitted pending confirmation.
+  chain(["Berdena Forest","Colorado Forest","Engrave Path","Essene"]);
+  chain(["Baskerville Forest","Lavy Basin","Ashely Forest","Onix Hill","Paladino Grove","Engrave Path"]);
   chain(["Ashton Basin","Brolly Basin","Ashmon Hills","Bairyn Forest","Sudden Hill","Malian Forest","Trakian Path","Saifield Forest","Kastled Grove","Essene"]);
   add("Abundance Town","Ashmon Hills");
   chain(["Essene","Evergal Grove","Crossevon Path","Vriely Grove","Meryle Wood","Wavin Plains","Crosby Plains","Aristone Plains","Harquil Plains","Albatross City"]);
@@ -60,7 +65,7 @@
   add("Chanthery Gorge","Clipper Plains",{minLevel:66,note:"L66+"});
 
   // South-east / Eir.
-  chain(["Clipper Plains","Elwood Plains","Hiroshi Gorge","Bailey Plains","Hooters Plains","Tolkin Gorge","Rosestar Basin","Pharaday Gorge","Lifeline Basin","Chingon Plains"]);
+  chain(["Clipper Plains","Elwood Plains","Hiroshi Gorge","Bailey Plains","Hooters Plains","Tolkin Gorge","Rosetar Basin","Pharaday Gorge","Lifeline Basin","Clingon Plains"]);
   add("Bailey Plains","Eir");
   chain(["Eir","Darive Plains","Vanderull Plains","Templar Gorge","Celephane Gorge"]);
   add("Eir","Marque Basin");
@@ -97,6 +102,16 @@
   add("Airship Boarding Gate","Floating Island of Dragons Dock",{kind:"transport",note:"Airship"});
 
   const aliases={
+    "sylphaen forest":"Shylphaen Forest",
+    "shylphaen forest":"Shylphaen Forest",
+    "pladino grove":"Paladino Grove",
+    "paladino grove":"Paladino Grove",
+    "ashley forest":"Ashely Forest",
+    "ashely forest":"Ashely Forest",
+    "rosestar basin":"Rosetar Basin",
+    "rosetar basin":"Rosetar Basin",
+    "chingon plains":"Clingon Plains",
+    "clingon plains":"Clingon Plains",
     "brynhilld":"Arcarinas Square",
     "brynhild":"Arcarinas Square",
     "brinhilld":"Arcarinas Square",
@@ -142,7 +157,7 @@
   };
 
   window.XEN_WORLD_ROUTES={
-    version:4,
+    version:5,
     source:"Makise Xen Rebirth World Map (user supplied)",
     movement_rule:"orthogonal-explicit-only",
     nodes:Array.from(nodes).sort(function(a,b){return a.localeCompare(b,"en");}),

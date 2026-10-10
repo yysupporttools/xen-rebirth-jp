@@ -191,7 +191,7 @@ async function addImage(req:Request,data:Record<string,unknown>){
    await rpc('site_feedback_monster_image_attach',{p_id:id,p_path:privateCopy});
    publicCopy=`${id}/${crypto.randomUUID()}.${image.extension}`;await uploadImage('monster-images',publicCopy,image);imageUrl=publicImageUrl(publicCopy);
   }
-  await rpc('site_feedback_publish_image',{p_id:id,p_image_url:imageUrl,p_public_image_path:publicCopy});
+  await rpc('site_feedback_publish_owned_image',{p_id:id,p_image_url:imageUrl,p_public_image_path:publicCopy,p_owner_hash:await imageOwnerHash(data.visitor)});
   return reply({ok:true,id,image_url:imageUrl,publication_mode:'immediate'});
  }catch(error){
   if(publicCopy){const committed=await discardUnpublishedCopy(id,publicCopy);if(committed)return reply({ok:true,id,image_url:(committed.details as Record<string,unknown>).image_url,publication_mode:'immediate'});}
@@ -220,6 +220,31 @@ async function saveDetails(req:Request,data:Record<string,unknown>){
  return reply({ok:true,id,publication_mode:'immediate_details',details:patch});
 }
 
+
+const imageUuid=/^[a-f0-9]{8}-[a-f0-9]{4}-4[a-f0-9]{3}-[89ab][a-f0-9]{3}-[a-f0-9]{12}$/i;
+async function imageOwnerHash(value:unknown){
+ if(!imageUuid.test(String(value||'')))throw Error('ブラウザ識別子が無効です');
+ return await hash('image-owner:'+String(value).toLowerCase());
+}
+async function imageActor(req:Request){if(!req.headers.get('Authorization'))return null;try{return await admin(req);}catch{return null;}}
+async function imagePermissions(req:Request,data:Record<string,unknown>){
+ const mid=string(data.monster_id,160,true);if(!/^[a-z0-9_-]{1,160}$/.test(mid)||data.honeypot)throw Error('入力が無効です');
+ if(!Array.isArray(data.ids)||data.ids.length>100||data.ids.some(id=>typeof id!=='string'||!imageUuid.test(id)))throw Error('画像の登録番号を確認してください');
+ const owner=await imageOwnerHash(data.visitor),actor=await imageActor(req);
+ const permissions=await Promise.all([...new Set(data.ids)].map(async id=>{
+  const row=await rpc('site_feedback_get',{p_id:id}) as Record<string,unknown>|null;
+  return {id,can_delete:!!row&&row.kind==='monster'&&row.category==='image'&&row.monster_id===mid&&row.status==='published'&&
+   Boolean((row.details as Record<string,unknown>)?.image_url)&&(actor!==null||row.image_owner_hash===owner)};
+ }));
+ return reply({permissions,is_admin:actor!==null});
+}
+async function deleteImage(req:Request,data:Record<string,unknown>){
+ if(data.honeypot||!imageUuid.test(String(data.id||'')))throw Error('画像の登録番号を確認してください');
+ const owner=await imageOwnerHash(data.visitor),actor=await imageActor(req),mid=string(data.monster_id,160,true);
+ const result=await rpc('site_feedback_delete_image',{p_id:data.id,p_monster_id:mid,p_owner_hash:owner,p_actor:actor});
+ return reply({ok:true,...result});
+}
+
 async function sign(path:string){if(!path)return '';const r=await fetch(`${project}/storage/v1/object/sign/article-feedback/${path}`,{method:'POST',headers:serviceHeaders,body:JSON.stringify({expiresIn:600})});if(!r.ok)return '';const data=await r.json();return data.signedURL?`${project}/storage/v1${data.signedURL}`:'';}
 Deno.serve(async(req:Request)=>{
  const origin=req.headers.get('Origin');if(origin&&origin!==allowedOrigin)return reply({error:'このサイトからご利用ください'},403);
@@ -231,7 +256,7 @@ Deno.serve(async(req:Request)=>{
    if(u.searchParams.get('action')!=='admin')return reply({ok:true});
    await admin(req);const status=u.searchParams.get('status');if(status&&!['pending','published','resolved','rejected'].includes(status))throw Error('状態が無効です');
    const rows=await rpc('site_feedback_list',{p_status:status}) as Record<string,unknown>[];
-   await Promise.all(rows.map(async row=>{if(row.attachment_path)row.attachment_url=await sign(String(row.attachment_path));row.has_monster_image=Boolean(row.monster_image_path);if(row.monster_image_path)row.monster_image_url=await sign(String(row.monster_image_path));row.monster_image_published=row.status==='published'&&Boolean(row.monster_image_public_path);delete row.reviewed_by;delete row.attachment_path;delete row.monster_image_path;delete row.monster_image_public_path;}));return reply({rows});
+   await Promise.all(rows.map(async row=>{if(row.attachment_path)row.attachment_url=await sign(String(row.attachment_path));row.has_monster_image=Boolean(row.monster_image_path);if(row.monster_image_path)row.monster_image_url=await sign(String(row.monster_image_path));row.monster_image_published=row.status==='published'&&Boolean(row.monster_image_public_path);delete row.reviewed_by;delete row.attachment_path;delete row.monster_image_path;delete row.monster_image_public_path;delete row.image_owner_hash;}));return reply({rows});
   }
   if(req.method!=='POST')return reply({error:'操作が無効です'},405);
   if(Number(req.headers.get('Content-Length')||0)>5700000)throw Error('画像が大きすぎます');const raw=await req.text();if(raw.length>5700000)throw Error('画像が大きすぎます');const data=JSON.parse(raw);if(!data||typeof data!=='object'||Array.isArray(data))throw Error('入力が無効です');
@@ -252,6 +277,8 @@ Deno.serve(async(req:Request)=>{
    try{await cleanupPublicImages();}catch{return reply({ok:true,warning:'変更は保存しました。公開を解除した画像の削除は次の管理者保存時に再試行します。'});}
    return reply({ok:true});
   }
+  if(data.action==='image_permissions')return await imagePermissions(req,data);
+  if(data.action==='delete_image')return await deleteImage(req,data);
   if(data.action==='add_image')return await addImage(req,data);
   if(data.action==='save_details')return await saveDetails(req,data);
   if(data.action!=='submit'||data.honeypot)throw Error('入力が無効です');if(!/^[a-f0-9]{8}-[a-f0-9]{4}-4[a-f0-9]{3}-[89ab][a-f0-9]{3}-[a-f0-9]{12}$/i.test(data.visitor||''))throw Error('ブラウザ識別子が無効です');

@@ -15,7 +15,7 @@
   function safeImageUrl(value){const safe=safeUrl(value);if(!safe)return '';const u=new URL(safe),host=u.hostname.toLowerCase().replace(/\.$/,'');if(u.username||u.password||host.includes(':')||host==='localhost'||host.endsWith('.localhost')||host.endsWith('.local')||host.endsWith('.internal'))return '';const p=host.split('.').map(Number);if(p.length===4&&p.every(n=>Number.isInteger(n)&&n>=0&&n<=255)&&(p[0]===0||p[0]===10||p[0]===127||(p[0]===169&&p[1]===254)||(p[0]===172&&p[1]>=16&&p[1]<=31)||(p[0]===192&&p[1]===168)))return '';return safe;}
   function pageUrl(){const u=new URL(location.href);u.search='';return u.href;}
   function productionUrl(value){const u=new URL(value||pageUrl(),location.href);return 'https://yysupporttools.github.io/xen-rebirth-jp/'+u.pathname.split('/').pop()+u.hash;}
-  function visitor(){try{let v=localStorage.getItem('xen-feedback-visitor-v1');if(!/^[a-f0-9-]{36}$/i.test(v||'')){v=crypto.randomUUID();localStorage.setItem('xen-feedback-visitor-v1',v);}return v;}catch{return crypto.randomUUID();}}
+  function visitor(){if(volatileVisitor)return volatileVisitor;try{let v=localStorage.getItem('xen-feedback-visitor-v1');if(!/^[a-f0-9-]{36}$/i.test(v||'')){v=crypto.randomUUID();localStorage.setItem('xen-feedback-visitor-v1',v);}return volatileVisitor=v;}catch{return volatileVisitor=crypto.randomUUID();}}
   async function request(action,payload,token){const headers={apikey:key};if(token)headers.Authorization='Bearer '+token;const options={headers,signal:AbortSignal.timeout(payload?.monster_image||payload?.attachment?60000:30000)};let url=endpoint;
     if(payload){options.method='POST';headers['Content-Type']='application/json';options.body=JSON.stringify({...payload,action});}
     else {const [operation,query]=action.split('&');url+='?action='+encodeURIComponent(operation)+(query?'&'+query:'');}
@@ -24,7 +24,7 @@
   function fields(d={}){return `<div class="report-field-grid"><label>モンスターLv<input name="level" type="number" min="0" max="300" value="${esc(d.level??'')}" placeholder="未確認なら空欄"></label><label>必要DEF・最小<input name="min_def" type="number" min="0" max="10000" value="${esc(d.min_def??'')}" placeholder="例：200"></label><label>必要DEF・最大<input name="max_def" type="number" min="0" max="10000" value="${esc(d.max_def??'')}" placeholder="範囲の目安がある場合"></label></div><p class="report-help">必要DEFは条件によって変わります。通常 / Hard、単体 / AoE、目標被ダメージなどの測定条件を備考に記載してください。</p><label>ドロップアイテム<textarea name="drop_items" maxlength="1200" placeholder="確認できたアイテムを1行ずつ記載">${esc(d.drop_items||'')}</textarea></label><label>出現場所<input name="map" maxlength="200" value="${esc(d.map||'')}" placeholder="地域・マップ名"></label><label>ゲーム内画像のURL<input name="image_url" type="url" maxlength="1000" value="${esc(d.image_url||'')}" placeholder="https://..."></label><label>備考・確認条件<textarea name="notes" maxlength="1000" placeholder="DEFの測定条件、ドロップ確認時の状況など">${esc(d.notes||'')}</textarea></label>`;}
   function readDetails(form){const data=new FormData(form);return {level:numberValue(data.get('level'),300),min_def:numberValue(data.get('min_def'),10000),max_def:numberValue(data.get('max_def'),10000),drop_items:String(data.get('drop_items')||''),map:String(data.get('map')||''),image_url:String(data.get('image_url')||''),notes:String(data.get('notes')||'')};}
   function makeDialog(){if(dialog)return dialog;dialog=document.createElement('dialog');dialog.className='report-dialog';dialog.setAttribute('aria-labelledby','xen-report-title');dialog.addEventListener('close',()=>clearMonsterImage());document.body.append(dialog);return dialog;}
-  function imagePicker(){return `<section class="report-image-upload" aria-labelledby="report-monster-image-heading"><h3 id="report-monster-image-heading">図鑑へ追加するゲーム内画像</h3><div class="report-image-paste" tabindex="0" role="group" aria-label="ゲーム内画像の貼り付け欄"><strong>ここをクリックして Ctrl＋V</strong><span>コピーした画像を貼り付けられます</span></div><label>画像ファイルから選ぶ<input name="monster_image" type="file" accept="image/png,image/jpeg,image/webp"></label><figure class="report-image-preview" hidden><button type="button" class="report-preview-zoom" aria-haspopup="dialog" aria-label="選んだゲーム内画像を拡大"><img alt="選んだゲーム内画像のプレビュー"><span class="report-image-zoom-hint">画像を拡大</span></button><figcaption></figcaption><button type="button" class="report-image-remove">この画像を取り消す</button></figure><p class="report-image-status" role="status" aria-live="polite"></p><p class="report-help">PNG / JPEG / WebP、2MB以内。「画像を追加」で、すぐ図鑑に公開されます。公式画像がある場合は追加画像として掲載し、画像未登録のモンスターは一覧にも表示します。</p></section>`;}
+  function imagePicker(){return `<section class="report-image-upload" aria-labelledby="report-monster-image-heading"><h3 id="report-monster-image-heading">図鑑へ追加するゲーム内画像</h3><div class="report-image-paste" tabindex="0" role="group" aria-label="ゲーム内画像の貼り付け欄"><strong>ここをクリックして Ctrl＋V</strong><span>コピーした画像を貼り付けられます</span></div><label>画像ファイルから選ぶ<input name="monster_image" type="file" accept="image/png,image/jpeg,image/webp"></label><figure class="report-image-preview" hidden><button type="button" class="report-preview-zoom" aria-haspopup="dialog" aria-label="選んだゲーム内画像を拡大"><img alt="選んだゲーム内画像のプレビュー"><span class="report-image-zoom-hint">画像を拡大</span></button><figcaption></figcaption><button type="button" class="report-image-remove">この画像を取り消す</button></figure><p class="report-image-status" role="status" aria-live="polite"></p><p class="report-help">PNG / JPEG / WebP、2MB以内。「画像を追加」で、すぐ図鑑に公開されます。追加した画像は、一覧と詳細のメイン画像にも表示します。</p></section>`;}
   function clearMonsterImage(){imageSelectionVersion++;selectedMonsterImage=null;monsterImageLoading=false;if(monsterPreviewUrl)URL.revokeObjectURL(monsterPreviewUrl);monsterPreviewUrl='';const panel=dialog?.querySelector('.report-image-upload');if(!panel)return;panel.querySelector('.report-image-preview').hidden=true;panel.querySelector('img').removeAttribute('src');const zoom=panel.querySelector('.report-preview-zoom');if(zoom){zoom.removeAttribute('data-monster-zoom-src');zoom.removeAttribute('data-monster-zoom-alt');}panel.querySelector('[name=monster_image]').value='';panel.querySelector('.report-image-status').textContent='';panel.querySelector('.report-image-paste').classList.remove('has-image');}
   async function selectMonsterImage(file){clearMonsterImage();if(!file)return;const version=imageSelectionVersion,panel=dialog.querySelector('.report-image-upload'),status=panel.querySelector('.report-image-status');let preview='';
     try{if(file.size>2097152||!['image/png','image/jpeg','image/webp'].includes(file.type))throw Error('画像は PNG / JPEG / WebP、2MB以内で選んでください');monsterImageLoading=true;status.textContent='画像を確認しています…';preview=URL.createObjectURL(file);const img=new Image();await new Promise((resolve,reject)=>{img.onload=()=>img.naturalWidth&&img.naturalHeight?resolve():reject(Error('画像を読み込めませんでした'));img.onerror=()=>reject(Error('画像を読み込めませんでした'));img.src=preview;});if(version!==imageSelectionVersion||!dialog.open){URL.revokeObjectURL(preview);return;}monsterImageLoading=false;selectedMonsterImage=file;monsterPreviewUrl=preview;panel.querySelector('img').src=preview;const zoom=panel.querySelector('.report-preview-zoom');if(zoom){zoom.disabled=false;zoom.dataset.monsterZoomSrc=preview;zoom.dataset.monsterZoomAlt=active.title+'のゲーム内画像（登録前プレビュー）';}panel.querySelector('figcaption').textContent=`${file.name||'貼り付けた画像'} / ${Math.max(1,Math.round(file.size/1024))}KB`;panel.querySelector('.report-image-preview').hidden=false;panel.querySelector('.report-image-paste').classList.add('has-image');status.textContent='「画像を追加」で、この画像がすぐ図鑑に公開されます。';}
@@ -138,20 +138,66 @@
   }
   async function loadMonster(id){return (await loadAllMonsters()).filter(row=>row.monster_id===id);}
   function detailHtml(d={}){const rows=[];if(d.level!=null)rows.push(['モンスターLv',d.level]);if(d.drop_items)rows.push(['ドロップアイテム',d.drop_items]);if(d.min_def!=null||d.max_def!=null)rows.push(['必要DEF',d.min_def!=null&&d.max_def!=null?`${d.min_def}～${d.max_def}`:d.min_def??d.max_def]);if(d.map)rows.push(['出現場所',d.map]);if(d.notes)rows.push(['備考・確認条件',d.notes]);return rows.length?`<dl class="report-published-fields">${rows.map(([k,v])=>`<div><dt>${k}</dt><dd>${esc(v)}</dd></div>`).join('')}</dl>`:'';}
+
+  let imageAuthClient, volatileVisitor;
+  async function imageAuthToken(){
+    try{
+      if(!window.supabase)return '';
+      if(!imageAuthClient)imageAuthClient=window.supabase.createClient(project,key,{auth:{storageKey:'xen-board-admin',detectSessionInUrl:false}});
+      const result=await imageAuthClient.auth.getSession();
+      return result.error?'':result.data.session?.access_token||'';
+    }catch{return '';}
+  }
+  async function imageDeleteControls(container,monster,rows,run){
+    const buttons=Array.from(container.querySelectorAll('[data-image-delete]'));
+    if(!buttons.length)return;
+    try{
+      const ids=rows.filter(row=>row.category==='image'&&safeImageUrl(row.details?.image_url)).map(row=>row.id);
+      const token=await imageAuthToken(),allowed=new Set();
+      for(let offset=0;offset<ids.length;offset+=100){
+        const response=await request('image_permissions',{monster_id:monster.id,ids:ids.slice(offset,offset+100),visitor:visitor()},token);
+        for(const permission of response.permissions||[])if(permission.can_delete===true)allowed.add(permission.id);
+      }
+      if(!container.isConnected||container.dataset.imageMount!==run)return;
+      for(const button of buttons){
+        button.hidden=!allowed.has(button.dataset.imageDelete);button.disabled=false;
+        button.onclick=async()=>{
+          if(button.disabled||!confirm('この追加画像を図鑑から削除しますか？'))return;
+          const status=container.querySelector('.report-community-status');button.disabled=true;status.textContent='画像を削除しています…';
+          try{
+            const result=await request('delete_image',{id:button.dataset.imageDelete,monster_id:monster.id,visitor:visitor()},await imageAuthToken());
+            if(result.deleted!==true||result.id!==button.dataset.imageDelete||result.monster_id!==monster.id)throw Error('削除結果を確認できませんでした。再読み込みしてください');
+            allCache=null;cacheTime=0;
+            if(container.isConnected&&container.dataset.imageMount===run)button.closest('article')?.remove();
+            try{await refreshMonsterImages(monster.id);}catch{
+              if(container.isConnected&&container.dataset.imageMount===run)status.textContent='削除は完了しました。表示を再読み込みしてください。';
+            }
+          }catch(error){
+            if(container.isConnected&&container.dataset.imageMount===run){status.textContent='削除できませんでした：'+error.message;button.disabled=false;}
+          }
+        };
+      }
+    }catch{
+      if(container.isConnected&&container.dataset.imageMount===run)container.querySelector('.report-community-status').textContent+=' 削除の権限を確認できませんでした。再読み込みで確認できます。';
+    }
+  }
+
   async function mountMonster(container,monster) {
     if(typeof container==='string')container=document.querySelector(container);if(!container)return;
+    const imageMount=String(Date.now())+'|'+crypto.randomUUID();container.dataset.imageMount=imageMount;
     container.classList.add('monster-community');container.innerHTML='<div class="report-community-heading"><h3>情報の編集・追加画像</h3><div class="report-community-actions"><button type="button" class="report-info-add">情報を編集</button><button type="button" class="report-image-add">画像を追加</button></div></div><p class="report-community-status" role="status">読み込み中…</p><div class="report-community-list"></div>';
     const options={kind:'monster',title:monster.name,monsterId:monster.id,url:monster.url||'monsters.html#'+monster.id,details:monster.details||{}};
     container.querySelector('.report-info-add').onclick=()=>openDetails(options);container.querySelector('.report-image-add').onclick=()=>openImage(options);
     try{
-      const rows=await loadMonster(monster.id);if(!container.isConnected)return;
+      const rows=await loadMonster(monster.id);if(!container.isConnected||container.dataset.imageMount!==imageMount)return;
       const edits=rows.filter(row=>row.details?.publication_mode==='immediate_details').sort((a,b)=>String(b.created_at||b.updated_at).localeCompare(String(a.created_at||a.updated_at))||String(b.id).localeCompare(String(a.id)));
       container.querySelector('.report-community-status').textContent=edits.length?'情報は '+date(edits[0].created_at||edits[0].updated_at)+' に更新されました。':'情報・画像は、保存後すぐ公開されます。';
       container.querySelector('.report-community-list').innerHTML=rows.filter(row=>row.details?.publication_mode!=='immediate_details').map(row=>{
         const image=safeImageUrl(row.details?.image_url),source=safeUrl(row.source_url),direct=row.details?.publication_mode==='immediate';
-        return `<article class="report-published ${direct?'report-player-image':''}">${direct?'':`<p>${esc(row.body)}</p>${detailHtml(row.details)}`}${image?`<button type="button" class="report-image-zoom" data-monster-zoom-src="${esc(image)}" data-monster-zoom-alt="${esc(monster.name)}の追加ゲーム内画像" aria-label="${esc(monster.name)}の追加ゲーム内画像を拡大" aria-haspopup="dialog"><img class="report-monster-image" src="${esc(image)}" alt="${esc(monster.name)}のゲーム内画像" loading="lazy" referrerpolicy="no-referrer"><span class="report-image-zoom-hint">画像を拡大</span></button>`:''}<p class="report-help">${esc(row.author_name)} · ${date(row.updated_at)}${source?` · <a href="${esc(source)}" target="_blank" rel="noopener noreferrer">出典を確認 ↗</a>`:''}</p></article>`;
+        return `<article class="report-published ${direct?'report-player-image':''}">${direct?'':`<p>${esc(row.body)}</p>${detailHtml(row.details)}`}${image?`<button type="button" class="report-image-zoom" data-monster-zoom-src="${esc(image)}" data-monster-zoom-alt="${esc(monster.name)}の追加ゲーム内画像" aria-label="${esc(monster.name)}の追加ゲーム内画像を拡大" aria-haspopup="dialog"><img class="report-monster-image" src="${esc(image)}" alt="${esc(monster.name)}のゲーム内画像" loading="lazy" referrerpolicy="no-referrer"><span class="report-image-zoom-hint">画像を拡大</span></button>`:''}${image&&row.category==='image'?`<button type="button" class="report-image-delete" data-image-delete="${esc(row.id)}" hidden>画像を削除</button>`:''}<p class="report-help">${esc(row.author_name)} · ${date(row.updated_at)}${source?` · <a href="${esc(source)}" target="_blank" rel="noopener noreferrer">出典を確認 ↗</a>`:''}</p></article>`;
       }).join('');
-    }catch(error){container.querySelector('.report-community-status').textContent=error.message+'。編集・画像追加は各ボタンから行えます。';}
+      imageDeleteControls(container,monster,rows,imageMount);
+    }catch(error){if(container.isConnected&&container.dataset.imageMount===imageMount)container.querySelector('.report-community-status').textContent=error.message+'。編集・画像追加は各ボタンから行えます。';}
   }
   function button(options,label='修正を報告'){const b=document.createElement('button');b.type='button';b.className='xen-report-button';b.textContent=label;b.onclick=()=>open(typeof options==='function'?options():options);return b;}
   function ensureArticleButtons(){if(document.querySelector('#reports-admin'))return;const main=document.querySelector('main');if(!main)return;if(!main.querySelector('.article-report-tools')){const bar=document.createElement('div');bar.className='article-report-tools';bar.append(button(()=>({title:document.querySelector('#quest-detail h1')?.textContent||main.querySelector('h1')?.textContent||document.title}),'この記事の修正を報告'));const h=main.querySelector('h1');(h?.closest('.page-intro')||h)?.insertAdjacentElement('afterend',bar);if(!bar.isConnected)main.prepend(bar);}

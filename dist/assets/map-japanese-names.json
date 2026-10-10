@@ -6,7 +6,12 @@
     "file": "codex-clipboard-2050d4ee-a4f0-4eb8-91cb-d69c52ded0ca.png",
     "reviewedAt": "2026-10-10",
     "method": "図の地名を読み、固有名詞の対応と登録済み経路の並びで照合。対応・文字が不確かな地点は除外。",
-    "note": "現在の英語名を主表示にし、旧日本語名を補助表示・検索に使用します。現在の公式日本語名や直訳として扱いません。"
+    "note": "現在の英語名を主表示にし、旧日本語名を補助表示・検索に使用します。現在の公式日本語名や直訳として扱いません。",
+    "confirmedAdditionalMaps": {
+      "reviewedAt": "2026-10-10",
+      "gameMapFile": "codex-clipboard-3eff11d0-3c2f-4c57-b0d0-2e93bca7cd6a.png",
+      "method": "ゲーム内Shylphaen Forestの北Baskerville Forest・東Corlona Forestを、旧地図のシルバエンの森・コルロナの森の文字と配置に照合。"
+    }
   },
   "names": {
     "Acidbath Valley": "アシッドバス谷",
@@ -77,12 +82,12 @@
     "Onix Hill": "オニックスの森",
     "Othellos Forest": "オテロスの森",
     "Pindown Valley": "ピンダウン谷",
-    "Pladino Grove": "パルラディノグローブ",
+    "Paladino Grove": "パルラディノグローブ",
     "Premusson Path": "プリマスン平原",
     "Presenal Plains": "プレスナル平原",
     "Proteron Gorge": "プロテロン峡谷",
     "Realto Plains": "リアルト沼地",
-    "Rosestar Basin": "ロジタ盆地",
+    "Rosetar Basin": "ロジタ盆地",
     "Router Valley": "ラウタの谷",
     "Rudwork Path": "ラドックパース",
     "Saifield Forest": "セイフィルドウッド",
@@ -108,6 +113,8 @@
     "Vanderull Plains": "ベンダロール平原",
     "Velcro Forest": "ベルクロの森",
     "Waimea Gorge": "ワイメア峡谷",
-    "Wavin Plains": "ワビン平原"
+    "Wavin Plains": "ワビン平原",
+    "Shylphaen Forest": "シルバエンの森",
+    "Corlona Forest": "コルロナの森"
   }
 }

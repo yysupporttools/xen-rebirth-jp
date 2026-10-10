@@ -26,6 +26,18 @@
 
 同日に提示されたゲーム内MAP画像の「Taisen Plains」も優先し、以前の「Toisen Plains」は別名として保持します。確認済みの旧日本語名「タイセン沼地」の辞書キーはTaisen Plainsへ引き継ぎ、新しい日本語名は推測追加していません。
 
+同日に提示されたゲーム内MAP画像の「Clingon Plains」も優先し、以前の「Chingon Plains」は別名として保持します。モンスター図鑑の5個体・4参考行はすでにClingon表記で変更せず、未確認の旧日本語名も追加していません。
+
+同日に確認された「Rosetar Basin」「Paladino Grove」「Ashely Forest」もゲーム内MAP表記を優先します。旧表記Rosestar Basin / Pladino Grove / Ashley Forestは検索・保存時の別名として保持します。旧日本語名のロジタ盆地・パルラディノグローブは対応キーだけ移し、未確認の日本語名は追加していません。経路の接続とLv条件は維持します。
+
+モンスター図鑑はRosetarの4個体・4参考行の表示名12項目、Paladinoの4個体・2参考行の表示名8項目のみ補正します。ClingonとAshelyの図鑑データはすでにゲーム内表記のため変更しません。ID・画像URL・出典URL・sourceAnchor・originalMap・non-HHs条件・DEF値を保持し、元の出典を追えるようにしています。
+
+## Shylphaen Forestの接続確認
+
+2026-10-10の拡大MAP全体の画像はShylphaen Forestと表示され、北側Baskerville Forest・東側Corlona Forestの2出口を確認できました。以前のSylphaen Forestは別名として保持し、北の既存接続に方向を追加、未確認だったBerdena Forestへの接続は掲載を止めて東のCorlona Forestへ置き換えます。Corlona ForestはColorado Forestと別地点として登録します。ほかの経路とLv条件は変更せず、出口の未登録座標・Lv/DEF値・Corlona以降の接続は補完しません。
+
+旧地図のシルバエンの森・コルロナの森の文字と、北バスカビル・東コルロナの並びも確認できるため、この2つの旧日本語名だけを追加しました。Shylphaenのモンスター6個体はすでに正しい表記のため変更せず、参考2行のmap/name計4表示項目のみ補正し、元のSylphaen表記と原本情報をoriginalMapに残します。
+
 ## BrynhilldとArcarinas Squareの表示統合
 
 2026-10-10の利用者のゲーム内確認で、Brynhild TrisectsからBrinhilldの入口へ入るとArcarinas Squareに接続することを確認しました。独立した仮の町名Brynhilldを一覧から外し、Brynhilld / Brynhild / Brinhilld / Brynnhild / Brynhildr / ブリンヒルドはArcarinas Squareへ直接対応させます。Guild Plaza・Mall Street・Summer Hill Street、Culvert各階層・Lost Brynhilld・Trisectsは別マップとして維持します。
@@ -34,7 +46,7 @@
 
 ## 旧日本語名の補助表示
 
-管理者が提示した旧日本語版の地図から、文字と経路・固有名詞の対応を確認できた100地点の旧日本語名を登録しました。英語のゲーム内マップ名を主表示にし、旧日本語名を補助表示・検索用に使います。現在の公式日本語名や英語名の直訳ではありません。対応や文字が不確かな地点は登録せず、NPC名も翻訳していません。
+管理者が提示した旧日本語版の地図から、文字と経路・固有名詞の対応を確認できた102地点の旧日本語名を登録しました（先に確認した100地点と、Shylphaen / Corlonaの2地点）。英語のゲーム内マップ名を主表示にし、旧日本語名を補助表示・検索用に使います。現在の公式日本語名や英語名の直訳ではありません。対応や文字が不確かな地点は登録せず、NPC名も翻訳していません。
 
 map-japanese-names.jsonのnamesが確認済み辞書の原本です。build-map-registry.cjsは重複する日本語名・未登録の英語名を拒否し、旧日本語名の検索別名とmap-japanese-names.jsを生成します。入力・保存キー・既存IDは英語の登録先を維持します。
 

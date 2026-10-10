@@ -4,6 +4,11 @@ const context={window:{},console,crypto:{randomUUID:()=> 'test-device'},localSto
 vm.runInContext(fs.readFileSync(path.join(root,'dist/assets/map-registry.js'),'utf8'),context);
 const registry=context.window.XEN_MAP_REGISTRY;
 const pairs=[
+["Sylphaen Forest","Shylphaen Forest"],["Shylphaen Forest","Shylphaen Forest"],["Sylphaen Forest B1F","Sylphaen Forest B1F"],["シルバエンの森","Shylphaen Forest"],["コルロナの森","Corlona Forest"],["Colorado Forest","Colorado Forest"],
+["Rosestar Basin","Rosetar Basin"],["Rosetar Basin","Rosetar Basin"],["Rosestar Basin B1F","Rosestar Basin B1F"],["ロジタ盆地","Rosetar Basin"],
+["Pladino Grove","Paladino Grove"],["Paladino Grove","Paladino Grove"],["Pladino Grove B1F","Pladino Grove B1F"],["パルラディノグローブ","Paladino Grove"],
+["Ashley Forest","Ashely Forest"],["Ashely Forest","Ashely Forest"],["Ashley Forest B1F","Ashley Forest B1F"],
+["Chingon Plains","Clingon Plains"],["Clingon Plains","Clingon Plains"],["Chingon Plains B1F","Chingon Plains B1F"],["Clingon Plains B2F","Clingon Plains B2F"],
 ["Brynhilld","Arcarinas Square"],["Brynhild","Arcarinas Square"],["Brinhilld","Arcarinas Square"],["Brynhildr","Arcarinas Square"],["ブリンヒルド","Arcarinas Square"],
 ["Toisen Plains","Taisen Plains"],["Taisen Plains","Taisen Plains"],["Toisen Plains B1F","Toisen Plains B1F"],["タイセン沼地","Taisen Plains"],
 ["Costella Forest","Castella Forest"],["Castella Forest","Castella Forest"],["Costella Forest B1F","Costella Forest B1F"],["Castella Forest B2F","Castella Forest B2F"],["カステルラの森","Castella Forest"],["ロエムの谷","Loem Valley"],["オテロスの森","Othellos Forest"],["クリスタンの森","Kryston Forest"],["カステルラの森 B1F","カステルラの森 B1F"],
@@ -66,6 +71,14 @@ assert.equal(context.window.mapTest.mapWriteName('Arcarinas Square'),'Brynhild')
 assert.equal(context.window.mapTest.profileWriteMapName('Transporter','Arcarinas Square'),'Brynhild');
 assert.equal(context.window.mapTest.profileKey('Transporter','Brinhilld'),context.window.mapTest.profileKey('Transporter','Arcarinas Square'));
 assert.equal(context.window.mapTest.dialogueReplayRecord({npc_name:'Transporter',map_name:'Arcarinas Square',english_text:'Transport greeting.'}).id,'legacy-city-dialogue');
+const clingonGroups=registry.groups([{id:'legacy-chingon-id',map_name:'Chingon Plains',map_image_url:'retained-plains-photo'},{id:'game-clingon-id',map_name:'Clingon Plains',map_image_url:'game-plains-photo'}]);
+assert.equal(clingonGroups.length,1);assert.equal(clingonGroups[0].map_name,'Clingon Plains');
+assert(clingonGroups[0].map_variants.some(row=>row.id==='legacy-chingon-id'&&row.map_image_url==='retained-plains-photo'));
+context.window.mapTest.set([{id:'chingon-dialogue-id',npc_name:'Guard',map_name:'Chingon Plains',english_text:'Clingon greeting.'}],[{id:'legacy-chingon-id',map_name:'Chingon Plains',map_image_url:'retained-plains-photo'}]);
+context.window.mapTest.setProfiles([{id:'chingon-profile-id',npc_name:'Guard',map_name:'Chingon Plains',image_url:'retained-profile-photo'}]);
+assert.equal(context.window.mapTest.mapWriteName('Clingon Plains'),'Chingon Plains');
+assert.equal(context.window.mapTest.profileWriteMapName('Guard','Clingon Plains'),'Chingon Plains');
+assert.equal(context.window.mapTest.dialogueReplayRecord({npc_name:'Guard',map_name:'Clingon Plains',english_text:'Clingon greeting.'}).id,'chingon-dialogue-id');
 (async()=>{context.window.mapTest.stubAncillary();context.window.mapTest.set([{id:'replay-id',npc_name:'Officer Jack',map_name:"Arcana's Square",english_text:'Welcome.',dialogue_text_en:'Welcome.',choices_en:[]}],[]);const replay=await context.window.mapTest.autoSaveAiResult({npc_name:'Officer Jack',map_name:'Arcarinas Square',english_text:'Welcome.',dialogue_text_en:'Welcome.',choices_en:[],screen_type:'npc_dialog',confidence:99},'same-screen');assert.equal(replay.id,'replay-id');assert.equal(rpcCalls.length,1);assert.equal(rpcCalls[0].name,'game_knowledge_merge_fragment');assert.equal(rpcCalls[0].args.p_record_id,'replay-id');assert.equal(rpcCalls[0].args.p_map_name,"Arcana's Square");rpcCalls.length=0;
 context.window.mapTest.set([{id:'bradlely-replay-id',npc_name:'Guard',map_name:'Bradley Forest',english_text:'Forest greeting.',dialogue_text_en:'Forest greeting.',choices_en:[]}],[{id:'game-map-original-id',map_name:'Bradley Forest',map_image_url:'retained-photo'}]);
 const correctedReplay=await context.window.mapTest.autoSaveAiResult({npc_name:'Guard',map_name:'Bradlely Forest',english_text:'Forest greeting.',dialogue_text_en:'Forest greeting.',choices_en:[],screen_type:'npc_dialog',confidence:99},'game-map-replay');
@@ -86,5 +99,15 @@ rpcCalls.length=0;
 context.window.mapTest.set([{id:'merged-city-replay-id',npc_name:'Transporter',map_name:'Brynhild',english_text:'Transport greeting.',dialogue_text_en:'Transport greeting.',choices_en:[]}],[{id:'legacy-city-map-id',map_name:'Brynhild',map_image_url:'retained-city-photo'}]);
 const cityReplay=await context.window.mapTest.autoSaveAiResult({npc_name:'Transporter',map_name:'Arcarinas Square',english_text:'Transport greeting.',dialogue_text_en:'Transport greeting.',choices_en:[],screen_type:'npc_dialog',confidence:99},'city-alias-replay');
 assert.equal(cityReplay.id,'merged-city-replay-id');assert.equal(rpcCalls.length,1);assert.equal(rpcCalls[0].name,'game_knowledge_merge_fragment');assert.equal(rpcCalls[0].args.p_record_id,'merged-city-replay-id');assert.equal(rpcCalls[0].args.p_map_name,'Brynhild');
-console.log('PASS: confirmed city merge, four game map corrections and reviewed Japanese aliases retain raw map/profile/image keys and real replay IDs.');})().catch(e=>{console.error(e);process.exitCode=1;});
-console.log('PASS: 50 aliases/unknown/floor/direction cases, duplicate dropdown grouping, retained photo variants, image switching, profile lookup, conservative route recognition.');
+rpcCalls.length=0;
+context.window.mapTest.set([{id:'clingon-replay-id',npc_name:'Guard',map_name:'Chingon Plains',english_text:'Clingon greeting.',dialogue_text_en:'Clingon greeting.',choices_en:[]}],[{id:'legacy-chingon-id',map_name:'Chingon Plains',map_image_url:'retained-plains-photo'}]);
+const clingonReplay=await context.window.mapTest.autoSaveAiResult({npc_name:'Guard',map_name:'Clingon Plains',english_text:'Clingon greeting.',dialogue_text_en:'Clingon greeting.',choices_en:[],screen_type:'npc_dialog',confidence:99},'clingon-game-map-replay');
+assert.equal(clingonReplay.id,'clingon-replay-id');assert.equal(rpcCalls.length,1);assert.equal(rpcCalls[0].name,'game_knowledge_merge_fragment');assert.equal(rpcCalls[0].args.p_record_id,'clingon-replay-id');assert.equal(rpcCalls[0].args.p_map_name,'Chingon Plains');
+for(const [oldName,newName]of [['Rosestar Basin','Rosetar Basin'],['Pladino Grove','Paladino Grove'],['Ashley Forest','Ashely Forest'],['Sylphaen Forest','Shylphaen Forest']]){
+ const id='retained-'+newName;rpcCalls.length=0;
+ const groups=registry.groups([{id:'raw-map-'+newName,map_name:oldName,map_image_url:'retained-photo'},{id:'game-map-'+newName,map_name:newName,map_image_url:'game-photo'}]);assert.equal(groups.length,1);assert.equal(groups[0].map_variants.length,2);assert(groups[0].map_variants.some(row=>row.id==='raw-map-'+newName&&row.map_name_original===oldName&&row.map_image_url==='retained-photo'));
+ context.window.mapTest.set([{id,npc_name:'Guard',map_name:oldName,english_text:newName+' greeting.',dialogue_text_en:newName+' greeting.',choices_en:[]}],[{id:'raw-map-'+newName,map_name:oldName,map_image_url:'retained-photo'}]);context.window.mapTest.setProfiles([{id:'retained-profile-'+newName,npc_name:'Guard',map_name:oldName,image_url:'retained-profile-photo'}]);assert.equal(context.window.mapTest.mapWriteName(newName),oldName);assert.equal(context.window.mapTest.profileWriteMapName('Guard',newName),oldName);
+ const replay=await context.window.mapTest.autoSaveAiResult({npc_name:'Guard',map_name:newName,english_text:newName+' greeting.',dialogue_text_en:newName+' greeting.',choices_en:[],screen_type:'npc_dialog',confidence:99},'corrected-map-'+newName);assert.equal(replay.id,id);assert.equal(rpcCalls.length,1);assert.equal(rpcCalls[0].name,'game_knowledge_merge_fragment');assert.equal(rpcCalls[0].args.p_record_id,id);assert.equal(rpcCalls[0].args.p_map_name,oldName);
+}
+console.log('PASS: game-confirmed spellings and all earlier aliases retain raw map/profile/image keys and real replay IDs.');})().catch(e=>{console.error(e);process.exitCode=1;});
+console.log('PASS: '+pairs.length+' aliases/unknown/floor/direction cases, duplicate dropdown grouping, retained photo variants, image switching, profile lookup, conservative route recognition.');

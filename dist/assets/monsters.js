@@ -79,11 +79,27 @@
     return [line(regular,'通常'),line(full,'強打込み'),line(rest,'マップ参考')].filter(Boolean).join(' ／ ');
   }
   function image(monster,detail=false) {
-    const url=http(monster.imageUrl);
-    return url ? '<button type="button" class="dex-image-zoom-trigger" data-monster-zoom-src="'+esc(url)+'" data-monster-zoom-alt="'+esc(monster.name)+'のゲーム内画像" aria-label="'+esc(monster.name)+'のゲーム内画像を拡大" aria-haspopup="dialog"><img src="'+esc(url)+'" alt="'+esc(monster.name)+'のゲーム内画像" '+(detail?'':'loading="lazy" ')+'decoding="async" referrerpolicy="no-referrer"><span class="dex-image-zoom-hint">画像を拡大</span></button>' : '<span class="dex-image-missing">ゲーム内画像<br>未登録</span>';
+    const candidates=[...new Set((monster.imageCandidates||[monster.imageUrl]).map(http).filter(Boolean))],url=candidates[0]||"";
+    return url ? '<button type="button" class="dex-image-zoom-trigger" data-monster-zoom-src="'+esc(url)+'" data-monster-zoom-alt="'+esc(monster.name)+'のゲーム内画像" aria-label="'+esc(monster.name)+'のゲーム内画像を拡大" aria-haspopup="dialog"><img src="'+esc(url)+'" data-monster-image-candidates="'+esc(JSON.stringify(candidates))+'" alt="'+esc(monster.name)+'のゲーム内画像" '+(detail?'':'loading="lazy" ')+'decoding="async" referrerpolicy="no-referrer"><span class="dex-image-zoom-hint">画像を拡大</span></button>' : '<span class="dex-image-missing">ゲーム内画像<br>未登録</span>';
   }
   function wireImages(container) {
-    container.querySelectorAll('img').forEach(img => img.addEventListener('error',() => {const p=document.createElement('span');p.className='dex-image-missing';p.textContent='画像を取得できません。詳細の出典リンクからご確認ください。';img.replaceWith(p);},{once:true}));
+    container.querySelectorAll('img').forEach(img=>{
+      let candidates=[];
+      try{candidates=JSON.parse(img.dataset.monsterImageCandidates||'[]').map(http).filter(Boolean);}catch{}
+      const tried=new Set();
+      img.addEventListener('error',()=>{
+        const current=http(img.currentSrc||img.src);if(current)tried.add(current);
+        const next=candidates.find(url=>!tried.has(url));
+        const trigger=img.closest('[data-monster-zoom-src]');
+        if(next){
+          tried.add(next);img.src=next;
+          if(trigger){trigger.disabled=false;trigger.dataset.monsterZoomSrc=next;const hint=trigger.querySelector('.dex-image-zoom-hint');if(hint)hint.textContent='画像を拡大';}
+          return;
+        }
+        if(trigger){trigger.disabled=true;trigger.removeAttribute('data-monster-zoom-src');const hint=trigger.querySelector('.dex-image-zoom-hint');if(hint)hint.textContent='画像を取得できません';}
+        const placeholder=document.createElement('span');placeholder.className='dex-image-missing';placeholder.textContent='画像を取得できません。詳細の出典リンクからご確認ください。';img.replaceWith(placeholder);
+      });
+    });
   }
   function setupImageViewer() {
     const viewer=document.createElement('dialog');viewer.className='dex-image-zoom';viewer.setAttribute('aria-labelledby','dex-image-zoom-title');
@@ -115,7 +131,7 @@
       event.preventDefault();event.stopPropagation();open(trigger);
     },true);
     document.addEventListener('error',event=>{
-      if(event.target.tagName!=='IMG')return;
+      if(event.target.tagName!=='IMG'||event.target.dataset.monsterImageCandidates)return;
       const trigger=event.target.closest('[data-monster-zoom-src]');if(!trigger)return;
       trigger.disabled=true;trigger.removeAttribute('data-monster-zoom-src');
       const hint=trigger.querySelector('.dex-image-zoom-hint');if(hint)hint.textContent='画像を取得できません';
@@ -191,7 +207,7 @@
       section.innerHTML='<h3>'+esc(title)+'</h3><ul class="dex-drop-list">'+items.map(d=>'<li>'+esc(d.name)+'<small>'+esc(d.note)+'</small><small>'+sourceLink(d.sourceUrl,'出典')+'</small></li>').join('')+'</ul>';
       $('dex-contributions').before(section);
     }
-    if(m.levelPost || m.imagePost){const p=document.createElement('p');p.className='dex-source';p.textContent=[m.levelPost?(isDetailEdit(m.levelPost)?'Lvはプレイヤーが入力した情報です。':'Lvは管理者が確認した投稿から補完。'):'',m.imagePost?(m.imagePost.details?.publication_mode==='immediate'?'画像はプレイヤーが追加したゲーム内画像です。':'画像は管理者が確認した投稿から補完。'):''].filter(Boolean).join(' ');$('dex-detail').querySelector('.dex-detail-main').after(p);}
+    if(m.levelPost || m.imagePost){const p=document.createElement('p');p.className='dex-source';p.textContent=[m.levelPost?(isDetailEdit(m.levelPost)?'Lvはプレイヤーが入力した情報です。':'Lvは管理者が確認した投稿から補完。'):'',m.imagePost?(['immediate','immediate_details'].includes(m.imagePost.details?.publication_mode)?'追加されたゲーム内画像を優先表示しています。':'管理者が確認した追加画像を優先表示しています。'):''].filter(Boolean).join(' ');$('dex-detail').querySelector('.dex-detail-main').after(p);}
     wireImages($('dex-detail'));
     if(window.XenReports){window.XenReports.mountMonster($('dex-contributions'),{id:m.id,name:m.name,url:'monsters.html#'+m.id,details:currentDetails(m)});const register=document.createElement('button');register.type='button';register.className='dex-image-register';register.textContent='画像を追加';register.onclick=()=>window.XenReports.openImage({kind:'monster',title:m.name,monsterId:m.id,url:'monsters.html#'+m.id});$('dex-detail').querySelector('.dex-detail-main>div').append(register);}
     else $('dex-contributions').textContent='追記機能を読み込めませんでした。ページを再読み込みしてください。';
@@ -206,17 +222,24 @@
     for(const monster of data.monsters){
       const original=originalValues.get(monster.id);
       if(original){monster.level=original.level;monster.imageUrl=original.imageUrl;monster.map=original.map;monster.notes=original.notes;}
-      delete monster.levelPost;delete monster.imagePost;delete monster.detailPosts;
+      delete monster.levelPost;delete monster.imagePost;delete monster.detailPosts;delete monster.imageCandidates;
     }
-    // Legacy reviewed rows keep their fill-missing behavior; image additions keep their existing rules.
+    // Legacy level rows keep their fill-missing behavior; image priority is resolved below.
     for(const row of rows){
       const list=additions.get(row.monster_id)||[];list.push(row);additions.set(row.monster_id,list);
       const monster=byId.get(row.monster_id);if(!monster)continue;
       if(monster.level==null && !isDetailEdit(row) && row.details?.publication_mode!=='immediate' && Number.isInteger(row.details?.level)){monster.level=row.details.level;monster.levelPost=row;}
-      if(!monster.imageUrl && http(row.details?.image_url)){monster.imageUrl=http(row.details.image_url);monster.imagePost=row;}
     }
     // Each explicitly submitted field has its own winner, irrespective of the API's row order.
     const time=row=>{const value=Date.parse(row.created_at||row.updated_at||'');return Number.isFinite(value)?value:0;};
+    for(const monster of data.monsters){
+      const images=extra(monster).filter(row=>!row.deleted_at&&!['rejected','removed'].includes(row.status)&&http(row.details?.image_url))
+        .slice().sort((a,b)=>time(b)-time(a)||String(b.id||'').localeCompare(String(a.id||'')));
+      const original=originalValues.get(monster.id)?.imageUrl;
+      monster.imageCandidates=[...new Set([...images.map(row=>http(row.details.image_url)),http(original)].filter(Boolean))];
+      monster.imageUrl=monster.imageCandidates.length?monster.imageCandidates[0]:original??null;
+      if(images.length)monster.imagePost=images[0];
+    }
     const edits=rows.filter(isDetailEdit).slice().sort((a,b)=>time(a)-time(b)||String(a.id||'').localeCompare(String(b.id||'')));
     for(const row of edits){
       const monster=byId.get(row.monster_id);if(!monster)continue;
@@ -238,7 +261,7 @@
     if($('dex-dialog').open && location.hash)open(decode(location.hash.slice(1)),false,false);
   }
   async function init() {
-    try {const response=await fetch('assets/monsters-data.json?v=3');if(!response.ok)throw new Error('load');data=await response.json();
+    try {const response=await fetch('assets/monsters-data.json?v=4');if(!response.ok)throw new Error('load');data=await response.json();
       for(const monster of data.monsters)originalValues.set(monster.id,{level:monster.level,imageUrl:monster.imageUrl,map:monster.map,notes:monster.notes});
       if(innerWidth<600)$('dex-region-panel').open=false;
       $('dex-total').textContent=data.regions.length+'地域・'+data.monsters.length+'件の出現情報';

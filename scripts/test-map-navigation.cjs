@@ -385,8 +385,8 @@ check("reviewed old Japanese labels keep English primary and leave unknown names
 });
 check("all curated Japanese map aliases are unique and source reviewed",()=>{
   const data=JSON.parse(fs.readFileSync(path.join(__dirname,"../dist/assets/map-japanese-names.json"),"utf8"));
-  assert.equal(Object.keys(data.names).length,100);
-  assert.equal(new Set(Object.values(data.names)).size,100);
+  assert.equal(Object.keys(data.names).length,102);
+  assert.equal(new Set(Object.values(data.names)).size,102);
   for(const [english,japanese] of Object.entries(data.names)){assert.equal(nav.canonicalMapName(japanese),english);assert(world.nodes.includes(english));}
   assert.equal(nav.canonicalMapName("北ブリンヒルド"),"Guild Plaza");
   assert.equal(nav.canonicalMapName("南ブリンヒルド"),"Arcarinas Square");
@@ -434,4 +434,35 @@ check("Trisects entry aliases point to Arcarinas without inventing an exit posit
   assert.equal(point.x,510);assert.equal(point.map_id,"trisects");
 });
 
+check("game-confirmed Clingon Plains corrects legacy Chingon without changing IDs or routes",()=>{
+  const graph=nav.buildGraph(world,[],{includeTransports:false});
+  assert.equal(nav.canonicalMapName("Chingon Plains"),"Clingon Plains");
+  assert(graph.nodes.includes("Clingon Plains"));assert(!graph.nodes.includes("Chingon Plains"));
+  assert.deepEqual(Array.from(nav.findRoute(graph,"Chingon Plains","Lifeline Basin").path),["Clingon Plains","Lifeline Basin"]);
+  assert.equal(nav.canonicalMapName("Chingon Plains B1F"),"Chingon Plains B1F");
+  const grouped=nav.groupMaps([{id:"legacy-chingon",map_name:"Chingon Plains",map_image_url:"retained-photo"},{id:"game-clingon",map_name:"Clingon Plains",map_image_url:"game-photo"}]);assert.equal(grouped.length,1);
+  assert(grouped[0].map_variants.some(row=>row.id==="legacy-chingon"&&row.map_image_url==="retained-photo"));
+  assert.equal(context.XEN_MAP_JAPANESE_NAMES["Clingon Plains"],undefined);
+});
+
+check("Rosetar, Paladino and Ashely corrections preserve their original connections and image keys",()=>{
+ const graph=nav.buildGraph(world,[],{includeTransports:false});
+ for(const [oldName,newName,left,right,jp]of [['Rosestar Basin','Rosetar Basin','Tolkin Gorge','Pharaday Gorge','ロジタ盆地'],['Pladino Grove','Paladino Grove','Onix Hill','Engrave Path','パルラディノグローブ'],['Ashley Forest','Ashely Forest','Lavy Basin','Onix Hill',null]]){
+  assert.equal(nav.canonicalMapName(oldName),newName);assert(graph.nodes.includes(newName));assert(!graph.nodes.includes(oldName));assert.deepEqual(Array.from(nav.findRoute(graph,oldName,left).path),[newName,left]);assert.deepEqual(Array.from(nav.findRoute(graph,oldName,right).path),[newName,right]);assert.equal(nav.canonicalMapName(oldName+' B1F'),oldName+' B1F');
+  const groups=nav.groupMaps([{id:'raw-id',map_name:oldName,map_image_url:'retained-photo'},{id:'new-id',map_name:newName,map_image_url:'game-photo'}]);assert.equal(groups.length,1);assert(groups[0].map_variants.some(row=>row.id==='raw-id'&&row.map_image_url==='retained-photo'&&row.map_name_original===oldName));if(jp){assert.equal(context.XEN_MAP_JAPANESE_NAMES[newName],jp);assert.equal(context.XEN_MAP_JAPANESE_NAMES[oldName],undefined);assert.equal(nav.canonicalMapName(jp),newName);}else assert.equal(context.XEN_MAP_JAPANESE_NAMES[newName],undefined);
+ }
+ assert.equal(world.edges.length,208);assert.equal(transports.edges.length,50);
+});
+check("monster display corrections keep source anchors and original reference map evidence",()=>{
+ const data=JSON.parse(fs.readFileSync(path.join(__dirname,'../dist/assets/monsters-data.json'),'utf8'));
+ assert.equal(data.monsters.filter(m=>m.map==='Rosetar Basin').length,4);assert.equal(data.monsters.filter(m=>m.map==='Paladino Grove').length,4);assert.equal(data.monsters.filter(m=>m.map==='Clingon Plains').length,5);assert.equal(data.monsters.filter(m=>m.map==='Ashely Forest').length,5);
+ for(const m of data.monsters.filter(m=>m.map==='Rosetar Basin')){assert(m.id.includes('rosestar-basin'));assert(m.sourceAnchor.includes('Rosestar'));}
+ for(const m of data.monsters.filter(m=>m.map==='Paladino Grove')){assert(m.id.includes('pladino-grove'));assert(m.sourceAnchor.includes('Pladino'));}
+ const ros=data.references.filter(r=>r.map==='Rosetar Basin'),pal=data.references.filter(r=>r.map==='Paladino Grove');assert.equal(ros.length,4);assert.equal(pal.length,2);assert(ros.every(r=>r.originalMap.startsWith('Rosestar Basin')&&r.name.startsWith('Rosetar Basin')));assert(pal.every(r=>r.originalMap==='Pladino Grove'&&r.name==='Paladino Grove'));assert(ros.some(r=>r.name==='Rosetar Basin (non-HHs)'&&r.originalMap==='Rosestar Basin (non-HHs)'));
+});
+check("complete Shylphaen MAP connects north Baskerville and east Corlona only",()=>{
+ const graph=nav.buildGraph(world,[],{includeTransports:false});assert.equal(nav.canonicalMapName('Sylphaen Forest'),'Shylphaen Forest');assert(!graph.nodes.includes('Sylphaen Forest'));assert(graph.nodes.includes('Corlona Forest'));assert.notEqual(nav.canonicalMapName('Corlona Forest'),nav.canonicalMapName('Colorado Forest'));const exits=graph.get('Shylphaen Forest');assert.equal(exits.length,2);const north=exits.find(e=>e.to==='Baskerville Forest'),east=exits.find(e=>e.to==='Corlona Forest');assert(north&&east);assert.equal(north.direction,'top');assert.equal(east.direction,'right');assert.equal(north.minLevel,null);assert.equal(east.minLevel,null);assert(!exits.some(e=>e.to==='Berdena Forest'));
+ const map={id:'shyl-map',map_name:'Sylphaen Forest'};assert.equal(nav.selectExit(north,map,[]),null);assert.equal(nav.selectExit(east,map,[]),null);const point=nav.selectExit(east,map,[{id:'verified-east',map_id:'shyl-map',npc_name:'Corlona Forest',x_norm:980,y_norm:390}]);assert.equal(point.x,980);assert.equal(nav.selectExit(east,{id:'different-crop',map_name:'Shylphaen Forest'},[{map_id:'shyl-map',npc_name:'Corlona Forest',x_norm:980,y_norm:390}]),null);
+ assert.equal(context.XenMapJapaneseNames.get('Sylphaen Forest'),'シルバエンの森');assert.equal(context.XenMapJapaneseNames.get('Corlona Forest'),'コルロナの森');assert.equal(nav.canonicalMapName('Sylphaen Forest B1F'),'Sylphaen Forest B1F');assert.equal(world.edges.length,208);assert.equal(transports.edges.length,50);const d=JSON.parse(fs.readFileSync(path.join(__dirname,'../dist/assets/monsters-data.json'),'utf8'));assert.equal(d.monsters.filter(m=>m.map==='Shylphaen Forest').length,6);const refs=d.references.filter(r=>r.map==='Shylphaen Forest');assert.equal(refs.length,2);assert(refs.every(r=>r.name==='Shylphaen Forest'&&r.originalMap==='Sylphaen Forest'));
+});
 console.log("PASS: "+checks+" route, transport, level, canonical map and exact-coordinate checks.");
