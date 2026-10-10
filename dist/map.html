@@ -12,7 +12,7 @@
 <script defer src="assets/world-routes.js?v=8"></script><script defer src="assets/map-registry.js?v=6"></script><script defer src="assets/map-japanese-names.js?v=2"></script>
 <script defer src="assets/map-transports.js?v=2"></script><script defer src="assets/map-navigation.js?v=1"></script>
 <script defer src="assets/map-schematics.js?v=2"></script><script defer src="assets/map-name-corrections.js?v=1"></script><script defer src="assets/map-location.js?v=1"></script><script defer src="assets/map-navigation-data.js?v=5"></script>
-<script defer src="assets/map-navigator.js?v=7"></script><script defer src="assets/map-portals.js?v=1"></script><script defer src="assets/saved-items.js?v=8"></script>
+<script defer src="assets/map-navigator.js?v=8"></script><script defer src="assets/map-portals.js?v=1"></script><script defer src="assets/saved-items.js?v=8"></script>
 <script defer src="assets/visitor-counter.js?v=1"></script><script defer src="assets/report-issues.js?v=6"></script>
 </head>
 <body>
@@ -46,7 +46,7 @@
 </div>
 <div class="map-view-column">
 <section class="paper map-view" aria-labelledby="map-view-title">
-<div class="map-view-heading"><div><p class="eyebrow">SAVED GAME MAP</p><h2 id="map-view-title">保存された拡大マップ</h2></div><div class="map-view-actions"><button id="map-name-edit" type="button" hidden>マップ名を修正</button><button id="map-update-image" type="button" hidden>画像を更新</button><button id="map-reload" type="button">再読み込み</button></div></div>
+<div class="map-view-heading"><div><p class="eyebrow">SAVED GAME MAP</p><h2 id="map-view-title">保存された拡大マップ</h2></div><div class="map-view-actions"><button id="map-name-edit" type="button" hidden>マップ名を修正</button><button id="map-update-image" type="button" hidden>画像を更新</button><button id="map-add-variant" type="button" hidden>別マップとして追加</button><button id="map-reload" type="button">再読み込み</button></div></div>
 <div class="map-view-selects"><label>表示するマップ<select id="map-view-select"><option value="">マップを選ぶ</option></select></label><label id="map-variant-label" hidden>画像を切り替える<select id="map-variant-select"></select></label></div>
 <form id="map-name-form" hidden><label>ゲーム内の正しいマップ名<input id="map-name-corrected" maxlength="120" required></label><p class="map-help">画像・NPC位置・接続を残したまま、サイト共通の表記を修正します。</p><p id="map-name-status" role="status"></p><div class="map-point-actions"><button id="map-name-cancel" type="button">キャンセル</button><button id="map-name-save" class="map-primary" type="submit">マップ名を保存</button></div></form>
 <p id="map-guidance" class="map-guidance" aria-live="polite">マップを選ぶとゲーム内画像を表示します。</p>
