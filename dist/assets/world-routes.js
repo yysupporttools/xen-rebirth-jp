@@ -42,8 +42,8 @@
   // Central blue route.
   chain(["Bradlely Forest","Kryston Forest","Sheriff Forest","Telling Denver Lake","Gaudy Forest","Harrington Forest","Candy Vault","Alicia Forest","Realto Plains","Taisen Plains","Lombard Plains","Scorging Plains","Rudwork Path","Proteron Gorge","Skitchy Gorge","Titanus Plains","Eir"]);
   add("Candy Vault","Alicia Forest",{minLevel:30,note:"L30+"});
-  chain(["Bradlely Forest","Belpharen Forest","Salem Valley","Witchwood Forest","Fraunden Forest"]);
-  chain(["Grudin Forest","Vargas Forest","Fraunden Forest","Abundance Town"]);
+  chain(["Bradlely Forest","Belpharen Forest","Salem Valley","Witchwood Forest","Furanden Forest"]);
+  chain(["Grudin Forest","Vargas Forest","Furanden Forest","Abundance Town"]);
   add("Witchwood Forest","Grudin Forest");
 
   // Central green routes into Essene.
@@ -170,7 +170,7 @@
   };
 
   window.XEN_WORLD_ROUTES={
-    version:8,
+    version:9,
     source:"Makise Xen Rebirth World Map (user supplied)",
     movement_rule:"orthogonal-explicit-only",
     nodes:Array.from(nodes).sort(function(a,b){return a.localeCompare(b,"en");}),

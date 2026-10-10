@@ -1,5 +1,5 @@
 {
-  "version": 7,
+  "version": 8,
   "source": "Pre-registered world routes, game-confirmed names, verified capture spelling aliases and reviewed old Japanese map names",
   "names": [
     "Abundance Town",
@@ -83,7 +83,7 @@
     "Felix Forest",
     "Fies Plateau",
     "Floating Island of Dragons Dock",
-    "Fraunden Forest",
+    "Furanden Forest",
     "Gaudy Forest",
     "Gefe Camp",
     "Goofball Plains",
@@ -297,7 +297,7 @@
     "felixforest": "Felix Forest",
     "fiesplateau": "Fies Plateau",
     "floatingislandofdragonsdock": "Floating Island of Dragons Dock",
-    "fraundenforest": "Fraunden Forest",
+    "fraundenforest": "Furanden Forest",
     "gaudyforest": "Gaudy Forest",
     "gefecamp": "Gefe Camp",
     "goofballplains": "Goofball Plains",
@@ -581,6 +581,7 @@
     "コルロナの森": "Corlona Forest",
     "lavavalley": "Lava Valley",
     "lavamountainexit": "Lava Mountain Exit",
-    "colronaforest": "Corlona Forest"
+    "colronaforest": "Corlona Forest",
+    "furandenforest": "Furanden Forest"
   }
 }
