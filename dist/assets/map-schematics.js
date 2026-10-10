@@ -23,5 +23,17 @@ window.XEN_MAP_SCHEMATICS={
     "label": "Sleepless Grave：Level 2の部分構造図",
     "scope": "動画で歩いた通路と分岐の概略です。区間どうしの全体接続、戻り経路、先の階層は未確認です。",
     "source": "bandicam 2026-10-10 11-57-18-215.mp4"
+  },
+  "Lost Wedge Valley": {
+    "path": "assets/schematics/lost-wedge-valley-clean.svg?v=1",
+    "label": "Lost Wedge Valley：動画からの概略図",
+    "scope": "動画の約8秒〜4分までの区間を参考に生成した概略図です。Sherwood Valleyの地形を含みません。 距離・位置・未撮影部分は未確認で、推定補完を含みます。入口・出口の印は管理者が手動で配置できます。",
+    "source": "bandicam 2026-10-10 16-31-43-604.mp4"
+  },
+  "Sherwood Valley": {
+    "path": "assets/schematics/sherwood-valley-clean.svg?v=1",
+    "label": "Sherwood Valley：動画からの概略図",
+    "scope": "動画の約4分4秒以降の区間を参考に生成した概略図です。終盤の吊り橋を含み、Ice Maze 1F内部は含みません。 距離・位置・未撮影部分は未確認で、推定補完を含みます。入口・出口の印は管理者が手動で配置できます。",
+    "source": "bandicam 2026-10-10 16-31-43-604.mp4"
   }
 };
