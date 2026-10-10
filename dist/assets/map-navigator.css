@@ -3,3 +3,5 @@
 
 .map-view-actions{display:flex;gap:8px;flex-wrap:wrap;justify-content:flex-end}.map-view-actions button{white-space:nowrap}.map-upload-dialog #map-upload-original-image{display:block;width:100%;max-height:320px;object-fit:contain;margin-top:12px}.map-image-review{color:#80631f;background:#fff7e4;border-radius:4px;padding:8px 11px}
 @media(max-width:500px){.map-view-heading{align-items:flex-start}.map-view-actions{flex-direction:column;gap:6px}.map-view-actions button{font-size:12px;padding:7px 9px}}
+
+.map-schematic-note{padding:12px 16px;margin-top:14px;border:1px solid #b5d1de;border-radius:8px;background:#eff8fc;color:#244a61}.map-schematic-note[hidden]{display:none}.map-schematic-note p{font-size:13px}.map-schematic-note button{padding:7px 12px;border:1px solid #abc7d5;border-radius:7px;background:white;color:#244a61}

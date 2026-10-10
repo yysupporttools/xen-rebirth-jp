@@ -116,7 +116,7 @@
   function renderOptions(){
     const all=names();
     $("map-names").innerHTML=all.map(name=>'<option value="'+esc(name)+'" label="'+esc(mapLabel(name))+'">'+esc(mapLabel(name))+'</option>').join("");
-    $("map-view-select").innerHTML='<option value="">マップを選ぶ</option>'+all.map(name=>'<option value="'+esc(name)+'">'+esc(mapLabel(name))+(noExpandedMap(name)?"（拡大マップなし）":data.maps.some(map=>map.map_name===name&&map.map_image_url)?"":"（画像未登録）")+'</option>').join("");
+    $("map-view-select").innerHTML='<option value="">マップを選ぶ</option>'+all.map(name=>'<option value="'+esc(name)+'">'+esc(mapLabel(name))+(noExpandedMap(name)?"（拡大マップなし）":data.maps.some(map=>map.map_name===name&&map.map_image_url)?"":schematic(name)?"（動画の部分構造図）":"（画像未登録）")+'</option>').join("");
     $("map-view-select").value=shown;
   }
   function currentStatus(state){
@@ -232,8 +232,9 @@
   function updateZoom(){
     $("map-stage").style.width=(zoom*100)+"%";$("map-zoom-label").textContent=Math.round(zoom*100)+"%";
   }
+  function schematic(name){const value=root.XEN_MAP_SCHEMATICS?.[canon(name)];return value&&/^assets\/schematics\/[a-z-]+\.svg\?v=\d+$/.test(value.path)?value:null;}
   function renderMap(){
-    const map=selectedMap(),image=map?safeImage(map.map_image_url):"";
+    const map=selectedMap(),actual=map?safeImage(map.map_image_url):"",diagram=actual?null:schematic(shown),image=actual||diagram?.path||"";
     $("map-view-title").textContent=mapLabel(shown)||"保存された拡大マップ";
     $("map-view-select").value=shown;
     const group=data.mapGroups.find(row=>canon(row.map_name)===shown);
@@ -242,16 +243,20 @@
     $("map-variant-select").innerHTML=variants.map((row,i)=>'<option value="'+esc(row.id)+'">画像 '+(i+1)+' · '+esc(mapLabel(row.map_name))+'</option>').join("");
     $("map-variant-select").value=map?.id||"";
     $("map-stage").hidden=!image;$("map-empty").hidden=!!image;$("map-add-image").hidden=!shown||!!map?.map_image_url||noExpandedMap(shown);
-    $("map-update-image").hidden=!image;
+    $("map-update-image").hidden=!actual;
     syncImageActions();
-    $("map-set-position").disabled=!image;$("map-set-marker").disabled=!image;
+    $("map-set-position").disabled=!actual;$("map-set-marker").disabled=!actual;
+    $("map-show-npcs").disabled=!!diagram;
+    $("map-schematic-note").hidden=!diagram;
+    $("map-schematic-caption").textContent=diagram?diagram.label+" — "+diagram.scope:"";
     for(const id of ["map-zoom-in","map-zoom-out","map-reset-view"])$(id).disabled=!image;
     $("map-image-status").textContent=(map?.image_source==="manual"?"手動更新の画像を優先表示しています。画像更新後のNPC位置は確認中です。 ":"")+(map?.updated_at?"画像・マップ情報の保存："+new Date(map.updated_at).toLocaleString("ja-JP"):"");
     $("map-image-status").classList.toggle("map-image-review",map?.image_source==="manual");
     if(image){
-      $("map-image").alt=mapLabel(shown)+" のゲーム内拡大マップ";
+      $("map-image").alt=diagram?diagram.label+"（動画から作成した概略構造図）":mapLabel(shown)+" のゲーム内拡大マップ";
       if($("map-image").getAttribute("src")!==image)$("map-image").src=image;
-      $("map-stage").style.width=(zoom*100)+"%";renderPins();
+      $("map-stage").style.width=(zoom*100)+"%";
+      if(diagram){$("map-pins").innerHTML="";$("map-arrows").innerHTML="";$("map-clear-marker").hidden=true;$("map-image-status").textContent="動画から作成した構造図。位置・縮尺は概略で、ゲーム画面の座標とは対応していません。";$("map-guidance").textContent=activeGuidance(map||{map_name:shown}).text+" 構造図の門・ポータルを参考に移動してください。";}else renderPins();
     }else{
       $("map-image").removeAttribute("src");$("map-arrows").innerHTML="";$("map-pins").innerHTML="";
       $("map-empty-text").textContent=noExpandedMap(shown)?"この場所には拡大マップがありません。移動手順と出発NPCで案内します。":shown?mapLabel(shown)+" の拡大マップ画像は未登録です。画像を追加するか、翻訳・NPC検索で収集できます。":"マップを選んでください。";
@@ -416,6 +421,7 @@
     if(directions[event.key]){event.preventDefault();$("map-viewport").scrollBy({left:directions[event.key][0],top:directions[event.key][1]});}
   });
   $("map-add-image").addEventListener("click",()=>openUpload("add"));
+  $("map-schematic-add").addEventListener("click",()=>openUpload("add"));
   $("map-update-image").addEventListener("click",()=>openUpload("update"));
   $("map-upload-paste").addEventListener("click",()=>$("map-upload-paste").focus());
   $("map-upload-paste").addEventListener("paste",event=>{const file=[...(event.clipboardData?.items||[])].find(item=>item.kind==="file"&&item.type.startsWith("image/"))?.getAsFile();if(file){event.preventDefault();selectUpload(file);}});

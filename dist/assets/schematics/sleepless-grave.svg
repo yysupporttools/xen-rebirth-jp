@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1100" height="1000" viewBox="0 0 1100 1000"><defs><pattern id="tiles" width="40" height="40" patternUnits="userSpaceOnUse"><rect width="40" height="40" fill="#344f64"/><path d="M0 0H40V40" fill="none" stroke="#486478"/></pattern><marker id="arrow" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0L10 5L0 10Z" fill="#edd36f"/></marker></defs><rect width="1100" height="1000" fill="#102634"/><g font-family="Yu Gothic,Meiryo,sans-serif" text-anchor="middle" fill="#eaf3f8"><text x="550" y="55" font-size="30" font-weight="bold">Sleepless Grave：入口とLevel 1付近</text><text x="550" y="91" font-size="18" fill="#b8ccd9">動画から作成した構造図・確認できた範囲のみ／寸法・位置・縮尺は概略</text>
+<text x="280" y="150" font-size="26">Entrance</text><text x="820" y="150" font-size="26">Level 1（到着地点付近）</text>
+<path d="M140 240H235V205H325V240H430V735H325V825H235V735H140Z" fill="url(#tiles)" stroke="#83a2b6" stroke-width="7"/>
+<rect x="235" y="205" width="90" height="45" fill="#edd36f"/><text x="280" y="193" font-size="20">奥の門 → Level 1</text>
+<rect x="155" y="360" width="65" height="150" rx="9" fill="#526879" stroke="#aac0cc"/><text x="187" y="545" font-size="18">棺</text>
+<ellipse cx="385" cy="400" rx="27" ry="55" fill="#526879" stroke="#aac0cc"/><text x="384" y="485" font-size="18">檻</text>
+<circle cx="280" cy="703" r="35" fill="#76cfa5"/><text x="280" y="790" font-size="19">Eirからの到着地点</text>
+<path d="M280 647V300" stroke="#edd36f" stroke-width="7" marker-end="url(#arrow)"/>
+<path d="M675 300V740H770V825H860V740H965V300" fill="url(#tiles)" stroke="#83a2b6" stroke-width="7"/>
+<path d="M675 300H965" stroke="#83a2b6" stroke-width="5" stroke-dasharray="12 10"/><text x="820" y="240" font-size="21">この先は未記録</text>
+<path d="M730 340Q820 315 910 340" fill="none" stroke="#a3bfcd" stroke-width="16"/><text x="820" y="385" font-size="19">到着した門付近</text>
+<circle cx="820" cy="700" r="35" fill="#76cfa5"/><text x="820" y="790" font-size="20">入口へ戻るポータル</text>
+<path d="M820 485V635" stroke="#edd36f" stroke-width="7" marker-end="url(#arrow)"/>
+<text x="550" y="873" font-size="18">Eirから入口へ移動、入口からLevel 1へ進み、入口へ戻る流れを動画で確認</text><text x="550" y="942" font-size="19" fill="#b8ccd9">青灰：確認できた床　黄：確認した移動　点線：未記録の先</text><text x="550" y="975" font-size="16" fill="#b8ccd9">2026-10-10の提供動画を参照</text></g></svg>

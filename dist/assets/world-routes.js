@@ -60,7 +60,7 @@
 
   // Oasis / desert.
   add("Taisen Plains","Oasis");
-  chain(["Oasis","Turneit Desert","Cretino Desert","Asherphel Desert","Emporanie Plateau","Taquestrim Plateau","Phildyeit Plateau","Alison Gorge","Heather Basin","Tanline Gorge"]);
+  chain(["Oasis","Turmeit Desert","Cretino Desert","Asherphel Desert","Emporanie Plateau","Taquestrim Plateau","Phildyeit Plateau","Alison Gorge","Heather Basin","Tanline Gorge"]);
   chain(["Tanline Gorge","Acidbath Valley","Chanthery Gorge"]);
   add("Chanthery Gorge","Clipper Plains",{minLevel:66,note:"L66+"});
 
@@ -73,7 +73,11 @@
 
   // Dungeon entrances with a single valid overworld entry.
   add("Eir","Sleepless Grave",{kind:"dungeon",note:"Eirからのみ入場"});
-  add("Turneit Desert","Sand Desert Dungeon",{kind:"dungeon",note:"Turneit Desertからのみ入場"});
+  // 2026-10-10 video: observed entry and Level 1 round trip; no unobserved Eir return.
+  add("Eir","Sleepless Grave (Entrance)",{kind:"dungeon",directed:true,exitA:["Sleepless Grave"],note:"動画で確認：Sleepless Graveの入口へ移動"});
+  add("Sleepless Grave (Entrance)","Sleepless Grave (Level 1)",{kind:"dungeon",dirA:"top",dirB:"bottom",note:"動画で確認：入口の奥の門とLevel 1の戻りポータル"});
+  add("Sleepless Grave (Level 1)","Sleepless Grave (Level 2)",{kind:"dungeon",directed:true,note:"動画で確認：格子の壁際からLevel 2へ。戻り経路は未確認"});
+  add("Turmeit Desert","Sand Desert Dungeon",{kind:"dungeon",note:"Turneit Desertからのみ入場"});
   add("Shenzhen Waterfall","Temple of Pansidia",{kind:"dungeon",note:"Shenzhen Waterfallからのみ入場"});
 
   // Far east.
@@ -152,6 +156,10 @@
     "floating island of dragons dock":"Floating Island of Dragons Dock",
     "air ship boarding gate":"Airship Boarding Gate",
     "airship boarding gate":"Airship Boarding Gate",
+    "turneit desert":"Turmeit Desert",
+    "turmeit desert":"Turmeit Desert",
+    "sleepless grave entrance":"Sleepless Grave (Entrance)",
+    "sleepless grave level 1":"Sleepless Grave (Level 1)",
     "sleepless grave":"Sleepless Grave",
     "sand desert":"Sand Desert Dungeon",
     "sand desert dungeon":"Sand Desert Dungeon",
@@ -159,7 +167,7 @@
   };
 
   window.XEN_WORLD_ROUTES={
-    version:6,
+    version:7,
     source:"Makise Xen Rebirth World Map (user supplied)",
     movement_rule:"orthogonal-explicit-only",
     nodes:Array.from(nodes).sort(function(a,b){return a.localeCompare(b,"en");}),

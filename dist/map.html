@@ -7,12 +7,12 @@
 <meta name="description" content="現在のマップから目的地やNPC、モンスターの出現マップまで案内。保存されたゲーム内拡大マップに目印を表示できます。">
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='6' fill='%230d2630'/%3E%3Cpath d='M8 7L24 25M24 7L8 25' stroke='%23e5bd77' stroke-width='4'/%3E%3C/svg%3E">
 <link rel="stylesheet" href="assets/style.css"><link rel="stylesheet" href="assets/saved-items.css?v=5">
-<link rel="stylesheet" href="assets/map-navigator.css?v=2"><link rel="stylesheet" href="assets/report-issues.css?v=5">
+<link rel="stylesheet" href="assets/map-navigator.css?v=3"><link rel="stylesheet" href="assets/report-issues.css?v=5">
 <script defer src="assets/vendor/supabase.js"></script><script defer src="assets/glossary-config.js"></script>
-<script defer src="assets/world-routes.js?v=7"></script><script defer src="assets/map-registry.js?v=5"></script><script defer src="assets/map-japanese-names.js?v=2"></script>
+<script defer src="assets/world-routes.js?v=8"></script><script defer src="assets/map-registry.js?v=6"></script><script defer src="assets/map-japanese-names.js?v=2"></script>
 <script defer src="assets/map-transports.js?v=2"></script><script defer src="assets/map-navigation.js?v=1"></script>
-<script defer src="assets/map-location.js?v=1"></script><script defer src="assets/map-navigation-data.js?v=4"></script>
-<script defer src="assets/map-navigator.js?v=5"></script><script defer src="assets/saved-items.js?v=8"></script>
+<script defer src="assets/map-schematics.js?v=1"></script><script defer src="assets/map-location.js?v=1"></script><script defer src="assets/map-navigation-data.js?v=4"></script>
+<script defer src="assets/map-navigator.js?v=6"></script><script defer src="assets/saved-items.js?v=8"></script>
 <script defer src="assets/visitor-counter.js?v=1"></script><script defer src="assets/report-issues.js?v=6"></script>
 </head>
 <body>
@@ -57,6 +57,7 @@
 <div id="map-stage" class="map-stage" hidden><img id="map-image" alt="" draggable="false"><svg id="map-arrows" class="map-arrows" viewBox="0 0 1000 1000" preserveAspectRatio="none" aria-hidden="true"></svg><div id="map-pins" class="map-pins"></div></div>
 <div id="map-empty" class="map-empty"><span aria-hidden="true">⌖</span><p id="map-empty-text">マップを選んでください。</p><button id="map-add-image" class="map-primary" type="button" hidden>拡大マップ画像を追加</button></div>
 </div>
+<aside id="map-schematic-note" class="map-schematic-note" hidden><strong>動画からの構造図</strong><p id="map-schematic-caption"></p><button id="map-schematic-add" type="button">ゲーム内の拡大マップ画像を追加</button></aside>
 <p id="map-image-status" class="map-help" role="status"></p>
 <div class="map-point-actions"><button id="map-set-position" type="button">地図で現在位置を指定</button><button id="map-set-marker" type="button">案内先の目印を補う</button><button id="map-cancel-point" type="button" hidden>位置指定をやめる</button><button id="map-clear-marker" type="button" hidden>補った目印を削除</button></div>
 <p id="map-point-status" class="map-help" role="status">位置の指定・補った目印は、この端末だけに保存します。</p>

@@ -451,7 +451,7 @@ check("Rosetar, Paladino and Ashely corrections preserve their original connecti
   assert.equal(nav.canonicalMapName(oldName),newName);assert(graph.nodes.includes(newName));assert(!graph.nodes.includes(oldName));assert.deepEqual(Array.from(nav.findRoute(graph,oldName,left).path),[newName,left]);assert.deepEqual(Array.from(nav.findRoute(graph,oldName,right).path),[newName,right]);assert.equal(nav.canonicalMapName(oldName+' B1F'),oldName+' B1F');
   const groups=nav.groupMaps([{id:'raw-id',map_name:oldName,map_image_url:'retained-photo'},{id:'new-id',map_name:newName,map_image_url:'game-photo'}]);assert.equal(groups.length,1);assert(groups[0].map_variants.some(row=>row.id==='raw-id'&&row.map_image_url==='retained-photo'&&row.map_name_original===oldName));if(jp){assert.equal(context.XEN_MAP_JAPANESE_NAMES[newName],jp);assert.equal(context.XEN_MAP_JAPANESE_NAMES[oldName],undefined);assert.equal(nav.canonicalMapName(jp),newName);}else assert.equal(context.XEN_MAP_JAPANESE_NAMES[newName],undefined);
  }
- assert.equal(world.edges.length,208);assert.equal(transports.edges.length,50);
+ assert.equal(world.edges.length,211);assert.equal(transports.edges.length,50);
 });
 check("monster display corrections keep source anchors and original reference map evidence",()=>{
  const data=JSON.parse(fs.readFileSync(path.join(__dirname,'../dist/assets/monsters-data.json'),'utf8'));
@@ -463,6 +463,15 @@ check("monster display corrections keep source anchors and original reference ma
 check("complete Shylphaen MAP connects north Baskerville and east Corlona only",()=>{
  const graph=nav.buildGraph(world,[],{includeTransports:false});assert.equal(nav.canonicalMapName('Sylphaen Forest'),'Shylphaen Forest');assert(!graph.nodes.includes('Sylphaen Forest'));assert(graph.nodes.includes('Corlona Forest'));assert.notEqual(nav.canonicalMapName('Corlona Forest'),nav.canonicalMapName('Colorado Forest'));const exits=graph.get('Shylphaen Forest');assert.equal(exits.length,2);const north=exits.find(e=>e.to==='Baskerville Forest'),east=exits.find(e=>e.to==='Corlona Forest');assert(north&&east);assert.equal(north.direction,'top');assert.equal(east.direction,'right');assert.equal(north.minLevel,null);assert.equal(east.minLevel,null);assert(!exits.some(e=>e.to==='Berdena Forest'));
  const map={id:'shyl-map',map_name:'Sylphaen Forest'};assert.equal(nav.selectExit(north,map,[]),null);assert.equal(nav.selectExit(east,map,[]),null);const point=nav.selectExit(east,map,[{id:'verified-east',map_id:'shyl-map',npc_name:'Corlona Forest',x_norm:980,y_norm:390}]);assert.equal(point.x,980);assert.equal(nav.selectExit(east,{id:'different-crop',map_name:'Shylphaen Forest'},[{map_id:'shyl-map',npc_name:'Corlona Forest',x_norm:980,y_norm:390}]),null);
- assert.equal(context.XenMapJapaneseNames.get('Sylphaen Forest'),'シルバエンの森');assert.equal(context.XenMapJapaneseNames.get('Corlona Forest'),'コルロナの森');assert.equal(nav.canonicalMapName('Sylphaen Forest B1F'),'Sylphaen Forest B1F');assert.equal(world.edges.length,208);assert.equal(transports.edges.length,50);const d=JSON.parse(fs.readFileSync(path.join(__dirname,'../dist/assets/monsters-data.json'),'utf8'));assert.equal(d.monsters.filter(m=>m.map==='Shylphaen Forest').length,6);const refs=d.references.filter(r=>r.map==='Shylphaen Forest');assert.equal(refs.length,2);assert(refs.every(r=>r.name==='Shylphaen Forest'&&r.originalMap==='Sylphaen Forest'));
+ assert.equal(context.XenMapJapaneseNames.get('Sylphaen Forest'),'シルバエンの森');assert.equal(context.XenMapJapaneseNames.get('Corlona Forest'),'コルロナの森');assert.equal(nav.canonicalMapName('Sylphaen Forest B1F'),'Sylphaen Forest B1F');assert.equal(world.edges.length,211);assert.equal(transports.edges.length,50);const d=JSON.parse(fs.readFileSync(path.join(__dirname,'../dist/assets/monsters-data.json'),'utf8'));assert.equal(d.monsters.filter(m=>m.map==='Shylphaen Forest').length,6);const refs=d.references.filter(r=>r.map==='Shylphaen Forest');assert.equal(refs.length,2);assert(refs.every(r=>r.name==='Shylphaen Forest'&&r.originalMap==='Sylphaen Forest'));
+});
+check("video-confirmed Grave floors stay separate with only observed transitions",()=>{
+ const graph=nav.buildGraph(world,[],{includeTransports:false});
+ assert.equal(nav.canonicalMapName('Turneit Desert'),'Turmeit Desert');
+ assert(nav.findRoute(graph,'Eir','Sleepless Grave (Level 2)'));
+ assert(graph.get('Sleepless Grave (Level 1)').some(e=>e.to==='Sleepless Grave (Level 2)'));
+ assert(!graph.get('Sleepless Grave (Level 2)').some(e=>e.to==='Sleepless Grave (Level 1)'));
+ assert(!graph.get('Sleepless Grave (Entrance)').some(e=>e.to==='Eir'));
+ assert.notEqual(nav.canonicalMapName('Sleepless Grave (Level 1)'),nav.canonicalMapName('Sleepless Grave (Level 2)'));
 });
 console.log("PASS: "+checks+" route, transport, level, canonical map and exact-coordinate checks.");
