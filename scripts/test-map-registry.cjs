@@ -4,6 +4,7 @@ const context={window:{},console,crypto:{randomUUID:()=> 'test-device'},localSto
 vm.runInContext(fs.readFileSync(path.join(root,'dist/assets/map-registry.js'),'utf8'),context);
 const registry=context.window.XEN_MAP_REGISTRY;
 const pairs=[
+["Berdena Forest","Berdana Forest"],["Berdana Forest","Berdana Forest"],
 ["Sylphaen Forest","Shylphaen Forest"],["Shylphaen Forest","Shylphaen Forest"],["Sylphaen Forest B1F","Sylphaen Forest B1F"],["シルバエンの森","Shylphaen Forest"],["コルロナの森","Corlona Forest"],["Colorado Forest","Colorado Forest"],
 ["Rosestar Basin","Rosetar Basin"],["Rosetar Basin","Rosetar Basin"],["Rosestar Basin B1F","Rosestar Basin B1F"],["ロジタ盆地","Rosetar Basin"],
 ["Pladino Grove","Paladino Grove"],["Paladino Grove","Paladino Grove"],["Pladino Grove B1F","Pladino Grove B1F"],["パルラディノグローブ","Paladino Grove"],

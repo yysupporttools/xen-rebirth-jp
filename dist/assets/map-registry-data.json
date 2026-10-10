@@ -1,5 +1,5 @@
 {
-  "version": 4,
+  "version": 5,
   "source": "Pre-registered world routes, game-confirmed names, verified capture spelling aliases and reviewed old Japanese map names",
   "names": [
     "Abundance Town",
@@ -27,7 +27,7 @@
     "Baskerville Forest",
     "Belpharen Forest",
     "Belteranin Forest",
-    "Berdena Forest",
+    "Berdana Forest",
     "Bernald Forest",
     "Big Apple Forest",
     "Blackmail Forest",
@@ -241,7 +241,7 @@
     "baskervilleforest": "Baskerville Forest",
     "belpharenforest": "Belpharen Forest",
     "belteraninforest": "Belteranin Forest",
-    "berdenaforest": "Berdena Forest",
+    "berdanaforest": "Berdana Forest",
     "bernaldforest": "Bernald Forest",
     "bigappleforest": "Big Apple Forest",
     "blackmailforest": "Blackmail Forest",
@@ -433,6 +433,7 @@
     "sylphaenforest": "Shylphaen Forest",
     "pladinogrove": "Paladino Grove",
     "ashleyforest": "Ashely Forest",
+    "berdenaforest": "Berdana Forest",
     "rosestarbasin": "Rosetar Basin",
     "chingonplains": "Clingon Plains",
     "brynhilld": "Arcarinas Square",

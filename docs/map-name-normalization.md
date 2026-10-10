@@ -55,3 +55,5 @@ map-japanese-names.jsonのnamesが確認済み辞書の原本です。build-map-
 `scripts/build-map-registry.cjs` は `dist/assets/world-routes.js` の地名と別名を読み、確認済みの別表記を加えて `dist/assets/map-registry-data.json` と `dist/assets/map-registry.js` を生成します。
 
 新しい別表記は `verified` に追加し、生成後に `scripts/test-map-registry.cjs` で確認してください。類似する別マップの名前は別名として追加しないでください。
+
+ゲーム内MAP画像の「Berdana Forest」を正とし、旧表記「Berdena Forest」は別名として保持します。図鑑は既にBerdana表記のため変更せず、既存ID・写真・出典・接続は保持します。

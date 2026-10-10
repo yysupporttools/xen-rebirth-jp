@@ -52,7 +52,7 @@
   add("Baskerville Forest","Shylphaen Forest",{dirB:"top",exitB:["Baskerville Forest"],verified:true,source:"利用者のゲーム内MAP確認（2026-10-10）"});
   add("Shylphaen Forest","Corlona Forest",{dirA:"right",exitA:["Corlona Forest"],exitB:["Shylphaen Forest","Sylphaen Forest"],verified:true,source:"利用者のゲーム内MAP確認（2026-10-10）"});
   // Prior Sylphaen–Berdena connection is omitted pending confirmation.
-  chain(["Berdena Forest","Colorado Forest","Engrave Path","Essene"]);
+  chain(["Berdana Forest","Colorado Forest","Engrave Path","Essene"]);
   chain(["Baskerville Forest","Lavy Basin","Ashely Forest","Onix Hill","Paladino Grove","Engrave Path"]);
   chain(["Ashton Basin","Brolly Basin","Ashmon Hills","Bairyn Forest","Sudden Hill","Malian Forest","Trakian Path","Saifield Forest","Kastled Grove","Essene"]);
   add("Abundance Town","Ashmon Hills");
@@ -108,6 +108,8 @@
     "paladino grove":"Paladino Grove",
     "ashley forest":"Ashely Forest",
     "ashely forest":"Ashely Forest",
+    "berdena forest":"Berdana Forest",
+    "berdana forest":"Berdana Forest",
     "rosestar basin":"Rosetar Basin",
     "rosetar basin":"Rosetar Basin",
     "chingon plains":"Clingon Plains",
@@ -157,7 +159,7 @@
   };
 
   window.XEN_WORLD_ROUTES={
-    version:5,
+    version:6,
     source:"Makise Xen Rebirth World Map (user supplied)",
     movement_rule:"orthogonal-explicit-only",
     nodes:Array.from(nodes).sort(function(a,b){return a.localeCompare(b,"en");}),
