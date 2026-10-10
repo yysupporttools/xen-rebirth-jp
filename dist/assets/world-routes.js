@@ -36,7 +36,7 @@
   add("Yvel","Siberas Plateau",{minLevel:100,note:"L100+"});
   add("Siberas Plateau","Fies Plateau");
   add("Amelia Forest","Mute Basin");
-  chain(["Metapolis","Robern Plains","Arobac Plateau","Hellin Plateau"]);
+  chain(["Metapolis","Robern Plains","Arobec Plateau","Hellein Plateau"]);
   add("Metapolis","Big Apple Forest",{minLevel:100,note:"L100+"});
 
   // Central blue route.
