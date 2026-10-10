@@ -85,7 +85,7 @@
       catalogPromise,
       optional("モンスターの投稿情報を取得できませんでした。",readAll("monster_updates","id,monster_id,details,source_url,created_at,updated_at"))
     ]);
-    const normalized=maps.map(record),manualMaps=new Set(maps.filter(map=>map.image_source==="manual").map(map=>map.id));
+    const normalized=maps.map(row=>record({...row,map_name:row.display_map_name||row.map_name})),manualMaps=new Set(maps.filter(map=>map.image_source==="manual").map(map=>map.id));
     return {
       maps:normalized,mapGroups:groupMaps(normalized),
       mapNpcs:mapNpcs.map(row=>Object.assign({},row,{x_norm:manualMaps.has(row.map_id)?null:coordinate(row.x_norm),y_norm:manualMaps.has(row.map_id)?null:coordinate(row.y_norm),confidence:Number(row.confidence),position_unconfirmed:manualMaps.has(row.map_id)})),
@@ -122,11 +122,11 @@
     const name=canonical(options.name);
     if(!name||name.length>120||/[\u0000-\u001f\u007f<>]/.test(name))throw Error("登録するマップ名を120文字以内で入力してください。");
     const maps=await readAll("game_maps","id,map_name,map_image_url");
-    const variants=maps.filter(row=>canonical(row.map_name)===name);
-    if(variants.some(row=>row.map_image_url))throw Error("このマップの画像は登録済みです。既存画像はそのまま利用します。");
+    const variants=maps.filter(row=>canonical(row.display_map_name||row.map_name)===name);
+    if(!options.allowVariant&&variants.some(row=>row.map_image_url))throw Error("このマップの画像は登録済みです。別マップとして追加してください。");
     const selected=variants.slice().sort((a,b)=>(a.map_name===name?-1:0)-(b.map_name===name?-1:0))[0];
     // Orphaned coordinates cannot safely be attached to an unrelated new crop.
-    if(variants.length){
+    if(variants.length&&!options.allowVariant){
       const points=await readAll("map_npcs","id,map_id");
       if(points.some(row=>variants.some(map=>map.id===row.map_id)))throw Error("このマップには既存の座標があります。翻訳・NPC検索から、座標と同じマップ画像を登録してください。");
     }
@@ -139,14 +139,16 @@
     if(!url)throw Error("マップ画像の公開URLを取得できませんでした。");
     // Check again after upload so another completed capture is not replaced.
     const latest=await readAll("game_maps","id,map_name,map_image_url");
-    if(latest.some(row=>canonical(row.map_name)===name&&row.map_image_url))throw Error("ほかの画面でこのマップが登録されました。再読み込みしてご確認ください。");
-    const latestVariants=latest.filter(row=>canonical(row.map_name)===name);
-    if(latestVariants.length){
+    if(!options.allowVariant&&latest.some(row=>canonical(row.display_map_name||row.map_name)===name&&row.map_image_url))throw Error("ほかの画面でこのマップが登録されました。再読み込みしてご確認ください。");
+    const latestVariants=latest.filter(row=>canonical(row.display_map_name||row.map_name)===name);
+    if(latestVariants.length&&!options.allowVariant){
       const latestPoints=await readAll("map_npcs","id,map_id");
       if(latestPoints.some(row=>latestVariants.some(map=>map.id===row.map_id)))throw Error("このマップに新しい座標が保存されました。再読み込みしてご確認ください。");
     }
     const latestRow=latestVariants.find(row=>row.map_name===name)||latestVariants[0]||selected;
-    const result=await db().rpc("map_analysis_save",{
+    const result=await db().rpc(options.allowVariant?"map_variant_create":"map_analysis_save",options.allowVariant?{
+      p_map_name:name,p_image_hash:hash,p_map_image_url:url,p_contributor_id:contributor()
+    }:{
       p_map_name:latestRow?latestRow.map_name:name,p_npcs:[],p_image_hash:hash,p_map_image_url:url,
       p_confidence:100,p_contributor_id:contributor()
     });
