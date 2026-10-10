@@ -30,7 +30,7 @@
   // Jotunheim / Yvel routes.
   chain(["Loren Valley","Kramer Forest","Ivolgue","Empion Forest","Morpheus Forest","Edine Plains","Daniella Plains","Business Plains","Goofball Plains","Presenal Plains","Inkwell Plains","Sennin Valley","Velcro Forest","Clique Forest","Amelia Forest","Jotunheim"]);
   add("Morpheus Forest","Midori Spa",{kind:"special",note:"Midori Spa"});
-  chain(["Morpheus Forest","Blackmail Forest","Shudbee Forest","Pindown Valley","Simpson Valley","Sheryle Valley","Nordis Valley","Lost Wedge Valley","Parade Valley","Sherwood Valley","Yvel"]);
+  chain(["Morpheus Forest","Blackmail Forest","Shudbee Forest","Pindown Valley","Simpson Valley","Sheryle Forest","Nordis Valley","Lost Wedge Valley","Parade Valley","Sherwood Valley","Yvel"]);
   chain(["Bombile Plateau","Anzers Plateau","Siberas Plateau"]);
   chain(["Bombile Plateau","Monoroby Plateau","Mute Basin","Fies Plateau","Nocefin Plateau","Rekiel Plateau","Vergzium Plateau","Pagment Plateau","Ramia Plateau","Metapolis"]);
   add("Yvel","Siberas Plateau",{minLevel:100,note:"L100+"});
@@ -170,7 +170,7 @@
   };
 
   window.XEN_WORLD_ROUTES={
-    version:9,
+    version:10,
     source:"Makise Xen Rebirth World Map (user supplied)",
     movement_rule:"orthogonal-explicit-only",
     nodes:Array.from(nodes).sort(function(a,b){return a.localeCompare(b,"en");}),
