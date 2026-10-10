@@ -73,7 +73,8 @@
     return sparse;
   }
   async function load(){
-    const warnings=[];
+    if(root.XenMapNames?.ready){await root.XenMapNames.ready;await root.XenMapNames.refresh();}
+    const warnings=root.XenMapNames?.failed?["マップ名の修正情報を読み込めませんでした。再読み込みしてください。"]:[];
     async function optional(label,promise){try{return await promise;}catch(error){warnings.push(label);return [];}}
     const catalogPromise=fetch("assets/monsters-data.json?v=4").then(response=>{if(!response.ok)throw Error("モンスター図鑑を読み込めませんでした。");return response.json();});
     const [maps,mapNpcs,npcProfiles,knowledge,catalog,monsterUpdates]=await Promise.all([

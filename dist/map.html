@@ -7,12 +7,12 @@
 <meta name="description" content="現在のマップから目的地やNPC、モンスターの出現マップまで案内。保存されたゲーム内拡大マップに目印を表示できます。">
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='6' fill='%230d2630'/%3E%3Cpath d='M8 7L24 25M24 7L8 25' stroke='%23e5bd77' stroke-width='4'/%3E%3C/svg%3E">
 <link rel="stylesheet" href="assets/style.css"><link rel="stylesheet" href="assets/saved-items.css?v=5">
-<link rel="stylesheet" href="assets/map-navigator.css?v=3"><link rel="stylesheet" href="assets/report-issues.css?v=5">
+<link rel="stylesheet" href="assets/map-navigator.css?v=4"><link rel="stylesheet" href="assets/report-issues.css?v=5">
 <script defer src="assets/vendor/supabase.js"></script><script defer src="assets/glossary-config.js"></script>
 <script defer src="assets/world-routes.js?v=8"></script><script defer src="assets/map-registry.js?v=6"></script><script defer src="assets/map-japanese-names.js?v=2"></script>
 <script defer src="assets/map-transports.js?v=2"></script><script defer src="assets/map-navigation.js?v=1"></script>
-<script defer src="assets/map-schematics.js?v=1"></script><script defer src="assets/map-location.js?v=1"></script><script defer src="assets/map-navigation-data.js?v=4"></script>
-<script defer src="assets/map-navigator.js?v=6"></script><script defer src="assets/saved-items.js?v=8"></script>
+<script defer src="assets/map-schematics.js?v=2"></script><script defer src="assets/map-name-corrections.js?v=1"></script><script defer src="assets/map-location.js?v=1"></script><script defer src="assets/map-navigation-data.js?v=5"></script>
+<script defer src="assets/map-navigator.js?v=7"></script><script defer src="assets/map-portals.js?v=1"></script><script defer src="assets/saved-items.js?v=8"></script>
 <script defer src="assets/visitor-counter.js?v=1"></script><script defer src="assets/report-issues.js?v=6"></script>
 </head>
 <body>
@@ -46,15 +46,16 @@
 </div>
 <div class="map-view-column">
 <section class="paper map-view" aria-labelledby="map-view-title">
-<div class="map-view-heading"><div><p class="eyebrow">SAVED GAME MAP</p><h2 id="map-view-title">保存された拡大マップ</h2></div><div class="map-view-actions"><button id="map-update-image" type="button" hidden>画像を更新</button><button id="map-reload" type="button">再読み込み</button></div></div>
+<div class="map-view-heading"><div><p class="eyebrow">SAVED GAME MAP</p><h2 id="map-view-title">保存された拡大マップ</h2></div><div class="map-view-actions"><button id="map-name-edit" type="button" hidden>マップ名を修正</button><button id="map-update-image" type="button" hidden>画像を更新</button><button id="map-reload" type="button">再読み込み</button></div></div>
 <div class="map-view-selects"><label>表示するマップ<select id="map-view-select"><option value="">マップを選ぶ</option></select></label><label id="map-variant-label" hidden>画像を切り替える<select id="map-variant-select"></select></label></div>
+<form id="map-name-form" hidden><label>ゲーム内の正しいマップ名<input id="map-name-corrected" maxlength="120" required></label><p class="map-help">画像・NPC位置・接続を残したまま、サイト共通の表記を修正します。</p><p id="map-name-status" role="status"></p><div class="map-point-actions"><button id="map-name-cancel" type="button">キャンセル</button><button id="map-name-save" class="map-primary" type="submit">マップ名を保存</button></div></form>
 <p id="map-guidance" class="map-guidance" aria-live="polite">マップを選ぶとゲーム内画像を表示します。</p>
 <div class="map-toolbar" aria-label="地図の操作">
 <button id="map-zoom-out" type="button" aria-label="地図を縮小">−</button><output id="map-zoom-label" aria-live="polite">100%</output><button id="map-zoom-in" type="button" aria-label="地図を拡大">＋</button><button id="map-reset-view" type="button">全体表示</button>
 <label class="map-check"><input id="map-show-npcs" type="checkbox">NPCの緑の目印を表示</label>
 </div>
 <div id="map-viewport" class="map-viewport" tabindex="0" aria-label="拡大マップ。矢印キーで移動できます。">
-<div id="map-stage" class="map-stage" hidden><img id="map-image" alt="" draggable="false"><svg id="map-arrows" class="map-arrows" viewBox="0 0 1000 1000" preserveAspectRatio="none" aria-hidden="true"></svg><div id="map-pins" class="map-pins"></div></div>
+<div id="map-stage" class="map-stage" hidden><img id="map-image" alt="" draggable="false"><svg id="map-arrows" class="map-arrows" viewBox="0 0 1000 1000" preserveAspectRatio="none" aria-hidden="true"></svg><div id="map-pins" class="map-pins"></div><div id="map-portal-pins" class="map-portal-pins"></div></div>
 <div id="map-empty" class="map-empty"><span aria-hidden="true">⌖</span><p id="map-empty-text">マップを選んでください。</p><button id="map-add-image" class="map-primary" type="button" hidden>拡大マップ画像を追加</button></div>
 </div>
 <aside id="map-schematic-note" class="map-schematic-note" hidden><strong>動画からの構造図</strong><p id="map-schematic-caption"></p><button id="map-schematic-add" type="button">ゲーム内の拡大マップ画像を追加</button></aside>
@@ -63,6 +64,17 @@
 <p id="map-point-status" class="map-help" role="status">位置の指定・補った目印は、この端末だけに保存します。</p>
 <div class="map-legend"><span><i class="map-dot current"></i>現在位置</span><span><i class="map-dot destination"></i>目的地・出口</span><span><i class="map-dot npc"></i>NPC</span></div>
 <p class="map-help">矢印は目印までの方向です。壁・通行可否を判定した歩行経路ではありません。NPCの位置は収集した情報に基づく目安です。</p>
+<section id="map-portal-panel" class="map-portal-panel" aria-label="入口・出口">
+<h3>入口・出口</h3><label class="map-check"><input id="map-show-portals" type="checkbox" checked>入口・出口の印を表示</label>
+<div id="map-portal-list"></div><p id="map-portal-status" class="map-help" role="status">保存済みの印は全利用者に表示されます。管理者が位置を編集できます。</p>
+<div class="map-point-actions"><button id="map-portal-edit" type="button" hidden>入口・出口を追加</button><button id="map-portal-refresh" type="button">印を再読み込み</button></div>
+<form id="map-portal-form" hidden>
+<label>種類<select id="map-portal-kind"><option value="entrance">入口</option><option value="exit">出口</option></select></label>
+<label>表示名（任意）<input id="map-portal-label" maxlength="120" placeholder="例：Level 2への門"></label>
+<label>移動先のマップ（任意）<input id="map-portal-destination" list="map-names" maxlength="120" placeholder="登録済みのマップから選択"></label>
+<button id="map-portal-place" type="button">地図をクリックして位置を指定</button><p id="map-portal-coordinate" class="map-help"></p>
+<div class="map-point-actions"><button id="map-portal-cancel" type="button">キャンセル</button><button id="map-portal-save" class="map-primary" type="submit">サイト共通で保存</button></div>
+</form></section>
 <div id="map-target-info" class="map-target-info"></div>
 </section>
 <section class="paper map-help-panel"><h2>足りないマップを増やす</h2>

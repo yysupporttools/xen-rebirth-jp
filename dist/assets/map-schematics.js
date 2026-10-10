@@ -13,9 +13,9 @@ window.XEN_MAP_SCHEMATICS={
     "source": "bandicam 2026-10-10 11-49-23-978.mp4"
   },
   "Sleepless Grave (Level 1)": {
-    "path": "assets/schematics/sleepless-grave-level-one.svg?v=1",
-    "label": "Sleepless Grave：Level 1の部分構造図",
-    "scope": "到着地点・石橋・格子の壁際までの記録範囲。撮影順の部分図で、全体の距離・方位は未確定です。",
+    "path": "assets/schematics/sleepless-grave-level-one-clean.svg?v=1",
+    "label": "Sleepless Grave：Level 1のAI補完地図",
+    "scope": "中央から上への橋はユーザー確認済みです。動画の復元構造をもとにAIで整えた試作で、未撮影部分は推定補完を含みます。入口・出口は管理者が地図上に登録できます。",
     "source": "bandicam 2026-10-10 11-57-18-215.mp4"
   },
   "Sand Desert Dungeon": {

@@ -110,6 +110,7 @@
   }
   function buildGraph(){graph=nav.buildGraph(root.XEN_WORLD_ROUTES,data.transitions,{maps:data.maps,mapNpcs:data.mapNpcs,includeTransports:$("map-transports").checked});}
   function noExpandedMap(name){return (root.XEN_MAP_TRANSPORTS?.noExpandedMapMaps||[]).map(canon).includes(canon(name));}
+  root.XenMapNavigator.registeredNames=()=>names();
   function names(){
     return [...new Set([...(root.XEN_MAP_REGISTRY?.names||[]),...(graph?.nodes||[]),...data.maps.map(map=>map.map_name),...entries.filter(entry=>!entry.regionOnly).map(entry=>entry.map),$("map-current").value,$("map-destination").value,shown].filter(Boolean).map(canon))].sort((a,b)=>a.localeCompare(b,"en"));
   }
@@ -264,12 +265,15 @@
       $("map-clear-marker").hidden=true;
     }
     updateZoom();renderTarget();
+    const detail={mapName:shown,imageKey:actual?imageKey(map):diagram?"schematic|"+diagram.path:"",destination:activeGuidance(map||{map_name:shown}).step?.to||""};
+    root.XenMapNavigator.currentView=detail;
+    root.dispatchEvent(new CustomEvent("xen-map-view",{detail}));
   }
   async function reload(){
     if(reloading)return;
     reloading=true;syncImageActions();$("map-load-status").textContent="保存されたマップを読み込んでいます…";
     try{
-      const fresh=await repo.load();data=fresh;loaded=true;entries=searchEntries(data);buildGraph();
+      const fresh=await repo.load();data=fresh;loaded=true;shown=canon(shown);$("map-current").value=canon($("map-current").value);$("map-destination").value=canon($("map-destination").value);entries=searchEntries(data);buildGraph();
       if(target){const latest=entries.find(entry=>entry.id===target.id);if(latest){const oldPoint=target.point;target={...latest};if(oldPoint)target.point=latest.points.find(row=>row.id===oldPoint.id)||null;$("map-destination").value=target.regionOnly?"":target.map;}}
       const state=location.read();
       if($("map-follow").checked&&state)$("map-current").value=state.map;
