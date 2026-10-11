@@ -60,7 +60,7 @@
 
   // Oasis / desert.
   add("Taisen Plains","Oasis");
-  chain(["Oasis","Turmeit Desert","Cretino Desert","Asherphel Desert","Emporanie Plateau","Taquestrim Plateau","Phildyeit Plateau","Alison Gorge","Heather Basin","Tanline Gorge"]);
+  chain(["Oasis","Turmeit Desert","Cretino Desert","Asherphel Desert","Emporanie Plateau","Taquestrim Plateau","Phildevilt Plateau","Alison Gorge","Heather Basin","Tanline Gorge"]);
   chain(["Tanline Gorge","Acidbath Valley","Chanthery Gorge"]);
   add("Chanthery Gorge","Clipper Plains",{minLevel:66,note:"L66+"});
 

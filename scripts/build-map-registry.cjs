@@ -11,6 +11,7 @@ const aliases = Object.create(null);
 for (const name of names) aliases[key(name)] = name;
 for (const [alias, canonical] of Object.entries(routes.aliases)) aliases[key(alias)] = canonical;
 const verified = {
+  'Phildyeit Plateau': 'Phildevilt Plateau',
   'Pagment Plateau': 'Pamament Plateau',
   'Vergzium Plateau': 'Verazium Plateau',
   'Nocefin Plateau': 'Noctein Plateau',
