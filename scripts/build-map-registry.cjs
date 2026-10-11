@@ -11,6 +11,7 @@ const aliases = Object.create(null);
 for (const name of names) aliases[key(name)] = name;
 for (const [alias, canonical] of Object.entries(routes.aliases)) aliases[key(alias)] = canonical;
 const verified = {
+  'Madrigras Valley': 'Mardigras Valley',
   'Asherphel Desert': 'Aseraphel Desert',
   'Aquilos Gorge': 'Augilas Gorge',
   'Augilas Gourge': 'Augilas Gorge',
