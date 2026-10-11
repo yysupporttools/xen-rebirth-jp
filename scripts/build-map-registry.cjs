@@ -6,11 +6,14 @@ const ctx = {window: {}};
 vm.runInNewContext(fs.readFileSync(path.join(root, 'dist/assets/world-routes.js'), 'utf8'), ctx);
 const routes = ctx.window.XEN_WORLD_ROUTES;
 const key = text => String(text || '').normalize('NFKC').toLowerCase().replace(/[^\p{L}\p{N}]/gu, '');
-const names = [...routes.nodes, 'City Hall', 'Cobalt\'s Cave', 'Amorica Cave', 'Mythril Mines', 'Pirate Ship', 'Labyrinth', 'Museidon Library Labyrinth', 'Ice Caves', 'Lost Brynhilld', 'Memorial Chapel', 'Secret Altar', 'Knight\'s Convention', 'Brynhilld Culvert B1F', 'Brynhilld Culvert B2F', 'Cave to Brynhilld Altar'];
+const names = [...routes.nodes, 'City Hall', 'Cobalts Cave Lv1', 'Cobalts Cave Lv2', 'Cobalts Cave Lv3', 'Amorica Cave', 'Mythril Mines', 'Pirate Ship', 'Labyrinth', 'Museidon Library Labyrinth', 'Ice Caves', 'Lost Brynhilld', 'Memorial Chapel', 'Secret Altar', 'Knight\'s Convention', 'Brynhilld Culvert B1F', 'Brynhilld Culvert B2F', 'Cave to Brynhilld Altar'];
 const aliases = Object.create(null);
 for (const name of names) aliases[key(name)] = name;
 for (const [alias, canonical] of Object.entries(routes.aliases)) aliases[key(alias)] = canonical;
 const verified = {
+  "Cobalt's Cave Lv1": 'Cobalts Cave Lv1', "Cobalts Cave (Level 1)": 'Cobalts Cave Lv1',
+  "Cobalt's Cave Lv2": 'Cobalts Cave Lv2', "Cobalts Cave (Level 2)": 'Cobalts Cave Lv2',
+  "Cobalt's Cave Lv3": 'Cobalts Cave Lv3', "Cobalts Cave (Level 3)": 'Cobalts Cave Lv3',
   'Vriely Grove': 'Vreily Grove',
   'Village of the Dead': 'Town of Deceased',
   'Emporanie Plateau': 'Emperonie Plateau',
@@ -66,6 +69,10 @@ for (const [canonical, oldJapanese] of Object.entries(japanese.names)) {
   const aliasKey=key(oldJapanese);
   if (aliases[aliasKey] && aliases[aliasKey] !== canonical) throw new Error('Ambiguous old Japanese name: '+oldJapanese);
   aliases[aliasKey]=canonical;
+}
+for (const [name,reading] of Object.entries(japanese.readings||{})) {
+  const canonical=aliases[key(name)]||name;
+  if(names.includes(canonical)&&(!aliases[key(reading)]||aliases[key(reading)]===canonical))aliases[key(reading)]=canonical;
 }
 const registry = {version: 9, source: 'Pre-registered world routes, game-confirmed names, verified capture spelling aliases and reviewed old Japanese map names', names: [...new Set(names)].sort(), aliases};
 fs.writeFileSync(path.join(root, 'dist/assets/map-registry-data.json'), JSON.stringify(registry, null, 2) + '\n');

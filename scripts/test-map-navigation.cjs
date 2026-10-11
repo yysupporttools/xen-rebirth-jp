@@ -443,14 +443,14 @@ check("game-confirmed Clingon Plains corrects legacy Chingon without changing ID
   assert.equal(nav.canonicalMapName("Chingon Plains B1F"),"Chingon Plains B1F");
   const grouped=nav.groupMaps([{id:"legacy-chingon",map_name:"Chingon Plains",map_image_url:"retained-photo"},{id:"game-clingon",map_name:"Clingon Plains",map_image_url:"game-photo"}]);assert.equal(grouped.length,1);
   assert(grouped[0].map_variants.some(row=>row.id==="legacy-chingon"&&row.map_image_url==="retained-photo"));
-  assert.equal(context.XEN_MAP_JAPANESE_NAMES["Clingon Plains"],undefined);
+  assert.equal(context.XEN_MAP_JAPANESE_NAMES["Clingon Plains"],"クリンゴン・プレーンズ");
 });
 
 check("Rosetar, Paladino and Ashely corrections preserve their original connections and image keys",()=>{
  const graph=nav.buildGraph(world,[],{includeTransports:false});
  for(const [oldName,newName,left,right,jp]of [['Rosestar Basin','Rosetar Basin','Tolkin Gorge','Pharaday Gorge','ロジタ盆地'],['Pladino Grove','Paladino Grove','Onix Hill','Engrave Path','パルラディノグローブ'],['Ashley Forest','Ashely Forest','Lavy Basin','Onix Hill',null]]){
   assert.equal(nav.canonicalMapName(oldName),newName);assert(graph.nodes.includes(newName));assert(!graph.nodes.includes(oldName));assert.deepEqual(Array.from(nav.findRoute(graph,oldName,left).path),[newName,left]);assert.deepEqual(Array.from(nav.findRoute(graph,oldName,right).path),[newName,right]);assert.equal(nav.canonicalMapName(oldName+' B1F'),oldName+' B1F');
-  const groups=nav.groupMaps([{id:'raw-id',map_name:oldName,map_image_url:'retained-photo'},{id:'new-id',map_name:newName,map_image_url:'game-photo'}]);assert.equal(groups.length,1);assert(groups[0].map_variants.some(row=>row.id==='raw-id'&&row.map_image_url==='retained-photo'&&row.map_name_original===oldName));if(jp){assert.equal(context.XEN_MAP_JAPANESE_NAMES[newName],jp);assert.equal(context.XEN_MAP_JAPANESE_NAMES[oldName],undefined);assert.equal(nav.canonicalMapName(jp),newName);}else assert.equal(context.XEN_MAP_JAPANESE_NAMES[newName],undefined);
+  const groups=nav.groupMaps([{id:'raw-id',map_name:oldName,map_image_url:'retained-photo'},{id:'new-id',map_name:newName,map_image_url:'game-photo'}]);assert.equal(groups.length,1);assert(groups[0].map_variants.some(row=>row.id==='raw-id'&&row.map_image_url==='retained-photo'&&row.map_name_original===oldName));if(jp){assert.equal(context.XEN_MAP_JAPANESE_NAMES[newName],jp);assert.equal(context.XEN_MAP_JAPANESE_NAMES[oldName],undefined);assert.equal(nav.canonicalMapName(jp),newName);}else assert.ok(context.XEN_MAP_JAPANESE_NAMES[newName]);
  }
  assert.equal(world.edges.length,211);assert.equal(transports.edges.length,50);
 });
