@@ -31,10 +31,10 @@ check("all explicitly provided destination level gates are preserved",()=>{
   }
 });
 check("Essene to Brynhilld Lv1 and return Essene Lv16 retain different gates",()=>{
-  const graph=nav.buildGraph(emptyWorld,[],{transports});
+  const graph=nav.buildGraph({nodes:[],edges:[{a:"Arcarinas Square",b:"Summer Hill Street"}]},[],{transports});
   assert.equal(nav.findRoute(graph,"Essene","Brynhild",{level:1}).steps[0].minLevel,1);
   assert.equal(nav.findRoute(graph,"Brynhild","Essene",{level:15}),null);
-  assert.equal(nav.findRoute(graph,"Brynhild","Essene",{level:16}).steps[0].minLevel,16);
+  assert.equal(nav.findRoute(graph,"Brynhild","Essene",{level:16}).steps.at(-1).minLevel,16);
 });
 check("Yvel offers exactly its verified Jotunheim direction, not inferred returns",()=>{
   const graph=nav.buildGraph(emptyWorld,[],{transports});
@@ -94,9 +94,10 @@ check("optional level retains condition in every step",()=>{
 });
 check("merged city aliases retain distinct districts and confirmed Summer Hill departures",()=>{
   const graph=nav.buildGraph(world,[],{transports});
-  const edge=graph.get("Arcarinas Square").find(e=>e.to==="Eir"&&e.kind==="transporter");
+  const edge=graph.get("Summer Hill Street").find(e=>e.to==="Eir"&&e.kind==="transporter");
   assert.equal(edge.sourceTown,"Arcarinas Square");assert.equal(edge.minLevel,40);
-  assert.equal(nav.findRoute(graph,"Brynhilld","Eir",{level:40}).steps[0].kind,"transporter");
+  assert.deepEqual(Array.from(nav.findRoute(graph,"Brynhilld","Eir",{level:40}).path),["Arcarinas Square","Summer Hill Street","Eir"]);
+  assert(!graph.get("Arcarinas Square").some(e=>e.kind==="transporter"));
   assert.deepEqual(Array.from(nav.findRoute(graph,"Brinhilld","Arcarinas Square",{level:1}).path),["Arcarinas Square"]);
   assert(!graph.nodes.includes("Brynhilld"));assert(!graph.get("Arcarinas Square").some(e=>e.to==="Arcarinas Square"));
   assert(graph.get("Arcarinas Square").some(e=>e.to==="Summer Hill Street"&&e.kind==="normal"));
@@ -110,7 +111,7 @@ check("source city transporter uses only exact saved point on Summer Hill varian
   const graph=nav.buildGraph(emptyWorld,[],{transports,maps,mapNpcs:rows});
   const summer=graph.get("Summer Hill Street").find(e=>e.to==="Eir");
   assert.equal(summer.exit.x,223);assert.equal(summer.exit.y,340);
-  assert.equal(graph.get("Arcarinas Square").find(e=>e.to==="Eir").exit,null);
+  assert(!graph.get("Arcarinas Square").some(e=>e.to==="Eir"&&e.kind==="transporter"));
 });
 check("map groups preserve both original image IDs and linked NPC coordinates",()=>{
   const maps=[{id:"one",map_name:"Brunen Basin",map_image_url:"one.webp"},{id:"two",map_name:"Brunnen Basin",map_image_url:"two.webp"}];
@@ -452,7 +453,7 @@ check("Rosetar, Paladino and Ashely corrections preserve their original connecti
   assert.equal(nav.canonicalMapName(oldName),newName);assert(graph.nodes.includes(newName));assert(!graph.nodes.includes(oldName));assert.deepEqual(Array.from(nav.findRoute(graph,oldName,left).path),[newName,left]);assert.deepEqual(Array.from(nav.findRoute(graph,oldName,right).path),[newName,right]);assert.equal(nav.canonicalMapName(oldName+' B1F'),oldName+' B1F');
   const groups=nav.groupMaps([{id:'raw-id',map_name:oldName,map_image_url:'retained-photo'},{id:'new-id',map_name:newName,map_image_url:'game-photo'}]);assert.equal(groups.length,1);assert(groups[0].map_variants.some(row=>row.id==='raw-id'&&row.map_image_url==='retained-photo'&&row.map_name_original===oldName));if(jp){assert.equal(context.XEN_MAP_JAPANESE_NAMES[newName],jp);assert.equal(context.XEN_MAP_JAPANESE_NAMES[oldName],undefined);assert.equal(nav.canonicalMapName(jp),newName);}else assert.ok(context.XEN_MAP_JAPANESE_NAMES[newName]);
  }
- assert.equal(world.edges.length,211);assert.equal(transports.edges.length,50);
+ assert.equal(world.edges.length,208);assert.equal(transports.edges.length,50);
 });
 check("monster display corrections keep source anchors and original reference map evidence",()=>{
  const data=JSON.parse(fs.readFileSync(path.join(__dirname,'../dist/assets/monsters-data.json'),'utf8'));
@@ -464,7 +465,7 @@ check("monster display corrections keep source anchors and original reference ma
 check("complete Shylphaen MAP connects north Baskerville and east Corlona only",()=>{
  const graph=nav.buildGraph(world,[],{includeTransports:false});assert.equal(nav.canonicalMapName('Sylphaen Forest'),'Shylphaen Forest');assert(!graph.nodes.includes('Sylphaen Forest'));assert(graph.nodes.includes('Corlona Forest'));assert.equal(nav.canonicalMapName('Corlona Forest'),nav.canonicalMapName('Colorado Forest'));const exits=graph.get('Shylphaen Forest');assert.equal(exits.length,2);const north=exits.find(e=>e.to==='Baskerville Forest'),east=exits.find(e=>e.to==='Corlona Forest');assert(north&&east);assert.equal(north.direction,'top');assert.equal(east.direction,'right');assert.equal(north.minLevel,null);assert.equal(east.minLevel,null);assert(!exits.some(e=>e.to==='Berdena Forest'));
  const map={id:'shyl-map',map_name:'Sylphaen Forest'};assert.equal(nav.selectExit(north,map,[]),null);assert.equal(nav.selectExit(east,map,[]),null);const point=nav.selectExit(east,map,[{id:'verified-east',map_id:'shyl-map',npc_name:'Corlona Forest',x_norm:980,y_norm:390}]);assert.equal(point.x,980);assert.equal(nav.selectExit(east,{id:'different-crop',map_name:'Shylphaen Forest'},[{map_id:'shyl-map',npc_name:'Corlona Forest',x_norm:980,y_norm:390}]),null);
- assert.equal(context.XenMapJapaneseNames.get('Sylphaen Forest'),'シルバエンの森');assert.equal(context.XenMapJapaneseNames.get('Corlona Forest'),'コルロナの森');assert.equal(nav.canonicalMapName('Sylphaen Forest B1F'),'Sylphaen Forest B1F');assert.equal(world.edges.length,211);assert.equal(transports.edges.length,50);const d=JSON.parse(fs.readFileSync(path.join(__dirname,'../dist/assets/monsters-data.json'),'utf8'));assert.equal(d.monsters.filter(m=>m.map==='Shylphaen Forest').length,6);const refs=d.references.filter(r=>r.map==='Shylphaen Forest');assert.equal(refs.length,2);assert(refs.every(r=>r.name==='Shylphaen Forest'&&r.originalMap==='Sylphaen Forest'));
+ assert.equal(context.XenMapJapaneseNames.get('Sylphaen Forest'),'シルバエンの森');assert.equal(context.XenMapJapaneseNames.get('Corlona Forest'),'コルロナの森');assert.equal(nav.canonicalMapName('Sylphaen Forest B1F'),'Sylphaen Forest B1F');assert.equal(world.edges.length,208);assert.equal(transports.edges.length,50);const d=JSON.parse(fs.readFileSync(path.join(__dirname,'../dist/assets/monsters-data.json'),'utf8'));assert.equal(d.monsters.filter(m=>m.map==='Shylphaen Forest').length,6);const refs=d.references.filter(r=>r.map==='Shylphaen Forest');assert.equal(refs.length,2);assert(refs.every(r=>r.name==='Shylphaen Forest'&&r.originalMap==='Sylphaen Forest'));
 });
 check("generic Grave and Entrance are one node without guessed return route",()=>{
  const graph=nav.buildGraph(world,[],{includeTransports:false});

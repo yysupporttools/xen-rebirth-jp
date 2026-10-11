@@ -12,7 +12,7 @@
   return {x_norm:Math.round(x),y_norm:Math.round(y)};
  }
  function visible(list,current){return current?list.filter(r=>canonical(r.map_name)===canonical(current.mapName)&&r.image_key===current.imageKey):[];}
- root.XenMapPortals={point,visible};
+ root.XenMapPortals={point,visible,forView:current=>visible(rows,current).map(row=>({...row}))};
  function message(text){$("map-portal-status").textContent=text;}
  function draw(){
   const list=visible(rows,view),show=$("map-show-portals").checked;
@@ -29,12 +29,12 @@
   armed=false;draft=null;$("map-portal-form").hidden=true;$("map-portal-kind").value="entrance";$("map-portal-label").value="";$("map-portal-destination").value="";$("map-portal-coordinate").textContent="";$("map-viewport").classList.remove("map-portal-placing");draw();
  }
  async function refresh(){
-  if(!view?.imageKey){rows=[];draw();return;}
+  if(!view?.imageKey){rows=[];draw();root.dispatchEvent(new CustomEvent("xen-map-portals"));return;}
   const request=++seq,v={...view};
   const result=await db.from("map_portals").select("id,map_name,image_key,kind,label,destination,x_norm,y_norm,updated_at").eq("map_name",root.XenMapNames?.source(v.mapName)||v.mapName).eq("image_key",v.imageKey).order("kind").limit(200);
   if(request!==seq||view?.imageKey!==v.imageKey)return;
   if(result.error){message("入口・出口を読み込めませんでした。再読み込みしてください。");return;}
-  rows=result.data||[];draw();
+  rows=result.data||[];draw();root.dispatchEvent(new CustomEvent("xen-map-portals"));
  }
  async function auth(){
   const user=await db.auth.getUser();const result=user.data?.user?await db.rpc("board_is_admin"):{data:false};

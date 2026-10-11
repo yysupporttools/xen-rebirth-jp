@@ -1,0 +1,2600 @@
+{
+  "version": 1,
+  "reviewedAt": "2026-10-12",
+  "images": [
+    {
+      "id": "b72b98b4-4f57-4b36-8dae-87e7e8901c8f",
+      "name": "Arcarinas Square",
+      "url": "https://dzxxjtmpcfsmvdgkcwvn.supabase.co/storage/v1/object/public/map-images/manual-updates/b72b98b4-4f57-4b36-8dae-87e7e8901c8f/5f5e03f4-a8d3-4b4b-b4fc-4dd646dd3a38.webp",
+      "hash": "00a3038083947ea5788e4f3e0d8461983cbe505e2957b0ac099071050bd28645",
+      "exits": [
+        {
+          "to": "Mall Street",
+          "x": 35,
+          "y": 429
+        }
+      ],
+      "services": []
+    },
+    {
+      "id": "54c4d19e-0b1b-443e-89bf-6008a51e1151",
+      "name": "Brunen Basin",
+      "url": "https://dzxxjtmpcfsmvdgkcwvn.supabase.co/storage/v1/object/public/map-images/manual-updates/54c4d19e-0b1b-443e-89bf-6008a51e1151/02b4fa66-3654-4184-bef6-b468b8ec8bd2.webp",
+      "hash": "963a68c86b3bc60f373a03bba933ef73b7ffd486af0ea93ece68bcdbb6531acb",
+      "exits": [
+        {
+          "to": "Brynhildr Trisects",
+          "x": 951,
+          "y": 657
+        }
+      ],
+      "services": []
+    },
+    {
+      "id": "22f77539-3613-424b-9f24-d44d3028d385",
+      "name": "Brunen Basin",
+      "url": "https://dzxxjtmpcfsmvdgkcwvn.supabase.co/storage/v1/object/public/map-images/brunnen-basin/1790133850976-08718f1d2e302e1c7bab2b79f3500060079938b54033cc1ccc34f376f46477b3.webp",
+      "hash": "08718f1d2e302e1c7bab2b79f3500060079938b54033cc1ccc34f376f46477b3",
+      "exits": [
+        {
+          "to": "Waimea Gorge",
+          "x": 494,
+          "y": 915
+        }
+      ],
+      "services": []
+    },
+    {
+      "id": "98ae57bd-efdb-4ca7-8eb0-cd715a8bb868",
+      "name": "Abundance Town",
+      "url": "https://dzxxjtmpcfsmvdgkcwvn.supabase.co/storage/v1/object/public/map-images/abundance-town/1791557250249-c790bb13-1d24-406d-a6a1-dd3f1cd700f3.webp",
+      "hash": "0f986ca6a30d64564cf972bc78ee6282706ac099b09275443840cc2136f6f5b1",
+      "exits": [
+        {
+          "to": "Furanden Forest",
+          "x": 17,
+          "y": 549
+        }
+      ],
+      "services": []
+    },
+    {
+      "id": "bbc3d565-652d-445e-8151-ade0ddfacfe2",
+      "name": "Albatross City",
+      "url": "https://dzxxjtmpcfsmvdgkcwvn.supabase.co/storage/v1/object/public/map-images/albatross-city/1791557305669-919b613d-b216-493e-b8f1-ee4e129bcdf0.webp",
+      "hash": "36c25cea89b8c1c26bf00ea9bfb500d2feab2cb8d9f9ce7b915003ce42cf3dd9",
+      "exits": [
+        {
+          "to": "Harquil Plains",
+          "x": 938,
+          "y": 513
+        }
+      ],
+      "services": []
+    },
+    {
+      "id": "53db02cd-6096-405f-bebc-50874cf06b7d",
+      "name": "Kastled Grove",
+      "url": "https://dzxxjtmpcfsmvdgkcwvn.supabase.co/storage/v1/object/public/map-images/kastled-grove/1791557601334-0efa4d99-e252-4f61-ac3b-fb7fae7a9d61.webp",
+      "hash": "bc60bbca70bd338eee41ca1f18abbb3ee6c083b49334fe331c12312d9fdd84b4",
+      "exits": [
+        {
+          "to": "Saifield Forest",
+          "x": 46,
+          "y": 472
+        }
+      ],
+      "services": []
+    },
+    {
+      "id": "e1773e5f-a506-4a02-b9dc-8f0c940e095f",
+      "name": "Floating Island of Dragons Dock",
+      "url": "https://dzxxjtmpcfsmvdgkcwvn.supabase.co/storage/v1/object/public/map-images/floating-island-of-dragons-dock/1791606562730-a31351b5-2fba-4099-bab3-006dde78dafa.webp",
+      "hash": "9501a8588654387b4c1a5cffc8302e77703decdd02d52700768e8e73b7d71c9b",
+      "exits": [
+        {
+          "to": "Hidden Dock",
+          "x": 382,
+          "y": 954
+        }
+      ],
+      "services": []
+    },
+    {
+      "id": "5a2f3d68-b1bc-4760-b3c2-bd8dc4122ec4",
+      "name": "Saifield Forest",
+      "url": "https://dzxxjtmpcfsmvdgkcwvn.supabase.co/storage/v1/object/public/map-images/saifield-forest/1791557653480-08b2fe13-99d0-4e7e-8b61-cafba2fd4637.webp",
+      "hash": "c174d8723465d9a6f06c531c563a73871a4da15395187974b530602d52322780",
+      "exits": [
+        {
+          "to": "Kastled Grove",
+          "x": 944,
+          "y": 483
+        }
+      ],
+      "services": []
+    },
+    {
+      "id": "91bf257a-9315-4cab-bb6d-8e3657be7f24",
+      "name": "Malian Forest",
+      "url": "https://dzxxjtmpcfsmvdgkcwvn.supabase.co/storage/v1/object/public/map-images/malian-forest/1791557766086-82a76e4f-066d-4866-9fcc-a74332f43ebb.webp",
+      "hash": "40df5e8e556e488af594e83a025b72e134afa7dd2b5bdfbf6c02785a4b56fa0f",
+      "exits": [
+        {
+          "to": "Trakian Path",
+          "x": 943,
+          "y": 674
+        }
+      ],
+      "services": []
+    },
+    {
+      "id": "f10162ed-6c26-4689-b382-5a8d6e49e72d",
+      "name": "Bairyn Forest",
+      "url": "https://dzxxjtmpcfsmvdgkcwvn.supabase.co/storage/v1/object/public/map-images/bairyn-forest/1791557887374-08f3781e-12c8-4f3f-afc4-cfb30d9058f9.webp",
+      "hash": "a50c3e4dc1a22b0750ed9e6984f7cb4662ee95bfaf3fb0694704ac4f19dc7416",
+      "exits": [
+        {
+          "to": "Sudden Hill",
+          "x": 936,
+          "y": 491
+        },
+        {
+          "to": "Ashmon Hills",
+          "x": 494,
+          "y": 63
+        }
+      ],
+      "services": []
+    },
+    {
+      "id": "7e54ebe7-ecaa-44cd-ac42-3033f90825fd",
+      "name": "Ashmon Hills",
+      "url": "https://dzxxjtmpcfsmvdgkcwvn.supabase.co/storage/v1/object/public/map-images/ashmon-hills/1791557943441-3977f2cf-fee9-4d36-b385-134e712738fe.webp",
+      "hash": "ea9235deebdc76e627338f2fcb98410101f7100ff13ad5e6ed33820317603b47",
+      "exits": [
+        {
+          "to": "Brolly Basin",
+          "x": 68,
+          "y": 396
+        }
+      ],
+      "services": []
+    },
+    {
+      "id": "0af79ebc-308b-490e-9ba7-70c5d0ab605d",
+      "name": "Oasis",
+      "url": "https://dzxxjtmpcfsmvdgkcwvn.supabase.co/storage/v1/object/public/map-images/manual-updates/0af79ebc-308b-490e-9ba7-70c5d0ab605d/e3762062-1dc3-412c-a965-db13e8791aa9.webp",
+      "hash": "3d1ce4959b7fa416b66f5e4d8a24780e3bfdd1dcb6c5807a159b813908adbf05",
+      "exits": [
+        {
+          "to": "Turmeit Desert",
+          "x": 985,
+          "y": 494
+        }
+      ],
+      "services": []
+    },
+    {
+      "id": "8a00ceff-5aa7-4368-9fb6-ba23ce0a1939",
+      "name": "Waimea Gorge",
+      "url": "https://dzxxjtmpcfsmvdgkcwvn.supabase.co/storage/v1/object/public/map-images/manual-updates/8a00ceff-5aa7-4368-9fb6-ba23ce0a1939/273d733a-49dc-4bc6-8193-e35f892335b9.webp",
+      "hash": "505267aa4e0526fdb27277fd8094d5afbb277cef376b5709204e61dccafb0706",
+      "exits": [
+        {
+          "to": "Brunen Basin",
+          "x": 457,
+          "y": 57
+        },
+        {
+          "to": "Death Valley",
+          "x": 433,
+          "y": 920
+        }
+      ],
+      "services": []
+    },
+    {
+      "id": "afe60c4e-9338-4805-8e9e-f3698ecb9d1e",
+      "name": "Brolly Basin",
+      "url": "https://dzxxjtmpcfsmvdgkcwvn.supabase.co/storage/v1/object/public/map-images/brolly-basin/1791558006998-7695154a-2881-473e-86e4-ff99fdaea582.webp",
+      "hash": "47351b0cd8d99b6f066eb13a788f7e699998f15f68a18305d625f47f6f9d7c84",
+      "exits": [
+        {
+          "to": "Ashton Basin",
+          "x": 110,
+          "y": 511
+        },
+        {
+          "to": "Ashmon Hills",
+          "x": 815,
+          "y": 511
+        }
+      ],
+      "services": []
+    },
+    {
+      "id": "4c5f5a51-30be-487b-84dd-6a631bdc1d32",
+      "name": "Urail Valley",
+      "url": "https://dzxxjtmpcfsmvdgkcwvn.supabase.co/storage/v1/object/public/map-images/urail-valley/1791558095662-e861f0a0-e4c9-4b6e-be52-f3dcd451b501.webp",
+      "hash": "58a20a81858719ca579bcac9767230c2002d01d2c0b3b99e3469187b836e0df7",
+      "exits": [
+        {
+          "to": "Belteranin Forest",
+          "x": 908,
+          "y": 341
+        },
+        {
+          "to": "Ashton Basin",
+          "x": 354,
+          "y": 905
+        }
+      ],
+      "services": []
+    },
+    {
+      "id": "ae730e11-034d-48ef-9abb-dd497dabac11",
+      "name": "Grudin Forest",
+      "url": "https://dzxxjtmpcfsmvdgkcwvn.supabase.co/storage/v1/object/public/map-images/grudin-forest/1791558205660-261c68f9-a8e5-4411-ba48-6a5f03e2a5b9.webp",
+      "hash": "dd3451230bb7551ef733266db77bdc3b2e7fb68a3a8159804b480f441d33d529",
+      "exits": [
+        {
+          "to": "Vargas Forest",
+          "x": 350,
+          "y": 928
+        },
+        {
+          "to": "Belteranin Forest",
+          "x": 60,
+          "y": 454
+        }
+      ],
+      "services": []
+    },
+    {
+      "id": "2ba3b3b7-5a5a-44f3-b5fc-8aeea51c45b4",
+      "name": "Vargas Forest",
+      "url": "https://dzxxjtmpcfsmvdgkcwvn.supabase.co/storage/v1/object/public/map-images/vargas-forest/1791558268671-3f6f2556-279f-4b79-baf1-2bfa49c1c77f.webp",
+      "hash": "134fd5e23935a53b4f55e848302655ea1fbe9c4b8019f1a72e4d8d1e59698457",
+      "exits": [
+        {
+          "to": "Furanden Forest",
+          "x": 942,
+          "y": 584
+        }
+      ],
+      "services": []
+    },
+    {
+      "id": "34393c71-5709-48b8-b272-19f9b7da3acf",
+      "name": "Furanden Forest",
+      "url": "https://dzxxjtmpcfsmvdgkcwvn.supabase.co/storage/v1/object/public/map-images/furanden-forest/1791558349061-b79385dd-92ac-4c89-b78d-e2ed30bb4786.webp",
+      "hash": "eb99599ce0c73fbbb847047992dd5c1f267e37f829cc59df12a64e9157d28991",
+      "exits": [
+        {
+          "to": "Vargas Forest",
+          "x": 77,
+          "y": 591
+        }
+      ],
+      "services": []
+    },
+    {
+      "id": "485aa878-45cf-4480-80a1-7ed60d96ac5a",
+      "name": "Salem Valley",
+      "url": "https://dzxxjtmpcfsmvdgkcwvn.supabase.co/storage/v1/object/public/map-images/salem-valley/1791558449967-2c343627-cb98-4027-99ba-bafe9bc991eb.webp",
+      "hash": "535bc538f0fd3a91976c4b1ff084b45c6e70ae80d06dd31ed1d178cc8b74e578",
+      "exits": [
+        {
+          "to": "Belpharen Valley",
+          "x": 58,
+          "y": 679
+        }
+      ],
+      "services": []
+    },
+    {
+      "id": "b5abca00-e8eb-4854-9cec-9184276d925c",
+      "name": "Bradlely Forest",
+      "url": "https://dzxxjtmpcfsmvdgkcwvn.supabase.co/storage/v1/object/public/map-images/bradley-forest/1791558630299-acffc8d7-354a-4f6f-8062-6145c8958fe4.webp",
+      "hash": "48316a281cffaff7ec0df14e4a2b873f0d071553a02422a59c11cd12a0b091fa",
+      "exits": [
+        {
+          "to": "Belpharen Valley",
+          "x": 478,
+          "y": 921
+        }
+      ],
+      "services": []
+    },
+    {
+      "id": "611c77c5-e314-4e88-8fb3-375556ccbb40",
+      "name": "Kryston Forest",
+      "url": "https://dzxxjtmpcfsmvdgkcwvn.supabase.co/storage/v1/object/public/map-images/kryston-forest/1791558737000-28cd27a2-a1ce-467d-892e-9fd4089fe7aa.webp",
+      "hash": "41bf80ef5a420d4efc618d633c82fa41f293fd8b5ed41f25bd91d7f78a752982",
+      "exits": [
+        {
+          "to": "Sheriff Forest",
+          "x": 932,
+          "y": 269
+        },
+        {
+          "to": "Bradlely Forest",
+          "x": 75,
+          "y": 314
+        }
+      ],
+      "services": []
+    },
+    {
+      "id": "ad171faa-c07e-4d59-9b18-5cc19c37aaf4",
+      "name": "Sheriff Forest",
+      "url": "https://dzxxjtmpcfsmvdgkcwvn.supabase.co/storage/v1/object/public/map-images/sheriff-forest/1791558829040-d8094fec-fb45-43ab-b9a4-6e56ca2b786b.webp",
+      "hash": "37733b2649ce57cc81f51d6b6478499e12c46613aff5693429e06dddc6fae2a4",
+      "exits": [
+        {
+          "to": "Kryston Forest",
+          "x": 73,
+          "y": 282
+        }
+      ],
+      "services": []
+    },
+    {
+      "id": "112cb361-f8b2-42e6-9b62-f5a69fb727a9",
+      "name": "Telling Denver Lake",
+      "url": "https://dzxxjtmpcfsmvdgkcwvn.supabase.co/storage/v1/object/public/map-images/telling-denver-lake/1791558901648-72982d7e-3d49-4f2a-9474-a5314009ef9e.webp",
+      "hash": "27f62fc111ac7e5a3fb6ee31e3ce6136da914e8c592eeb3805cf9a7f6ad25537",
+      "exits": [
+        {
+          "to": "Sheriff Forest",
+          "x": 62,
+          "y": 499
+        },
+        {
+          "to": "Gaudy Forest",
+          "x": 942,
+          "y": 500
+        }
+      ],
+      "services": []
+    },
+    {
+      "id": "24f99668-1023-4818-91bc-58f4ea2ba6a7",
+      "name": "Gaudy Forest",
+      "url": "https://dzxxjtmpcfsmvdgkcwvn.supabase.co/storage/v1/object/public/map-images/gaudy-forest/1791558929799-7e7ba80b-e255-4bbb-b5e7-9d480bd980e7.webp",
+      "hash": "6bcc8b88078148565a4d5a172b9bd6296a28535b4740984444fc4f9c2c83d7fa",
+      "exits": [
+        {
+          "to": "Harrington Forest",
+          "x": 917,
+          "y": 547
+        }
+      ],
+      "services": []
+    },
+    {
+      "id": "54f32061-727c-4ea9-9fcb-dbe99788c021",
+      "name": "Harrington Forest",
+      "url": "https://dzxxjtmpcfsmvdgkcwvn.supabase.co/storage/v1/object/public/map-images/harrington-forest/1791559005406-5a21a98d-c0d2-4179-8fbd-d16b7e5aa9ee.webp",
+      "hash": "db5bc68b78523500ad3e42337a633cbea91dca5ef51fcbaa9971c9951fb22ddd",
+      "exits": [
+        {
+          "to": "Candy Vault",
+          "x": 946,
+          "y": 550
+        }
+      ],
+      "services": []
+    },
+    {
+      "id": "cfb3cc83-a642-4a6f-9396-4d0073a0c950",
+      "name": "Curior Forest",
+      "url": "https://dzxxjtmpcfsmvdgkcwvn.supabase.co/storage/v1/object/public/map-images/curior-forest/1791559099740-dd44288a-6818-4cad-97ff-62ec1cd67d8e.webp",
+      "hash": "e15bd54cbd032cf79c88a94597f0d97e8c3280c3762fd70a7818b4d826d28a3a",
+      "exits": [
+        {
+          "to": "Felix Forest",
+          "x": 89,
+          "y": 849
+        }
+      ],
+      "services": []
+    },
+    {
+      "id": "88c04515-2cf7-4b55-bf5c-560e7088a444",
+      "name": "Stout Forest",
+      "url": "https://dzxxjtmpcfsmvdgkcwvn.supabase.co/storage/v1/object/public/map-images/stout-forest/1791559204704-b38d66ca-7c9a-4482-97b7-52e5ee45a018.webp",
+      "hash": "32fd2ba9738a9714762832e169db77b9f774869ebb38ca98b326ae2a187e1d22",
+      "exits": [
+        {
+          "to": "Felix Forest",
+          "x": 936,
+          "y": 132
+        }
+      ],
+      "services": []
+    },
+    {
+      "id": "245306ce-4faa-4d49-8a71-0b063e4326b0",
+      "name": "Othellos Forest",
+      "url": "https://dzxxjtmpcfsmvdgkcwvn.supabase.co/storage/v1/object/public/map-images/othellos-forest/1791559270408-e9c49501-a424-4f2e-ac2f-717944f1ef1a.webp",
+      "hash": "39780db35fc1001de19f4f33c16b0900222a356decfd97a65812d0b636d7603e",
+      "exits": [
+        {
+          "to": "Stout Forest",
+          "x": 939,
+          "y": 498
+        },
+        {
+          "to": "Theglaia Forest",
+          "x": 65,
+          "y": 498
+        }
+      ],
+      "services": []
+    },
+    {
+      "id": "bf9fe2f6-328e-4aef-90c5-15b0d413496e",
+      "name": "Theglaia Forest",
+      "url": "https://dzxxjtmpcfsmvdgkcwvn.supabase.co/storage/v1/object/public/map-images/theglia-forest/1791559310600-51d65ab3-75b4-4bd6-903f-1aa2a3bdb045.webp",
+      "hash": "e358ca512ca17c9a9d63da53341c656e3114cafe9669deec7381899f117e2554",
+      "exits": [
+        {
+          "to": "Bernald Forest",
+          "x": 86,
+          "y": 457
+        },
+        {
+          "to": "Othellos Forest",
+          "x": 924,
+          "y": 417
+        }
+      ],
+      "services": []
+    },
+    {
+      "id": "d21ba04d-839d-4669-bbc2-e620cbe0921f",
+      "name": "Bernald Forest",
+      "url": "https://dzxxjtmpcfsmvdgkcwvn.supabase.co/storage/v1/object/public/map-images/bernald-forest/1791559372700-0e2e7153-4541-4467-bab8-53c40aaa94de.webp",
+      "hash": "e9faccf0f049f9fa70dace02b8d1e75f584e4d3e4da08f0139c409fc6a43f3f7",
+      "exits": [
+        {
+          "to": "Theglaia Forest",
+          "x": 939,
+          "y": 832
+        },
+        {
+          "to": "Callisto Gorge",
+          "x": 70,
+          "y": 712
+        }
+      ],
+      "services": []
+    },
+    {
+      "id": "6691e13a-45da-4012-b719-edd242154ffd",
+      "name": "Callisto Gorge",
+      "url": "https://dzxxjtmpcfsmvdgkcwvn.supabase.co/storage/v1/object/public/map-images/callisto-gorge/1791559440458-cce797cb-f226-46d2-83ed-2dd6d962b167.webp",
+      "hash": "fb3c7392c761495ebf346f12650766d270f4d92ec7dec7e27583f29bbb771674",
+      "exits": [
+        {
+          "to": "Castella Forest",
+          "x": 67,
+          "y": 457
+        },
+        {
+          "to": "Bernald Forest",
+          "x": 927,
+          "y": 669
+        }
+      ],
+      "services": []
+    },
+    {
+      "id": "0dd24d35-658d-4a42-91e8-c227779acff9",
+      "name": "Loem Valley",
+      "url": "https://dzxxjtmpcfsmvdgkcwvn.supabase.co/storage/v1/object/public/map-images/loem-valley/1791559685378-b3bdd5ae-3bbf-4d07-9a56-c5ad54e16440.webp",
+      "hash": "d6053d7eedc23d8cd919550c8144548b58e247059890b14be3864ac35442050c",
+      "exits": [
+        {
+          "to": "Castella Forest",
+          "x": 552,
+          "y": 915
+        }
+      ],
+      "services": []
+    },
+    {
+      "id": "a53ae852-7145-4672-ab92-c741cb07d51e",
+      "name": "Aerial Forest",
+      "url": "https://dzxxjtmpcfsmvdgkcwvn.supabase.co/storage/v1/object/public/map-images/aerial-forest/1791559739871-779ad1b1-bd3d-4bab-a236-467884bb0a83.webp",
+      "hash": "72de9d3cce8daa2be782592bacdb4cd0772ce0c1bafb8604ed8cee45e8cb2936",
+      "exits": [
+        {
+          "to": "Linear Forest",
+          "x": 898,
+          "y": 360
+        },
+        {
+          "to": "Loem Valley",
+          "x": 538,
+          "y": 924
+        },
+        {
+          "to": "Brynhildr Trisects",
+          "x": 39,
+          "y": 676
+        }
+      ],
+      "services": []
+    },
+    {
+      "id": "a086fbbe-23c1-4db6-a4b9-fa1d35e0a166",
+      "name": "Hiroshi Gorge",
+      "url": "https://dzxxjtmpcfsmvdgkcwvn.supabase.co/storage/v1/object/public/map-images/hiroshi-gorge/1791562259693-4470dded-4a0f-4cdd-bf35-3605ae5b0f4f.webp",
+      "hash": "252e4db75a95f197dc81e94a5b5cfefea4f07a8a7fe2a42f750b649b9bf4118c",
+      "exits": [
+        {
+          "to": "Elwood Plains",
+          "x": 85,
+          "y": 356
+        }
+      ],
+      "services": []
+    },
+    {
+      "id": "d9a44348-abb3-4d3d-b5df-505fe99e87c3",
+      "name": "Clingon Plains",
+      "url": "https://dzxxjtmpcfsmvdgkcwvn.supabase.co/storage/v1/object/public/map-images/chingon-plains/1791562384816-fad10f19-f891-4d94-909b-8f9dadbf6699.webp",
+      "hash": "28b13b1877d4aed5daaaf206c9772637af5fb1c12ba59e1d2ea2318fd4486e2a",
+      "exits": [
+        {
+          "to": "Lifeline Basin",
+          "x": 938,
+          "y": 512
+        }
+      ],
+      "services": []
+    },
+    {
+      "id": "e37c94b7-80f4-414d-8f96-68e24f3892a4",
+      "name": "Alicia Forest",
+      "url": "https://dzxxjtmpcfsmvdgkcwvn.supabase.co/storage/v1/object/public/map-images/alicia-forest/1791560100500-07203966-ebe4-4068-9d03-ead0ac63c62b.webp",
+      "hash": "361dd05d19161b8e9068309d2cd91db9cad1d2bbed6ac327ba41424ca717811e",
+      "exits": [
+        {
+          "to": "Candy Vault",
+          "x": 117,
+          "y": 475
+        }
+      ],
+      "services": []
+    },
+    {
+      "id": "2e72bb70-3a98-4f87-a408-31c1746b7410",
+      "name": "Realto Plains",
+      "url": "https://dzxxjtmpcfsmvdgkcwvn.supabase.co/storage/v1/object/public/map-images/realto-plains/1791560173973-1e7d7aa3-710c-4bbc-9cf4-d14d9efae142.webp",
+      "hash": "dcd1440c45b0df23a5de2303d10689fd75306b69b62b0694a497abd7c3f404d1",
+      "exits": [
+        {
+          "to": "Taisen Plains",
+          "x": 778,
+          "y": 917
+        }
+      ],
+      "services": []
+    },
+    {
+      "id": "0171287d-5573-4e68-8d06-383cc5da5b3d",
+      "name": "Taisen Plains",
+      "url": "https://dzxxjtmpcfsmvdgkcwvn.supabase.co/storage/v1/object/public/map-images/toisen-plains/1791560289251-2314af51-dfe9-4222-baa8-9d3e298988ad.webp",
+      "hash": "8cf3592c9016ee3b3fba4e1751c07083b56d8fe8b6c21b9d14b495726cbf96fc",
+      "exits": [
+        {
+          "to": "Realto Plains",
+          "x": 783,
+          "y": 78
+        },
+        {
+          "to": "Lombard Plains",
+          "x": 312,
+          "y": 909
+        }
+      ],
+      "services": []
+    },
+    {
+      "id": "fc8c8e64-cb56-4d25-b0c3-cb11ac567c45",
+      "name": "Lombard Plains",
+      "url": "https://dzxxjtmpcfsmvdgkcwvn.supabase.co/storage/v1/object/public/map-images/lombard-plains/1791560370285-08cdfcd0-d2ac-4b47-8834-b160dedcfb7e.webp",
+      "hash": "9e2e51ffe8e52506592c2018b3c83dd6dbc30c656f008f3469517a05f94b265b",
+      "exits": [
+        {
+          "to": "Scorging Plains",
+          "x": 907,
+          "y": 281
+        }
+      ],
+      "services": []
+    },
+    {
+      "id": "bc4e8629-7de8-43dd-86d5-7fe24d760644",
+      "name": "Scorging Plains",
+      "url": "https://dzxxjtmpcfsmvdgkcwvn.supabase.co/storage/v1/object/public/map-images/scorging-plains/1791560444679-3bc58bbd-3fea-4a0e-aafa-8f63d99d8bbf.webp",
+      "hash": "7f0a3318b83c2928dea4705b15a82e97f6be92054985abae441a3e1dce77303c",
+      "exits": [
+        {
+          "to": "Rudwork Path",
+          "x": 395,
+          "y": 888
+        }
+      ],
+      "services": []
+    },
+    {
+      "id": "3aa22143-1f4f-4a10-bddf-380da7e41a21",
+      "name": "Rudwork Path",
+      "url": "https://dzxxjtmpcfsmvdgkcwvn.supabase.co/storage/v1/object/public/map-images/rudwork-path/1791560511188-7be02ecd-c3a5-4c67-995f-cc1c930f0b6f.webp",
+      "hash": "f7d1775189892549171538dd46b3c5c13e56b64442278cba96fb79b5dccbef51",
+      "exits": [
+        {
+          "to": "Proteron Gorge",
+          "x": 685,
+          "y": 940
+        },
+        {
+          "to": "Scorging Plains",
+          "x": 421,
+          "y": 46
+        }
+      ],
+      "services": []
+    },
+    {
+      "id": "0faacdea-20d5-4baf-a2b3-4f127e7e4e36",
+      "name": "Brynhildr Trisects",
+      "url": "https://dzxxjtmpcfsmvdgkcwvn.supabase.co/storage/v1/object/public/map-images/manual-updates/0faacdea-20d5-4baf-a2b3-4f127e7e4e36/0d9f2efe-f6be-4de1-912c-70b67f5fd464.webp",
+      "hash": "e3597c0825e651b407809a9ba1a902f60030e9cf4fc271402d1f9bbd25dd0817",
+      "exits": [
+        {
+          "to": "Brunen Basin",
+          "x": 57,
+          "y": 673
+        }
+      ],
+      "services": []
+    },
+    {
+      "id": "c54abe4a-e2fc-4bc8-8e99-08485b2a7cfd",
+      "name": "Limus Basin",
+      "url": "https://dzxxjtmpcfsmvdgkcwvn.supabase.co/storage/v1/object/public/map-images/limus-basin/1791561998731-b24359e0-25c5-44ef-804d-5bddc13764ff.webp",
+      "hash": "62339d0e5b2e54b53827046f1908de29987e0ca6dbc49d7c0acfec2ce92b6db1",
+      "exits": [
+        {
+          "to": "Harquil Plains",
+          "x": 69,
+          "y": 469
+        },
+        {
+          "to": "Clipper Plains",
+          "x": 959,
+          "y": 210
+        }
+      ],
+      "services": []
+    },
+    {
+      "id": "66a55d18-9799-43c8-8fcd-530b644fc34c",
+      "name": "Tolkin Gorge",
+      "url": "https://dzxxjtmpcfsmvdgkcwvn.supabase.co/storage/v1/object/public/map-images/tolkin-gorge/1791562701700-f1b76aa2-cf67-4791-a5e3-929f99ff87eb.webp",
+      "hash": "dfacd6df9121022f9f5b92a684ad3244806f7c66b2cfda6c68e1e42728f54548",
+      "exits": [
+        {
+          "to": "Hooters Plains",
+          "x": 66,
+          "y": 409
+        }
+      ],
+      "services": []
+    },
+    {
+      "id": "14d2b34e-fd2c-49da-94d2-f13d690dde97",
+      "name": "Bailey Plains",
+      "url": "https://dzxxjtmpcfsmvdgkcwvn.supabase.co/storage/v1/object/public/map-images/bailey-plains/1791562831772-9e15fb8b-9b52-4e79-b1ca-876f1df7501f.webp",
+      "hash": "ac1849c6fe1836917d7c378585a68abdc9f982d81c86b79e8326602f5a4c94b8",
+      "exits": [
+        {
+          "to": "Hooters Plains",
+          "x": 368,
+          "y": 935
+        }
+      ],
+      "services": []
+    },
+    {
+      "id": "2171a1a7-1d12-4245-b76c-daaf9e0ff673",
+      "name": "Paladino Grove",
+      "url": "https://dzxxjtmpcfsmvdgkcwvn.supabase.co/storage/v1/object/public/map-images/pladino-grove/1791598377953-3b22a31d-9d4e-437a-a8ef-3edcd9ddf68c.webp",
+      "hash": "8f92f044a401505bd12c5314b6409be73628d24b8b9e97e09caadcbccdbb07d8",
+      "exits": [
+        {
+          "to": "Engrave Path",
+          "x": 528,
+          "y": 946
+        },
+        {
+          "to": "Onix Hill",
+          "x": 104,
+          "y": 307
+        }
+      ],
+      "services": []
+    },
+    {
+      "id": "878c7afe-ba0c-42e8-90fc-e37a4cef9f8c",
+      "name": "Onix Hill",
+      "url": "https://dzxxjtmpcfsmvdgkcwvn.supabase.co/storage/v1/object/public/map-images/onix-hill/1791598449920-d79e1620-a54a-49cd-99ff-fbd3ede4b4d6.webp",
+      "hash": "59dac397589ffe13b9b455166ad8eaf700451c47fa8fa69ccc7f6404073bd5f8",
+      "exits": [
+        {
+          "to": "Paladino Grove",
+          "x": 953,
+          "y": 227
+        }
+      ],
+      "services": []
+    },
+    {
+      "id": "00475532-784b-49b4-9851-9614576ffd19",
+      "name": "Ashely Forest",
+      "url": "https://dzxxjtmpcfsmvdgkcwvn.supabase.co/storage/v1/object/public/map-images/ashley-forest/1791598518258-249e40c1-0780-4c70-9b04-770fe3e8f7fc.webp",
+      "hash": "a68ad90bf5d7e235a60a3dc16c0004a63059ecd178a2d7bce1968cd6a08f0aa9",
+      "exits": [
+        {
+          "to": "Lavy Basin",
+          "x": 900,
+          "y": 589
+        }
+      ],
+      "services": []
+    },
+    {
+      "id": "dc43e7cc-8760-468b-b9c0-803d25f1fd02",
+      "name": "Lavy Basin",
+      "url": "https://dzxxjtmpcfsmvdgkcwvn.supabase.co/storage/v1/object/public/map-images/lavy-basin/1791598606243-8c55c92d-ca61-4060-989c-d43c5c83b221.webp",
+      "hash": "ff001b22cc1b0d4cfd0612730532f83e28192cb2e85fbf934216909521ae76d6",
+      "exits": [
+        {
+          "to": "Ashely Forest",
+          "x": 91,
+          "y": 563
+        },
+        {
+          "to": "Baskerville Forest",
+          "x": 914,
+          "y": 480
+        }
+      ],
+      "services": []
+    },
+    {
+      "id": "fa54d62c-a5ef-421a-b3f1-24f2e296ce11",
+      "name": "Baskerville Forest",
+      "url": "https://dzxxjtmpcfsmvdgkcwvn.supabase.co/storage/v1/object/public/map-images/baskerville-forest/1791598670316-a841938c-e890-4778-8f06-1c468d46e4dd.webp",
+      "hash": "9424e3f3d21fa2893e614f6dea8a3e27f8d96e9c92651af9e635e6ad88cd31b9",
+      "exits": [
+        {
+          "to": "Lavy Basin",
+          "x": 68,
+          "y": 481
+        },
+        {
+          "to": "Shylphaen Forest",
+          "x": 597,
+          "y": 936
+        }
+      ],
+      "services": []
+    },
+    {
+      "id": "8e069710-3e59-46af-b1fd-dadd6ac7bc79",
+      "name": "Shylphaen Forest",
+      "url": "https://dzxxjtmpcfsmvdgkcwvn.supabase.co/storage/v1/object/public/map-images/shylphaen-forest/20261010-7eff7bb1-faf4-49de-ac15-7b5651f14024.png",
+      "hash": "74231c732f8d3515ea1c83b8471bffab07395b362d84f009604d5d343af7d660",
+      "exits": [
+        {
+          "to": "Corlona Forest",
+          "x": 897,
+          "y": 386
+        }
+      ],
+      "services": []
+    },
+    {
+      "id": "8f94c6c3-8366-4b25-91a6-553580739eae",
+      "name": "Berdana Forest",
+      "url": "https://dzxxjtmpcfsmvdgkcwvn.supabase.co/storage/v1/object/public/map-images/berdena-forest/1791600266693-7be5f48d-98d9-4780-b28f-c8b4d3869839.webp",
+      "hash": "4156673dabafcfc8d884018903d5e03413bbc3ec523e9d6df4df077b47f9b0b8",
+      "exits": [
+        {
+          "to": "Corlona Forest",
+          "x": 504,
+          "y": 955
+        }
+      ],
+      "services": []
+    },
+    {
+      "id": "de782c37-247a-426e-beb4-bdfbb951b294",
+      "name": "Turmeit Desert",
+      "url": "https://dzxxjtmpcfsmvdgkcwvn.supabase.co/storage/v1/object/public/map-images/turneit-desert/1791600842504-54cc4cb5-864b-4a3a-a9f6-d559f82d872b.webp",
+      "hash": "bc079b3d8a6261d10bb8bf056b2608ade161abcc1b6d19938fc91de54c66aa4c",
+      "exits": [
+        {
+          "to": "Sand Desert Dungeon",
+          "x": 476,
+          "y": 244
+        }
+      ],
+      "services": []
+    },
+    {
+      "id": "22e1b701-3518-41d3-8482-e5246684591b",
+      "name": "Router Valley",
+      "url": "https://dzxxjtmpcfsmvdgkcwvn.supabase.co/storage/v1/object/public/map-images/router-valley/1791602856840-3b3f0ae3-8b60-409b-9f8d-dced2e2acd87.webp",
+      "hash": "8458f56a156cb317b18ff0ce7df1ecabaffd83b46c1d970d96b6347bafff7450",
+      "exits": [
+        {
+          "to": "Death Valley",
+          "x": 68,
+          "y": 384
+        }
+      ],
+      "services": []
+    },
+    {
+      "id": "b458cf26-136e-4b15-8ba9-3a2193441620",
+      "name": "Mystra Hill",
+      "url": "https://dzxxjtmpcfsmvdgkcwvn.supabase.co/storage/v1/object/public/map-images/mystra-hill/1791603747415-3837474e-ed43-4ad3-a087-3d3644563d12.webp",
+      "hash": "ee6db64bf19803fc3782871f92b9b465f0275c811a1229b6041ed297c40a3078",
+      "exits": [
+        {
+          "to": "Augilas Gorge",
+          "x": 886,
+          "y": 471
+        },
+        {
+          "to": "Mystra Basin",
+          "x": 90,
+          "y": 445
+        }
+      ],
+      "services": []
+    },
+    {
+      "id": "eebc190c-0c50-4a8b-ba08-e17cc3b6b14c",
+      "name": "Luan Basin",
+      "url": "https://dzxxjtmpcfsmvdgkcwvn.supabase.co/storage/v1/object/public/map-images/luan-basin/1791603870192-fbdc2ad0-ae78-4cce-9036-8ce16d2395ac.webp",
+      "hash": "1d7662a66163794c11446fd1ff7ab541dc053d36da80af88809e1e1025e99fe4",
+      "exits": [
+        {
+          "to": "Mystra Basin",
+          "x": 921,
+          "y": 632
+        }
+      ],
+      "services": []
+    },
+    {
+      "id": "313c459a-fe3e-4d62-96a3-7f4fba1b0273",
+      "name": "Shalo Forest",
+      "url": "https://dzxxjtmpcfsmvdgkcwvn.supabase.co/storage/v1/object/public/map-images/shalo-forest/1791604087976-283ab2a2-1657-43da-9495-1257e80a8bb6.webp",
+      "hash": "9d89ac736c0e8dad4b8c9c5e89bf4e3a9714a264b35cefa7adacbf8cb904ac93",
+      "exits": [
+        {
+          "to": "Belteranin Forest",
+          "x": 445,
+          "y": 903
+        }
+      ],
+      "services": []
+    },
+    {
+      "id": "48d11acf-9b81-41b9-a0fa-c61ae0f3b823",
+      "name": "Shenzhen Canyon",
+      "url": "https://dzxxjtmpcfsmvdgkcwvn.supabase.co/storage/v1/object/public/map-images/shenzhen-canyon/1791607466824-2f74df10-c877-417d-b609-9e2242245fe5.webp",
+      "hash": "ea2bd58ac03d31dad4615527597dc6d4ee8590bf434b3ec60ec5571371af0979",
+      "exits": [
+        {
+          "to": "Shenzhen Valley",
+          "x": 936,
+          "y": 161
+        }
+      ],
+      "services": []
+    },
+    {
+      "id": "09dbd296-fc99-4229-b60a-dffcc9c4d758",
+      "name": "Shenzhen Waterfall Entrance",
+      "url": "https://dzxxjtmpcfsmvdgkcwvn.supabase.co/storage/v1/object/public/map-images/shenzhen-waterfall-entrance/1791607656479-7a0565c4-6316-495d-be67-d39fdcd564e9.webp",
+      "hash": "9a8966ffc568ea918538c5c7a2fabfaad2ef6902a590b4fceef55cb6aea5083a",
+      "exits": [
+        {
+          "to": "Shenzhen Canyon Exit",
+          "x": 149,
+          "y": 300
+        }
+      ],
+      "services": []
+    },
+    {
+      "id": "6a7d3e43-13c9-4d43-8edf-5232853d4c70",
+      "name": "Ibarra Canyon Exit",
+      "url": "https://dzxxjtmpcfsmvdgkcwvn.supabase.co/storage/v1/object/public/map-images/ibarra-canyon-exit/1791610658813-8c5adb10-c4f6-46b5-add9-482c18d8ecfe.webp",
+      "hash": "821db4dfa88fc036efc676ae450b1962ebb0f3cbdfab6506d1dda15f6b98beb3",
+      "exits": [
+        {
+          "to": "Thorn Basin",
+          "x": 544,
+          "y": 83
+        }
+      ],
+      "services": []
+    },
+    {
+      "id": "f2ac4860-2b36-4740-a5d2-f4748ff299b6",
+      "name": "Lava Canyon",
+      "url": "https://dzxxjtmpcfsmvdgkcwvn.supabase.co/storage/v1/object/public/map-images/lava-canyon/1791613657529-5e49a6c2-aa27-4dc2-9c43-6f97594d7b53.webp",
+      "hash": "6bf1c68e4e026628e1a5ce75f0c8c8af1658efaffd873ce7c8c16cf78ae70d9e",
+      "exits": [
+        {
+          "to": "Lava Valley",
+          "x": 168,
+          "y": 947
+        }
+      ],
+      "services": []
+    },
+    {
+      "id": "bd28028c-e08e-48ec-813d-a2420b6d7bb3",
+      "name": "Red Mine",
+      "url": "https://dzxxjtmpcfsmvdgkcwvn.supabase.co/storage/v1/object/public/map-images/red-mine/1791614215566-9b01295f-9da9-4f0d-99a2-f5fd52ba5215.webp",
+      "hash": "84c54728e0b7b6f337898f93867e8c078a0c7d0253f8bb9f7b8bca5fc80d066a",
+      "exits": [
+        {
+          "to": "Lava Valley",
+          "x": 98,
+          "y": 204
+        }
+      ],
+      "services": []
+    },
+    {
+      "id": "ec246edb-2664-4119-9b6a-779683933266",
+      "name": "Clique Forest",
+      "url": "https://dzxxjtmpcfsmvdgkcwvn.supabase.co/storage/v1/object/public/map-images/clique-forest/1791615898223-1c3d86f6-871e-426c-a297-eac2e992049f.webp",
+      "hash": "c537431ae5e77897ce3365d1b03a2fad4521da516ef2bd8b4fc3dcd86013d717",
+      "exits": [
+        {
+          "to": "Amelia Forest",
+          "x": 934,
+          "y": 146
+        },
+        {
+          "to": "Velcro Forest",
+          "x": 58,
+          "y": 170
+        }
+      ],
+      "services": []
+    },
+    {
+      "id": "a6edbaa8-1de2-4bbd-96cd-8d3cbd51b7e3",
+      "name": "Velcro Forest",
+      "url": "https://dzxxjtmpcfsmvdgkcwvn.supabase.co/storage/v1/object/public/map-images/velcro-forest/1791615973729-3a13661d-2c29-4b3b-bdcc-d6016dd9a65f.webp",
+      "hash": "4a73a56a9581d26023f16f4edcf16111fc81abb4806b09ecfa6011065cbbf1dc",
+      "exits": [
+        {
+          "to": "Clique Forest",
+          "x": 924,
+          "y": 245
+        },
+        {
+          "to": "Sennin Valley",
+          "x": 63,
+          "y": 189
+        }
+      ],
+      "services": []
+    },
+    {
+      "id": "e34edd54-c23b-4279-bace-fd4f608dab95",
+      "name": "Sennin Valley",
+      "url": "https://dzxxjtmpcfsmvdgkcwvn.supabase.co/storage/v1/object/public/map-images/sennin-valley/1791616054600-3284f688-f693-4a6d-b5ef-ef8f4c9408e8.webp",
+      "hash": "04e2137a7c4c3b9617b291778b2ac521d8633357967983033ebbf7601c22486f",
+      "exits": [
+        {
+          "to": "Velcro Forest",
+          "x": 931,
+          "y": 747
+        }
+      ],
+      "services": []
+    },
+    {
+      "id": "03bcfce2-d75a-4d16-9163-4101f1de0d28",
+      "name": "Inkwell Plains",
+      "url": "https://dzxxjtmpcfsmvdgkcwvn.supabase.co/storage/v1/object/public/map-images/inkwell-plains/1791616084440-7f3e2622-6c6b-480a-8f77-b41d27d16ef4.webp",
+      "hash": "43487904ef5f500fa3e8bb8464f0caf2f0a18ba4b0b27fd73bff8247ebaca249",
+      "exits": [
+        {
+          "to": "Sennin Valley",
+          "x": 175,
+          "y": 890
+        }
+      ],
+      "services": []
+    },
+    {
+      "id": "015295e3-5bbc-49a8-82d0-58faab09a6c9",
+      "name": "Business Plains",
+      "url": "https://dzxxjtmpcfsmvdgkcwvn.supabase.co/storage/v1/object/public/map-images/business-plains/1791616345540-37a0675f-90c7-4b0a-9603-960c0083a78a.webp",
+      "hash": "0e621c47b29308e23ea26157ce982f08edb3a01fb55ef11695528c199be895da",
+      "exits": [
+        {
+          "to": "Daniella Plains",
+          "x": 74,
+          "y": 543
+        }
+      ],
+      "services": []
+    },
+    {
+      "id": "ebecdffb-d11b-4834-bf27-24c75e0f419a",
+      "name": "Blackmail Forest",
+      "url": "https://dzxxjtmpcfsmvdgkcwvn.supabase.co/storage/v1/object/public/map-images/blackmail-forest/1791616678534-c128eec0-cd51-4f13-9d70-baac1efd9316.webp",
+      "hash": "314e2a8d554fe1c7c7dcd2d40131809c009f5183ec25a138669b7d5042308421",
+      "exits": [
+        {
+          "to": "Shudbee Forest",
+          "x": 500,
+          "y": 959
+        }
+      ],
+      "services": []
+    },
+    {
+      "id": "65511337-41b2-4f9a-82cc-f04fa7d53f04",
+      "name": "Pindown Valley",
+      "url": "https://dzxxjtmpcfsmvdgkcwvn.supabase.co/storage/v1/object/public/map-images/pindown-valley/1791616867009-6f7539d0-1fd3-4e20-b0d6-fa3c1e9d84ce.webp",
+      "hash": "ac450805ba590c41b41cec79f7b2eeb4b62d91a7b5b6fe586bca7e305aff7a2a",
+      "exits": [
+        {
+          "to": "Shudbee Forest",
+          "x": 48,
+          "y": 704
+        }
+      ],
+      "services": []
+    },
+    {
+      "id": "64eae737-0fbd-4117-9eae-498437990470",
+      "name": "Simpson Valley",
+      "url": "https://dzxxjtmpcfsmvdgkcwvn.supabase.co/storage/v1/object/public/map-images/simpson-valley/1791617079667-a5ebd3ad-dbd2-4ef9-9bcd-9032adf0f9b3.webp",
+      "hash": "5d843a3b4fd344183ef7431e572fdc456321909572fc6ac5885f64ba5782dcaf",
+      "exits": [
+        {
+          "to": "Sheryle Forest",
+          "x": 54,
+          "y": 655
+        }
+      ],
+      "services": []
+    },
+    {
+      "id": "0280c057-deef-4e7f-83de-23e6cd9a6a59",
+      "name": "Sheryle Forest",
+      "url": "https://dzxxjtmpcfsmvdgkcwvn.supabase.co/storage/v1/object/public/map-images/sheryle-valley/1791617332381-c37573cf-e0b6-43fc-affa-8a1ee653715f.webp",
+      "hash": "c4a5f9761e2748d0c6613a617745e97cefe2245f93278b27d0cb95220181964c",
+      "exits": [
+        {
+          "to": "Simpson Valley",
+          "x": 932,
+          "y": 704
+        },
+        {
+          "to": "Nordis Valley",
+          "x": 69,
+          "y": 328
+        }
+      ],
+      "services": []
+    },
+    {
+      "id": "d88ec8b3-7c88-4e1a-b9c2-eee8a9784ace",
+      "name": "Sheryle Forest",
+      "url": "https://dzxxjtmpcfsmvdgkcwvn.supabase.co/storage/v1/object/public/map-images/sheryle-forest/1791617415150-33d9e434-8878-4ec5-adca-2a2f551cb07f.webp",
+      "hash": "c4a5f9761e2748d0c6613a617745e97cefe2245f93278b27d0cb95220181964c",
+      "exits": [
+        {
+          "to": "Simpson Valley",
+          "x": 932,
+          "y": 704
+        },
+        {
+          "to": "Nordis Valley",
+          "x": 69,
+          "y": 328
+        }
+      ],
+      "services": []
+    },
+    {
+      "id": "8ec5ab36-e31e-439b-8e57-7eae7368c745",
+      "name": "Hellein Plateau",
+      "url": "https://dzxxjtmpcfsmvdgkcwvn.supabase.co/storage/v1/object/public/map-images/hellein-plateau/1791622139766-edefe974-33f9-403e-9432-fe83bf458197.webp",
+      "hash": "339db5dec33ef63b8f86266da56f0844b7b0796581a0249447bfddecb0485623",
+      "exits": [
+        {
+          "to": "Arobec Plateau",
+          "x": 103,
+          "y": 519
+        }
+      ],
+      "services": []
+    },
+    {
+      "id": "76f66bd5-7581-4985-9aea-2a53db22b24c",
+      "name": "Arobec Plateau",
+      "url": "https://dzxxjtmpcfsmvdgkcwvn.supabase.co/storage/v1/object/public/map-images/arobec-plateau/1791622140606-00b0a10b-f236-4258-afa8-c9dd2562f1fa.webp",
+      "hash": "5837f8eb61513b3cb7f25322c45aad298b5c0f12ac8c150db4799dc4be10cf2a",
+      "exits": [
+        {
+          "to": "Robern Plains",
+          "x": 67,
+          "y": 491
+        },
+        {
+          "to": "Hellein Plateau",
+          "x": 926,
+          "y": 491
+        }
+      ],
+      "services": []
+    },
+    {
+      "id": "163d64be-7b5d-4f9e-9803-ac144e680c81",
+      "name": "Metapolis",
+      "url": "https://dzxxjtmpcfsmvdgkcwvn.supabase.co/storage/v1/object/public/map-images/metapolis/1791622452927-3b00d932-a1ee-4b7f-98ea-2a9c4f6ee3bc.webp",
+      "hash": "06cf7a0b3093baac21e60a43eeea9d29c18019b819a705627680f558d17595cc",
+      "exits": [
+        {
+          "to": "Robern Plains",
+          "x": 941,
+          "y": 487
+        },
+        {
+          "to": "Ramia Plateau",
+          "x": 60,
+          "y": 497
+        }
+      ],
+      "services": []
+    },
+    {
+      "id": "e7c470ba-7dcd-493f-b4de-7673b2204e09",
+      "name": "Pamament Plateau",
+      "url": "https://dzxxjtmpcfsmvdgkcwvn.supabase.co/storage/v1/object/public/map-images/pamament-plateau/1791622573323-67cb122a-dff2-4acd-9095-852df1e44e16.webp",
+      "hash": "b5d9e28379f96abcbf01b50b92a3252d8b251756e7dfc4fa1709a60005f9a5f2",
+      "exits": [
+        {
+          "to": "Ramia Plateau",
+          "x": 944,
+          "y": 445
+        }
+      ],
+      "services": []
+    },
+    {
+      "id": "64049082-43c4-4c8d-9c08-8abb9a3f33c2",
+      "name": "Noctein Plateau",
+      "url": "https://dzxxjtmpcfsmvdgkcwvn.supabase.co/storage/v1/object/public/map-images/noctein-plateau/1791622574072-4224dfad-ecce-4395-a84c-246046d315c0.webp",
+      "hash": "2e3b44eba3c2947d5d017699ea71a25a1a3385e9d84e3ce8c4d0497e45c0e952",
+      "exits": [
+        {
+          "to": "Fies Plateau",
+          "x": 744,
+          "y": 960
+        },
+        {
+          "to": "Rekiell Plateau",
+          "x": 54,
+          "y": 369
+        }
+      ],
+      "services": []
+    },
+    {
+      "id": "63b5afa7-6347-4d92-a045-47cb93ba5a56",
+      "name": "Verazium Plateau",
+      "url": "https://dzxxjtmpcfsmvdgkcwvn.supabase.co/storage/v1/object/public/map-images/verazium-plateau/1791622574374-002acc5e-d94b-49ff-bf09-94dcf1cba031.webp",
+      "hash": "ebff2691b731bfef10d6d3f3e34b9a9430aade9ec7270c509363b728d69837f8",
+      "exits": [
+        {
+          "to": "Rekiell Plateau",
+          "x": 140,
+          "y": 490
+        },
+        {
+          "to": "Pamament Plateau",
+          "x": 880,
+          "y": 220
+        }
+      ],
+      "services": []
+    },
+    {
+      "id": "623f2152-0564-48f5-9c62-3aa1833b8f12",
+      "name": "Fies Plateau",
+      "url": "https://dzxxjtmpcfsmvdgkcwvn.supabase.co/storage/v1/object/public/map-images/fies-plateau/1791622574668-2e8440c5-f2f9-4462-91dd-d401050d2379.webp",
+      "hash": "4622de616539d5396a5ed409c0dc2c3ea86c949d96f4c3aba7311a306ad763d8",
+      "exits": [
+        {
+          "to": "Mute Basin",
+          "x": 27,
+          "y": 514
+        },
+        {
+          "to": "Noctein Plateau",
+          "x": 877,
+          "y": 43
+        }
+      ],
+      "services": []
+    },
+    {
+      "id": "69e74e05-2b91-4126-9f3c-f93ceaa732ef",
+      "name": "Mute Basin",
+      "url": "https://dzxxjtmpcfsmvdgkcwvn.supabase.co/storage/v1/object/public/map-images/mute-basin/1791622575008-117b4f6a-7ce7-400e-b15b-6263c5986168.webp",
+      "hash": "81494e2b281d37a44f520a09809e6495383689a1067435ad1833948c64fcb1ea",
+      "exits": [
+        {
+          "to": "Fies Plateau",
+          "x": 509,
+          "y": 80
+        }
+      ],
+      "services": []
+    },
+    {
+      "id": "e0715498-b4ac-4449-937e-0c0404803043",
+      "name": "Monoroby Plateau",
+      "url": "https://dzxxjtmpcfsmvdgkcwvn.supabase.co/storage/v1/object/public/map-images/monoroby-plateau/1791622575285-9d2e8d95-3062-44cd-99a1-cd47443bc187.webp",
+      "hash": "e293544373fc1b87d0e5e6e7e4638a4893f9a538aeab058104c37d5bd57a6c8f",
+      "exits": [
+        {
+          "to": "Bombile Plateau",
+          "x": 55,
+          "y": 866
+        }
+      ],
+      "services": []
+    },
+    {
+      "id": "f4e7cbcc-0cf2-4df8-8470-49c39f594b91",
+      "name": "Anzers Plateau",
+      "url": "https://dzxxjtmpcfsmvdgkcwvn.supabase.co/storage/v1/object/public/map-images/anzers-plateau/1791622817736-092b8923-2f28-4f18-b265-faace542710a.webp",
+      "hash": "a80687bb18efce946394212d9f1a0798d3465ceebb1b51cec81b7b6288535e4f",
+      "exits": [
+        {
+          "to": "Siberas Plateau",
+          "x": 87,
+          "y": 538
+        }
+      ],
+      "services": []
+    },
+    {
+      "id": "87d8ce4a-e918-412d-9d88-4a34a923274c",
+      "name": "Town of Deceased",
+      "url": "https://dzxxjtmpcfsmvdgkcwvn.supabase.co/storage/v1/object/public/map-images/town-of-deceased/1791723154306-ed4d1673-27dd-4429-ac70-67b27d0b66a2.webp",
+      "hash": "c5da28a0d1e49457f8c88caac732a2e23ffd568cb8c5aed5c6bd5c6e1cc02f75",
+      "exits": [
+        {
+          "to": "Eaglerentin Plain",
+          "x": 12,
+          "y": 513
+        }
+      ],
+      "services": []
+    },
+    {
+      "id": "b6c6244c-1a15-4301-aded-d632de5ab912",
+      "name": "Templar Gorge",
+      "url": "https://dzxxjtmpcfsmvdgkcwvn.supabase.co/storage/v1/object/public/map-images/templar-gorge/1791723405378-9cb1801d-73e8-4524-b597-7530e912cbcf.webp",
+      "hash": "a33428838f6c19067dd9a07a04b7699dac7e2ea8b8983d2e6bea72d054a96549",
+      "exits": [
+        {
+          "to": "Marque Basin",
+          "x": 276,
+          "y": 905
+        }
+      ],
+      "services": []
+    },
+    {
+      "id": "4666c037-dc3b-4e60-afe9-f538189ddc1b",
+      "name": "Vanderull Plains",
+      "url": "https://dzxxjtmpcfsmvdgkcwvn.supabase.co/storage/v1/object/public/map-images/vanderull-plains/1791723538696-b1f2d9cf-9e67-4394-8f75-bc54de7beca8.webp",
+      "hash": "89333547a6be50f5c1560419853d938f44d71c5a11bd3b3ce30d5841513a5560",
+      "exits": [
+        {
+          "to": "Darive Plains",
+          "x": 724,
+          "y": 105
+        }
+      ],
+      "services": []
+    },
+    {
+      "id": "8b3d1a36-2a17-41b5-be29-c301d411a924",
+      "name": "Bangle Valley",
+      "url": "https://dzxxjtmpcfsmvdgkcwvn.supabase.co/storage/v1/object/public/map-images/bangle-valley/1791724058309-c80651a7-702c-4e10-bec6-e01573996443.webp",
+      "hash": "4995bdd3a7e0879afb25c802fd376e1f8ec88ca19bdeb81c87e4920ed612de86",
+      "exits": [
+        {
+          "to": "Mardigras Valley",
+          "x": 907,
+          "y": 552
+        }
+      ],
+      "services": []
+    },
+    {
+      "id": "9f4b4cf1-9e4a-4d00-bd06-db44f7a70be8",
+      "name": "Eaglerentin Plain",
+      "url": "https://dzxxjtmpcfsmvdgkcwvn.supabase.co/storage/v1/object/public/map-images/eaglerenton-plains/1791723204633-a8fa43fa-c070-4c35-89ee-ce021ff66eee.webp",
+      "hash": "d394e8425b863ef78483a496412d5d86955b147e1497d3e4c4766e99636831e2",
+      "exits": [
+        {
+          "to": "Premusson Path",
+          "x": 78,
+          "y": 559
+        },
+        {
+          "to": "Celephane Gorge",
+          "x": 460,
+          "y": 906
+        }
+      ],
+      "services": []
+    },
+    {
+      "id": "4e1fe589-889b-4dfb-85f5-f23743ad5a29",
+      "name": "Hardina Forest",
+      "url": "https://dzxxjtmpcfsmvdgkcwvn.supabase.co/storage/v1/object/public/map-images/hardina-forest/1791724324904-c5c536ee-d2f0-4e35-bb47-224285020627.webp",
+      "hash": "4b6797b612f1d5f27fb7d4a6a5c20793bbd5bf0629dc0598e386bc02aa9dbdd0",
+      "exits": [
+        {
+          "to": "Litrohid Forest",
+          "x": 61,
+          "y": 326
+        }
+      ],
+      "services": []
+    },
+    {
+      "id": "41c4236c-3c60-4916-9e75-8aa04764d6f3",
+      "name": "Big Apple Forest",
+      "url": "https://dzxxjtmpcfsmvdgkcwvn.supabase.co/storage/v1/object/public/map-images/big-apple-forest/1791724426480-1c6a5511-e0a2-4925-abee-7451a6baf6c2.webp",
+      "hash": "a46383df482697c8c219b50fd6aace1614985d90bfd8165f6f97ec1ea540876e",
+      "exits": [
+        {
+          "to": "Odalisque Forest",
+          "x": 926,
+          "y": 352
+        }
+      ],
+      "services": []
+    },
+    {
+      "id": "04db0bbb-67f4-4a8f-a852-849031523367",
+      "name": "Premusson Path",
+      "url": "https://dzxxjtmpcfsmvdgkcwvn.supabase.co/storage/v1/object/public/map-images/premusson-path/1791724615768-463e8d3e-3d9c-405c-b86d-4ef4d956f22d.webp",
+      "hash": "cc32913fd97d7823a66be75cd56f0077610024119a55b29b0025b67f99b6d998",
+      "exits": [
+        {
+          "to": "Eaglerentin Plain",
+          "x": 925,
+          "y": 587
+        }
+      ],
+      "services": []
+    },
+    {
+      "id": "90bf5352-7b73-444d-bb53-b8837eb5cc70",
+      "name": "Dragons' Back",
+      "url": "https://dzxxjtmpcfsmvdgkcwvn.supabase.co/storage/v1/object/public/map-images/dragons-back/1791725510630-807351e3-6f4c-4b10-a2b1-0ee4fc8667f7.webp",
+      "hash": "0d43a6773c71abe030911fd96e8f67e6c8a3a163214fb2c78939cefd0ee180b4",
+      "exits": [
+        {
+          "to": "Dragons' Village",
+          "x": 211,
+          "y": 810
+        }
+      ],
+      "services": []
+    },
+    {
+      "id": "77c941a4-80f4-4396-9ace-6f237bd06073",
+      "name": "Dragons' Head",
+      "url": "https://dzxxjtmpcfsmvdgkcwvn.supabase.co/storage/v1/object/public/map-images/dragons-head/1791725512209-fafd5df9-0a2b-41b2-8523-913f45d28c1f.webp",
+      "hash": "5574fd781feba9d9367d693d1e4d1a97312abed2e828144b55aff062b6466fb7",
+      "exits": [
+        {
+          "to": "Dragons' Village",
+          "x": 217,
+          "y": 167
+        }
+      ],
+      "services": []
+    },
+    {
+      "id": "7d83104d-5e31-4bb0-b801-aa731f932a84",
+      "name": "Floating Island of Dragons' Back",
+      "url": "https://dzxxjtmpcfsmvdgkcwvn.supabase.co/storage/v1/object/public/map-images/floating-island-of-dragons-back/1791726094836-98821b17-0c23-4958-b778-6a77278e3788.webp",
+      "hash": "843a8deb861d2b66145fb829b08735be32d275e374ad55f3fa6a3e056ff41f6a",
+      "exits": [
+        {
+          "to": "Dragons' Village",
+          "x": 212,
+          "y": 814
+        }
+      ],
+      "services": []
+    },
+    {
+      "id": "1297d40e-b314-4d1d-bf3e-1339a76b70de",
+      "name": "Linear Forest",
+      "url": "https://dzxxjtmpcfsmvdgkcwvn.supabase.co/storage/v1/object/public/map-images/linear-forest/1791726350789-68808485-b282-4362-acf4-e7cb6432ba36.webp",
+      "hash": "cb8b26926f556c204f6cdad2024f60a4e6909aef2b0e3baa2fc7b6b0440aa78a",
+      "exits": [
+        {
+          "to": "Aerial Forest",
+          "x": 58,
+          "y": 467
+        },
+        {
+          "to": "Oblique Forest",
+          "x": 933,
+          "y": 527
+        }
+      ],
+      "services": []
+    },
+    {
+      "id": "c9270765-32cb-461b-b04f-15e72da62dd0",
+      "name": "Oblique Forest",
+      "url": "https://dzxxjtmpcfsmvdgkcwvn.supabase.co/storage/v1/object/public/map-images/oblique-forest/1791726396928-8fe73a99-84a4-4dbd-98c7-716081fb5bf4.webp",
+      "hash": "86393d7b04b3653343785c660d6921b46da9067cfe82621e2aea82f00a98c890",
+      "exits": [
+        {
+          "to": "Loren Valley",
+          "x": 938,
+          "y": 521
+        },
+        {
+          "to": "Linear Forest",
+          "x": 58,
+          "y": 493
+        }
+      ],
+      "services": []
+    },
+    {
+      "id": "a513c3da-2a70-4afa-a320-3a64bb16b9c2",
+      "name": "Evergal Grove",
+      "url": "https://dzxxjtmpcfsmvdgkcwvn.supabase.co/storage/v1/object/public/map-images/evergal-grove/1791727167060-f2d65563-1098-4676-9b7d-4e00c197d339.webp",
+      "hash": "c33d148b688f33a6dc10517c1f0976cd02db7ff41e44cfc751b66abbf3251345",
+      "exits": [
+        {
+          "to": "Essene",
+          "x": 71,
+          "y": 547
+        }
+      ],
+      "services": []
+    },
+    {
+      "id": "9671fa9d-a693-42e5-b62a-2139996628f7",
+      "name": "Empion Forest",
+      "url": "https://dzxxjtmpcfsmvdgkcwvn.supabase.co/storage/v1/object/public/map-images/empion-forest/1791726894943-c8c631c8-814a-48ac-b51d-109bdad1b8d1.webp",
+      "hash": "4bc7fc31d2b22678e909f71eeceab2dab10f5926b659a2f39bf0e805fb3c10ad",
+      "exits": [
+        {
+          "to": "Morpheus Forest",
+          "x": 887,
+          "y": 245
+        }
+      ],
+      "services": []
+    },
+    {
+      "id": "2f17849b-5172-4302-b071-47899df57acb",
+      "name": "Morpheus Forest",
+      "url": "https://dzxxjtmpcfsmvdgkcwvn.supabase.co/storage/v1/object/public/map-images/morpheus-forest/1791726988897-2190e7d4-5322-48cb-8d24-daa179e79d71.webp",
+      "hash": "f74012611e529f6960f6a0d03a5b75d1759ca265145aa14a343cb3d0e75f08c0",
+      "exits": [
+        {
+          "to": "Midori Spa",
+          "x": 574,
+          "y": 56
+        }
+      ],
+      "services": []
+    },
+    {
+      "id": "87a6def1-e0c5-4cdf-83eb-0c28077deff9",
+      "name": "Meryle Wood",
+      "url": "https://dzxxjtmpcfsmvdgkcwvn.supabase.co/storage/v1/object/public/map-images/meryle-wood/1791727338666-c5cad47d-aa66-43fb-9a9d-f8d5b2290910.webp",
+      "hash": "e45d8447a6ecd307caefa6ba6dc4b126e81cd471aef859d8e0cbff9fca6dbdb5",
+      "exits": [
+        {
+          "to": "Vreily Grove",
+          "x": 922,
+          "y": 285
+        }
+      ],
+      "services": []
+    },
+    {
+      "id": "0ba839c1-799d-44f4-a891-869bf08858c4",
+      "name": "Chanthery Gorge",
+      "url": "https://dzxxjtmpcfsmvdgkcwvn.supabase.co/storage/v1/object/public/map-images/chanthery-gorge/1791728737197-b5eb272e-828d-47bf-8ed3-5023cd6111f8.webp",
+      "hash": "48557ac68eae8bb1fc29eec5ff05075913c64ca4f4e63b68c20f14bf9cf85568",
+      "exits": [
+        {
+          "to": "Acidbath Valley",
+          "x": 53,
+          "y": 452
+        }
+      ],
+      "services": []
+    },
+    {
+      "id": "58947d05-4e92-40e9-8c7e-a31c35d17235",
+      "name": "Heather Basin",
+      "url": "https://dzxxjtmpcfsmvdgkcwvn.supabase.co/storage/v1/object/public/map-images/heather-basin/1791728920110-d8f2c723-11d3-4cd6-a654-97af687107ea.webp",
+      "hash": "ad54013bf444ca4f6971f1a4a80be5a971613a5f11d4f5dd73ed551e53a610da",
+      "exits": [
+        {
+          "to": "Tanline Gorge",
+          "x": 76,
+          "y": 548
+        }
+      ],
+      "services": []
+    },
+    {
+      "id": "4119aac1-2ee5-4e88-94d2-5328c0563c6a",
+      "name": "Alison Gorge",
+      "url": "https://dzxxjtmpcfsmvdgkcwvn.supabase.co/storage/v1/object/public/map-images/alison-gorge/1791728995195-903df1f3-25d1-4cc4-9e29-0b4140655b91.webp",
+      "hash": "2fc1d87f2862125ce6ded254c133f0f734271c67bc0f50f7ff837a269f8daa7a",
+      "exits": [
+        {
+          "to": "Heather Basin",
+          "x": 520,
+          "y": 913
+        },
+        {
+          "to": "Phildevilt Plateau",
+          "x": 71,
+          "y": 494
+        }
+      ],
+      "services": []
+    },
+    {
+      "id": "cf0a4858-07d2-4564-85c6-625224a7e76f",
+      "name": "Phildevilt Plateau",
+      "url": "https://dzxxjtmpcfsmvdgkcwvn.supabase.co/storage/v1/object/public/map-images/phildevilt-plateau/1791729103486-74d7b55d-1233-417f-be5d-f2fa97436617.webp",
+      "hash": "0a561bc333d3ef7e2933ef5790ebd16817a011732c0faabe517ba2369fff2a88",
+      "exits": [
+        {
+          "to": "Alison Gorge",
+          "x": 898,
+          "y": 572
+        }
+      ],
+      "services": []
+    },
+    {
+      "id": "5211407c-34be-4294-9ffe-18bc86d8c6cc",
+      "name": "Taquestrim Plateau",
+      "url": "https://dzxxjtmpcfsmvdgkcwvn.supabase.co/storage/v1/object/public/map-images/taquestrim-plateau/1791729194233-0fce4281-2fac-4fbf-a679-adf44bd4daeb.webp",
+      "hash": "5466bf26e823cf4993d8c093ce4c5ea891fbd94d515edae3148be5d8560b7d5e",
+      "exits": [
+        {
+          "to": "Emperonie Plateau",
+          "x": 903,
+          "y": 369
+        }
+      ],
+      "services": []
+    },
+    {
+      "id": "cea4793d-d2ec-4b36-854c-1942cb112b9c",
+      "name": "Cretino Desert",
+      "url": "https://dzxxjtmpcfsmvdgkcwvn.supabase.co/storage/v1/object/public/map-images/cretino-desert/1791729556538-f6c91a5b-da5e-4204-bc40-3fdd9c2a3aa3.webp",
+      "hash": "5232988d60dc622c10cd98ade100dcb2cddebc77eb6e3ab7a31e58ed185e0e8d",
+      "exits": [
+        {
+          "to": "Aseraphel Desert",
+          "x": 937,
+          "y": 628
+        }
+      ],
+      "services": []
+    },
+    {
+      "id": "bb0d9d95-3de2-46cc-ae2a-73ecb28c90c6",
+      "name": "Dragons' Tail",
+      "url": "https://dzxxjtmpcfsmvdgkcwvn.supabase.co/storage/v1/object/public/map-images/dragons-tail/1791731227441-3dddb011-5bb6-4e76-8ecb-dcea3ba04d8c.webp",
+      "hash": "02f3fe979c5c84b7a00c86c4cbc35ab1f129f36187a1f130a100f7a3e012a036",
+      "exits": [
+        {
+          "to": "Dragons' Village",
+          "x": 471,
+          "y": 254
+        }
+      ],
+      "services": []
+    },
+    {
+      "id": "827c68fb-2927-4394-8f40-134d95a62881",
+      "name": "Mardigras Valley",
+      "url": "https://dzxxjtmpcfsmvdgkcwvn.supabase.co/storage/v1/object/public/map-images/mardigras-valley/1791731664283-a707c8f3-10a9-457e-a0a7-f103497cfc9a.webp",
+      "hash": "2523097236ab5c3b01bc5d4edc4a754b1173f01e5394bddef11ff4b5f1f781e3",
+      "exits": [
+        {
+          "to": "Bangle Valley",
+          "x": 77,
+          "y": 618
+        }
+      ],
+      "services": []
+    },
+    {
+      "id": "2ba011c7-722c-4108-b497-86f232053ffd",
+      "name": "Ramia Plateau",
+      "url": "https://dzxxjtmpcfsmvdgkcwvn.supabase.co/storage/v1/object/public/map-images/ramia-plateau/1791622572359-99462d22-406f-43ec-9257-503873f802ef.webp",
+      "hash": "7d595e7a3d42a53630e40156035369160293b41ba15e9a7b0a6d6c4a7730182d",
+      "exits": [
+        {
+          "to": "Metapolis",
+          "x": 879,
+          "y": 447
+        }
+      ],
+      "services": []
+    },
+    {
+      "id": "c66d8a2c-2026-410c-9422-650ff6c91a92",
+      "name": "Summer Hill Street",
+      "url": "https://dzxxjtmpcfsmvdgkcwvn.supabase.co/storage/v1/object/public/map-images/manual-updates/c66d8a2c-2026-410c-9422-650ff6c91a92/746a9f4a-35c1-4f0f-b9d6-c1fa087dd295.webp",
+      "hash": "dc2489d1cdb0b2757aadd08bf8e509a9188530e944c5f68e3a607dfed1435166",
+      "exits": [],
+      "services": [
+        {
+          "name": "Transporter",
+          "x": 110,
+          "y": 406
+        }
+      ]
+    },
+    {
+      "id": "13c8a2e3-e609-40f4-a808-2daef82d891a",
+      "name": "Midori Spa",
+      "url": "https://dzxxjtmpcfsmvdgkcwvn.supabase.co/storage/v1/object/public/map-images/manual-updates/13c8a2e3-e609-40f4-a808-2daef82d891a/1c8b6789-7661-4b8f-9fab-a5f5dca6aee1.webp",
+      "hash": "f62d8430da024e4ba548dfc5e95259b686fe23a3fc6cb464da577a3e5a08bff4",
+      "exits": [],
+      "services": [
+        {
+          "name": "Transporter",
+          "x": 347,
+          "y": 457
+        }
+      ]
+    },
+    {
+      "id": "cd60f250-c08f-403f-a012-71ea2084ec49",
+      "name": "Essene",
+      "url": "https://dzxxjtmpcfsmvdgkcwvn.supabase.co/storage/v1/object/public/map-images/manual-updates/cd60f250-c08f-403f-a012-71ea2084ec49/91f014f5-208d-4677-8af5-2d4aa851cdb8.webp",
+      "hash": "3645d26cecb4acd85556f2d19d9edd7c9e8112f427917236d7c5dbb576c19d8a",
+      "exits": [],
+      "services": [
+        {
+          "name": "Transporter",
+          "x": 400,
+          "y": 450
+        }
+      ]
+    }
+  ],
+  "connections": [
+    {
+      "from": "Yvel",
+      "to": "Lost Wedge Valley",
+      "bidirectional": false,
+      "verified": true,
+      "source": "登録済みマップ画像の接続先を確認（2026-10-12）"
+    }
+  ],
+  "walkMasks": [
+    {
+      "id": "2ba011c7-722c-4108-b497-86f232053ffd",
+      "name": "Ramia Plateau",
+      "url": "https://dzxxjtmpcfsmvdgkcwvn.supabase.co/storage/v1/object/public/map-images/ramia-plateau/1791622572359-99462d22-406f-43ec-9257-503873f802ef.webp",
+      "hash": "7d595e7a3d42a53630e40156035369160293b41ba15e9a7b0a6d6c4a7730182d",
+      "width": 256,
+      "height": 99,
+      "runs": [
+        3636,
+        1,
+        3871,
+        1,
+        3882,
+        2,
+        3891,
+        5,
+        4125,
+        22,
+        4152,
+        18,
+        4383,
+        20,
+        4408,
+        18,
+        4639,
+        20,
+        4706,
+        5,
+        4895,
+        20,
+        4962,
+        5,
+        5151,
+        20,
+        5218,
+        5,
+        5407,
+        20,
+        5470,
+        9,
+        5485,
+        1,
+        5657,
+        30,
+        5720,
+        23,
+        5912,
+        31,
+        5972,
+        38,
+        6167,
+        32,
+        6226,
+        40,
+        6422,
+        34,
+        6481,
+        43,
+        6604,
+        3,
+        6677,
+        35,
+        6736,
+        45,
+        6857,
+        11,
+        6929,
+        39,
+        6990,
+        47,
+        7112,
+        12,
+        7185,
+        40,
+        7244,
+        51,
+        7367,
+        13,
+        7447,
+        27,
+        7496,
+        56,
+        7623,
+        13,
+        7703,
+        26,
+        7751,
+        57,
+        7878,
+        14,
+        7959,
+        26,
+        8006,
+        59,
+        8128,
+        20,
+        8215,
+        26,
+        8262,
+        59,
+        8383,
+        21,
+        8471,
+        26,
+        8518,
+        59,
+        8638,
+        22,
+        8716,
+        14,
+        8735,
+        18,
+        8774,
+        60,
+        8892,
+        24,
+        8972,
+        14,
+        8991,
+        18,
+        9030,
+        60,
+        9148,
+        24,
+        9228,
+        5,
+        9257,
+        8,
+        9286,
+        60,
+        9403,
+        25,
+        9484,
+        5,
+        9513,
+        8,
+        9541,
+        61,
+        9658,
+        26,
+        9741,
+        4,
+        9769,
+        8,
+        9799,
+        59,
+        9914,
+        26,
+        10025,
+        11,
+        10055,
+        59,
+        10170,
+        26,
+        10281,
+        11,
+        10312,
+        19,
+        10336,
+        34,
+        10425,
+        27,
+        10537,
+        11,
+        10568,
+        19,
+        10593,
+        37,
+        10681,
+        27,
+        10793,
+        11,
+        10825,
+        18,
+        10850,
+        33,
+        10936,
+        28,
+        11045,
+        15,
+        11082,
+        17,
+        11107,
+        32,
+        11192,
+        28,
+        11297,
+        19,
+        11340,
+        11,
+        11364,
+        31,
+        11448,
+        28,
+        11553,
+        20,
+        11598,
+        9,
+        11622,
+        29,
+        11703,
+        29,
+        11809,
+        21,
+        11856,
+        4,
+        11880,
+        27,
+        11958,
+        30,
+        12065,
+        1,
+        12077,
+        9,
+        12112,
+        4,
+        12137,
+        27,
+        12212,
+        32,
+        12334,
+        9,
+        12368,
+        4,
+        12397,
+        24,
+        12468,
+        32,
+        12591,
+        9,
+        12624,
+        4,
+        12654,
+        24,
+        12723,
+        33,
+        12848,
+        8,
+        12880,
+        4,
+        12910,
+        26,
+        12979,
+        33,
+        13105,
+        9,
+        13136,
+        4,
+        13166,
+        36,
+        13234,
+        33,
+        13362,
+        8,
+        13392,
+        4,
+        13422,
+        39,
+        13487,
+        34,
+        13619,
+        9,
+        13647,
+        5,
+        13678,
+        40,
+        13743,
+        32,
+        13876,
+        9,
+        13892,
+        33,
+        13930,
+        45,
+        13998,
+        32,
+        14133,
+        9,
+        14147,
+        85,
+        14254,
+        31,
+        14390,
+        99,
+        14509,
+        12,
+        14528,
+        12,
+        14647,
+        98,
+        14764,
+        11,
+        14786,
+        10,
+        14904,
+        97,
+        15020,
+        10,
+        15044,
+        7,
+        15161,
+        97,
+        15275,
+        9,
+        15300,
+        5,
+        15418,
+        97,
+        15530,
+        9,
+        15557,
+        3,
+        15674,
+        97,
+        15785,
+        9,
+        15814,
+        2,
+        15946,
+        4,
+        15957,
+        11,
+        15994,
+        33,
+        16040,
+        8,
+        16070,
+        2,
+        16202,
+        4,
+        16214,
+        10,
+        16250,
+        33,
+        16295,
+        8,
+        16326,
+        1,
+        16458,
+        3,
+        16470,
+        10,
+        16506,
+        33,
+        16550,
+        9,
+        16714,
+        3,
+        16726,
+        10,
+        16786,
+        9,
+        16805,
+        8,
+        16970,
+        3,
+        16983,
+        9,
+        17042,
+        9,
+        17059,
+        9,
+        17225,
+        4,
+        17239,
+        8,
+        17299,
+        9,
+        17314,
+        9,
+        17480,
+        5,
+        17499,
+        4,
+        17556,
+        22,
+        17733,
+        8,
+        17813,
+        20,
+        17989,
+        11,
+        18070,
+        18,
+        18245,
+        9,
+        18326,
+        17,
+        18501,
+        8,
+        18582,
+        15,
+        18757,
+        8,
+        18838,
+        15,
+        19013,
+        8,
+        19094,
+        14,
+        19264,
+        13,
+        19350,
+        14,
+        19520,
+        13,
+        19607,
+        13,
+        19778,
+        2,
+        19787,
+        2,
+        19863,
+        13,
+        20035,
+        1,
+        20119,
+        13,
+        20291,
+        1,
+        20375,
+        13,
+        20547,
+        1,
+        20631,
+        8,
+        20803,
+        1,
+        20887,
+        7,
+        21059,
+        2,
+        21143,
+        6,
+        21315,
+        1,
+        21400,
+        5,
+        21658,
+        3
+      ]
+    },
+    {
+      "id": "63b5afa7-6347-4d92-a045-47cb93ba5a56",
+      "name": "Verazium Plateau",
+      "url": "https://dzxxjtmpcfsmvdgkcwvn.supabase.co/storage/v1/object/public/map-images/verazium-plateau/1791622574374-002acc5e-d94b-49ff-bf09-94dcf1cba031.webp",
+      "hash": "ebff2691b731bfef10d6d3f3e34b9a9430aade9ec7270c509363b728d69837f8",
+      "width": 256,
+      "height": 148,
+      "runs": [
+        1951,
+        31,
+        2205,
+        34,
+        2461,
+        35,
+        2716,
+        37,
+        2971,
+        39,
+        3226,
+        41,
+        3481,
+        43,
+        3735,
+        30,
+        3770,
+        12,
+        3990,
+        30,
+        4026,
+        13,
+        4245,
+        28,
+        4283,
+        13,
+        4500,
+        14,
+        4540,
+        13,
+        4755,
+        14,
+        4797,
+        13,
+        5010,
+        13,
+        5054,
+        13,
+        5265,
+        13,
+        5311,
+        12,
+        5520,
+        13,
+        5568,
+        11,
+        5775,
+        13,
+        5826,
+        14,
+        6030,
+        13,
+        6082,
+        14,
+        6285,
+        13,
+        6338,
+        14,
+        6541,
+        12,
+        6595,
+        13,
+        6795,
+        13,
+        6852,
+        13,
+        7050,
+        12,
+        7109,
+        13,
+        7306,
+        12,
+        7366,
+        13,
+        7560,
+        13,
+        7623,
+        12,
+        7815,
+        12,
+        7880,
+        14,
+        8071,
+        12,
+        8138,
+        11,
+        8327,
+        11,
+        8394,
+        11,
+        8583,
+        9,
+        8651,
+        10,
+        8839,
+        7,
+        8909,
+        8,
+        9095,
+        6,
+        9165,
+        8,
+        9351,
+        6,
+        9422,
+        8,
+        9607,
+        6,
+        9863,
+        6,
+        10119,
+        6,
+        10375,
+        8,
+        10631,
+        8,
+        10858,
+        1,
+        10887,
+        9,
+        11113,
+        4,
+        11143,
+        9,
+        11368,
+        6,
+        11399,
+        9,
+        11624,
+        6,
+        11655,
+        10,
+        11878,
+        11,
+        11911,
+        10,
+        12133,
+        13,
+        12167,
+        10,
+        12388,
+        13,
+        12423,
+        10,
+        12643,
+        13,
+        12679,
+        10,
+        12898,
+        13,
+        12935,
+        10,
+        13154,
+        12,
+        13191,
+        10,
+        13408,
+        13,
+        13447,
+        10,
+        13663,
+        12,
+        13703,
+        10,
+        13918,
+        12,
+        13959,
+        10,
+        14173,
+        12,
+        14215,
+        10,
+        14428,
+        12,
+        14471,
+        10,
+        14684,
+        11,
+        14727,
+        10,
+        14940,
+        10,
+        14983,
+        10,
+        15196,
+        10,
+        15239,
+        10,
+        15452,
+        6,
+        15494,
+        11,
+        15708,
+        6,
+        15749,
+        12,
+        15964,
+        6,
+        16004,
+        13,
+        16220,
+        6,
+        16259,
+        13,
+        16476,
+        6,
+        16514,
+        12,
+        16732,
+        6,
+        16769,
+        13,
+        16988,
+        8,
+        17024,
+        13,
+        17198,
+        3,
+        17244,
+        8,
+        17279,
+        12,
+        17454,
+        3,
+        17500,
+        9,
+        17533,
+        13,
+        17710,
+        4,
+        17756,
+        9,
+        17789,
+        12,
+        17966,
+        5,
+        18012,
+        9,
+        18044,
+        12,
+        18222,
+        6,
+        18268,
+        10,
+        18299,
+        12,
+        18477,
+        8,
+        18524,
+        10,
+        18554,
+        13,
+        18732,
+        10,
+        18780,
+        10,
+        18809,
+        12,
+        18987,
+        12,
+        19035,
+        13,
+        19064,
+        13,
+        19242,
+        13,
+        19290,
+        15,
+        19319,
+        13,
+        19497,
+        35,
+        19539,
+        47,
+        19752,
+        37,
+        19795,
+        47,
+        20007,
+        38,
+        20051,
+        46,
+        20262,
+        39,
+        20307,
+        44,
+        20517,
+        40,
+        20563,
+        44,
+        20772,
+        41,
+        20819,
+        43,
+        21028,
+        41,
+        21074,
+        43,
+        21285,
+        87,
+        21541,
+        86,
+        21797,
+        85,
+        22053,
+        67,
+        22310,
+        18,
+        22363,
+        12,
+        22566,
+        18,
+        22619,
+        11,
+        22822,
+        17,
+        22875,
+        11,
+        23079,
+        14,
+        23132,
+        10,
+        23336,
+        10,
+        23388,
+        10,
+        23594,
+        6,
+        23644,
+        10,
+        23854,
+        1,
+        23900,
+        10,
+        24156,
+        10,
+        24412,
+        10,
+        24668,
+        10,
+        24924,
+        11,
+        25180,
+        11,
+        25436,
+        11,
+        25692,
+        11,
+        25948,
+        11,
+        26204,
+        11,
+        26460,
+        12,
+        26716,
+        12,
+        26972,
+        14,
+        27228,
+        15,
+        27486,
+        13,
+        27743,
+        14,
+        28000,
+        14,
+        28258,
+        12,
+        28514,
+        14,
+        28771,
+        13,
+        29028,
+        12,
+        29285,
+        13,
+        29542,
+        12,
+        29799,
+        13,
+        30056,
+        13,
+        30313,
+        13,
+        30339,
+        5,
+        30571,
+        12,
+        30592,
+        9,
+        30828,
+        12,
+        30845,
+        12,
+        31084,
+        12,
+        31101,
+        12,
+        31341,
+        28,
+        31598,
+        26,
+        31855,
+        25,
+        32112,
+        24,
+        32369,
+        23,
+        32626,
+        22,
+        32883,
+        20
+      ]
+    }
+  ]
+}

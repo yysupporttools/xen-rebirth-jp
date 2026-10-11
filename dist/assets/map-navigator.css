@@ -18,3 +18,8 @@
 .map-missing-results button span{overflow-wrap:anywhere}
 .map-missing-results button small{color:var(--teal);white-space:nowrap;font-size:12px;font-weight:700}
 .map-missing-note{margin-top:12px}
+.map-viewport{height:clamp(280px,65vh,660px);min-height:0;max-height:none;display:grid;align-items:center;justify-items:center}.map-stage{flex:none}.map-route-overlay{position:absolute;z-index:7;left:50%;bottom:12px;transform:translateX(-50%);max-width:calc(100% - 24px);width:max-content;pointer-events:none;background:#fff7f5ed;border:2px solid #d22d25;color:#9e1c17;border-radius:6px;padding:9px 13px;line-height:1.5;text-align:center;font-size:clamp(12px,1.3vw,16px);font-weight:700;box-shadow:0 2px 6px #0005}.map-route-overlay small{display:block;font-size:11px;font-weight:400}.map-pins .map-pin.target{background:#ed3931;color:white}@media(max-width:500px){.map-viewport{height:clamp(280px,60vh,560px)}}
+
+.map-manual-next{display:flex;align-items:center;gap:12px;flex-wrap:wrap}.map-manual-next span{font-size:13px}.map-viewport{align-items:safe center;justify-items:safe center}.map-layout #map-next-step:disabled{cursor:not-allowed}.map-dot.destination{background:#e3342f}.map-route-overlay{overflow-wrap:anywhere}
+
+.map-legend .map-dot.destination{background:#e3342f}

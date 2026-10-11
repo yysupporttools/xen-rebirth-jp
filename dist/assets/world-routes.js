@@ -30,12 +30,11 @@
   // Jotunheim / Yvel routes.
   chain(["Loren Valley","Kramer Forest","Ivolgue","Empion Forest","Morpheus Forest","Edine Plains","Daniella Plains","Business Plains","Goofball Plains","Presenal Plains","Inkwell Plains","Sennin Valley","Velcro Forest","Clique Forest","Amelia Forest","Jotunheim"]);
   add("Morpheus Forest","Midori Spa",{kind:"special",note:"Midori Spa"});
-  chain(["Morpheus Forest","Blackmail Forest","Shudbee Forest","Pindown Valley","Simpson Valley","Sheryle Forest","Nordis Valley","Lost Wedge Valley","Parade Valley","Sherwood Valley","Yvel"]);
+  chain(["Morpheus Forest","Blackmail Forest","Shudbee Forest","Pindown Valley","Simpson Valley","Sheryle Forest","Nordis Valley","Lost Wedge Valley","Parade Valley","Sherwood Valley"]);
   chain(["Bombile Plateau","Anzers Plateau","Siberas Plateau"]);
   chain(["Bombile Plateau","Monoroby Plateau","Mute Basin","Fies Plateau","Noctein Plateau","Rekiell Plateau","Verazium Plateau","Pamament Plateau","Ramia Plateau","Metapolis"]);
   add("Yvel","Siberas Plateau",{minLevel:100,note:"L100+"});
-  add("Siberas Plateau","Fies Plateau");
-  add("Amelia Forest","Mute Basin");
+  // Full saved images show no Siberas–Fies or Amelia–Mute direct exit.
   chain(["Metapolis","Robern Plains","Arobec Plateau","Hellein Plateau"]);
   add("Metapolis","Big Apple Forest",{minLevel:100,note:"L100+"});
 

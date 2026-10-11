@@ -18,7 +18,7 @@
   const imageKey=map=>String(map?.id||"")+"|"+String(map?.map_image_url||"")+"|"+String(map?.source_image_hash||"");
   function pointOnImage(point,map){
     if(!point||!map||String(point.map_id||point.mapId)!==String(map.id))return null;
-    if(map.image_source==="manual"&&!point.personal)return null;
+    if(map.image_source==="manual"&&!point.personal&&!(point.imageVerified&&point.image_key===imageKey(map)))return null;
     if(point.image_key && point.image_key!==imageKey(map))return null;
     const x=nav.validCoordinate(point.x??point.x_norm),y=nav.validCoordinate(point.y??point.y_norm);
     return x===null||y===null?null:{x,y,map_id:map.id,name:point.npc_name||point.name||"",personal:!!point.personal};
@@ -59,11 +59,13 @@
     if(!map)return {point:null,step:null,text:"マップを選んでください。"};
     const step=plan?.steps.find(step=>canon(step.from)===canon(map.map_name));
     if(step){
-      const registered=map.image_source==="manual"?null:nav.selectExit(step,map,personal.mapNpcs||[]);
+      const overlay=root.XenMapRouteOverlay;
+      const verified=["transporter","transport","npc-transport","event-transport"].includes(step.kind)?overlay?.service(map,step.npcName||"Transporter"):overlay?.exit(map,step.to,personal.portals||[]);
+      const registered=pointOnImage(verified,map)||(map.image_source==="manual"?null:nav.selectExit(step,map,personal.mapNpcs||[]));
       const local=personal.markers?.[markerKey(map,step,target)];
       return {point:registered||pointOnImage(local,map),step,
         text:["transporter","transport","npc-transport","event-transport"].includes(step.kind)?"ここから "+mapLabel(step.to)+" へ移動します。":"次のマップは "+mapLabel(step.to)+" です。",
-        missing:registered?"":"出口・案内NPCの位置は未登録です。方向の目安は行き方欄をご確認ください。"};
+        missing:registered||local?"":"出口・案内NPCの位置は未登録です。方向の目安は行き方欄をご確認ください。"};
     }
     if(target&&!target.regionOnly&&canon(target.map)===canon(map.map_name)){
       let registered=pointOnImage(target.point,map);
@@ -84,16 +86,16 @@
   const storeKey="xen-map-personal-markers-v1";
   let data={maps:[],mapNpcs:[],npcProfiles:[],knowledge:[],monsters:[],mapGroups:[],transitions:[],warnings:[]};
   let graph,entries=[],target=null,plan=null,shown="",variantId="",zoom=1,pointMode="",loaded=false,reloading=false;
-  let markers={},currentPoint=null;
+  let markers={},currentPoint=null,arrivalFrom=null;
   let uploadFile=null,uploadUrl="",uploadSaving=false,uploadName="",uploadMode="add",uploadMap=null;
   function readPersonal(){
     try{
       const stored=JSON.parse(localStorage.getItem(storeKey)||"null");
-      if(stored&&stored.version===1){markers=stored.markers&&typeof stored.markers==="object"&&!Array.isArray(stored.markers)?stored.markers:{};currentPoint=stored.current||null;}
+      if(stored&&stored.version===1){markers=stored.markers&&typeof stored.markers==="object"&&!Array.isArray(stored.markers)?stored.markers:{};currentPoint=stored.current||null;arrivalFrom=stored.arrivalFrom||null;}
     }catch(_){}
   }
   function writePersonal(){
-    try{localStorage.setItem(storeKey,JSON.stringify({version:1,markers,current:currentPoint}));}catch(_){$("map-point-status").textContent="このブラウザでは目印を保存できません。この画面を開いている間だけ利用できます。";}
+    try{localStorage.setItem(storeKey,JSON.stringify({version:1,markers,current:currentPoint,arrivalFrom}));}catch(_){$("map-point-status").textContent="このブラウザでは目印を保存できません。この画面を開いている間だけ利用できます。";}
   }
   function safeImage(value){
     try{const url=new URL(value),project=new URL(root.XEN_GLOSSARY_CONFIG.SUPABASE_URL);return url.origin===project.origin&&url.pathname.startsWith("/storage/v1/object/public/map-images/")?url.href:"";}catch(_){return "";}
@@ -108,7 +110,7 @@
     $("map-reload").disabled=busy;
     $("map-update-image").disabled=busy||!safeImage(selectedMap()?.map_image_url);
   }
-  function buildGraph(){graph=nav.buildGraph(root.XEN_WORLD_ROUTES,data.transitions,{maps:data.maps,mapNpcs:data.mapNpcs,includeTransports:$("map-transports").checked});}
+  function buildGraph(){graph=nav.buildGraph(root.XEN_WORLD_ROUTES,[...data.transitions,...(root.XenMapRouteOverlay?.connections()||[])],{maps:data.maps,mapNpcs:data.mapNpcs,includeTransports:$("map-transports").checked});}
   function noExpandedMap(name){return (root.XEN_MAP_TRANSPORTS?.noExpandedMapMaps||[]).map(canon).includes(canon(name));}
   root.XenMapNavigator.registeredNames=()=>names();
   function names(){
@@ -193,6 +195,9 @@
   }
   function renderRoute(){
     const current=canon($("map-current").value),destination=canon($("map-destination").value);
+    const next=root.XenMapRouteOverlay?.nextStep(plan,current,ambiguousVariant(current));
+    $("map-next-step").disabled=!next;
+    $("map-next-destination").textContent=next?"移動後に押す → "+mapLabel(next.to):plan&&!plan.steps.length&&current&&destination?"目的地に到着しました。":"経路を選ぶと、次の移動先を表示します。";
     $("map-destination-display").textContent=destination?"行き先："+mapLabel(destination):"";
     let text="";
     if(target?.regionOnly)text="地域のみ登録されています。詳細な出現マップを図鑑で確認・登録してください。";
@@ -224,7 +229,7 @@
     if(map&&ambiguousVariant(map.map_name)&&plan?.steps.some(step=>canon(step.from)===canon(map.map_name))){
       return {point:null,step:null,text:"同名マップが複数あります。画像を切り替えて現在地を確認してください。接続先がマップIDで検証されるまで出口は案内しません。",missing:""};
     }
-    return guidance(map,plan,target,{mapNpcs:data.mapNpcs,markers});
+    return guidance(map,plan,target,{mapNpcs:data.mapNpcs,markers,portals:root.XenMapPortals?.forView({mapName:map?.map_name,imageKey:imageKey(map)})||[]});
   }
   function position(map){
     const shared=location.read();
@@ -244,24 +249,46 @@
     if(end)markup+=pin(end,(end.personal?"自分用の目印：":"")+(end.npc_name||end.name||target?.name||info.step?.to||"目的地"),"target");
     if(start)markup+=pin(start,"自分で指定した現在位置","current");
     $("map-pins").innerHTML=markup;
-    let arrows='';
-    if(end){
-      const from=start||{x:end.x,y:end.y<110?Math.min(1000,end.y+100):Math.max(0,end.y-100)};
-      if(Math.abs(from.x-end.x)+Math.abs(from.y-end.y)>2)arrows='<defs><marker id="map-arrow-head" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8 Z" fill="#ffd36b"/></marker></defs><line x1="'+from.x+'" y1="'+from.y+'" x2="'+end.x+'" y2="'+end.y+'" stroke="#172b34" stroke-width="10"/><line x1="'+from.x+'" y1="'+from.y+'" x2="'+end.x+'" y2="'+end.y+'" stroke="#ffd36b" stroke-width="5" marker-end="url(#map-arrow-head)"/>';
-    }
-    $("map-arrows").innerHTML=arrows;
-    const annotation=end?(start?"指定した現在位置から、目印までの方向を表示しています。":"矢印は目印を指しています。現在位置は地図から指定できます。"):"";
+    const overlay=root.XenMapRouteOverlay,portals=root.XenMapPortals?.forView({mapName:map.map_name,imageKey:imageKey(map)})||[];
+    const index=plan?.path.indexOf(canon(map.map_name))??-1;
+    const previous=index>0?{map:map.map_name,from:plan.steps[index-1].from,kind:plan.steps[index-1].kind}:canon($("map-current").value)===canon(map.map_name)?arrivalFrom:null;
+    const entry=pointOnImage(overlay?.entrance(map,previous,portals),map);
+    const path=overlay?.walkingPath(map,start||entry,end);
+    const shortArrow=end?[{x:end.x,y:end.y<110?Math.min(1000,end.y+90):Math.max(0,end.y-90)},end]:null;
+    $("map-arrows").innerHTML=overlay?.arrow(path?.length>1?path:shortArrow)||"";
+    const annotation=path?.length>1?"赤い道順は、確認した画像の通路内で距離が短い経路の目安です。入口・出口の赤い目印も確認してください。":end?"赤い矢印は出口・案内先の目印を指しています。この画像の通路全体は未確認です。":"";
+    renderOverlay(info);
     $("map-guidance").textContent=info.text+(info.missing?" "+info.missing:"")+(end?.personal?" 自分用に補った目印です。":"")+" "+annotation;
     const mkey=markerKey(map,info.step,target);
     $("map-clear-marker").hidden=!mkey||!markers[mkey];
     $("map-set-marker").disabled=!mkey||!!end&&!end.personal;
   }
+  function renderOverlay(info){
+    const text=root.XenMapRouteOverlay?.guidanceText(info?.step,mapLabel)||"";
+    $("map-route-overlay").hidden=!text;
+    $("map-route-overlay").textContent=text;
+  }
+  function advanceMap(){
+    const step=root.XenMapRouteOverlay?.nextStep(plan,canon($("map-current").value),ambiguousVariant($("map-current").value));
+    if(!step)return;
+    $("map-follow").checked=false;currentPoint=null;
+    arrivalFrom={map:step.to,from:step.from,kind:step.kind};
+    $("map-current").value=step.to;
+    location.publish({map:step.to,source:"manual",confidence:100,method:"next-map-button"});
+    writePersonal();compute(true);
+  }
   function updateZoom(){
-    $("map-stage").style.width=(zoom*100)+"%";$("map-zoom-label").textContent=Math.round(zoom*100)+"%";
+    const image=$("map-image"),viewport=$("map-viewport");
+    if(image.naturalWidth&&image.naturalHeight){
+      const fit=Math.min(Math.max(1,viewport.clientWidth-4),Math.max(1,viewport.clientHeight-4)*image.naturalWidth/image.naturalHeight);
+      $("map-stage").style.width=(fit*zoom)+"px";
+    }
+    $("map-zoom-label").textContent=zoom===1?"全体":"全体 × "+Math.round(zoom*100)+"%";
   }
   function schematic(name){const value=root.XEN_MAP_SCHEMATICS?.[canon(name)];return value&&/^assets\/schematics\/[a-z-]+\.svg\?v=\d+$/.test(value.path)?value:null;}
   function renderMap(){
     const map=selectedMap(),actual=map?safeImage(map.map_image_url):"",diagram=actual?null:schematic(shown),image=actual||diagram?.path||"";
+    renderOverlay(activeGuidance(map||{map_name:shown}));
     $("map-view-title").textContent=mapLabel(shown)||"保存された拡大マップ";
     $("map-view-select").value=shown;
     const group=data.mapGroups.find(row=>canon(row.map_name)===shown);
@@ -283,11 +310,10 @@
     if(image){
       $("map-image").alt=diagram?diagram.label+"（動画から作成した概略構造図）":mapLabel(shown)+" のゲーム内拡大マップ";
       if($("map-image").getAttribute("src")!==image)$("map-image").src=image;
-      $("map-stage").style.width=(zoom*100)+"%";
       if(diagram){$("map-pins").innerHTML="";$("map-arrows").innerHTML="";$("map-clear-marker").hidden=true;$("map-image-status").textContent="動画から作成した構造図。位置・縮尺は概略で、ゲーム画面の座標とは対応していません。";$("map-guidance").textContent=activeGuidance(map||{map_name:shown}).text+" 構造図の門・ポータルを参考に移動してください。";}else renderPins();
     }else{
       $("map-image").removeAttribute("src");$("map-arrows").innerHTML="";$("map-pins").innerHTML="";
-      $("map-empty-text").textContent=noExpandedMap(shown)?"この場所には拡大マップがありません。移動手順と出発NPCで案内します。":shown?mapLabel(shown)+" の拡大マップ画像は未登録です。画像を追加するか、翻訳・NPC検索で収集できます。":"マップを選んでください。";
+      $("map-empty-text").textContent=noExpandedMap(shown)?"この場所には拡大マップがありません。移動手順と出発NPCで案内します。":shown?mapLabel(shown)+" の拡大マップ画像は未登録です。ゲーム内の画像を手動で追加できます。":"マップを選んでください。";
       $("map-guidance").textContent=shown?activeGuidance(map||{map_name:shown}).text:"マップを選ぶとゲーム内画像を表示します。";
       $("map-clear-marker").hidden=true;
     }
@@ -318,6 +344,7 @@
   }
   function sync(state){
     if(!$("map-follow").checked||!state)return;
+    arrivalFrom=null;
     $("map-current").value=state.map;currentStatus(state);
     if(loaded){
       compute(false);
@@ -353,7 +380,7 @@
     if(nav.validCoordinate(x)===null||nav.validCoordinate(y)===null)return;
     const point={map_id:map.id,x:Math.round(x),y:Math.round(y),image_key:imageKey(map),personal:true};
     if(pointMode==="current"){
-      currentPoint=point;$("map-follow").checked=false;
+      currentPoint=point;arrivalFrom=null;$("map-follow").checked=false;
       $("map-current").value=map.map_name;location.publish({map:map.map_name,mapId:map.id,x:point.x,y:point.y,source:"manual",confidence:100});
     }else{
       const info=activeGuidance(map),mkey=markerKey(map,info.step,target);
@@ -430,7 +457,9 @@
   $("map-show-npcs").checked=false;
   readPersonal();
   $("map-plan-form").addEventListener("submit",event=>{event.preventDefault();target=null;compute(true);});
-  $("map-current").addEventListener("change",()=>{$("map-follow").checked=false;currentPoint=null;location.publish({map:canon($("map-current").value),source:"manual",confidence:100});writePersonal();compute(true);});
+  $("map-current").addEventListener("change",()=>{$("map-follow").checked=false;currentPoint=null;arrivalFrom=null;location.publish({map:canon($("map-current").value),source:"manual",confidence:100});writePersonal();compute(true);});
+  $("map-next-step").addEventListener("click",advanceMap);
+  root.addEventListener("xen-map-portals",renderPins);
   $("map-follow").addEventListener("change",()=>{if($("map-follow").checked)sync(location.read());});
   $("map-transports").addEventListener("change",()=>compute(false));
   $("map-level").addEventListener("change",()=>compute(false));
@@ -459,7 +488,8 @@
   });
   $("map-reload").addEventListener("click",()=>reload().catch(()=>{}));
   $("map-image").addEventListener("error",()=>{$("map-stage").hidden=true;$("map-empty").hidden=false;$("map-empty-text").textContent="マップ画像を読み込めませんでした。再読み込みで再度お試しください。";$("map-add-image").hidden=true;$("map-set-position").disabled=true;$("map-set-marker").disabled=true;});
-  $("map-image").addEventListener("load",()=>{$("map-stage").hidden=false;$("map-empty").hidden=true;renderPins();});
+  $("map-image").addEventListener("load",()=>{$("map-stage").hidden=false;$("map-empty").hidden=true;updateZoom();renderPins();});
+  if(root.ResizeObserver)new ResizeObserver(updateZoom).observe($("map-viewport"));
   $("map-zoom-in").addEventListener("click",()=>{zoom=Math.min(4,zoom+.25);updateZoom();});
   $("map-zoom-out").addEventListener("click",()=>{zoom=Math.max(1,zoom-.25);updateZoom();});
   $("map-reset-view").addEventListener("click",()=>{zoom=1;updateZoom();$("map-viewport").scrollTo({top:0,left:0});});
