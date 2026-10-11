@@ -2047,35 +2047,6 @@
     return await cropBlobNormalized(imageBlob,region,0.86);
   }
 
-  async function makeMapCandidateBlob(){
-    if(!imageBlob) return null;
-    return await cropBlobNormalized(imageBlob,{x:470,y:0,width:530,height:600},0.84);
-  }
-
-  async function analyzeMapCandidate(){
-    const blob=await makeMapCandidateBlob();
-    if(!blob) return null;
-    const hash=await blobHash(blob);
-    const dataUrl=await blobToDataUrl(blob);
-    const response=await fetch(cfg.SUPABASE_URL+"/functions/v1/analyze-game-map",{
-      method:"POST",
-      headers:{
-        "Content-Type":"application/json",
-        "apikey":cfg.SUPABASE_ANON_KEY,
-        "x-xen-client":"capture-v1"
-      },
-      body:JSON.stringify({
-        image:dataUrl,
-        image_hash:hash,
-        known_maps:gameMaps.map(function(m){return m.map_name;}).filter(Boolean).slice(0,40)
-      })
-    });
-    let data={};
-    try{data=await response.json();}catch(_){}
-    if(!response.ok) throw new Error(data.error||("マップ解析に失敗しました（HTTP "+response.status+"）"));
-    return {data:data,blob:blob,hash:hash};
-  }
-
   function canonicalMapRegion(region){
     const r=region||{};
     const rx=Number(r.x)||0;
@@ -2155,69 +2126,6 @@
     return best;
   }
 
-  async function saveDedicatedMapAnalysis(pack){
-    if(!pack||!pack.data||!pack.data.map_visible) return false;
-    const result=pack.data;
-    let mapName=canonicalMapName(result.map_name);
-    const confidence=Number(result.confidence||0);
-    const sourceRegion=validMapRegion(result.panel_region)?result.panel_region:{x:420,y:0,width:580,height:760};
-    const savedRegion=canonicalMapRegion(sourceRegion);
-    const rawNpcs=Array.isArray(result.npcs)?result.npcs.filter(function(n){
-      return n&&String(n.name||"").trim()&&Number(n.confidence||0)>=70;
-    }):[];
-    const npcs=rawNpcs.map(function(n){return remapNpcToSavedRegion(n,sourceRegion,savedRegion);});
-
-    const existingByName=gameMaps.find(function(m){return normText(m.map_name)===normText(mapName);});
-    const inferred=inferKnownMapFromNpcPattern(npcs);
-    let inferredByPattern=false;
-    const preferredManual=gameMaps.filter(function(m){return normText(m.map_name)===normText(mapName)&&m.image_source==="manual";}).sort(function(a,b){return String(b.updated_at||"").localeCompare(String(a.updated_at||""));})[0];
-    if(!preferredManual&&inferred&&(!existingByName||normText(existingByName.map_name)!==normText(inferred.map.map_name))){
-      mapName=inferred.map.map_name;
-      inferredByPattern=true;
-    }
-
-    if(!mapName||/^(?:unknown|unidentified|none|null|undefined|map|map name|未認識|不明|マップ名不明)$/i.test(mapName)||!Number.isFinite(confidence)||confidence<70) return false;
-
-    let mapImageUrl="";
-    const existing=preferredManual||gameMaps.find(function(m){return normText(m.map_name)===normText(mapName)&&m.source_image_hash===pack.hash;})||gameMaps.find(function(m){return normText(m.map_name)===normText(mapName);});
-    if(existing&&existing.image_source==="manual"){
-      // The preferred image stays unchanged; keep this AI observation as a candidate.
-      mapImageUrl="";
-    }else if(existing&&existing.map_image_url&&existing.source_image_hash===pack.hash){
-      mapImageUrl=existing.map_image_url;
-    }else{
-      const panel=await cropBlobNormalized(pack.blob,savedRegion,0.9);
-      if(panel){
-        const safe=mapName.toLowerCase().replace(/[^a-z0-9]+/g,"-").replace(/^-+|-+$/g,"")||"map";
-        const path=safe+"/"+Date.now()+"-"+pack.hash+".webp";
-        const up=await db.storage.from("map-images").upload(path,panel,{contentType:"image/webp",upsert:false});
-        if(!up.error) mapImageUrl=db.storage.from("map-images").getPublicUrl(path).data.publicUrl||"";
-      }
-    }
-
-    const res=await db.rpc("map_analysis_save",{
-      p_map_name:existing&&(existing.image_source==="manual"||existing.source_image_hash===pack.hash)?rawMapName(existing):mapWriteName(mapName),
-      p_npcs:npcs,
-      p_image_hash:pack.hash,
-      p_map_image_url:mapImageUrl,
-      p_confidence:confidence,
-      p_contributor_id:contributorId
-    });
-    if(res.error) throw new Error("マップ情報の保存に失敗しました："+res.error.message);
-    const info=res.data||{};
-    setStatus(
-      "map-collect-status",
-      (inferredByPattern?"NPC配置から "+mapName+" と補完しました。":"")+
-      mapName+" の拡大マップを保存：NPC "+npcs.length+"件 / 新規観測 "+(info.new_sightings||0)+"件"
-    );
-    await loadMapData();
-    const savedMap=gameMaps.find(function(m){return m.id===info.map_id;});
-    if(savedMap&&savedMap.image_source==="manual") setStatus("map-collect-status",mapName+" の観測を保存しました。手動で更新した画像を優先し、未確認のNPC位置は重ねません。");
-    // Uploaded historical screenshots collect data without becoming live location.
-    if(stream&&isLikelyXenGameFrame()) setLocalCurrentMap(mapName,"拡大マップの保存",confidence,true,info.map_id);
-    return true;
-  }
-
   function portraitFallbackRegion(result){
     const r=result&&result.npc_portrait_region;
     if(!r) return null;
@@ -2253,57 +2161,6 @@
     await loadNpcProfiles();
     setStatus("npc-image-status",npc+" のNPC画像を自動登録しました。");
     return true;
-  }
-
-  async function uploadMapImage(mapName,region,imageHash){
-    const existing=gameMaps.find(function(m){return normText(m.map_name)===normText(mapName);});
-    if(existing&&existing.map_image_url) return existing.map_image_url;
-    const blob=await cropMapBlob(region);
-    if(!blob) return "";
-    const safe=String(mapName||"map").toLowerCase().replace(/[^a-z0-9]+/g,"-").replace(/^-+|-+$/g,"")||"map";
-    const path=safe+"/"+Date.now()+"-"+(imageHash||crypto.randomUUID())+".webp";
-    const up=await db.storage.from("map-images").upload(path,blob,{contentType:"image/webp",upsert:false});
-    if(up.error) throw new Error("マップ画像保存に失敗しました："+up.error.message);
-    return db.storage.from("map-images").getPublicUrl(path).data.publicUrl||"";
-  }
-
-  async function saveMapAnalysis(result,imageHash){
-    if(result.screen_type!=="expanded_map") return null;
-    const mapName=canonicalMapName(result.map_name);
-    const confidence=Number(result.map_confidence||result.confidence||0);
-    const npcs=Array.isArray(result.map_npcs)?result.map_npcs.filter(function(n){
-      return n&&String(n.name||"").trim()&&Number(n.confidence||0)>=70;
-    }):[];
-
-    if(!mapName||confidence<70){
-      setStatus("map-collect-status","マップ名または認識精度が不足したため保存しませんでした。");
-      return null;
-    }
-
-    let mapImageUrl="";
-    try{
-      mapImageUrl=await uploadMapImage(mapName,result.map_region,imageHash);
-    }catch(err){
-      setStatus("map-collect-status",err.message||String(err));
-    }
-
-    const res=await db.rpc("map_analysis_save",{
-      p_map_name:mapWriteName(mapName),
-      p_npcs:npcs,
-      p_image_hash:imageHash||"",
-      p_map_image_url:mapImageUrl,
-      p_confidence:confidence,
-      p_contributor_id:contributorId
-    });
-    if(res.error) throw new Error("マップ情報の保存に失敗しました："+res.error.message);
-
-    const info=res.data||{};
-    setStatus(
-      "map-collect-status",
-      mapName+" を保存：NPC "+npcs.length+"件 / 新規観測 "+(info.new_sightings||0)+"件"
-    );
-    await loadMapData();
-    return info;
   }
 
   async function runOpenAiAnalysis(trigger){
@@ -2375,18 +2232,7 @@
         await autoSaveAiResult(data,imageHash);
       }
 
-      let dedicatedMapSaved=false;
-      if(data.screen_type==="expanded_map"&&isLikelyXenGameFrame()){
-        try{
-          const mapPack=await analyzeMapCandidate();
-          dedicatedMapSaved=await saveDedicatedMapAnalysis(mapPack);
-        }catch(mapErr){
-          setStatus("map-collect-status",mapErr&&mapErr.message?mapErr.message:String(mapErr));
-        }
-      }
-      if(data.screen_type==="expanded_map"&&!dedicatedMapSaved){
-        setStatus("map-collect-status","拡大マップは検出しましたが、専用マップ解析で確定できなかったため保存しませんでした。");
-      }
+      // Map screenshots are registered manually in the map navigator.
     }catch(err){
       setStatus("capture-status",err&&err.message?err.message:String(err));
     }finally{

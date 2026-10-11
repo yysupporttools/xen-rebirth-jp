@@ -16,7 +16,7 @@
   <script defer src="assets/world-routes.js?v=13"></script>
   <script defer src="assets/map-registry.js?v=12"></script><script defer src="assets/map-name-corrections.js?v=1"></script>
   <script defer src="assets/map-location.js?v=1"></script>
-  <script defer src="assets/capture.js?v=34"></script>
+  <script defer src="assets/capture.js?v=98"></script>
   <script defer src="assets/map-companion.js?v=1"></script>
   <link rel="stylesheet" href="assets/map-companion.css?v=1">
   <script defer src="assets/saved-items.js?v=8"></script>
@@ -40,7 +40,7 @@
     <p>ゲーム画面を共有して自動解析をONにすると、NPCとの英語の会話を日本語に自動翻訳します。翻訳した会話やクエスト情報は保存でき、あとからNPC名やマップ名で検索できます。</p>
   </div>
 
-  <p class="note" id="capture-nav-link"><a class="button" href="map.html">マップナビを開く</a>　認識した現在マップをナビへ共有します。画面共有と自動解析を有効にして拡大マップを開くと、画像とNPC座標も収集します。NPCの会話を閉じて地図を表示してください。</p>
+  <p class="note" id="capture-nav-link"><a class="button" href="map.html">マップナビを開く</a>　認識した現在マップをナビへ共有します。マップ画像の追加・更新はマップナビから手動で行えます。</p>
 
   <section class="paper capture-section" id="capture-source-section">
     <div class="section-heading"><div><p class="eyebrow">CAPTURE</p><h2>1. ゲーム画面を取り込む</h2></div><span>PC推奨</span></div>
@@ -83,7 +83,7 @@
       </label>
       <span class="auto-status" id="auto-status" data-state="off">OFF</span>
       <span class="small">変化確認：約2.5秒ごと / AI解析：最短10秒間隔</span>
-      <span class="small">拡大マップ表示中はマップ名・NPC名・位置も自動収集します。</span>
+      <span class="small">NPCとの会話を自動翻訳し、保存済みの会話を検索できます。</span>
     </div>
 
     <div class="capture-controls">
@@ -248,7 +248,7 @@
       <div><p class="eyebrow">MAP DATABASE</p><h2>4. 自動収集したマップ・NPC位置</h2></div>
       <span id="map-db-count">0 NPC</span>
     </div>
-    <p class="note">ゲーム中に右上の拡大マップを開くと、マップ枠全体を探して保存し、マップ名とNPC名・位置を蓄積します。現在地のルート案内はOpenAIを使わず、登録済みマップ画像とのローカル照合と、画面中央に一瞬表示されるマップ名のローカルOCRで判定します。</p>
+    <p class="note">マップ画像は自動保存しません。追加・更新はマップナビで行ってください。現在地のルート案内はOpenAIを使わず、登録済みマップ画像とのローカル照合と、画面中央に一瞬表示されるマップ名のローカルOCRで判定します。</p>
 
     <div class="map-route-planner" aria-label="マップルート案内">
       <div class="map-route-current">
