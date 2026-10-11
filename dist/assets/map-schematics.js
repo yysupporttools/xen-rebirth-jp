@@ -35,5 +35,11 @@ window.XEN_MAP_SCHEMATICS={
     "label": "Sherwood Valley：動画からの概略図",
     "scope": "動画の約4分4秒以降の区間を参考に生成した概略図です。終盤の吊り橋を含み、Ice Maze 1F内部は含みません。 距離・位置・未撮影部分は未確認で、推定補完を含みます。入口・出口の印は管理者が手動で配置できます。",
     "source": "bandicam 2026-10-10 16-31-43-604.mp4"
+  },
+  "Parade Valley": {
+    "path": "assets/schematics/parade-valley-clean.svg?v=1",
+    "label": "Parade Valley：動画からの概略図",
+    "scope": "動画の冒頭から約1分36秒までの雪道を参考に生成した概略図です。終盤のSherwood Valleyへの切り替わりは含みません。距離・位置・未撮影部分は未確認で、推定補完を含みます。入口・出口の印は管理者が手動で配置できます。",
+    "source": "bandicam 2026-10-12 00-39-18-525.mp4"
   }
 };
