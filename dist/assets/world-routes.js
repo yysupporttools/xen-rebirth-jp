@@ -42,7 +42,7 @@
   // Central blue route.
   chain(["Bradlely Forest","Kryston Forest","Sheriff Forest","Telling Denver Lake","Gaudy Forest","Harrington Forest","Candy Vault","Alicia Forest","Realto Plains","Taisen Plains","Lombard Plains","Scorging Plains","Rudwork Path","Proteron Gorge","Skitchy Gorge","Titanus Plains","Eir"]);
   add("Candy Vault","Alicia Forest",{minLevel:30,note:"L30+"});
-  chain(["Bradlely Forest","Belpharen Forest","Salem Valley","Witchwood Forest","Furanden Forest"]);
+  chain(["Bradlely Forest","Belpharen Valley","Salem Valley","Witchwood Forest","Furanden Forest"]);
   chain(["Grudin Forest","Vargas Forest","Furanden Forest","Abundance Town"]);
   add("Witchwood Forest","Grudin Forest");
 
@@ -52,7 +52,7 @@
   add("Baskerville Forest","Shylphaen Forest",{dirB:"top",exitB:["Baskerville Forest"],verified:true,source:"利用者のゲーム内MAP確認（2026-10-10）"});
   add("Shylphaen Forest","Corlona Forest",{dirA:"right",exitA:["Corlona Forest"],exitB:["Shylphaen Forest","Sylphaen Forest"],verified:true,source:"利用者のゲーム内MAP確認（2026-10-10）"});
   // Prior Sylphaen–Berdena connection is omitted pending confirmation.
-  chain(["Berdana Forest","Colorado Forest","Engrave Path","Essene"]);
+  chain(["Berdana Forest","Corlona Forest","Engrave Path","Essene"]);
   chain(["Baskerville Forest","Lavy Basin","Ashely Forest","Onix Hill","Paladino Grove","Engrave Path"]);
   chain(["Ashton Basin","Brolly Basin","Ashmon Hills","Bairyn Forest","Sudden Hill","Malian Forest","Trakian Path","Saifield Forest","Kastled Grove","Essene"]);
   add("Abundance Town","Ashmon Hills");
