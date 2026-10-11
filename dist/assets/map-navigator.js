@@ -125,7 +125,7 @@
     const existingImages=new Set(data.maps.filter(map=>!!safeImage(map.map_image_url)).map(map=>canon(map.map_name)));
     const noExpanded=new Set((root.XEN_MAP_TRANSPORTS?.noExpandedMapMaps||[]).map(canon));
     const eligible=registered.filter(name=>!noExpanded.has(name)).sort((a,b)=>a.localeCompare(b,"ja"));
-    const unregistered=eligible.filter(name=>!existingImages.has(name));
+    const unregistered=eligible.filter(name=>!existingImages.has(name)&&!schematic(name));
     const query=key($("map-missing-search").value);
     const found=unregistered.filter(name=>!query||key(name).includes(query)||key(mapLabel(name)).includes(query));
     const finished=eligible.length-unregistered.length;
@@ -134,7 +134,7 @@
     $("map-missing-summary").textContent="画像登録済み "+finished+" / "+eligible.length+" 件 · 残り "+unregistered.length+" 件 · "+rate+"%";
     $("map-missing-progress").value=rate;
     $("map-missing-results").innerHTML=found.length?found.map(name=>'<button type="button" data-missing-map="'+esc(name)+'"><span>'+esc(mapLabel(name))+'</span><small>画像を追加 ›</small></button>').join(""):'<p class="map-help">'+(query?"一致する未登録マップはありません。":"未登録マップはありません。")+'</p>';
-    $("map-missing-note").textContent="集計は登録対象リストにあるマップ名称単位。別画像・同名マップは重複計上しません。表記違い・ゲーム内に拡大マップがない場所は確認が必要です。";
+    $("map-missing-note").textContent="ゲーム内画像・動画からの構造図を登録済みとして集計します。集計は登録対象リストにあるマップ名称単位。別画像・同名マップは重複計上しません。表記違い・ゲーム内に拡大マップがない場所は確認が必要です。";
   }
   function currentStatus(state){
     const current=$("map-current").value.trim();

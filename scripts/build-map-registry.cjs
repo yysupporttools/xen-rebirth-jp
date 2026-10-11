@@ -11,6 +11,9 @@ const aliases = Object.create(null);
 for (const name of names) aliases[key(name)] = name;
 for (const [alias, canonical] of Object.entries(routes.aliases)) aliases[key(alias)] = canonical;
 const verified = {
+  'Lithroid Forest': 'Litrohid Forest',
+  'Edgelderin Plains': 'Eaglerentin Plain',
+  'Eaglerenton Plains': 'Eaglerentin Plain',
   'Colorado Forest': 'Corlona Forest',
   'Belpharen Forest': 'Belpharen Valley',
   'Madrigras Valley': 'Mardigras Valley',
