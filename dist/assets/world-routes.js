@@ -22,7 +22,7 @@
   // Mall Street and Summer Hill Street do not have a downward exit.
   // Guild Plaza's left/right dungeon entrances are intentionally not connected.
   chain(["Waimea Gorge","Brunen Basin","Brynhildr Trisects","Aerial Forest","Linear Forest","Oblique Forest"]);
-  chain(["Waimea Gorge","Death Valley","Router Valley","Aquilos Gorge","Mystra Hill","Mystra Basin","Luan Basin","Cyoren Forest","Shalo Forest","Belteranin Forest","Urail Valley","Ashton Basin"]);
+  chain(["Waimea Gorge","Death Valley","Router Valley","Augilas Gorge","Mystra Hill","Mystra Basin","Luan Basin","Cyoren Forest","Shalo Forest","Belteranin Forest","Urail Valley","Ashton Basin"]);
   add("Brynhildr Trisects","Loem Valley");
   chain(["Loem Valley","Castella Forest","Callisto Gorge","Bernald Forest","Theglaia Forest","Othellos Forest","Stout Forest","Felix Forest","Curior Forest","Candy Vault"]);
   add("Oblique Forest","Loren Valley",{minLevel:50,note:"L50+"});
@@ -60,7 +60,7 @@
 
   // Oasis / desert.
   add("Taisen Plains","Oasis");
-  chain(["Oasis","Turmeit Desert","Cretino Desert","Asherphel Desert","Emporanie Plateau","Taquestrim Plateau","Phildevilt Plateau","Alison Gorge","Heather Basin","Tanline Gorge"]);
+  chain(["Oasis","Turmeit Desert","Cretino Desert","Aseraphel Desert","Emporanie Plateau","Taquestrim Plateau","Phildevilt Plateau","Alison Gorge","Heather Basin","Tanline Gorge"]);
   chain(["Tanline Gorge","Acidbath Valley","Chanthery Gorge"]);
   add("Chanthery Gorge","Clipper Plains",{minLevel:66,note:"L66+"});
 
