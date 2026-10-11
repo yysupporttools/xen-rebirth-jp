@@ -56,7 +56,7 @@
   chain(["Baskerville Forest","Lavy Basin","Ashely Forest","Onix Hill","Paladino Grove","Engrave Path"]);
   chain(["Ashton Basin","Brolly Basin","Ashmon Hills","Bairyn Forest","Sudden Hill","Malian Forest","Trakian Path","Saifield Forest","Kastled Grove","Essene"]);
   add("Abundance Town","Ashmon Hills");
-  chain(["Essene","Evergal Grove","Crossevon Path","Vriely Grove","Meryle Wood","Wavin Plains","Crosby Plains","Aristone Plains","Harquil Plains","Albatross City"]);
+  chain(["Essene","Evergal Grove","Crossevon Path","Vreily Grove","Meryle Wood","Wavin Plains","Crosby Plains","Aristone Plains","Harquil Plains","Albatross City"]);
 
   // Oasis / desert.
   add("Taisen Plains","Oasis");
