@@ -82,7 +82,7 @@
 
   // Far east.
   chain(["Amorica Forest","Bangle Valley","Mardigras Valley","Tincrush Valley","Hardina Forest","Litrohid Forest","Big Apple Forest","Odalisque Forest","Premusson Path","Eaglerentin Plain","Celephane Gorge"]);
-  add("Eaglerentin Plain","Village of the Dead",{kind:"special",note:"Ammeroid Chapel"});
+  add("Eaglerentin Plain","Town of Deceased",{kind:"special",note:"Ammeroid Chapel"});
   add("Big Apple Forest","Metapolis",{minLevel:100,note:"L100+"});
 
   // Shenzhen / Xiamen / Craving route.

@@ -177,10 +177,11 @@ check("Oasis and Albatross have incoming travel only and no Transporter service"
   assert.equal(transports.edges.find(e=>e.a==="Eir"&&e.b==="Oasis").minLevel,80);
   assert.equal(transports.edges.find(e=>e.a==="Essene"&&e.b==="Albatross City").minLevel,35);
 });
-check("unverified Town of Deceased identity stays separate and no guessed foot route exists",()=>{
+check("user-confirmed Town of Deceased identity merges old name and preserves service gate",()=>{
   assert.equal(nav.canonicalMapName("Town of Deceased"),"Town of Deceased");
   const graph=nav.buildGraph(world,[],{includeTransports:false});
-  assert.equal(nav.findRoute(graph,"Town of Deceased","Village of the Dead"),null);
+  assert.equal(nav.canonicalMapName("Village of the Dead"),"Town of Deceased");
+  assert(!graph.nodes.includes("Village of the Dead"));
   const service=transports.edges.find(e=>e.a==="Eir"&&e.b==="Town of Deceased");
   assert.equal(service.minLevel,100);
 });
