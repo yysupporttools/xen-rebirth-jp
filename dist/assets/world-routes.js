@@ -64,7 +64,7 @@
   add("Chanthery Gorge","Clipper Plains",{minLevel:66,note:"L66+"});
 
   // South-east / Eir.
-  chain(["Clipper Plains","Elwood Plains","Hiroshi Gorge","Bailey Plains","Hooters Plains","Tolkin Gorge","Rosetar Basin","Pharaday Gorge","Lifeline Basin","Clingon Plains"]);
+  chain(["Clipper Plains","Elwood Plains","Hiroshi Gorge","Clingon Plains","Lifeline Basin","Pharaday Gorge","Rosetar Basin","Tolkin Gorge","Hooters Plains","Bailey Plains"]);
   add("Bailey Plains","Eir");
   chain(["Eir","Darive Plains","Vanderull Plains","Templar Gorge","Celephane Gorge"]);
   add("Eir","Marque Basin");

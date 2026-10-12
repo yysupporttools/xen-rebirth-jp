@@ -29,6 +29,12 @@ test('no diagonal corner cutting or impossible route',()=>{
 test('image connection corrections avoid old direct shortcuts',()=>{
  const graph=nav.buildGraph(context.XEN_WORLD_ROUTES,overlay.connections(),{includeTransports:false});
  assert(!graph.get('Sherwood Valley').some(e=>e.to==='Yvel'));assert(!graph.get('Siberas Plateau').some(e=>e.to==='Fies Plateau'));assert(!graph.get('Amelia Forest').some(e=>e.to==='Mute Basin'));
+ assert(!graph.get('Bailey Plains').some(e=>e.to==='Hiroshi Gorge'));
+ assert(!graph.get('Hiroshi Gorge').some(e=>e.to==='Bailey Plains'));
+ assert(graph.get('Hiroshi Gorge').some(e=>e.to==='Clingon Plains'));
+ const route=nav.findRoute(graph,'Bailey Plains','Hiroshi Gorge',{});
+ assert.equal(route.steps[0].to,'Hooters Plains');assert.equal(route.steps.at(-1).from,'Clingon Plains');
+ assert.equal(overlay.guidanceText(route.steps[0],n=>n),'Bailey Plains → Hooters Plains への出口');
  assert(graph.get('Yvel').some(e=>e.to==='Lost Wedge Valley'));assert(graph.get('Aerial Forest').some(e=>e.to==='Loem Valley'));
 });
 test('each reviewed mask produces a route on the matching saved photo',()=>{

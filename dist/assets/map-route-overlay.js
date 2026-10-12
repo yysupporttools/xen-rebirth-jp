@@ -11,7 +11,7 @@
   return bound(map,consistent((audited(map)?.exits||[]).filter(p=>canonical(p.to)===canonical(to))),to);
  }
  function service(map,name){return bound(map,consistent((audited(map)?.services||[]).filter(p=>String(p.name).toLowerCase()===String(name||'Transporter').toLowerCase())),name||'Transporter');}
- function guidanceText(step,label){if(!step)return '';if(step.kind==='transporter')return 'トランスポーターで '+label(step.to)+' へ移動';if(['transport','npc-transport','event-transport'].includes(step.kind))return (step.npcName||'移動NPC')+'で '+label(step.to)+' へ移動';return label(step.to)+' への出口';}
+ function guidanceText(step,label){if(!step)return '';if(step.kind==='transporter')return 'トランスポーターで '+label(step.to)+' へ移動';if(['transport','npc-transport','event-transport'].includes(step.kind))return (step.npcName||'移動NPC')+'で '+label(step.to)+' へ移動';return label(step.from)+' → '+label(step.to)+' への出口';}
  function nextStep(plan,current,ambiguous){const first=plan?.steps?.[0];return first&&!ambiguous&&canonical(first.from)===canonical(current)?first:null;}
  function connections(){
   const result=[...(root.XEN_MAP_IMAGE_AUDIT?.connections||[])];
