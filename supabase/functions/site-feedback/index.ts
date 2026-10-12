@@ -1,3 +1,4 @@
+import mapCatalog from "./monster-map-catalog.json" with { type: "json" };
 // Public feedback accepts the site's publishable key. Moderation additionally
 // validates a live Auth user and reuses the existing board administrator check.
 const project = Deno.env.get('SUPABASE_URL')!;
@@ -45,7 +46,7 @@ function reviewDetailPatch(value:unknown,previous:Record<string,unknown>){
   if(Object.prototype.hasOwnProperty.call(previous,key))result[key]=previous[key];
   if(Object.prototype.hasOwnProperty.call(validated,key)&&(Object.prototype.hasOwnProperty.call(previous,key)||validated[key]!==null&&validated[key]!==''))result[key]=validated[key];
  }
- return {...detailPatch(result,true),publication_mode:'immediate_details'};
+ return {...detailPatch(result,true),publication_mode:'immediate_details',...(previous.catalog_entry?{catalog_entry:previous.catalog_entry}:{})};
 }
 
 async function rpc(name:string,args:unknown){const r=await fetch(`${project}/rest/v1/rpc/${name}`,{method:'POST',headers:serviceHeaders,body:JSON.stringify(args)});const text=await r.text();let data=null;if(text.trim()){try{data=JSON.parse(text);}catch{throw Error('保存先の応答を読み込めませんでした');}}if(!r.ok)throw Error(data?.message||'保存に失敗しました');return data;}
@@ -168,6 +169,12 @@ async function requireKnownMonster(id:string){
   const ids=new Set<string>(),names=new Map<string,string>();for(const monster of data.monsters){if(typeof monster.id==='string'&&/^[a-z0-9_-]{1,160}$/.test(monster.id)){ids.add(monster.id);if(typeof monster.name==='string'&&monster.name.trim()&&monster.name.length<=200)names.set(monster.id,monster.name.trim());}}
   if(!ids.size)throw Error('図鑑のデータを読み込めませんでした');knownMonsterIds=ids;knownMonsterIdsAt=Date.now();knownMonsterNames.clear();for(const [mid,name]of names)knownMonsterNames.set(mid,name);
  }
+ if(!knownMonsterIds.has(id)&&/^manual-[a-f0-9-]{36}$/.test(id)){
+  const r=await fetch(project+'/rest/v1/monster_updates?select=details&monster_id=eq.'+encodeURIComponent(id)+'&details->catalog_entry=not.is.null&limit=1',{headers:serviceHeaders});
+  if(!r.ok)throw Error('追加モンスターを確認できませんでした');
+  const rows=await r.json(),entry=rows[0]?.details?.catalog_entry;
+  if(entry?.name){knownMonsterIds.add(id);knownMonsterNames.set(id,entry.name);}
+ }
  if(!knownMonsterIds.has(id))throw Error('このモンスターは図鑑に登録されていません。図鑑から追加してください');
 }
 async function addImage(req:Request,data:Record<string,unknown>){
@@ -246,6 +253,23 @@ async function deleteImage(req:Request,data:Record<string,unknown>){
 }
 
 async function sign(path:string){if(!path)return '';const r=await fetch(`${project}/storage/v1/object/sign/article-feedback/${path}`,{method:'POST',headers:serviceHeaders,body:JSON.stringify({expiresIn:600})});if(!r.ok)return '';const data=await r.json();return data.signedURL?`${project}/storage/v1${data.signedURL}`:'';}
+
+async function createMonster(req:Request,data:Record<string,unknown>){
+ if(data.honeypot||!imageUuid.test(String(data.visitor||'')))throw Error('入力が無効です');
+ const name=string(data.name,200,true),map=string(data.map,200,true),regionId=string(data.region_id,100,true);
+ const region=mapCatalog.regions.find(r=>r.id===regionId);
+ if(!region||!mapCatalog.maps.some(m=>m.name===map&&m.regionId===regionId))throw Error('地域と登録済みマップを選んでください');
+ const patch=detailPatch({...((data.details||{}) as Record<string,unknown>),map});
+ const mid='manual-'+crypto.randomUUID();
+ const result=await rpc('site_feedback_create_monster',{
+ p_input:{kind:'monster',category:'note',monster_id:mid,title:name,article_url:articleUrl('monsters.html#'+mid),
+ body:name+'を図鑑に登録しました。',details:{...patch,publication_mode:'immediate_details'},
+ catalog_entry:{name,map,regionId,region:region.name},author_name:string(data.author_name,40)||'匿名',source_url:''},
+ p_visitor_hash:await hash('details-visitor:'+data.visitor),
+ p_ip_hash:await hash('details-ip:'+service+':'+clientIp(req,data.visitor))});
+ return reply({ok:true,...result});
+}
+
 Deno.serve(async(req:Request)=>{
  const origin=req.headers.get('Origin');if(origin&&origin!==allowedOrigin)return reply({error:'このサイトからご利用ください'},403);
  if(req.method==='OPTIONS')return new Response(null,{status:204,headers:cors});
@@ -280,6 +304,7 @@ Deno.serve(async(req:Request)=>{
   if(data.action==='image_permissions')return await imagePermissions(req,data);
   if(data.action==='delete_image')return await deleteImage(req,data);
   if(data.action==='add_image')return await addImage(req,data);
+  if(data.action==='create_monster')return await createMonster(req,data);
   if(data.action==='save_details')return await saveDetails(req,data);
   if(data.action!=='submit'||data.honeypot)throw Error('入力が無効です');if(!/^[a-f0-9]{8}-[a-f0-9]{4}-4[a-f0-9]{3}-[89ab][a-f0-9]{3}-[a-f0-9]{12}$/i.test(data.visitor||''))throw Error('ブラウザ識別子が無効です');
   if(!['article','monster'].includes(data.kind))throw Error('報告の種類が無効です');const mid=string(data.monster_id,160);if(data.kind==='monster'&&!/^[a-z0-9_-]{1,160}$/.test(mid))throw Error('モンスターが無効です');

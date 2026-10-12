@@ -1,0 +1,1542 @@
+{
+  "regions": [
+    {
+      "id": "eir",
+      "name": "Eir"
+    },
+    {
+      "id": "essene",
+      "name": "Essene"
+    },
+    {
+      "id": "brynhilld",
+      "name": "Brynhilld"
+    },
+    {
+      "id": "candyvault",
+      "name": "Candyvault"
+    },
+    {
+      "id": "jotunnheim",
+      "name": "Jotunnheim"
+    },
+    {
+      "id": "oasis",
+      "name": "Oasis"
+    },
+    {
+      "id": "yvel",
+      "name": "Yvel"
+    },
+    {
+      "id": "altar-of-lava",
+      "name": "Altar of Lava"
+    },
+    {
+      "id": "amorica-cave",
+      "name": "Amorica Cave"
+    },
+    {
+      "id": "before-yellow-gate",
+      "name": "Before Yellow Gate (Xiamen)"
+    },
+    {
+      "id": "beyond-yellow-gate",
+      "name": "Beyond Yellow Gate"
+    },
+    {
+      "id": "cobalts-cave",
+      "name": "Cobalt's Cave"
+    },
+    {
+      "id": "dragon-island",
+      "name": "Dragon Island"
+    },
+    {
+      "id": "guild-dungeon",
+      "name": "Guild Dungeon"
+    },
+    {
+      "id": "hellein-plateau",
+      "name": "Hellein Plateau"
+    },
+    {
+      "id": "ice-maze",
+      "name": "Ice Maze"
+    },
+    {
+      "id": "labyrinth-maze",
+      "name": "Labyrinth Maze"
+    },
+    {
+      "id": "lost-brynhilld",
+      "name": "Lost Brynhilld"
+    },
+    {
+      "id": "midori-spa",
+      "name": "Midori Spa"
+    },
+    {
+      "id": "museidon-library",
+      "name": "Museidon Library Labyrinth"
+    },
+    {
+      "id": "mythril-mines",
+      "name": "Mythril Mines"
+    },
+    {
+      "id": "pirate-ship",
+      "name": "Pirate Ship"
+    },
+    {
+      "id": "sleepless-grave",
+      "name": "Sleepless Grave"
+    },
+    {
+      "id": "town-spawns",
+      "name": "Town Exclusive Spawns"
+    },
+    {
+      "id": "shenzhen",
+      "name": "Shenzhen Teleport Areas"
+    },
+    {
+      "id": "abundance",
+      "name": "Abundance Town 周辺"
+    },
+    {
+      "id": "albatross",
+      "name": "Albatross City 周辺"
+    },
+    {
+      "id": "craving-thorns",
+      "name": "Craving・Thorns 周辺"
+    },
+    {
+      "id": "ibarra",
+      "name": "Ibarra Canyon 周辺"
+    },
+    {
+      "id": "pansidia",
+      "name": "Temple of Pansidia"
+    },
+    {
+      "id": "deceased",
+      "name": "Town of Deceased・Memorial Chapel"
+    },
+    {
+      "id": "aisen",
+      "name": "Aisen"
+    },
+    {
+      "id": "gefe",
+      "name": "Gefe Camp 周辺"
+    },
+    {
+      "id": "ivolgue",
+      "name": "Ivolgue"
+    },
+    {
+      "id": "map-brolly-basin",
+      "name": "Brolly Basin 周辺"
+    },
+    {
+      "id": "map-evergal-grove",
+      "name": "Evergal Grove 周辺"
+    },
+    {
+      "id": "map-knight-s-convention",
+      "name": "Knight's Convention 周辺"
+    },
+    {
+      "id": "map-sand-desert-dungeon",
+      "name": "Sand Desert Dungeon 周辺"
+    },
+    {
+      "id": "map-secret-altar",
+      "name": "Secret Altar 周辺"
+    }
+  ],
+  "maps": [
+    {
+      "name": "Abundance Town",
+      "regionId": "abundance",
+      "label": "Abundance Town（アバンダンス・タウン）"
+    },
+    {
+      "name": "Acidbath Valley",
+      "regionId": "oasis",
+      "label": "Acidbath Valley（アシッドバス谷）"
+    },
+    {
+      "name": "Aerial Forest",
+      "regionId": "brynhilld",
+      "label": "Aerial Forest（エアリアルウッド）"
+    },
+    {
+      "name": "Airship Boarding Gate",
+      "regionId": "albatross",
+      "label": "Airship Boarding Gate（エアシップ・ボーディング・ゲート）"
+    },
+    {
+      "name": "Aisen",
+      "regionId": "aisen",
+      "label": "Aisen"
+    },
+    {
+      "name": "Albatross City",
+      "regionId": "albatross",
+      "label": "Albatross City（アルバトロス・シティ）"
+    },
+    {
+      "name": "Alicia Forest",
+      "regionId": "candyvault",
+      "label": "Alicia Forest（エルリサの森）"
+    },
+    {
+      "name": "Alison Gorge",
+      "regionId": "oasis",
+      "label": "Alison Gorge（アリソン・ゴージ）"
+    },
+    {
+      "name": "Amelia Forest",
+      "regionId": "jotunnheim",
+      "label": "Amelia Forest（アメリアの森）"
+    },
+    {
+      "name": "Amorica Cave",
+      "regionId": "amorica-cave",
+      "label": "Amorica Cave（アモリカ・ケーブ）"
+    },
+    {
+      "name": "Amorica Forest",
+      "regionId": "eir",
+      "label": "Amorica Forest（アモリカ谷）"
+    },
+    {
+      "name": "Anzers Plateau",
+      "regionId": "hellein-plateau",
+      "label": "Anzers Plateau（アンザーズ・プラトー）"
+    },
+    {
+      "name": "Arcarinas Square",
+      "regionId": "brynhilld",
+      "label": "Arcarinas Square（南ブリンヒルド）"
+    },
+    {
+      "name": "Aristone Plains",
+      "regionId": "essene",
+      "label": "Aristone Plains（アリストン平原）"
+    },
+    {
+      "name": "Arobec Plateau",
+      "regionId": "hellein-plateau",
+      "label": "Arobec Plateau（アロベック・プラトー）"
+    },
+    {
+      "name": "Aseraphel Desert",
+      "regionId": "oasis",
+      "label": "Aseraphel Desert（アセラフェル・デザート）"
+    },
+    {
+      "name": "Ashely Forest",
+      "regionId": "essene",
+      "label": "Ashely Forest（アシェリー・フォレスト）"
+    },
+    {
+      "name": "Ashmon Hills",
+      "regionId": "essene",
+      "label": "Ashmon Hills（アシュモン・ヒルズ）"
+    },
+    {
+      "name": "Ashton Basin",
+      "regionId": "essene",
+      "label": "Ashton Basin（アシュトン・ベイスン）"
+    },
+    {
+      "name": "Augilas Gorge",
+      "regionId": "brynhilld",
+      "label": "Augilas Gorge（アウキルラス峡谷）"
+    },
+    {
+      "name": "Bailey Plains",
+      "regionId": "eir",
+      "label": "Bailey Plains（ベイルリ荒地）"
+    },
+    {
+      "name": "Bairyn Forest",
+      "regionId": "essene",
+      "label": "Bairyn Forest（バイリン・フォレスト）"
+    },
+    {
+      "name": "Bangle Valley",
+      "regionId": "eir",
+      "label": "Bangle Valley（ベングル谷）"
+    },
+    {
+      "name": "Baskerville Forest",
+      "regionId": "candyvault",
+      "label": "Baskerville Forest（バスカビルの森）"
+    },
+    {
+      "name": "Belpharen Valley",
+      "regionId": "candyvault",
+      "label": "Belpharen Valley（ベルファレン・バレー）"
+    },
+    {
+      "name": "Belteranin Forest",
+      "regionId": "brynhilld",
+      "label": "Belteranin Forest（ベルテラニン・フォレスト）"
+    },
+    {
+      "name": "Berdana Forest",
+      "regionId": "candyvault",
+      "label": "Berdana Forest（ベルダナ・フォレスト）"
+    },
+    {
+      "name": "Bernald Forest",
+      "regionId": "brynhilld",
+      "label": "Bernald Forest（バーナードの森）"
+    },
+    {
+      "name": "Big Apple Forest",
+      "regionId": "eir",
+      "label": "Big Apple Forest（ビッグアップルの森）"
+    },
+    {
+      "name": "Blackmail Forest",
+      "regionId": "midori-spa",
+      "label": "Blackmail Forest（ブラックメイルの森）"
+    },
+    {
+      "name": "Bombile Plateau",
+      "regionId": "hellein-plateau",
+      "label": "Bombile Plateau（ボンビル・プラトー）"
+    },
+    {
+      "name": "Boss Dungeon",
+      "regionId": "ice-maze",
+      "label": "Boss Dungeon"
+    },
+    {
+      "name": "Bradlely Forest",
+      "regionId": "candyvault",
+      "label": "Bradlely Forest（ブレドルリの森）"
+    },
+    {
+      "name": "Bridge of Despair B1",
+      "regionId": "altar-of-lava",
+      "label": "Bridge of Despair B1"
+    },
+    {
+      "name": "Bridge of Despair B2",
+      "regionId": "altar-of-lava",
+      "label": "Bridge of Despair B2"
+    },
+    {
+      "name": "Brolly Basin",
+      "regionId": "map-brolly-basin",
+      "label": "Brolly Basin（ブロリー・ベイスン）"
+    },
+    {
+      "name": "Brunen Basin",
+      "regionId": "brynhilld",
+      "label": "Brunen Basin（ブルネン盆地）"
+    },
+    {
+      "name": "Brynhildr Trisects",
+      "regionId": "brynhilld",
+      "label": "Brynhildr Trisects（ブリンヒルド南入口）"
+    },
+    {
+      "name": "Brynhilld Culvert B1F",
+      "regionId": "brynhilld",
+      "label": "Brynhilld Culvert B1F（ブリンヒルド・カルバート 地下1階）"
+    },
+    {
+      "name": "Brynhilld Culvert B2F",
+      "regionId": "brynhilld",
+      "label": "Brynhilld Culvert B2F（ブリンヒルド・カルバート 地下2階）"
+    },
+    {
+      "name": "Brynhilld Underground Square (Center)",
+      "regionId": "lost-brynhilld",
+      "label": "Brynhilld Underground Square (Center)"
+    },
+    {
+      "name": "Brynhilld Underground Square (East)",
+      "regionId": "lost-brynhilld",
+      "label": "Brynhilld Underground Square (East)"
+    },
+    {
+      "name": "Brynhilld Underground Square (North)",
+      "regionId": "lost-brynhilld",
+      "label": "Brynhilld Underground Square (North)"
+    },
+    {
+      "name": "Brynhilld Underground Square (West)",
+      "regionId": "lost-brynhilld",
+      "label": "Brynhilld Underground Square (West)"
+    },
+    {
+      "name": "Brynhilld Underground Square Tramis Mansion",
+      "regionId": "lost-brynhilld",
+      "label": "Brynhilld Underground Square Tramis Mansion"
+    },
+    {
+      "name": "Business Plains",
+      "regionId": "jotunnheim",
+      "label": "Business Plains（ビスニズ平原）"
+    },
+    {
+      "name": "Callisto Gorge",
+      "regionId": "brynhilld",
+      "label": "Callisto Gorge（カルリスト峡谷）"
+    },
+    {
+      "name": "Candy Vault",
+      "regionId": "candyvault",
+      "label": "Candy Vault（ケンディボルト）"
+    },
+    {
+      "name": "Candyvault周辺（詳細未記載）",
+      "regionId": "candyvault",
+      "label": "Candyvault周辺（詳細未記載）"
+    },
+    {
+      "name": "Castella Forest",
+      "regionId": "brynhilld",
+      "label": "Castella Forest（カステルラの森）"
+    },
+    {
+      "name": "Cave to Brynhilld Altar",
+      "regionId": "lost-brynhilld",
+      "label": "Cave to Brynhilld Altar（ブリンヒルド祭壇への洞窟）"
+    },
+    {
+      "name": "Celephane Gorge",
+      "regionId": "eir",
+      "label": "Celephane Gorge（セレファン・ゴージ）"
+    },
+    {
+      "name": "Chanthery Gorge",
+      "regionId": "oasis",
+      "label": "Chanthery Gorge（チェンサリー峡谷）"
+    },
+    {
+      "name": "City Hall",
+      "regionId": "brynhilld",
+      "label": "City Hall（シティ・ホール）"
+    },
+    {
+      "name": "Clingon Plains",
+      "regionId": "eir",
+      "label": "Clingon Plains（クリンゴン・プレーンズ）"
+    },
+    {
+      "name": "Clipper Plains",
+      "regionId": "eir",
+      "label": "Clipper Plains（クルリパ平原）"
+    },
+    {
+      "name": "Clique Forest",
+      "regionId": "jotunnheim",
+      "label": "Clique Forest（クリクの森）"
+    },
+    {
+      "name": "Cobalts Cave Lv1",
+      "regionId": "cobalts-cave",
+      "label": "Cobalts Cave Lv1（コバルツ・ケーブ Lv1）"
+    },
+    {
+      "name": "Cobalts Cave Lv2",
+      "regionId": "cobalts-cave",
+      "label": "Cobalts Cave Lv2（コバルツ・ケーブ Lv2）"
+    },
+    {
+      "name": "Cobalts Cave Lv3",
+      "regionId": "cobalts-cave",
+      "label": "Cobalts Cave Lv3（コバルツ・ケーブ Lv3）"
+    },
+    {
+      "name": "Corlona Forest",
+      "regionId": "candyvault",
+      "label": "Corlona Forest（コルロナの森）"
+    },
+    {
+      "name": "Corridor of Craving",
+      "regionId": "craving-thorns",
+      "label": "Corridor of Craving（コリドー・オブ・クレービング）"
+    },
+    {
+      "name": "Corridor of Thorns",
+      "regionId": "craving-thorns",
+      "label": "Corridor of Thorns（コリドー・オブ・ソーンズ）"
+    },
+    {
+      "name": "Craving Basin Entrance",
+      "regionId": "craving-thorns",
+      "label": "Craving Basin Entrance（クレービング・ベイスン 入口）"
+    },
+    {
+      "name": "Craving Basin Exit",
+      "regionId": "craving-thorns",
+      "label": "Craving Basin Exit（クレービング・ベイスン 出口）"
+    },
+    {
+      "name": "Craving Canyon",
+      "regionId": "craving-thorns",
+      "label": "Craving Canyon（クレービング・キャニオン）"
+    },
+    {
+      "name": "Craving Prison",
+      "regionId": "beyond-yellow-gate",
+      "label": "Craving Prison"
+    },
+    {
+      "name": "Craving Wilderness",
+      "regionId": "craving-thorns",
+      "label": "Craving Wilderness（クレービング・ウィルダネス）"
+    },
+    {
+      "name": "Cretino Desert",
+      "regionId": "oasis",
+      "label": "Cretino Desert（クレティノ高原）"
+    },
+    {
+      "name": "Crosby Plains",
+      "regionId": "essene",
+      "label": "Crosby Plains（クロスビ平原）"
+    },
+    {
+      "name": "Crossevon Path",
+      "regionId": "essene",
+      "label": "Crossevon Path（クロセボン・パス）"
+    },
+    {
+      "name": "Curior Forest",
+      "regionId": "candyvault",
+      "label": "Curior Forest（クリアの森）"
+    },
+    {
+      "name": "Cyoren Forest",
+      "regionId": "brynhilld",
+      "label": "Cyoren Forest（キョレン・フォレスト）"
+    },
+    {
+      "name": "Daniella Plains",
+      "regionId": "jotunnheim",
+      "label": "Daniella Plains（ダニエルラ平原）"
+    },
+    {
+      "name": "Darive Plains",
+      "regionId": "eir",
+      "label": "Darive Plains（ダリーブ平原）"
+    },
+    {
+      "name": "Death Valley",
+      "regionId": "brynhilld",
+      "label": "Death Valley（デース谷）"
+    },
+    {
+      "name": "Despair Basin",
+      "regionId": "beyond-yellow-gate",
+      "label": "Despair Basin（ディスペア・ベイスン）"
+    },
+    {
+      "name": "Despair Canyon",
+      "regionId": "beyond-yellow-gate",
+      "label": "Despair Canyon（ディスペア・キャニオン）"
+    },
+    {
+      "name": "Despair Canyon -Exit-",
+      "regionId": "beyond-yellow-gate",
+      "label": "Despair Canyon -Exit-（ディスペア・キャニオン 出口）"
+    },
+    {
+      "name": "Despaired Canyon -Entrance-",
+      "regionId": "beyond-yellow-gate",
+      "label": "Despaired Canyon -Entrance-（ディスペアード・キャニオン 入口）"
+    },
+    {
+      "name": "Despaired Rocky Mountain",
+      "regionId": "beyond-yellow-gate",
+      "label": "Despaired Rocky Mountain（ディスペアード・ロッキー・マウンテン）"
+    },
+    {
+      "name": "Dragons' Back",
+      "regionId": "dragon-island",
+      "label": "Dragons' Back（ドラゴンズ・バック）"
+    },
+    {
+      "name": "Dragons' Head",
+      "regionId": "dragon-island",
+      "label": "Dragons' Head（ドラゴンズ・ヘッド）"
+    },
+    {
+      "name": "Dragons' Left Wing",
+      "regionId": "dragon-island",
+      "label": "Dragons' Left Wing（ドラゴンズ・レフト・ウィング）"
+    },
+    {
+      "name": "Dragons' Right Wing",
+      "regionId": "dragon-island",
+      "label": "Dragons' Right Wing（ドラゴンズ・ライト・ウィング）"
+    },
+    {
+      "name": "Dragons' Tail",
+      "regionId": "dragon-island",
+      "label": "Dragons' Tail（ドラゴンズ・テール）"
+    },
+    {
+      "name": "Dragons' Village",
+      "regionId": "dragon-island",
+      "label": "Dragons' Village（ドラゴンズ・ビレッジ）"
+    },
+    {
+      "name": "Eaglerentin Plain",
+      "regionId": "eir",
+      "label": "Eaglerentin Plain（イーグルレンティン・プレーン）"
+    },
+    {
+      "name": "East Essene",
+      "regionId": "essene",
+      "label": "East Essene"
+    },
+    {
+      "name": "Edine Plains",
+      "regionId": "jotunnheim",
+      "label": "Edine Plains（エディネ平原）"
+    },
+    {
+      "name": "Eir",
+      "regionId": "eir",
+      "label": "Eir（エイル）"
+    },
+    {
+      "name": "Elwood Plains",
+      "regionId": "eir",
+      "label": "Elwood Plains（エルウッド平原）"
+    },
+    {
+      "name": "Emperonie Plateau",
+      "regionId": "oasis",
+      "label": "Emperonie Plateau（アンプロニ高原）"
+    },
+    {
+      "name": "Empion Forest",
+      "regionId": "midori-spa",
+      "label": "Empion Forest（エムピオンの森）"
+    },
+    {
+      "name": "Engrave Path",
+      "regionId": "essene",
+      "label": "Engrave Path（イングレイブパース）"
+    },
+    {
+      "name": "Entrance to Underground Brynhilld",
+      "regionId": "lost-brynhilld",
+      "label": "Entrance to Underground Brynhilld"
+    },
+    {
+      "name": "Essene",
+      "regionId": "essene",
+      "label": "Essene（エスネ）"
+    },
+    {
+      "name": "Evergal Grove",
+      "regionId": "map-evergal-grove",
+      "label": "Evergal Grove（エバーガル・グローブ）"
+    },
+    {
+      "name": "Felix Forest",
+      "regionId": "candyvault",
+      "label": "Felix Forest（フェリックス・フォレスト）"
+    },
+    {
+      "name": "Fies Plateau",
+      "regionId": "hellein-plateau",
+      "label": "Fies Plateau（フィエス・プラトー）"
+    },
+    {
+      "name": "Floating Island of Dragons Dock",
+      "regionId": "dragon-island",
+      "label": "Floating Island of Dragons Dock（フローティング・アイランド・オブ・ドラゴンズ 船着き場）"
+    },
+    {
+      "name": "Floating Island of Dragons' Back",
+      "regionId": "dragon-island",
+      "label": "Floating Island of Dragons' Back（フローティング・アイランド・オブ・ドラゴンズ・バック）"
+    },
+    {
+      "name": "Floating Island of Dragons' Left Wing",
+      "regionId": "dragon-island",
+      "label": "Floating Island of Dragons' Left Wing（フローティング・アイランド・オブ・ドラゴンズ・レフト・ウィング）"
+    },
+    {
+      "name": "Floating Island of Dragons' Right Wing",
+      "regionId": "dragon-island",
+      "label": "Floating Island of Dragons' Right Wing（フローティング・アイランド・オブ・ドラゴンズ・ライト・ウィング）"
+    },
+    {
+      "name": "Floating Island of Dragons' Tail",
+      "regionId": "dragon-island",
+      "label": "Floating Island of Dragons' Tail（フローティング・アイランド・オブ・ドラゴンズ・テール）"
+    },
+    {
+      "name": "Floor 1",
+      "regionId": "sleepless-grave",
+      "label": "Floor 1"
+    },
+    {
+      "name": "Floor 2",
+      "regionId": "sleepless-grave",
+      "label": "Floor 2"
+    },
+    {
+      "name": "Forgotten Lake",
+      "regionId": "brynhilld",
+      "label": "Forgotten Lake"
+    },
+    {
+      "name": "Furanden Forest",
+      "regionId": "candyvault",
+      "label": "Furanden Forest（フランデン・フォレスト）"
+    },
+    {
+      "name": "Gaudy Forest",
+      "regionId": "candyvault",
+      "label": "Gaudy Forest（ガウディの森）"
+    },
+    {
+      "name": "Gefe Camp",
+      "regionId": "gefe",
+      "label": "Gefe Camp（ゲフェ・キャンプ）"
+    },
+    {
+      "name": "Goofball Plains",
+      "regionId": "jotunnheim",
+      "label": "Goofball Plains（クフボル平原）"
+    },
+    {
+      "name": "Grudin Forest",
+      "regionId": "candyvault",
+      "label": "Grudin Forest（グルディン・フォレスト）"
+    },
+    {
+      "name": "Guild Dungeon",
+      "regionId": "guild-dungeon",
+      "label": "Guild Dungeon"
+    },
+    {
+      "name": "Guild Plaza",
+      "regionId": "brynhilld",
+      "label": "Guild Plaza（北ブリンヒルド）"
+    },
+    {
+      "name": "Hardina Forest",
+      "regionId": "eir",
+      "label": "Hardina Forest（ハディンの森）"
+    },
+    {
+      "name": "Harquil Plains",
+      "regionId": "essene",
+      "label": "Harquil Plains（ハルクル平原）"
+    },
+    {
+      "name": "Harrington Forest",
+      "regionId": "candyvault",
+      "label": "Harrington Forest（ヘリングタンの森）"
+    },
+    {
+      "name": "Heather Basin",
+      "regionId": "oasis",
+      "label": "Heather Basin（ヘザー・ベイスン）"
+    },
+    {
+      "name": "Hellein Plateau",
+      "regionId": "hellein-plateau",
+      "label": "Hellein Plateau（ヘレイン・プラトー）"
+    },
+    {
+      "name": "Hidden Dock",
+      "regionId": "pirate-ship",
+      "label": "Hidden Dock（ヒドゥン・ドック）"
+    },
+    {
+      "name": "Hiroshi Gorge",
+      "regionId": "eir",
+      "label": "Hiroshi Gorge（ヒロシ峡谷）"
+    },
+    {
+      "name": "Hooters Plains",
+      "regionId": "eir",
+      "label": "Hooters Plains（フタス荒原）"
+    },
+    {
+      "name": "Ibarra Canyon Entrance",
+      "regionId": "ibarra",
+      "label": "Ibarra Canyon Entrance（イバラ・キャニオン 入口）"
+    },
+    {
+      "name": "Ibarra Canyon Exit",
+      "regionId": "ibarra",
+      "label": "Ibarra Canyon Exit（イバラ・キャニオン 出口）"
+    },
+    {
+      "name": "Ice Caves",
+      "regionId": "ice-maze",
+      "label": "Ice Caves（アイス・ケーブス）"
+    },
+    {
+      "name": "Ice Maze (Floor 1)",
+      "regionId": "ice-maze",
+      "label": "Ice Maze (Floor 1)"
+    },
+    {
+      "name": "Ice Maze (Floor 2)",
+      "regionId": "ice-maze",
+      "label": "Ice Maze (Floor 2)"
+    },
+    {
+      "name": "Inkwell Plains",
+      "regionId": "jotunnheim",
+      "label": "Inkwell Plains（インクウェル平原）"
+    },
+    {
+      "name": "Ivolgue",
+      "regionId": "ivolgue",
+      "label": "Ivolgue（イボルグの森）"
+    },
+    {
+      "name": "Ivolgue Forest",
+      "regionId": "midori-spa",
+      "label": "Ivolgue Forest"
+    },
+    {
+      "name": "Jotunheim",
+      "regionId": "jotunnheim",
+      "label": "Jotunheim（ヨツンハイム）"
+    },
+    {
+      "name": "Kastled Grove",
+      "regionId": "essene",
+      "label": "Kastled Grove（キャストルド・グローブ）"
+    },
+    {
+      "name": "Knight's Convention",
+      "regionId": "map-knight-s-convention",
+      "label": "Knight's Convention（ナイツ・コンベンション）"
+    },
+    {
+      "name": "Kramer Forest",
+      "regionId": "midori-spa",
+      "label": "Kramer Forest（クラマの森）"
+    },
+    {
+      "name": "Kryston Forest",
+      "regionId": "candyvault",
+      "label": "Kryston Forest（クリスタンの森）"
+    },
+    {
+      "name": "Labyrinth",
+      "regionId": "labyrinth-maze",
+      "label": "Labyrinth（ラビリンス）"
+    },
+    {
+      "name": "Lava Canyon",
+      "regionId": "beyond-yellow-gate",
+      "label": "Lava Canyon（ラヴァ・キャニオン）"
+    },
+    {
+      "name": "Lava Corridor",
+      "regionId": "beyond-yellow-gate",
+      "label": "Lava Corridor（ラヴァ・コリドー）"
+    },
+    {
+      "name": "Lava Mountain",
+      "regionId": "beyond-yellow-gate",
+      "label": "Lava Mountain（ラヴァ・マウンテン）"
+    },
+    {
+      "name": "Lava Mountain -Entrance-",
+      "regionId": "beyond-yellow-gate",
+      "label": "Lava Mountain -Entrance-（ラヴァ・マウンテン 入口）"
+    },
+    {
+      "name": "Lava Mountain Exit",
+      "regionId": "altar-of-lava",
+      "label": "Lava Mountain Exit（ラヴァ・マウンテン 出口）"
+    },
+    {
+      "name": "Lava Mountain Valley",
+      "regionId": "beyond-yellow-gate",
+      "label": "Lava Mountain Valley（ラヴァ・マウンテン・バレー）"
+    },
+    {
+      "name": "Lava Valley",
+      "regionId": "beyond-yellow-gate",
+      "label": "Lava Valley（ラヴァ・バレー）"
+    },
+    {
+      "name": "Lavy Basin",
+      "regionId": "essene",
+      "label": "Lavy Basin（ラビ盆地）"
+    },
+    {
+      "name": "Lifeline Basin",
+      "regionId": "eir",
+      "label": "Lifeline Basin（ライフライン盆地）"
+    },
+    {
+      "name": "Limus Basin",
+      "regionId": "essene",
+      "label": "Limus Basin（リムス・ベイスン）"
+    },
+    {
+      "name": "Linear Forest",
+      "regionId": "brynhilld",
+      "label": "Linear Forest（リニアの森）"
+    },
+    {
+      "name": "Litrohid Forest",
+      "regionId": "eir",
+      "label": "Litrohid Forest（リトロヘドの森）"
+    },
+    {
+      "name": "Loem Valley",
+      "regionId": "brynhilld",
+      "label": "Loem Valley（ロエムの谷）"
+    },
+    {
+      "name": "Lombard Plains",
+      "regionId": "candyvault",
+      "label": "Lombard Plains（ランバード沼地）"
+    },
+    {
+      "name": "Loren Valley",
+      "regionId": "midori-spa",
+      "label": "Loren Valley（ロレン谷）"
+    },
+    {
+      "name": "Lost Brynhilld",
+      "regionId": "lost-brynhilld",
+      "label": "Lost Brynhilld（ロスト・ブリンヒルド）"
+    },
+    {
+      "name": "Lost Wedge Valley",
+      "regionId": "yvel",
+      "label": "Lost Wedge Valley（ロスト・ウェッジ・バレー）"
+    },
+    {
+      "name": "Luan Basin",
+      "regionId": "brynhilld",
+      "label": "Luan Basin（ルアン・ベイスン）"
+    },
+    {
+      "name": "Malian Forest",
+      "regionId": "essene",
+      "label": "Malian Forest（マルリアンウッド）"
+    },
+    {
+      "name": "Mall Street",
+      "regionId": "brynhilld",
+      "label": "Mall Street（西ブリンヒルド）"
+    },
+    {
+      "name": "Mardigras Valley",
+      "regionId": "eir",
+      "label": "Mardigras Valley（マディグラスの森）"
+    },
+    {
+      "name": "Marque Basin",
+      "regionId": "eir",
+      "label": "Marque Basin（マーク・ベイスン）"
+    },
+    {
+      "name": "Memorial Chapel",
+      "regionId": "deceased",
+      "label": "Memorial Chapel（メモリアル・チャペル）"
+    },
+    {
+      "name": "Meryle Wood",
+      "regionId": "essene",
+      "label": "Meryle Wood（マリルウッド）"
+    },
+    {
+      "name": "Metapolis",
+      "regionId": "hellein-plateau",
+      "label": "Metapolis（メタポリス）"
+    },
+    {
+      "name": "Midori Spa",
+      "regionId": "midori-spa",
+      "label": "Midori Spa（ミドリ・スパ）"
+    },
+    {
+      "name": "Monoroby Plateau",
+      "regionId": "hellein-plateau",
+      "label": "Monoroby Plateau（モノロビー・プラトー）"
+    },
+    {
+      "name": "Morpheus Forest",
+      "regionId": "jotunnheim",
+      "label": "Morpheus Forest（モピアスの森）"
+    },
+    {
+      "name": "Museidon Library (B1) 🕮",
+      "regionId": "museidon-library",
+      "label": "Museidon Library (B1) 🕮"
+    },
+    {
+      "name": "Museidon Library (B2) 🕮",
+      "regionId": "museidon-library",
+      "label": "Museidon Library (B2) 🕮"
+    },
+    {
+      "name": "Museidon Library (B3) 🕮",
+      "regionId": "museidon-library",
+      "label": "Museidon Library (B3) 🕮"
+    },
+    {
+      "name": "Museidon Library (B4) 🕮",
+      "regionId": "museidon-library",
+      "label": "Museidon Library (B4) 🕮"
+    },
+    {
+      "name": "Museidon Library (B5) 🕮",
+      "regionId": "museidon-library",
+      "label": "Museidon Library (B5) 🕮"
+    },
+    {
+      "name": "Museidon Library Archive (Library Room) 🕮",
+      "regionId": "museidon-library",
+      "label": "Museidon Library Archive (Library Room) 🕮"
+    },
+    {
+      "name": "Museidon Library Labyrinth",
+      "regionId": "museidon-library",
+      "label": "Museidon Library Labyrinth（ミュセイドン・ライブラリー・ラビリンス）"
+    },
+    {
+      "name": "Mute Basin",
+      "regionId": "hellein-plateau",
+      "label": "Mute Basin（ミュート・ベイスン）"
+    },
+    {
+      "name": "Mystra Basin",
+      "regionId": "brynhilld",
+      "label": "Mystra Basin（ミストラ・ベイスン）"
+    },
+    {
+      "name": "Mystra Hill",
+      "regionId": "brynhilld",
+      "label": "Mystra Hill（ミストラ・ヒル）"
+    },
+    {
+      "name": "Mythril Mines",
+      "regionId": "mythril-mines",
+      "label": "Mythril Mines（ミスリル・マインズ）"
+    },
+    {
+      "name": "Mythril Mines (Level 1)",
+      "regionId": "mythril-mines",
+      "label": "Mythril Mines (Level 1)"
+    },
+    {
+      "name": "Mythril Mines (Level 2)",
+      "regionId": "mythril-mines",
+      "label": "Mythril Mines (Level 2)"
+    },
+    {
+      "name": "Mythril Mines (Level 3)",
+      "regionId": "mythril-mines",
+      "label": "Mythril Mines (Level 3)"
+    },
+    {
+      "name": "Noctein Plateau",
+      "regionId": "hellein-plateau",
+      "label": "Noctein Plateau（ノクテイン・プラトー）"
+    },
+    {
+      "name": "Nordis Valley",
+      "regionId": "yvel",
+      "label": "Nordis Valley（ノディス谷）"
+    },
+    {
+      "name": "Oasis",
+      "regionId": "oasis",
+      "label": "Oasis（オアシス）"
+    },
+    {
+      "name": "Oblique Forest",
+      "regionId": "brynhilld",
+      "label": "Oblique Forest（オブルクの森）"
+    },
+    {
+      "name": "Odalisque Forest",
+      "regionId": "eir",
+      "label": "Odalisque Forest（オダリスクの森）"
+    },
+    {
+      "name": "Onix Hill",
+      "regionId": "essene",
+      "label": "Onix Hill（オニックスの森）"
+    },
+    {
+      "name": "Othellos Forest",
+      "regionId": "brynhilld",
+      "label": "Othellos Forest（オテロスの森）"
+    },
+    {
+      "name": "Paladino Grove",
+      "regionId": "essene",
+      "label": "Paladino Grove（パルラディノグローブ）"
+    },
+    {
+      "name": "Pamament Plateau",
+      "regionId": "hellein-plateau",
+      "label": "Pamament Plateau（パマメント・プラトー）"
+    },
+    {
+      "name": "Parade Valley",
+      "regionId": "yvel",
+      "label": "Parade Valley（パレード・バレー）"
+    },
+    {
+      "name": "Pharaday Gorge",
+      "regionId": "eir",
+      "label": "Pharaday Gorge（ファラデイ・ゴージ）"
+    },
+    {
+      "name": "Phildevilt Plateau",
+      "regionId": "oasis",
+      "label": "Phildevilt Plateau（フィルデビルト・プラトー）"
+    },
+    {
+      "name": "Pindown Valley",
+      "regionId": "midori-spa",
+      "label": "Pindown Valley（ピンダウン谷）"
+    },
+    {
+      "name": "Pirate Cabin Floor 1",
+      "regionId": "pirate-ship",
+      "label": "Pirate Cabin Floor 1"
+    },
+    {
+      "name": "Pirate Cabin Floor 2",
+      "regionId": "pirate-ship",
+      "label": "Pirate Cabin Floor 2"
+    },
+    {
+      "name": "Pirate Ship",
+      "regionId": "pirate-ship",
+      "label": "Pirate Ship（パイレーツ・シップ）"
+    },
+    {
+      "name": "Pirate Ship Cargo Hold",
+      "regionId": "pirate-ship",
+      "label": "Pirate Ship Cargo Hold"
+    },
+    {
+      "name": "Premusson Path",
+      "regionId": "eir",
+      "label": "Premusson Path（プリマスン平原）"
+    },
+    {
+      "name": "Presenal Plains",
+      "regionId": "jotunnheim",
+      "label": "Presenal Plains（プレスナル平原）"
+    },
+    {
+      "name": "Prophet of Shenzhen",
+      "regionId": "before-yellow-gate",
+      "label": "Prophet of Shenzhen（プロフェット・オブ・シェンゼン）"
+    },
+    {
+      "name": "Proteron Gorge",
+      "regionId": "eir",
+      "label": "Proteron Gorge（プロテロン峡谷）"
+    },
+    {
+      "name": "Ramia Plateau",
+      "regionId": "hellein-plateau",
+      "label": "Ramia Plateau（ラミア・プラトー）"
+    },
+    {
+      "name": "Realto Plains",
+      "regionId": "candyvault",
+      "label": "Realto Plains（リアルト沼地）"
+    },
+    {
+      "name": "Red Mine",
+      "regionId": "beyond-yellow-gate",
+      "label": "Red Mine（レッド・マイン）"
+    },
+    {
+      "name": "Rekiell Plateau",
+      "regionId": "hellein-plateau",
+      "label": "Rekiell Plateau（レキエル・プラトー）"
+    },
+    {
+      "name": "Robern Plains",
+      "regionId": "hellein-plateau",
+      "label": "Robern Plains（ロバーン・プレーンズ）"
+    },
+    {
+      "name": "Rosetar Basin",
+      "regionId": "eir",
+      "label": "Rosetar Basin（ロジタ盆地）"
+    },
+    {
+      "name": "Router Valley",
+      "regionId": "brynhilld",
+      "label": "Router Valley（ラウタの谷）"
+    },
+    {
+      "name": "Rudwork Path",
+      "regionId": "eir",
+      "label": "Rudwork Path（ラドックパース）"
+    },
+    {
+      "name": "Saifield Forest",
+      "regionId": "essene",
+      "label": "Saifield Forest（セイフィルドウッド）"
+    },
+    {
+      "name": "Salem Valley",
+      "regionId": "candyvault",
+      "label": "Salem Valley（セーラム・バレー）"
+    },
+    {
+      "name": "Sand Desert Dungeon",
+      "regionId": "map-sand-desert-dungeon",
+      "label": "Sand Desert Dungeon（サンド・デザート・ダンジョン）"
+    },
+    {
+      "name": "Scorging Plains",
+      "regionId": "eir",
+      "label": "Scorging Plains（スコジン沼地）"
+    },
+    {
+      "name": "Secret Altar",
+      "regionId": "map-secret-altar",
+      "label": "Secret Altar（シークレット・オルター）"
+    },
+    {
+      "name": "Sennin Valley",
+      "regionId": "jotunnheim",
+      "label": "Sennin Valley（センニン谷）"
+    },
+    {
+      "name": "Sewers (Level 1)",
+      "regionId": "lost-brynhilld",
+      "label": "Sewers (Level 1)"
+    },
+    {
+      "name": "Sewers (Level 2)",
+      "regionId": "lost-brynhilld",
+      "label": "Sewers (Level 2)"
+    },
+    {
+      "name": "Shalo Forest",
+      "regionId": "brynhilld",
+      "label": "Shalo Forest（シャロ・フォレスト）"
+    },
+    {
+      "name": "Shenzhen Canyon",
+      "regionId": "before-yellow-gate",
+      "label": "Shenzhen Canyon（シェンゼン・キャニオン）"
+    },
+    {
+      "name": "Shenzhen Canyon Entrance",
+      "regionId": "before-yellow-gate",
+      "label": "Shenzhen Canyon Entrance（シェンゼン・キャニオン 入口）"
+    },
+    {
+      "name": "Shenzhen Canyon Exit",
+      "regionId": "before-yellow-gate",
+      "label": "Shenzhen Canyon Exit（シェンゼン・キャニオン 出口）"
+    },
+    {
+      "name": "Shenzhen Forest",
+      "regionId": "before-yellow-gate",
+      "label": "Shenzhen Forest（シェンゼン・フォレスト）"
+    },
+    {
+      "name": "Shenzhen Teleport Areas",
+      "regionId": "shenzhen",
+      "label": "Shenzhen Teleport Areas"
+    },
+    {
+      "name": "Shenzhen Valley",
+      "regionId": "before-yellow-gate",
+      "label": "Shenzhen Valley（シェンゼン・バレー）"
+    },
+    {
+      "name": "Shenzhen Waterfall",
+      "regionId": "before-yellow-gate",
+      "label": "Shenzhen Waterfall（シェンゼン・ウォーターフォール）"
+    },
+    {
+      "name": "Shenzhen Waterfall Entrance",
+      "regionId": "before-yellow-gate",
+      "label": "Shenzhen Waterfall Entrance（シェンゼン・ウォーターフォール 入口）"
+    },
+    {
+      "name": "Shenzhen Waterfall Exit",
+      "regionId": "before-yellow-gate",
+      "label": "Shenzhen Waterfall Exit（シェンゼン・ウォーターフォール 出口）"
+    },
+    {
+      "name": "Sheriff Forest",
+      "regionId": "candyvault",
+      "label": "Sheriff Forest（セリフの森）"
+    },
+    {
+      "name": "Sherwood Valley",
+      "regionId": "yvel",
+      "label": "Sherwood Valley（シャーウッド・バレー）"
+    },
+    {
+      "name": "Sheryle Forest",
+      "regionId": "yvel",
+      "label": "Sheryle Forest（シエリルの森）"
+    },
+    {
+      "name": "Shudbee Forest",
+      "regionId": "midori-spa",
+      "label": "Shudbee Forest（シュドビーの森）"
+    },
+    {
+      "name": "Shylphaen Forest",
+      "regionId": "candyvault",
+      "label": "Shylphaen Forest（シルバエンの森）"
+    },
+    {
+      "name": "Siberas Plateau",
+      "regionId": "hellein-plateau",
+      "label": "Siberas Plateau（シベラス・プラトー）"
+    },
+    {
+      "name": "Simpson Valley",
+      "regionId": "midori-spa",
+      "label": "Simpson Valley（シンプソン・バレー）"
+    },
+    {
+      "name": "Skitchy Gorge",
+      "regionId": "eir",
+      "label": "Skitchy Gorge（スキチー峡谷）"
+    },
+    {
+      "name": "Sleepless Grave (Entrance)",
+      "regionId": "sleepless-grave",
+      "label": "Sleepless Grave (Entrance)（スリープレス・グレイブ 入口）"
+    },
+    {
+      "name": "Sleepless Grave (Level 1)",
+      "regionId": "sleepless-grave",
+      "label": "Sleepless Grave (Level 1)（スリープレス・グレイブ Lv1）"
+    },
+    {
+      "name": "Sleepless Grave (Level 2)",
+      "regionId": "sleepless-grave",
+      "label": "Sleepless Grave (Level 2)（スリープレス・グレイブ Lv2）"
+    },
+    {
+      "name": "Stout Forest",
+      "regionId": "candyvault",
+      "label": "Stout Forest（スタウトの森）"
+    },
+    {
+      "name": "Sudden Hill",
+      "regionId": "essene",
+      "label": "Sudden Hill（サドンヒル）"
+    },
+    {
+      "name": "Summer Hill Street",
+      "regionId": "brynhilld",
+      "label": "Summer Hill Street（東ブリンヒルド）"
+    },
+    {
+      "name": "Taisen Plains",
+      "regionId": "candyvault",
+      "label": "Taisen Plains（タイセン沼地）"
+    },
+    {
+      "name": "Tanline Gorge",
+      "regionId": "oasis",
+      "label": "Tanline Gorge（テンライン谷）"
+    },
+    {
+      "name": "Taquestrim Plateau",
+      "regionId": "oasis",
+      "label": "Taquestrim Plateau（タクストリム高原）"
+    },
+    {
+      "name": "Telling Denver Lake",
+      "regionId": "candyvault",
+      "label": "Telling Denver Lake（テリング・デンバー・レイク）"
+    },
+    {
+      "name": "Templar Gorge",
+      "regionId": "eir",
+      "label": "Templar Gorge（テンプル峡谷）"
+    },
+    {
+      "name": "Temple of Pansidia",
+      "regionId": "pansidia",
+      "label": "Temple of Pansidia（テンプル・オブ・パンシディア）"
+    },
+    {
+      "name": "The Master Maze (Advanced)",
+      "regionId": "labyrinth-maze",
+      "label": "The Master Maze (Advanced)"
+    },
+    {
+      "name": "The Master Maze (Expert)",
+      "regionId": "labyrinth-maze",
+      "label": "The Master Maze (Expert)"
+    },
+    {
+      "name": "The Master Maze (Hades)",
+      "regionId": "labyrinth-maze",
+      "label": "The Master Maze (Hades)"
+    },
+    {
+      "name": "The Master Maze (Novice)",
+      "regionId": "labyrinth-maze",
+      "label": "The Master Maze (Novice)"
+    },
+    {
+      "name": "Theglaia Forest",
+      "regionId": "brynhilld",
+      "label": "Theglaia Forest（セグライアの森）"
+    },
+    {
+      "name": "Thorn Basin",
+      "regionId": "craving-thorns",
+      "label": "Thorn Basin（ソーン・ベイスン）"
+    },
+    {
+      "name": "Thorny Canyon",
+      "regionId": "craving-thorns",
+      "label": "Thorny Canyon（ソーニー・キャニオン）"
+    },
+    {
+      "name": "Tincrush Valley",
+      "regionId": "eir",
+      "label": "Tincrush Valley（ティンクラッシュ谷）"
+    },
+    {
+      "name": "Titanus Plains",
+      "regionId": "eir",
+      "label": "Titanus Plains（ティタヌス平原）"
+    },
+    {
+      "name": "Tolkin Gorge",
+      "regionId": "eir",
+      "label": "Tolkin Gorge（トルキン峡谷）"
+    },
+    {
+      "name": "Town Exclusive Spawns",
+      "regionId": "town-spawns",
+      "label": "Town Exclusive Spawns"
+    },
+    {
+      "name": "Town of Deceased",
+      "regionId": "deceased",
+      "label": "Town of Deceased（タウン・オブ・ディシースト）"
+    },
+    {
+      "name": "Trakian Path",
+      "regionId": "essene",
+      "label": "Trakian Path（トラキアンベス）"
+    },
+    {
+      "name": "Tramis Mansion",
+      "regionId": "brynhilld",
+      "label": "Tramis Mansion（トラミス邸）"
+    },
+    {
+      "name": "Turmeit Desert",
+      "regionId": "oasis",
+      "label": "Turmeit Desert（ターメイト・デザート）"
+    },
+    {
+      "name": "Urail Valley",
+      "regionId": "essene",
+      "label": "Urail Valley（ウレイル・バレー）"
+    },
+    {
+      "name": "Vanderull Plains",
+      "regionId": "eir",
+      "label": "Vanderull Plains（ベンダロール平原）"
+    },
+    {
+      "name": "Vargas Forest",
+      "regionId": "candyvault",
+      "label": "Vargas Forest（バーガス・フォレスト）"
+    },
+    {
+      "name": "Velcro Forest",
+      "regionId": "jotunnheim",
+      "label": "Velcro Forest（ベルクロの森）"
+    },
+    {
+      "name": "Verazium Plateau",
+      "regionId": "hellein-plateau",
+      "label": "Verazium Plateau（ベラジウム・プラトー）"
+    },
+    {
+      "name": "Vreily Grove",
+      "regionId": "essene",
+      "label": "Vreily Grove（ブレイリー・グローブ）"
+    },
+    {
+      "name": "Waimea Gorge",
+      "regionId": "brynhilld",
+      "label": "Waimea Gorge（ワイメア峡谷）"
+    },
+    {
+      "name": "Wavin Plains",
+      "regionId": "essene",
+      "label": "Wavin Plains（ワビン平原）"
+    },
+    {
+      "name": "Witchwood Forest",
+      "regionId": "candyvault",
+      "label": "Witchwood Forest（ウィッチウッド・フォレスト）"
+    },
+    {
+      "name": "Xiamen",
+      "regionId": "before-yellow-gate",
+      "label": "Xiamen（シアメン）"
+    },
+    {
+      "name": "Xiamen Exit",
+      "regionId": "before-yellow-gate",
+      "label": "Xiamen Exit（シアメン 出口）"
+    },
+    {
+      "name": "Xiamen Main Gate",
+      "regionId": "before-yellow-gate",
+      "label": "Xiamen Main Gate（シアメン 正門）"
+    },
+    {
+      "name": "Yellow Gate",
+      "regionId": "before-yellow-gate",
+      "label": "Yellow Gate（イエロー・ゲート）"
+    },
+    {
+      "name": "Yellow gate -Back Gate-",
+      "regionId": "beyond-yellow-gate",
+      "label": "Yellow gate -Back Gate-（イエロー・ゲート 裏門）"
+    },
+    {
+      "name": "Yvel",
+      "regionId": "yvel",
+      "label": "Yvel（イベル）"
+    }
+  ]
+}

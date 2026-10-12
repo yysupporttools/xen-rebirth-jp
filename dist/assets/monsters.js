@@ -6,6 +6,8 @@
   const fold = value => String(value ?? '').normalize('NFKC').toLowerCase().replace(/[\u200b-\u200d\ufeff]/g,'');
   const decode = value => {try{return decodeURIComponent(value);}catch{return '';}};
   let data = {monsters:[], regions:[], references:[]}, visible = [], limit = 60, lastButton = null;
+  let mapCatalog={regions:[],maps:[]};
+  const canonical=value=>window.XenMapNavigation?.canonicalMapName(value)||value;
   const additions = new Map();
   const originalValues = new Map();
   const scopeLabels = {excludes_hard_hitters:'通常個体向け（強打個体を除外）',excludes_listed_hard_hitters:'通常個体向け（記載の強打個体を除外）',includes_hard_hitters:'マップ全体（強打個体を含む）',full_map:'マップ全体',monster:'個体参考',unknown:'条件未確認'};
@@ -166,6 +168,7 @@
       }
       if(region!==null)html.push('</div></section>');
     } else html.push('<section class="dex-region-group"><h2>検索結果</h2><div class="dex-grid">'+shown.map(card).join('')+'</div></section>');
+    renderMapCoverage();
     $('dex-results').innerHTML=html.join('');wireImages($('dex-results'));
     $('dex-status').textContent=visible.length+'件の出現情報／'+shown.length+'件表示';
     $('dex-more').hidden=shown.length>=visible.length;
@@ -175,7 +178,7 @@
   function filter(save=true,preserveLimit=false) {
     const query=fold($('dex-query').value).trim().split(/\s+/).filter(Boolean),region=$('dex-region').value,map=$('dex-map').value,min=num('dex-min-level'),max=num('dex-max-level'),def=num('dex-def'),unknown=$('dex-include-unknown').checked;
     visible=data.monsters.filter(m=>{
-      if(region && m.regionId!==region || map && m.map!==map)return false;
+      if(region && m.regionId!==region || map && canonical(m.map)!==map)return false;
       if($('dex-known-drop').checked && !dropNames(m).length)return false;
       if(min!=null || max!=null) {const range=levelRange(m);if(!range) {if(!unknown)return false;} else if(min!=null && range[1]<min || max!=null && range[0]>max)return false;}
       if(def!=null) {const required=filterDef(m);if(required==null){if(!unknown)return false;}else if(required>def)return false;}
@@ -184,13 +187,14 @@
     });
     if($('dex-sort').value==='level')visible.sort((a,b)=>(levelRange(a)?.[0]??999)-(levelRange(b)?.[0]??999)||a.name.localeCompare(b.name));
     else if($('dex-sort').value==='name')visible.sort((a,b)=>a.name.localeCompare(b.name));
+    else visible.sort((a,b)=>a.regionId.localeCompare(b.regionId)||String(a.area).localeCompare(String(b.area))||String(a.map).localeCompare(String(b.map))||a.name.localeCompare(b.name));
     if(!preserveLimit)limit=60;render();
     if(save) {const url=new URL(location.href);url.search='';[['q','dex-query'],['region','dex-region'],['map','dex-map'],['min','dex-min-level'],['max','dex-max-level'],['def','dex-def']].forEach(([key,id])=>{if($(id).value)url.searchParams.set(key,$(id).value);});if($('dex-def-mode').value==='full')url.searchParams.set('def-mode','full');if($('dex-known-drop').checked)url.searchParams.set('drops','1');if(!unknown)url.searchParams.set('unknown','0');if($('dex-sort').value!=='region')url.searchParams.set('sort',$('dex-sort').value);history.replaceState(null,'',url);}
   }
   function maps() {
     const selected=$('dex-map').value,region=$('dex-region').value;
-    const choices=[...new Set(data.monsters.filter(m=>!region || m.regionId===region).map(m=>m.map).filter(Boolean))];
-    $('dex-map').innerHTML='<option value="">すべてのマップ</option>'+choices.map(m=>'<option value="'+esc(m)+'">'+esc(m)+'</option>').join('');
+    const choices=[...new Set([...mapCatalog.maps.filter(m=>!region||m.regionId===region).map(m=>m.name),...data.monsters.filter(m=>!region || m.regionId===region).map(m=>canonical(m.map)).filter(Boolean)])];
+    $('dex-map').innerHTML='<option value="">すべてのマップ</option>'+choices.map(m=>'<option value="'+esc(m)+'">'+esc(mapCatalog.maps.find(x=>x.name===m)?.label||m)+(data.monsters.some(x=>canonical(x.map)===m)?'':'（モンスター未登録）')+'</option>').join('');
     if(choices.includes(selected))$('dex-map').value=selected;
   }
   function sourceLink(url,label) {const href=http(url);return href?'<a href="'+esc(href)+'" target="_blank" rel="noopener noreferrer">'+esc(label)+' ↗</a>':esc(label);}
@@ -200,7 +204,7 @@
   function open(id,save=true,moveFocus=true) {
     const m=data.monsters.find(x=>x.id===id);if(!m)return;
     const known=refs(m),drops=effectiveDrops(m),edited=editedDef(m),region=data.regions.find(x=>x.id===m.regionId);
-    $('dex-detail').innerHTML='<div class="dex-detail-main"><div>'+image(m,true)+'</div><div><h2 id="dex-dialog-title">'+esc(m.name)+'</h2><span class="dex-level">'+levelLabel(m)+'</span><p>'+esc([m.region,m.area,m.map].filter(Boolean).filter((v,i,a)=>a.indexOf(v)===i).join(' / '))+'</p><div class="dex-source">'+sourceLink(m.sourceUrl,m.detailPosts?'元のモンスター情報の出典':m.imagePost?'モンスター情報の公式出典':'ゲーム内画像・モンスター情報の出典')+(region?.author?'<p>記事作者：'+esc(region.author)+'</p>':'')+'</div></div></div><section class="dex-detail-section"><h3>アイテムドロップ</h3>'+(drops.length?'<ul class="dex-drop-list">'+drops.map(d=>'<li>'+esc(d.name)+(d.note?'<small>'+esc(d.note)+'</small>':'')+'<small>'+(d.sourceUrl?sourceLink(d.sourceUrl,'出典'):d.player?'プレイヤー入力':sourceLink(m.sourceUrl,'出典'))+'</small></li>').join('')+'</ul>':'<p>未登録です。出典に記載がない項目は推測で補完していません。</p>')+'</section><section class="dex-detail-section"><h3>必要DEF（参考）</h3>'+(edited?'<p class="dex-def-row"><strong>'+esc(formatDef(edited))+'</strong></p>':'')+(edited && known.length?'<details><summary>元の参考資料を見る</summary>':'')+(known.length?known.map(r=>'<div class="dex-def-row"><p><strong>'+esc(r.defDisplay||'数値未登録')+'</strong> ／ '+esc(r.type==='monster'?'個体参考':scopeLabels[r.scope]||'マップ参考')+'</p><p>'+esc(r.note)+'</p>'+(r.levelGate?'<p>マップのLv条件：'+esc(typeof r.levelGate==='object'?JSON.stringify(r.levelGate):r.levelGate)+'</p>':'')+'<small>'+sourceRef(r)+'</small></div>').join(''):!edited?'<p class="dex-def-unknown">このマップ・個体の参考値は未登録です。</p>':'')+(edited && known.length?'</details>':'')+'</section>'+(m.notes?.length?'<section class="dex-detail-section"><h3>補足</h3><ul class="dex-notes">'+m.notes.map(n=>'<li>'+esc(n)+'</li>').join('')+'</ul></section>':'')+'<section id="dex-contributions" class="dex-detail-section"></section>';
+    $('dex-detail').innerHTML='<div class="dex-detail-main"><div>'+image(m,true)+'</div><div><h2 id="dex-dialog-title">'+esc(m.name)+'</h2><span class="dex-level">'+levelLabel(m)+'</span><p>'+esc([m.region,m.area,m.map].filter(Boolean).filter((v,i,a)=>a.indexOf(v)===i).join(' / '))+'</p><div class="dex-source">'+(m.manualEntry?'手動登録（プレイヤー入力）':sourceLink(m.sourceUrl,m.detailPosts?'元のモンスター情報の出典':m.imagePost?'モンスター情報の公式出典':'ゲーム内画像・モンスター情報の出典'))+(region?.author?'<p>記事作者：'+esc(region.author)+'</p>':'')+'</div></div></div><section class="dex-detail-section"><h3>アイテムドロップ</h3>'+(drops.length?'<ul class="dex-drop-list">'+drops.map(d=>'<li>'+esc(d.name)+(d.note?'<small>'+esc(d.note)+'</small>':'')+'<small>'+(d.sourceUrl?sourceLink(d.sourceUrl,'出典'):d.player?'プレイヤー入力':sourceLink(m.sourceUrl,'出典'))+'</small></li>').join('')+'</ul>':'<p>未登録です。出典に記載がない項目は推測で補完していません。</p>')+'</section><section class="dex-detail-section"><h3>必要DEF（参考）</h3>'+(edited?'<p class="dex-def-row"><strong>'+esc(formatDef(edited))+'</strong></p>':'')+(edited && known.length?'<details><summary>元の参考資料を見る</summary>':'')+(known.length?known.map(r=>'<div class="dex-def-row"><p><strong>'+esc(r.defDisplay||'数値未登録')+'</strong> ／ '+esc(r.type==='monster'?'個体参考':scopeLabels[r.scope]||'マップ参考')+'</p><p>'+esc(r.note)+'</p>'+(r.levelGate?'<p>マップのLv条件：'+esc(typeof r.levelGate==='object'?JSON.stringify(r.levelGate):r.levelGate)+'</p>':'')+'<small>'+sourceRef(r)+'</small></div>').join(''):!edited?'<p class="dex-def-unknown">このマップ・個体の参考値は未登録です。</p>':'')+(edited && known.length?'</details>':'')+'</section>'+(m.notes?.length?'<section class="dex-detail-section"><h3>補足</h3><ul class="dex-notes">'+m.notes.map(n=>'<li>'+esc(n)+'</li>').join('')+'</ul></section>':'')+'<section id="dex-contributions" class="dex-detail-section"></section>';
     for(const [items,title] of [[m.rewards,'討伐報酬'],[m.mapItems,'このマップの入手情報（ドロップする個体は未特定）']]) {
       if(!items?.length)continue;
       const section=document.createElement('section');section.className='dex-detail-section';
@@ -218,6 +222,13 @@
   function close() {$('dex-dialog').close();history.replaceState(null,'',location.pathname+location.search);const button=lastButton?.isConnected?lastButton:lastButton?.dataset.monster?$('dex-results').querySelector('[data-monster="'+CSS.escape(lastButton.dataset.monster)+'"]'):null;button?.focus();}
   function applyAdditions(rows) {
     additions.clear();
+    data.monsters=data.monsters.filter(m=>!m.manualEntry);
+    const seen=new Set(data.monsters.map(m=>m.id));
+    for(const row of rows){const e=row.details?.catalog_entry;if(!e||seen.has(row.monster_id)||!/^manual-[a-f0-9-]{36}$/.test(row.monster_id))continue;
+      if(!mapCatalog.maps.some(m=>m.name===e.map&&m.regionId===e.regionId)||typeof e.name!=='string')continue;
+      const m={id:row.monster_id,name:e.name,regionId:e.regionId,region:e.region,map:e.map,area:'',level:null,imageUrl:null,notes:[],drops:[],defRefs:[],manualEntry:true};
+      data.monsters.push(m);seen.add(m.id);originalValues.set(m.id,{level:null,imageUrl:null,map:e.map,notes:[]});
+    }
     const byId=new Map(data.monsters.map(monster=>[monster.id,monster]));
     for(const monster of data.monsters){
       const original=originalValues.get(monster.id);
@@ -257,19 +268,62 @@
       if(hasField(fields,'map'))monster.map=fields.map.details.map;
       if(hasField(fields,'notes'))monster.notes=lines(fields.notes.details.notes);
     }
-    maps();filter(false,true);
-    if($('dex-dialog').open && location.hash)open(decode(location.hash.slice(1)),false,false);
+    renderRegions();maps();filter(false,true);
+    if(location.hash && ($('dex-dialog').open||location.hash.startsWith('#manual-')))open(decode(location.hash.slice(1)),false,false);
   }
+
+  function renderRegions(){
+    const selected=$('dex-region').value;
+    $('dex-total').textContent=data.regions.length+'地域・'+data.monsters.length+'件の出現情報';
+    $('dex-region').innerHTML='<option value="">すべての地域</option>'+data.regions.map(r=>'<option value="'+esc(r.id)+'">'+esc(r.name)+'</option>').join('');
+    $('dex-region').value=selected;
+    $('dex-regions').innerHTML='<button type="button" data-region="" aria-pressed="'+(!selected)+'"><span>すべて</span><small>'+data.monsters.length+'件</small></button>'+data.regions.map(r=>'<button type="button" data-region="'+esc(r.id)+'" aria-pressed="'+(selected===r.id)+'"><span>'+esc(r.name)+'</span><small>'+data.monsters.filter(m=>m.regionId===r.id).length+'件</small></button>').join('');
+  }
+  function renderMapCoverage(){
+    const region=$('dex-region').value;
+    const unfilled=mapCatalog.maps.filter(m=>(!region||m.regionId===region)&&!data.monsters.some(x=>canonical(x.map)===m.name));
+    $('dex-empty-maps').innerHTML=unfilled.length?'<summary>モンスター未登録のマップ（'+unfilled.length+'件）</summary>'+data.regions.filter(r=>unfilled.some(m=>m.regionId===r.id)).map(r=>'<section><h3>'+esc(r.name)+'</h3><div class="dex-map-add-list">'+unfilled.filter(m=>m.regionId===r.id).map(m=>'<button type="button" data-create-map="'+esc(m.name)+'">'+esc(m.label)+'<small>モンスターを追加 ＋</small></button>').join('')+'</div></section>').join(''):'<summary>この地域の未登録マップはありません</summary>';
+  }
+  function setupCreate(){
+    const dialog=$('dex-create-dialog'),form=$('dex-create-form');
+    $('dex-create-region').innerHTML=mapCatalog.regions.map(r=>'<option value="'+esc(r.id)+'">'+esc(r.name)+'</option>').join('');
+    const populate=()=>{$('dex-create-map').innerHTML=mapCatalog.maps.filter(m=>m.regionId===$('dex-create-region').value).map(m=>'<option value="'+esc(m.name)+'">'+esc(m.label)+'</option>').join('');};
+    const show=(map='')=>{form.reset();$('dex-create-status').textContent='';const match=mapCatalog.maps.find(m=>m.name===map);
+      $('dex-create-region').value=match?.regionId||$('dex-region').value||mapCatalog.regions[0].id;populate();if(match)$('dex-create-map').value=match.name;
+      dialog.showModal();$('dex-create-name').focus();};
+    $('dex-create-region').onchange=populate;
+    $('dex-add-monster').onclick=()=>show($('dex-map').value);
+    $('dex-empty-maps').onclick=e=>{const b=e.target.closest('[data-create-map]');if(b)show(b.dataset.createMap);};
+    $('dex-create-close').onclick=()=>dialog.close();
+    let saving=false;
+    dialog.addEventListener('cancel',e=>{if(saving)e.preventDefault();});
+    form.onsubmit=async e=>{e.preventDefault();if(saving)return;const f=new FormData(form),name=String(f.get('name')).trim(),map=$('dex-create-map').value;
+      if(!name){$('dex-create-name').focus();return;}
+      const existing=data.monsters.find(m=>fold(m.name).trim()===fold(name)&&canonical(m.map)===map);
+      if(existing){dialog.close();open(existing.id);return;}
+      const buttons=[...form.querySelectorAll('button'),$('dex-create-close')];saving=true;buttons.forEach(b=>b.disabled=true);$('dex-create-status').textContent='登録しています…';
+      let result;
+      try{
+        result=await window.XenReports.createMonster({name,map,region_id:$('dex-create-region').value,details:{level:f.get('level')===''?null:Number(f.get('level')),drop_items:String(f.get('drop_items')),notes:String(f.get('notes'))}});
+        $('dex-region').value=$('dex-create-region').value;maps();$('dex-map').value=map;
+        await window.XenReports.refreshMonsterImages(result.monster_id);
+        dialog.close();filter();open(result.monster_id);
+        if(e.submitter?.value==='image')window.XenReports.openImage({title:name,monsterId:result.monster_id,url:'monsters.html#'+result.monster_id});
+      }catch(error){$('dex-create-status').textContent=result?'登録は完了しましたが、表示を更新できませんでした。再読み込みしてください。':'登録できませんでした：'+error.message;
+      }finally{saving=false;buttons.forEach(b=>b.disabled=false);}
+    };
+  }
+
   async function init() {
     try {const response=await fetch('assets/monsters-data.json?v=4');if(!response.ok)throw new Error('load');data=await response.json();
       for(const monster of data.monsters)originalValues.set(monster.id,{level:monster.level,imageUrl:monster.imageUrl,map:monster.map,notes:monster.notes});
       if(innerWidth<600)$('dex-region-panel').open=false;
-      $('dex-total').textContent=data.regions.length+'地域・'+data.monsters.length+'件の出現情報';
-      $('dex-region').innerHTML='<option value="">すべての地域</option>'+data.regions.map(r=>'<option value="'+esc(r.id)+'">'+esc(r.name)+'</option>').join('');
-      $('dex-regions').innerHTML='<button type="button" data-region="" aria-pressed="true"><span>すべて</span><small>'+data.monsters.length+'件</small></button>'+data.regions.map(r=>'<button type="button" data-region="'+esc(r.id)+'" aria-pressed="false"><span>'+esc(r.name)+'</span><small>'+data.monsters.filter(m=>m.regionId===r.id).length+'件</small></button>').join('');
+      const catalogResponse=await fetch('assets/monster-map-catalog.json?v=1');if(!catalogResponse.ok)throw Error('catalog');mapCatalog=await catalogResponse.json();
+      data.regions=mapCatalog.regions.map(r=>({...data.regions.find(x=>x.id===r.id),...r}));
+      renderRegions();setupCreate();
       const query=new URLSearchParams(location.search);[['q','dex-query'],['region','dex-region'],['min','dex-min-level'],['max','dex-max-level'],['def','dex-def']].forEach(([key,id])=>{if(query.has(key))$(id).value=query.get(key);});maps();if(query.has('map'))$('dex-map').value=query.get('map');if(query.has('sort'))$('dex-sort').value=query.get('sort');if(query.get('def-mode')==='full')$('dex-def-mode').value='full';$('dex-known-drop').checked=query.get('drops')==='1';$('dex-include-unknown').checked=query.get('unknown')!=='0';filter(false);
-      if(location.hash)open(decode(location.hash.slice(1)),false);
-      if(window.XenReports?.loadAllMonsters) {window.XenReports.loadAllMonsters().then(rows=>applyAdditions(rows)).catch(()=>{});}
+      if(location.hash&&!location.hash.startsWith('#manual-'))open(decode(location.hash.slice(1)),false);
+      if(window.XenReports?.loadAllMonsters) {window.XenReports.loadAllMonsters().then(rows=>applyAdditions(rows)).catch(()=>{$('dex-status').textContent+=' 追加モンスターを読み込めませんでした。再読み込みしてください。';});}
     } catch { $('dex-status').textContent='図鑑を読み込めませんでした。ページを再読み込みしてください。'; }
   }
   $('dex-filter').addEventListener('submit',event=>{event.preventDefault();filter();});

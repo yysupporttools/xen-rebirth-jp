@@ -1,0 +1,12 @@
+const fs=require('fs'),vm=require('vm'),assert=require('assert/strict'),{stripTypeScriptTypes}=require('module'),path=require('path');
+const base=path.resolve(__dirname,'../supabase/functions/site-feedback');
+const catalog=JSON.parse(fs.readFileSync(base+'/monster-map-catalog.json')),source=fs.readFileSync(base+'/index.ts','utf8').replace(/^import mapCatalog.*\r?\n/,'');
+let handler,calls=[];const ctx={console,Request,Response,Headers,URL,AbortSignal,crypto,TextEncoder,Uint8Array,atob,btoa,mapCatalog:catalog,Deno:{env:{get:n=>n==='SUPABASE_URL'?'https://test.supabase.co':n==='SITE_PUBLISHABLE_KEY'?'key':'key'},serve:f=>handler=f},fetch:async(url,opts)=>{calls.push([url,opts]);if(url.includes('/rpc/site_feedback_create_monster'))return Response.json({monster_id:'manual-11111111-1111-4111-8111-111111111111'});if(url.includes('/rpc/site_feedback_save_details'))return Response.json('11111111-1111-4111-8111-111111111111');if(url.includes('monsters-data.json'))return Response.json({monsters:[{id:'original',name:'Original'}]});if(url.includes('/monster_updates?'))return Response.json([{details:{catalog_entry:{name:'Manual'}}}]);throw Error('unexpected '+url);}};
+vm.runInNewContext(stripTypeScriptTypes(source),ctx);
+(async()=>{const body={action:'create_monster',name:'Test',map:'Craving Canyon',region_id:'craving-thorns',visitor:'11111111-1111-4111-8111-111111111111',details:{level:12}};
+const send=d=>handler(new Request('https://test.supabase.co/functions/v1/site-feedback',{method:'POST',headers:{apikey:'sb_publishable_yTgQ5bw5pnSkNCTOH4me8Q_YaQhRkQ_',Origin:'https://yysupporttools.github.io','Content-Type':'application/json'},body:JSON.stringify(d)}));
+let r=await send(body);assert.equal(r.status,200,await r.text());assert(calls.some(([u])=>u.includes('site_feedback_create_monster')));calls=[];
+r=await send({...body,region_id:'eir'});assert.equal(r.status,400);assert.equal(calls.length,0);
+r=await send({...body,details:{level:999}});assert.equal(r.status,400);
+r=await send({...body,action:'save_details',monster_id:'manual-11111111-1111-4111-8111-111111111111',details:{level:14}});assert.equal(r.status,200,await r.text());assert(calls.some(([u])=>u.includes('/monster_updates?')));
+console.log('PASS new registration validation and existing detail edits for manual IDs');})().catch(e=>{console.error(e);process.exitCode=1});
