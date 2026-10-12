@@ -96,8 +96,8 @@ check("merged city aliases retain distinct districts and confirmed Summer Hill d
   const graph=nav.buildGraph(world,[],{transports});
   const edge=graph.get("Summer Hill Street").find(e=>e.to==="Eir"&&e.kind==="transporter");
   assert.equal(edge.sourceTown,"Arcarinas Square");assert.equal(edge.minLevel,40);
-  assert.deepEqual(Array.from(nav.findRoute(graph,"Brynhilld","Eir",{level:40}).path),["Arcarinas Square","Summer Hill Street","Eir"]);
-  assert(!graph.get("Arcarinas Square").some(e=>e.kind==="transporter"));
+  assert.deepEqual(Array.from(nav.findRoute(graph,"Brynhilld","Eir",{level:40}).path),["Arcarinas Square","Eir"]);
+  assert(graph.get("Arcarinas Square").some(e=>e.kind==="transporter"));
   assert.deepEqual(Array.from(nav.findRoute(graph,"Brinhilld","Arcarinas Square",{level:1}).path),["Arcarinas Square"]);
   assert(!graph.nodes.includes("Brynhilld"));assert(!graph.get("Arcarinas Square").some(e=>e.to==="Arcarinas Square"));
   assert(graph.get("Arcarinas Square").some(e=>e.to==="Summer Hill Street"&&e.kind==="normal"));
@@ -111,7 +111,7 @@ check("source city transporter uses only exact saved point on Summer Hill varian
   const graph=nav.buildGraph(emptyWorld,[],{transports,maps,mapNpcs:rows});
   const summer=graph.get("Summer Hill Street").find(e=>e.to==="Eir");
   assert.equal(summer.exit.x,223);assert.equal(summer.exit.y,340);
-  assert(!graph.get("Arcarinas Square").some(e=>e.to==="Eir"&&e.kind==="transporter"));
+  assert.equal(graph.get("Arcarinas Square").find(e=>e.to==="Eir"&&e.kind==="transporter").exit,null);
 });
 check("map groups preserve both original image IDs and linked NPC coordinates",()=>{
   const maps=[{id:"one",map_name:"Brunen Basin",map_image_url:"one.webp"},{id:"two",map_name:"Brunnen Basin",map_image_url:"two.webp"}];

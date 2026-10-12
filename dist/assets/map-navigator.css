@@ -23,3 +23,6 @@
 .map-manual-next{display:flex;align-items:center;gap:12px;flex-wrap:wrap}.map-manual-next span{font-size:13px}.map-viewport{align-items:safe center;justify-items:safe center}.map-layout #map-next-step:disabled{cursor:not-allowed}.map-dot.destination{background:#e3342f}.map-route-overlay{overflow-wrap:anywhere}
 
 .map-legend .map-dot.destination{background:#e3342f}
+
+/* Keep route instructions in a reserved band, outside the game image. */
+.map-canvas-frame{background:#10222c;border:1px solid #bac9d0;border-radius:5px;overflow:hidden}.map-canvas-frame .map-viewport{border:0;border-radius:0}.map-canvas-frame .map-route-overlay{position:static;transform:none;width:auto;max-width:none;margin:0;border:0;border-bottom:1px solid #dcb2aa;border-radius:0;padding:10px 14px;box-shadow:none;line-height:1.6;font-size:14px;overflow-wrap:anywhere}.map-manual-next .map-step-buttons{display:flex;gap:8px;flex-wrap:wrap}.map-layout #map-previous-step:disabled{cursor:not-allowed}

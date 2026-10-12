@@ -108,7 +108,7 @@
     });
     supplied.push.apply(supplied,transportData.extraConnections||[]);
     if(config.includeTransports!==false){
-      supplied.push.apply(supplied,(transportData.edges||[]).filter(function(edge){return !((transportData.cityOriginMaps||{})[canonicalMapName(edge.a)]||[]).length;}));
+      supplied.push.apply(supplied,transportData.edges||[]);
       supplied.push.apply(supplied,transportData.specialRoutes||[]);
       (transportData.edges||[]).forEach(function(edge){
         const originMaps=(transportData.cityOriginMaps||{})[canonicalMapName(edge.a)]||[];

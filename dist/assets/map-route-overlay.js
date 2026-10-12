@@ -23,6 +23,14 @@
   const shared=consistent((portals||[]).filter(p=>p.kind==='entrance'&&p.image_key===imageKey(map)&&canonical(p.destination)===canonical(previous.from)));
   return shared?bound(map,shared,'入口'):exit(map,previous.from,portals);
  }
+ function exitPointer(end){
+  if(!end)return null;
+  let from={x:end.x,y:end.y<110?end.y+90:end.y-90};
+  if(end.y>900)from={x:end.x>850?end.x-90:end.x+90,y:end.y};
+  else if(end.x<100)from={x:end.x+90,y:Math.max(20,end.y-65)};
+  else if(end.x>900)from={x:end.x-90,y:Math.max(20,end.y-65)};
+  return [from,end];
+ }
  function arrow(points){
   if(!points||points.length<2)return '';
   const coordinates=points.map(p=>Number(p.x).toFixed(1)+','+Number(p.y).toFixed(1)).join(' ');
@@ -64,5 +72,5 @@
   const grid=(root.XEN_MAP_IMAGE_AUDIT?.walkMasks||[]).find(row=>row.id===map?.id&&row.url===map.map_image_url&&row.hash===(map.source_image_hash||''));
   return shortestPath(grid,start,end);
  }
- root.XenMapRouteOverlay={imageKey,audited,exit,service,guidanceText,nextStep,connections,entrance,arrow,shortestPath,walkingPath};
+ root.XenMapRouteOverlay={imageKey,audited,exit,service,guidanceText,nextStep,connections,entrance,arrow,exitPointer,shortestPath,walkingPath};
 })(typeof window!=='undefined'?window:globalThis);

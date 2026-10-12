@@ -86,7 +86,7 @@
   const storeKey="xen-map-personal-markers-v1";
   let data={maps:[],mapNpcs:[],npcProfiles:[],knowledge:[],monsters:[],mapGroups:[],transitions:[],warnings:[]};
   let graph,entries=[],target=null,plan=null,shown="",variantId="",zoom=1,pointMode="",loaded=false,reloading=false;
-  let markers={},currentPoint=null,arrivalFrom=null;
+  let markers={},currentPoint=null,arrivalFrom=null,manualHistory=[];
   let uploadFile=null,uploadUrl="",uploadSaving=false,uploadName="",uploadMode="add",uploadMap=null;
   function readPersonal(){
     try{
@@ -119,7 +119,7 @@
   function renderOptions(){
     const all=names();
     $("map-names").innerHTML=all.map(name=>'<option value="'+esc(name)+'" label="'+esc(mapLabel(name))+'">'+esc(mapLabel(name))+'</option>').join("");
-    $("map-view-select").innerHTML='<option value="">マップを選ぶ</option>'+all.map(name=>'<option value="'+esc(name)+'">'+esc(mapLabel(name))+(noExpandedMap(name)?"（拡大マップなし）":data.maps.some(map=>map.map_name===name&&map.map_image_url)?"":schematic(name)?"（動画の部分構造図）":"（画像未登録）")+'</option>').join("");
+    $("map-view-select").innerHTML='<option value="">マップを選ぶ</option>'+all.map(name=>'<option value="'+esc(name)+'">'+esc(mapLabel(name))+(noExpandedMap(name)?"（拡大マップなし）":data.maps.some(map=>canon(map.map_name)===name&&map.map_image_url)?"":schematic(name)?"（動画の部分構造図）":"（画像未登録）")+'</option>').join("");
     $("map-view-select").value=shown;
   }
   function renderMissingMaps(){
@@ -195,6 +195,9 @@
   }
   function renderRoute(){
     const current=canon($("map-current").value),destination=canon($("map-destination").value);
+    const last=manualHistory.at(-1);
+    if(last&&(last.to!==current||last.destination!==destination))manualHistory=[];
+    $("map-previous-step").disabled=!manualHistory.length;
     const next=root.XenMapRouteOverlay?.nextStep(plan,current,ambiguousVariant(current));
     $("map-next-step").disabled=!next;
     $("map-next-destination").textContent=next?"移動後に押す → "+mapLabel(next.to):plan&&!plan.steps.length&&current&&destination?"目的地に到着しました。":"経路を選ぶと、次の移動先を表示します。";
@@ -254,7 +257,7 @@
     const previous=index>0?{map:map.map_name,from:plan.steps[index-1].from,kind:plan.steps[index-1].kind}:canon($("map-current").value)===canon(map.map_name)?arrivalFrom:null;
     const entry=pointOnImage(overlay?.entrance(map,previous,portals),map);
     const path=overlay?.walkingPath(map,start||entry,end);
-    const shortArrow=end?[{x:end.x,y:end.y<110?Math.min(1000,end.y+90):Math.max(0,end.y-90)},end]:null;
+    const shortArrow=overlay?.exitPointer(end);
     $("map-arrows").innerHTML=overlay?.arrow(path?.length>1?path:shortArrow)||"";
     const annotation=path?.length>1?"赤い道順は、確認した画像の通路内で距離が短い経路の目安です。入口・出口の赤い目印も確認してください。":end?"赤い矢印は出口・案内先の目印を指しています。この画像の通路全体は未確認です。":"";
     renderOverlay(info);
@@ -266,15 +269,30 @@
   function renderOverlay(info){
     const text=root.XenMapRouteOverlay?.guidanceText(info?.step,mapLabel)||"";
     $("map-route-overlay").hidden=!text;
-    $("map-route-overlay").textContent=text;
+    $("map-route-overlay").textContent=text+(text&&!info.point?"（位置は確認中）":"");
   }
   function advanceMap(){
     const step=root.XenMapRouteOverlay?.nextStep(plan,canon($("map-current").value),ambiguousVariant($("map-current").value));
     if(!step)return;
+    manualHistory.push({from:step.from,to:step.to,destination:canon($("map-destination").value),point:currentPoint,arrival:arrivalFrom});
+    if(manualHistory.length>100)manualHistory.shift();
     $("map-follow").checked=false;currentPoint=null;
     arrivalFrom={map:step.to,from:step.from,kind:step.kind};
     $("map-current").value=step.to;
     location.publish({map:step.to,source:"manual",confidence:100,method:"next-map-button"});
+    writePersonal();compute(true);
+  }
+  function previousMap(){
+    const last=manualHistory.at(-1);
+    if(!last||last.to!==canon($("map-current").value)||last.destination!==canon($("map-destination").value)){
+      manualHistory=[];renderRoute();return;
+    }
+    manualHistory.pop();$("map-follow").checked=false;
+    const map=last.point&&data.maps.find(row=>row.id===last.point.map_id);
+    currentPoint=map&&last.point.image_key===imageKey(map)&&pointOnImage(last.point,map)?last.point:null;
+    arrivalFrom=last.arrival||null;$("map-current").value=last.from;
+    location.publish({map:last.from,source:"manual",confidence:100,method:"previous-map-button",
+      ...(currentPoint?{mapId:currentPoint.map_id,x:currentPoint.x,y:currentPoint.y}:{})});
     writePersonal();compute(true);
   }
   function updateZoom(){
@@ -344,7 +362,7 @@
   }
   function sync(state){
     if(!$("map-follow").checked||!state)return;
-    arrivalFrom=null;
+    arrivalFrom=null;manualHistory=[];
     $("map-current").value=state.map;currentStatus(state);
     if(loaded){
       compute(false);
@@ -457,8 +475,9 @@
   $("map-show-npcs").checked=false;
   readPersonal();
   $("map-plan-form").addEventListener("submit",event=>{event.preventDefault();target=null;compute(true);});
-  $("map-current").addEventListener("change",()=>{$("map-follow").checked=false;currentPoint=null;arrivalFrom=null;location.publish({map:canon($("map-current").value),source:"manual",confidence:100});writePersonal();compute(true);});
+  $("map-current").addEventListener("change",()=>{$("map-follow").checked=false;currentPoint=null;arrivalFrom=null;manualHistory=[];location.publish({map:canon($("map-current").value),source:"manual",confidence:100});writePersonal();compute(true);});
   $("map-next-step").addEventListener("click",advanceMap);
+  $("map-previous-step").addEventListener("click",previousMap);
   root.addEventListener("xen-map-portals",renderPins);
   $("map-follow").addEventListener("change",()=>{if($("map-follow").checked)sync(location.read());});
   $("map-transports").addEventListener("change",()=>compute(false));
