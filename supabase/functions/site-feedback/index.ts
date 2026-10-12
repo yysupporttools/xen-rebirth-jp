@@ -1,4 +1,5 @@
 import mapCatalog from "./monster-map-catalog.json" with { type: "json" };
+const excludedTownMaps=new Set(['Eir','Essene','Candy Vault','Jotunheim','Oasis','Yvel','Midori Spa','Abundance Town','Albatross City','Town of Deceased','Memorial Chapel']);
 // Public feedback accepts the site's publishable key. Moderation additionally
 // validates a live Auth user and reuses the existing board administrator check.
 const project = Deno.env.get('SUPABASE_URL')!;
@@ -258,7 +259,7 @@ async function createMonster(req:Request,data:Record<string,unknown>){
  if(data.honeypot||!imageUuid.test(String(data.visitor||'')))throw Error('入力が無効です');
  const name=string(data.name,200,true),map=string(data.map,200,true),regionId=string(data.region_id,100,true);
  const region=mapCatalog.regions.find(r=>r.id===regionId);
- if(!region||!mapCatalog.maps.some(m=>m.name===map&&m.regionId===regionId))throw Error('地域と登録済みマップを選んでください');
+ if(!region||excludedTownMaps.has(map)||!mapCatalog.maps.some(m=>m.name===map&&m.regionId===regionId))throw Error('地域と登録済みマップを選んでください');
  const patch=detailPatch({...((data.details||{}) as Record<string,unknown>),map});
  const mid='manual-'+crypto.randomUUID();
  const result=await rpc('site_feedback_create_monster',{

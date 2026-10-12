@@ -7,6 +7,10 @@
   const decode = value => {try{return decodeURIComponent(value);}catch{return '';}};
   let data = {monsters:[], regions:[], references:[]}, visible = [], limit = 60, lastButton = null;
   let mapCatalog={regions:[],maps:[]};
+  // Towns are useful as monster locations in the existing catalogue, but are
+  // not selectable as new field-map registration targets.
+  const excludedTownMaps=new Set(['Eir','Essene','Candy Vault','Jotunheim','Oasis','Yvel','Midori Spa','Abundance Town','Albatross City','Town of Deceased','Memorial Chapel']);
+  const addableMaps=()=>mapCatalog.maps.filter(map=>!excludedTownMaps.has(map.name));
   const canonical=value=>window.XenMapNavigation?.canonicalMapName(value)||value;
   const additions = new Map();
   const originalValues = new Map();
@@ -193,7 +197,7 @@
   }
   function maps() {
     const selected=$('dex-map').value,region=$('dex-region').value;
-    const choices=[...new Set([...mapCatalog.maps.filter(m=>!region||m.regionId===region).map(m=>m.name),...data.monsters.filter(m=>!region || m.regionId===region).map(m=>canonical(m.map)).filter(Boolean)])];
+    const choices=[...new Set([...addableMaps().filter(m=>!region||m.regionId===region).map(m=>m.name),...data.monsters.filter(m=>!region || m.regionId===region).map(m=>canonical(m.map)).filter(Boolean)])];
     $('dex-map').innerHTML='<option value="">すべてのマップ</option>'+choices.map(m=>'<option value="'+esc(m)+'">'+esc(mapCatalog.maps.find(x=>x.name===m)?.label||m)+(data.monsters.some(x=>canonical(x.map)===m)?'':'（モンスター未登録）')+'</option>').join('');
     if(choices.includes(selected))$('dex-map').value=selected;
   }
@@ -281,13 +285,13 @@
   }
   function renderMapCoverage(){
     const region=$('dex-region').value;
-    const unfilled=mapCatalog.maps.filter(m=>(!region||m.regionId===region)&&!data.monsters.some(x=>canonical(x.map)===m.name));
+    const unfilled=addableMaps().filter(m=>(!region||m.regionId===region)&&!data.monsters.some(x=>canonical(x.map)===m.name));
     $('dex-empty-maps').innerHTML=unfilled.length?'<summary>モンスター未登録のマップ（'+unfilled.length+'件）</summary>'+data.regions.filter(r=>unfilled.some(m=>m.regionId===r.id)).map(r=>'<section><h3>'+esc(r.name)+'</h3><div class="dex-map-add-list">'+unfilled.filter(m=>m.regionId===r.id).map(m=>'<button type="button" data-create-map="'+esc(m.name)+'">'+esc(m.label)+'<small>モンスターを追加 ＋</small></button>').join('')+'</div></section>').join(''):'<summary>この地域の未登録マップはありません</summary>';
   }
   function setupCreate(){
     const dialog=$('dex-create-dialog'),form=$('dex-create-form');
     $('dex-create-region').innerHTML=mapCatalog.regions.map(r=>'<option value="'+esc(r.id)+'">'+esc(r.name)+'</option>').join('');
-    const populate=()=>{$('dex-create-map').innerHTML=mapCatalog.maps.filter(m=>m.regionId===$('dex-create-region').value).map(m=>'<option value="'+esc(m.name)+'">'+esc(m.label)+'</option>').join('');};
+    const populate=()=>{$('dex-create-map').innerHTML=addableMaps().filter(m=>m.regionId===$('dex-create-region').value).map(m=>'<option value="'+esc(m.name)+'">'+esc(m.label)+'</option>').join('');};
     const show=(map='')=>{form.reset();$('dex-create-status').textContent='';const match=mapCatalog.maps.find(m=>m.name===map);
       $('dex-create-region').value=match?.regionId||$('dex-region').value||mapCatalog.regions[0].id;populate();if(match)$('dex-create-map').value=match.name;
       dialog.showModal();$('dex-create-name').focus();};
