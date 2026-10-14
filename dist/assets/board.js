@@ -25,9 +25,9 @@
  const put=(k,v)=>{memory[k]=v;try{localStorage.setItem(k,v);return true}catch{return false}};
  const visitor=get('xen-board-visitor')||keygen();put('xen-board-visitor',visitor);
  const keyFor=id=>get('xen-board-owner-'+id)||'';
-  const boardTypes={question:{label:'質問掲示板',lead:'わからないことを質問したり、知っていることを回答したりできます。',body:'質問の内容',post:'質問する'},chat:{label:'雑談・質問掲示板',lead:'ゲームの話題やちょっとした質問をみんなで話せます。',body:'投稿内容',post:'雑談を投稿'},friend:{label:'フレンド募集掲示板',lead:'一緒に遊ぶフレンドを募集できます。活動時間や遊び方を書いてください。',body:'募集内容',post:'フレンドを募集'},guild:{label:'ギルド募集掲示板',lead:'加入者・ギルドメンバーを募集できます。ギルドの特徴や活動時間を書いてください。',body:'募集内容',post:'ギルドを募集'}};
+  const boardTypes={discussion:{label:'質問・雑談掲示板',lead:'わからないことを質問したり、ゲームの話題をみんなで話したりできます。',body:'投稿内容',post:'投稿する'},friend:{label:'フレンド募集掲示板',lead:'一緒に遊ぶフレンドを募集できます。活動時間や遊び方を書いてください。',body:'募集内容',post:'フレンドを募集'},guild:{label:'ギルド募集掲示板',lead:'加入者・ギルドメンバーを募集できます。ギルドの特徴や活動時間を書いてください。',body:'募集内容',post:'ギルドを募集'}};
   const queryType=new URLSearchParams(location.search).get('category');
-  const boardType=Object.prototype.hasOwnProperty.call(boardTypes,queryType)?queryType:'question';
+  const boardType=Object.prototype.hasOwnProperty.call(boardTypes,queryType)?queryType:'discussion';
   const typeInfo=boardTypes[boardType];
   let admin=false, current=null, owner=false, page=0, action=null, generation=0;
  const date=s=>new Date(s).toLocaleString('ja-JP');
@@ -47,7 +47,8 @@
  async function load(){const gen=++generation;const id=location.hash.slice(1);$('board-status').textContent='読み込み中…';try{
    if(id){await detail(id,gen);return}
    current=null;$('board-list-view').hidden=false;$('board-detail').hidden=true;
-    let q=db.from('board_threads').select('*',{count:'exact'}).eq('category',boardType).order('updated_at',{ascending:false}).order('id').range(page*20,page*20+19);
+    let q=db.from('board_threads').select('*',{count:'exact'}).order('updated_at',{ascending:false}).order('id').range(page*20,page*20+19);
+    q=boardType==='discussion'?q.in('category',['question','chat']):q.eq('category',boardType);
    const f=$('board-filter').value;if(f)q=q.eq('status',f);
    const words=$('board-search').value.trim();if(words){const safe=words.replace(/[,%()*\\]/g,' ');q=q.or(`title.ilike.%${safe}%,body.ilike.%${safe}%`)}
    const {data,error,count}=await q;if(error)throw error;if(gen!==generation)return;
@@ -56,7 +57,7 @@
  }catch(e){fail(e)}}
   async function detail(id,gen){$('board-list-view').hidden=true;$('board-detail').hidden=false;$('board-detail').innerHTML='<p>投稿を読み込み中…</p>';
    const {data:t,error}=await db.from('board_threads').select('*').eq('id',id).maybeSingle();if(error)throw error;if(gen!==generation)return;
-    if(!t||t.category!==boardType){$('board-detail').innerHTML='<p>投稿が見つからないか、管理者により削除されました。</p><a href="board.html?category='+boardType+'">一覧へ戻る</a>';$('board-status').textContent='';return}
+    if(!t||((boardType==='discussion'&&!['question','chat'].includes(t.category))|| (boardType!=='discussion'&&t.category!==boardType))){$('board-detail').innerHTML='<p>投稿が見つからないか、管理者により削除されました。</p><a href="board.html?category='+boardType+'">一覧へ戻る</a>';$('board-status').textContent='';return}
    const {data:answers,error:ae}=await db.from('board_answers').select('*').eq('thread_id',id).order('created_at');if(ae)throw ae;
    const own=keyFor(id)?await rpc('board_check_owner',{p_thread_id:id,p_owner_key:keyFor(id)}):false;if(gen!==generation)return;current=t;owner=own;
     $('board-detail').innerHTML=`<a href="board.html?category=${boardType}">← ${esc(typeInfo.label)}一覧へ</a><article class="paper">${tag(t.status)}<h1>${esc(t.title)}</h1><p class="board-meta">投稿者：${esc(t.author_name)} · ${date(t.created_at)}</p><p class="board-body">${esc(t.body)}</p>${t.close_reason?`<p class="board-notice">${esc(t.close_reason)}</p>`:''}<div class="board-actions">${owner?'<button id="show-key">管理キーを確認</button>':'<button id="restore-key">投稿者として操作</button>'}${owner&&t.status==='open'?'<button id="owner-close">受付を終了する</button>':''}</div>${admin?'<div class="board-actions"><strong>管理者操作</strong><button id="mod-close">受付終了にする</button><button id="mod-delete" class="danger">スレッドを削除</button></div>':''}</article><h2>返信（${answers.length}件）</h2>${answers.map(a=>`<article id="answer-${a.id}" class="paper board-answer ${a.id===t.best_answer_id?'best':''}">${a.id===t.best_answer_id?'<p class="board-tag">★ ベスト回答</p>':''}<p class="board-meta">${esc(a.author_name)} · ${date(a.created_at)}</p><p class="board-body">${esc(a.body)}</p>${owner&&t.status==='open'?`<button data-best="${a.id}" class="primary">ベスト回答に選んで終了</button>`:''}</article>`).join('')||'<p>まだ返信がありません。</p>'}${t.status==='open'?'<section class="paper"><h2>返信する</h2><form id="answer-form"><label>表示名（任意）<input name="name" maxlength="40" placeholder="匿名"></label><label>返信<textarea name="body" maxlength="6000" required></textarea></label><p class="form-status" role="status"></p><button type="submit" class="primary">返信を投稿する</button></form></section>':'<p class="board-notice">この投稿の受付は終了しています。</p>'}`;
@@ -71,7 +72,7 @@
  }
  function showKey(key,saved){$('owner-key-value').textContent=key;$('key-storage-note').textContent=saved?'このブラウザにも保存しました。ブラウザのデータを消す場合や別端末で操作する場合は、このキーが必要です。':'ブラウザへ保存できませんでした。必ずこのキーを控えてください。';show('key-dialog')}
  function confirmAction(kind,answer){action={kind,answer,id:current.id};$('action-title').textContent=kind==='best'?'ベストアンサーを選んで解決':kind==='deleted'?'スレッドを削除':'回答受付を終了';$('action-description').textContent=kind==='deleted'?'質問と回答が公開一覧から非表示になります。管理用の記録は保存されます。':'確定すると、このスレッドに新しい回答を投稿できなくなります。';$('reason-label').hidden=!['closed','deleted'].includes(kind);$('action-form').reset();show('action-dialog')}
-  $('question-form').addEventListener('submit',e=>{e.preventDefault();submit(e.target,async()=>{const f=new FormData(e.target),key=keygen();const id=await rpc('board_create_thread_category',{p_title:f.get('title'),p_body:f.get('body'),p_name:f.get('name'),p_owner_key:key,p_visitor_key:visitor,p_category:boardType});const saved=put('xen-board-owner-'+id,key);$('question-dialog').close();e.target.reset();location.hash=id;showKey(key,saved)})});
+  $('question-form').addEventListener('submit',e=>{e.preventDefault();submit(e.target,async()=>{const f=new FormData(e.target),key=keygen();const id=await rpc('board_create_thread_category',{p_title:f.get('title'),p_body:f.get('body'),p_name:f.get('name'),p_owner_key:key,p_visitor_key:visitor,p_category:boardType==='discussion'?'chat':boardType});const saved=put('xen-board-owner-'+id,key);$('question-dialog').close();e.target.reset();location.hash=id;showKey(key,saved)})});
  $('restore-form').addEventListener('submit',e=>{e.preventDefault();submit(e.target,async()=>{const key=new FormData(e.target).get('key').trim();if(!await rpc('board_check_owner',{p_thread_id:current.id,p_owner_key:key}))throw Error('管理キーが一致しません');put('xen-board-owner-'+current.id,key);$('restore-dialog').close();await load()})});
  $('action-form').addEventListener('submit',e=>{e.preventDefault();submit(e.target,async()=>{if(['best','owner'].includes(action.kind))await rpc('board_close_thread',{p_thread_id:action.id,p_owner_key:keyFor(action.id),p_answer_id:action.answer});else await rpc('board_moderate',{p_thread_id:action.id,p_action:action.kind,p_reason:new FormData(e.target).get('reason')});$('action-dialog').close();if(action.kind==='deleted')location.hash='';else await load()})});
  $('board-new').addEventListener('click',()=>show('question-dialog'));$('board-reload').addEventListener('click',load);
