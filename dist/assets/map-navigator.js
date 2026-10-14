@@ -118,6 +118,9 @@
   }
   function renderOptions(){
     const all=names();
+    // Keep the current-map field empty by default so the full registered list is
+    // available as suggestions. The captured location remains visible in the
+    // status line and can be opted into with the checkbox below.
     $("map-names").innerHTML=all.map(name=>'<option value="'+esc(name)+'" label="'+esc(mapLabel(name))+'">'+esc(mapLabel(name))+'</option>').join("");
     $("map-view-select").innerHTML='<option value="">マップを選ぶ</option>'+all.map(name=>'<option value="'+esc(name)+'">'+esc(mapLabel(name))+(noExpandedMap(name)?"（拡大マップなし）":data.maps.some(map=>canon(map.map_name)===name&&map.map_image_url)?"":schematic(name)?"（動画の部分構造図）":"（画像未登録）")+'</option>').join("");
     $("map-view-select").value=shown;
@@ -538,4 +541,5 @@
   location.subscribe(sync);currentStatus(location.read());sync(location.read());
   reload().catch(()=>{});
 })(typeof window!=="undefined"?window:globalThis);
+
 
