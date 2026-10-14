@@ -3,7 +3,7 @@
   const $=id=>document.getElementById(id), core=window.SiteSearchCore;
   const input=$('site-search-query'), filter=$('site-search-kind'), results=$('site-search-results');
   if (!input || !core) return;
-  const labels={guide:'ガイド・ページ',class:'職業・転職',skill:'スキル',glossary:'用語集',lucky:'ラッキーボール',quest:'クエスト',board:'質問掲示板',event:'イベント'};
+  const labels={guide:'ガイド・ページ',class:'職業・転職',skill:'スキル',glossary:'用語集',lucky:'ラッキーボール',quest:'クエスト',board:'掲示板',event:'イベント'};
   let records=[], ready=false, liveLoading=true, limit=20, failed=[], timer;
   const text=(obj,fields)=>fields.map(k=>obj[k]).filter(v=>v!==null&&v!==undefined).map(v=>Array.isArray(v)?v.join(' '):String(v)).join(' ');
   const title=obj=>[obj.name_ja||obj.title_ja,obj.name_en||obj.title_en].filter(Boolean).join(' / ');
@@ -110,9 +110,10 @@
       const [quests,steps]=await Promise.all([rows('quests','id,title_en,title_ja,category,required_level,start_npc,start_location,prerequisite,rewards,notes'),rows('quest_steps','id,quest_id,title,description,npc_name,location')]);
       return quests.map(q=>record('quest:'+q.id,title(q),text(q,['category','required_level','start_npc','start_location','prerequisite','rewards','notes'])+' '+steps.filter(s=>String(s.quest_id)===String(q.id)).map(s=>text(s,['title','description','npc_name','location'])).join(' '),'quests.html#'+encodeURIComponent(q.id),'quest','クエスト'));
     }],
-    ['質問掲示板','board',async()=>{
-      const [threads,answers]=await Promise.all([rows('board_threads','id,title,body,status',{status:'in.(open,resolved,closed)'}),rows('board_answers','id,thread_id,body')]);
-      return threads.map(t=>record('board:'+t.id,t.title,t.body+' '+answers.filter(a=>String(a.thread_id)===String(t.id)).map(a=>a.body).join(' '),'board.html#'+encodeURIComponent(t.id),'board','質問掲示板'));
+    ['掲示板','board',async()=>{
+      const [threads,answers]=await Promise.all([rows('board_threads','id,title,body,status,category',{status:'in.(open,resolved,closed)'}),rows('board_answers','id,thread_id,body')]);
+      const names={question:'質問掲示板',chat:'雑談・質問掲示板',friend:'フレンド募集掲示板',guild:'ギルド募集掲示板'};
+      return threads.map(t=>record('board:'+t.id,t.title,t.body+' '+answers.filter(a=>String(a.thread_id)===String(t.id)).map(a=>a.body).join(' '),'board.html'+(t.category&&t.category!=='question'?'?category='+encodeURIComponent(t.category):'')+'#'+encodeURIComponent(t.id),'board',names[t.category]||'質問掲示板'));
     }],
     ['イベント','event',async()=> (await rows('xen_events','id,title_ja,title_en,description_ja,requirements_ja,rewards_ja,location,start_time')).map(t=>record('event:'+t.id,title(t),eventDate(t.start_time)+' '+text(t,['location','description_ja','requirements_ja','rewards_ja']),'events.html?event='+encodeURIComponent(t.id),'event','イベントカレンダー'))]
   ];
@@ -122,3 +123,4 @@
   }));
   liveLoading=false;render();updateStatus();
 })();
+
