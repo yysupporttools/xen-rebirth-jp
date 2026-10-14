@@ -112,7 +112,7 @@
     }],
     ['掲示板','board',async()=>{
       const [threads,answers]=await Promise.all([rows('board_threads','id,title,body,status,category',{status:'in.(open,resolved,closed)'}),rows('board_answers','id,thread_id,body')]);
-      const names={question:'質問・雑談掲示板',chat:'質問・雑談掲示板',friend:'フレンド募集掲示板',guild:'ギルド募集掲示板'};
+      const names={question:'質問・雑談掲示板',chat:'質問・雑談掲示板',friend:'フレンド募集掲示板',guild:'ギルド募集掲示板',trade:'取引掲示板'};
       return threads.map(t=>record('board:'+t.id,t.title,t.body+' '+answers.filter(a=>String(a.thread_id)===String(t.id)).map(a=>a.body).join(' '),'board.html'+(t.category&&['question','chat'].includes(t.category)?'':'?category='+encodeURIComponent(t.category||'discussion'))+'#'+encodeURIComponent(t.id),'board',names[t.category]||'質問・雑談掲示板'));
     }],
     ['イベント','event',async()=> (await rows('xen_events','id,title_ja,title_en,description_ja,requirements_ja,rewards_ja,location,start_time')).map(t=>record('event:'+t.id,title(t),eventDate(t.start_time)+' '+text(t,['location','description_ja','requirements_ja','rewards_ja']),'events.html?event='+encodeURIComponent(t.id),'event','イベントカレンダー'))]

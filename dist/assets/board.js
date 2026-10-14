@@ -25,7 +25,7 @@
  const put=(k,v)=>{memory[k]=v;try{localStorage.setItem(k,v);return true}catch{return false}};
  const visitor=get('xen-board-visitor')||keygen();put('xen-board-visitor',visitor);
  const keyFor=id=>get('xen-board-owner-'+id)||'';
-  const boardTypes={discussion:{label:'質問・雑談掲示板',lead:'わからないことを質問したり、ゲームの話題をみんなで話したりできます。',body:'投稿内容',post:'投稿する'},friend:{label:'フレンド募集掲示板',lead:'一緒に遊ぶフレンドを募集できます。活動時間や遊び方を書いてください。',body:'募集内容',post:'フレンドを募集'},guild:{label:'ギルド募集掲示板',lead:'加入者・ギルドメンバーを募集できます。ギルドの特徴や活動時間を書いてください。',body:'募集内容',post:'ギルドを募集'}};
+  const boardTypes={discussion:{label:'質問・雑談掲示板',lead:'わからないことを質問したり、ゲームの話題をみんなで話したりできます。',body:'投稿内容',post:'投稿する'},friend:{label:'フレンド募集掲示板',lead:'一緒に遊ぶフレンドを募集できます。活動時間や遊び方を書いてください。',body:'募集内容',post:'フレンドを募集'},guild:{label:'ギルド募集掲示板',lead:'加入者・ギルドメンバーを募集できます。ギルドの特徴や活動時間を書いてください。',body:'募集内容',post:'ギルドを募集'},trade:{label:'取引掲示板',lead:'ゲーム内アイテムの交換や売買の相談に利用できます。条件を分かりやすく書いてください。',body:'取引内容',post:'取引を投稿'}};
   const queryType=new URLSearchParams(location.search).get('category');
   const boardType=Object.prototype.hasOwnProperty.call(boardTypes,queryType)?queryType:'discussion';
   const typeInfo=boardTypes[boardType];
