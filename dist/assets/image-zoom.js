@@ -1,6 +1,6 @@
 (() => {
   'use strict';
-  const selector = 'img.glossary-thumb, img.lucky-ball-group-image, img.lucky-ball-item-image, img.class-equipment-image, img.token-exchange-item-icon';
+  const selector = 'img.glossary-thumb, img.lucky-ball-group-image, img.lucky-ball-item-image, img.class-equipment-image, img.token-exchange-item-icon, img.vote-guide-image';
   const dialog = document.createElement('dialog');
   dialog.className = 'image-zoom';
   dialog.setAttribute('aria-labelledby', 'image-zoom-title');
@@ -66,3 +66,5 @@
     if (opener?.isConnected) opener.focus({preventScroll:true});
   });
 })();
+
+
